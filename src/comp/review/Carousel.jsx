@@ -19,72 +19,70 @@ const images = [
   },
 ];
 
-// Creiamo un array con la prima e l'ultima immagine duplicate
+// Continuous scrolling effect
 const extendedImages = [
-  images[images.length - 1], // Ultima immagine all'inizio
+  images[images.length - 1], // last image first
   ...images,
-  images[0], // Prima immagine alla fine
+  images[0], // first image last
 ];
 
 function Carousel() {
-  const [currentIndex, setCurrentIndex] = useState(1); // Partiamo dalla prima "vera" immagine
-  const transitionRef = useRef(true); // Controlla se attivare la transizione
-  const intervalRef = useRef(null); // Riferimento al setInterval
+  const [currentIndex, setCurrentIndex] = useState(1); // first image
+  const transitionRef = useRef(true); // transition on
+  const intervalRef = useRef(null);
 
-  // Funzione per andare avanti
+  // ->
   const nextSlide = () => {
     setCurrentIndex((prevIndex) => prevIndex + 1);
     resetAutoPlay(); // Reset del timer
   };
 
-  // Funzione per andare indietro
+  // <-
   const prevSlide = () => {
     setCurrentIndex((prevIndex) => prevIndex - 1);
     resetAutoPlay(); // Reset del timer
   };
 
-  // Funzione per resettare il timer (per ogni interazione dell'utente)
+  // Reset Timer - User Interaction
   const resetAutoPlay = () => {
     if (intervalRef.current) {
-      clearInterval(intervalRef.current); // Pulisce il timer precedente
+      clearInterval(intervalRef.current); // clear prev timer
     }
-    // Avvia un nuovo timer
-    intervalRef.current = setInterval(nextSlide, 5000);
+    intervalRef.current = setInterval(nextSlide, 5000); // start new timer
   };
 
-  // Effetto per resettare il carosello quando arriva alla fine
+  // Reset carousel effect
   useEffect(() => {
     if (currentIndex === extendedImages.length - 1) {
       setTimeout(() => {
-        transitionRef.current = false; // Disabilitiamo la transizione
-        setCurrentIndex(1); // Torniamo alla prima immagine "vera"
+        transitionRef.current = false;
+        setCurrentIndex(1); // back to first image
       }, 1000);
     }
 
     if (currentIndex === 0) {
       setTimeout(() => {
-        transitionRef.current = false; // Disabilitiamo la transizione
-        setCurrentIndex(images.length); // Torniamo all'ultima immagine "vera"
+        transitionRef.current = false;
+        setCurrentIndex(images.length); // back to last image
       }, 1000);
     }
   }, [currentIndex]);
 
-  // Ripristina la transizione quando cambia immagine normalmente
+  // Restore transition
   useEffect(() => {
     transitionRef.current = true;
   }, [currentIndex]);
 
-  // Cambio automatico ogni 5 secondi
+  // Automatic shift
   useEffect(() => {
-    // Impostiamo l'intervallo quando il componente è montato
     intervalRef.current = setInterval(nextSlide, 5000);
 
-    return () => clearInterval(intervalRef.current); // Pulisce l'intervallo quando il componente viene smontato
+    return () => clearInterval(intervalRef.current); // clear interval
   }, []);
 
   return (
     <div className="relative w-full max-w-4xl mx-auto overflow-hidden">
-      {/* Contenitore immagini */}
+      {/* Images */}
       <div
         className={`flex ${
           transitionRef.current
@@ -107,7 +105,7 @@ function Carousel() {
         ))}
       </div>
 
-      {/* Div invisibili per la navigazione */}
+      {/* Invisible divs for navigation */}
       <div
         onClick={prevSlide}
         className="absolute top-0 left-0 w-1/10 h-full cursor-pointer"
@@ -117,14 +115,14 @@ function Carousel() {
         className="absolute top-0 right-0 w-1/10 h-full cursor-pointer"
       ></div>
 
-      {/* Indicatori */}
+      {/* Pointers */}
       <div className="absolute bottom-18 left-1/2 transform -translate-x-1/2 flex space-x-2">
         {images.map((_, index) => (
           <button
             key={index}
             onClick={() => {
-              setCurrentIndex(index + 1); // +1 per allineare con l'offset
-              resetAutoPlay(); // Reset del timer
+              setCurrentIndex(index + 1); // +1 to align with the offset
+              resetAutoPlay(); // reset timer
             }}
             className={`w-3 h-3 rounded-full cursor-pointer ${
               index + 1 === currentIndex ? "bg-blue-500" : "bg-gray-300"

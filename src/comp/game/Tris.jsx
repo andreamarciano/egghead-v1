@@ -80,7 +80,7 @@ function Tris() {
     setBoard(newBoard);
     setIsXNext(false); // ai move
 
-    // check winner
+    // Check winner
     const result = calculateWinner(newBoard);
     if (result.winner || newBoard.every((square) => square !== null)) return;
 

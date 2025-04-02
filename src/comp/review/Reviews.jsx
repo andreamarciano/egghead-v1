@@ -6,7 +6,7 @@ import PokemonBattle from "../game/PokemonBattle/PokemonBattle";
 import ConnectFour from "../game/ConnectFour/ConnectFour";
 
 function Reviews() {
-  const reviews = useSelector((state) => state.reviews.value);
+  const reviews = useSelector((state) => state.reviews.value); // redux store
   const [game, setGame] = useState(null);
 
   return (
@@ -14,15 +14,19 @@ function Reviews() {
       <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
         Le opinioni dei nostri clienti
       </h2>
+      {/* Reviews Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto px-6 overflow-y-auto h-100">
         {reviews.map((review) => (
           <ReviewCard key={review.id} {...review} />
         ))}
       </div>
+
+      {/* Form */}
       <div className="max-w-lg mx-auto mt-10">
         <ReviewForm onTriggerGame={setGame} />
       </div>
 
+      {/* Games */}
       {game === "pokemon" && <PokemonBattle onClose={() => setGame(null)} />}
       {game === "forza4" && <ConnectFour onClose={() => setGame(null)} />}
     </div>

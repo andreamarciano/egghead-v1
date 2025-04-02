@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 
 function AnimalCard({ num, imgURL, alt, description, position }) {
-  let col = num % 2;
+  let col = num % 2; // col sep
 
-  if (col == 0) {
+  if (col == 0) { // even
     return (
       <div className="flex items-center justify-between">
         <Link
@@ -24,7 +24,7 @@ function AnimalCard({ num, imgURL, alt, description, position }) {
       </div>
     );
   }
-  return (
+  return ( // odd
     <div className="flex items-center justify-between">
       <div className="w-1/2 p-4">
         <h2 className="text-2xl font-semibold text-gray-900">{alt}</h2>

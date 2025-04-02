@@ -4,10 +4,12 @@ import Tris from "./game/Tris";
 import Flower from "./game/Flower";
 
 function Footer() {
+  // Tris states
   const [isTrisOpen, setIsTrisOpen] = useState(false);
   const openTris = () => setIsTrisOpen(true);
   const closeTris = () => setIsTrisOpen(false);
 
+  // Flower states
   const [isFlowerOpen, setIsFlowerOpen] = useState(false);
   const openFlower = () => setIsFlowerOpen(true);
   const closeFlower = () => setIsFlowerOpen(false);
@@ -15,7 +17,7 @@ function Footer() {
   return (
     <footer className="bg-blue-500 text-white py-10">
       <div className="container mx-auto px-6 lg:px-20 grid grid-cols-1 md:grid-cols-4 gap-10">
-        {/* Logo e informazioni */}
+        {/* Logo (1/2) */}
         <div className="md:col-span-2 flex flex-col items-center md:items-start">
           <img
             src="https://images.unsplash.com/vector-1739891192522-3b086ab3954e?q=80&w=1800"
@@ -32,7 +34,7 @@ function Footer() {
           </p>
         </div>
 
-        {/* Learn More */}
+        {/* Learn More (1/4) */}
         <div className="md:col-span-1 text-center md:text-left">
           <h3 className="text-lg font-bold mb-3">Learn More</h3>
           <ul className="space-y-2">
@@ -64,10 +66,11 @@ function Footer() {
           </ul>
         </div>
 
-        {/* Social Media */}
+        {/* Social Media (1/4) */}
         <div className="md:col-span-1 text-center md:text-left">
           <h3 className="text-lg font-bold mb-3">Seguici su</h3>
           <div className="flex justify-center md:justify-start space-x-4">
+            {/* Snake */}
             <button
               onClick={() =>
                 alert("Il social Snake non è ancora stato inventato!")
@@ -81,6 +84,7 @@ function Footer() {
               />
             </button>
 
+            {/* Tris */}
             <button onClick={openTris} className="hover:opacity-75 transition">
               <img
                 src="https://images.unsplash.com/vector-1739891195183-b18fb97ba750?q=80&w=2360&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
@@ -89,6 +93,7 @@ function Footer() {
               />
             </button>
 
+            {/* Flower */}
             <button
               onClick={openFlower}
               className="hover:opacity-75 transition"
@@ -103,15 +108,18 @@ function Footer() {
         </div>
       </div>
 
+      {/* Tris Modal*/}
       {isTrisOpen && (
         <div className="fixed inset-0 flex top-20 left-130 justify-center items-center bg-gray-900 bg-opacity-50 z-50 w-135 h-135">
           <div className="p-6 rounded-lg shadow-lg bg-blue-600 w-125 h-125 items-center justify-center flex flex-col">
+            {/* Close */}
             <button
               onClick={closeTris}
               className="absolute top-0 right-2 bg-transparent hover:bg-gray-800 hover:text-red-500 rounded-full"
             >
               x
             </button>
+            {/* Title - Cheat */}
             <h2 className="text-center text-3xl font-bold mb-4 text-blue-900 relative group left-7">
               <span className="text-transparent group-hover:text-black transition duration-300">
                 C
@@ -140,7 +148,9 @@ function Footer() {
                 ⬇️
               </span>
             </h2>
+            {/* Tris */}
             <Tris />
+            {/* Title - Cheat */}
             <h2 className="text-center text-3xl font-bold mb-4 text-blue-900 absolute group bottom-5 right-8">
               <span className="text-transparent group-hover:text-black transition duration-300">
                 ⬅️
@@ -150,18 +160,22 @@ function Footer() {
         </div>
       )}
 
+      {/* Flower Modal */}
       {isFlowerOpen && (
         <div className="fixed inset-0 flex top-1 left-90 justify-center items-center bg-orange-900 bg-opacity-50 z-50 w-200 h-170 rounded-2xl overflow-y-auto">
           <div className="p-6 rounded-lg shadow-lg bg-yellow-600 w-200 h-200 items-center justify-center flex flex-col ">
+            {/* Close */}
             <button
               onClick={closeFlower}
               className="absolute text-3xl top-0 right-2 bg-transparent hover:bg-gray-800 hover:text-red-500 rounded-full"
             >
               x
             </button>
+            {/* Title */}
             <h2 className="text-center text-3xl font-bold mb-4 text-white">
               Prat💩... Fiorit🥚?
             </h2>
+            {/* Flower */}
             <Flower />
           </div>
         </div>

@@ -7,7 +7,8 @@ const DIFFICULTY_SETTINGS = {
 };
 
 function Flower() {
-  const [difficulty, setDifficulty] = useState("🥚"); // Difficoltà iniziale
+  // default difficulty states
+  const [difficulty, setDifficulty] = useState("🥚");
   const [gridSize, setGridSize] = useState(10);
   const [numMines, setNumMines] = useState(15);
   const [timer, setTimer] = useState(30);
@@ -16,22 +17,13 @@ function Flower() {
   const [grid, setGrid] = useState([]);
   const [gameOver, setGameOver] = useState(false);
   const [flagsLeft, setFlagsLeft] = useState(numMines);
-  const [hasWon, setHasWon] = useState(false); // Stato di vittoria
-  const [highlighted, setHighlighted] = useState(null); // Casella evidenziata al passaggio del mouse
-  const [message, setMessage] = useState(""); // Messaggio iniziale
-  const [timeLeft, setTimeLeft] = useState(timer); // Stato per il timer
-  const [timeRanOut, setTimeRanOut] = useState(false); // Tempo scaduto
-  const [hasStarted, setHasStarted] = useState(false); // Inizio del gioco
+  const [hasWon, setHasWon] = useState(false);
+  const [highlighted, setHighlighted] = useState(null);
+  const [message, setMessage] = useState("");
+  const [timeLeft, setTimeLeft] = useState(timer);
+  const [timeRanOut, setTimeRanOut] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
 
-  const handleDifficultyChange = (level) => {
-    setDifficulty(level);
-    setGridSize(DIFFICULTY_SETTINGS[level].gridSize);
-    setNumMines(DIFFICULTY_SETTINGS[level].numMines);
-    setTimer(DIFFICULTY_SETTINGS[level].timer);
-    setIncrement(DIFFICULTY_SETTINGS[level].increment);
-  };
-
-  // Messaggi casuali da visualizzare quando si clicca una casella
   const randomMessages = [
     "Attento a non calpestarle!",
     "Non di là!",
@@ -46,6 +38,16 @@ function Flower() {
     "Se lo dici tu...",
   ];
 
+  // Change difficulty
+  const handleDifficultyChange = (level) => {
+    setDifficulty(level);
+    setGridSize(DIFFICULTY_SETTINGS[level].gridSize);
+    setNumMines(DIFFICULTY_SETTINGS[level].numMines);
+    setTimer(DIFFICULTY_SETTINGS[level].timer);
+    setIncrement(DIFFICULTY_SETTINGS[level].increment);
+  };
+
+  // Grid
   const generateGrid = () => {
     let newGrid = Array(gridSize)
       .fill(null)
@@ -104,37 +106,39 @@ function Flower() {
     }
 
     setHasStarted(false);
-    setTimeLeft(timer); // Reset del timer
+    setTimeLeft(timer); // reset timer
     setFlagsLeft(numMines);
     setGameOver(false);
-    setHasWon(false); // Reset vittoria
+    setHasWon(false); // reset victory
     setTimeRanOut(false);
-    setMessage("Raccogliamo le uova!"); // Mostra il messaggio iniziale
+    setMessage("Raccogliamo le uova!"); // initial message
     setGrid(newGrid);
   };
 
+  // Generate Grid
   useEffect(() => {
     generateGrid();
   }, [gridSize, numMines, timer]);
 
-  // Timer: Decrementa ogni secondo
+  // Timer
   useEffect(() => {
-    if (!hasStarted || gameOver || hasWon) return; // Se il gioco è finito, non fare nulla
+    if (!hasStarted || gameOver || hasWon) return;
 
     if (timeLeft <= 0) {
       setGameOver(true);
-      setTimeRanOut(true); // Segna che il game over è stato causato dal timer
+      setTimeRanOut(true); // lose for timer
       return;
     }
 
     const timer = setInterval(() => {
+      // timer decrement
       setTimeLeft((prevTime) => prevTime - 1);
     }, 1000);
 
-    return () => clearInterval(timer); // Pulisce l'intervallo quando il componente viene smontato o il timer finisce
+    return () => clearInterval(timer); // clear timer
   }, [timeLeft, hasStarted, gameOver, hasWon]);
 
-  // Formatta il timer in MM:SS
+  // Time formatting (MM:SS)
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
@@ -174,6 +178,7 @@ function Flower() {
     }
   };
 
+  // Winner
   const checkWinCondition = (newGrid) => {
     let allMinesFlagged = true;
     let allSafeCellsRevealed = true;
@@ -192,30 +197,31 @@ function Flower() {
     if (allMinesFlagged && allSafeCellsRevealed) {
       setHasWon(true);
       let victoryMessage = "";
-      // Aggiungi logica per i messaggi di vittoria in base alla difficoltà
+      // message based on difficulty
       if (difficulty === "🐔🐔🐔") {
         victoryMessage = "Bel lavoro! Ecco il tuo codice: FLOW5";
       } else {
         victoryMessage = "Bene, aumentiamo la difficoltà!";
       }
-      setMessage(victoryMessage); // Mostra il messaggio di vittoria
+      setMessage(victoryMessage);
     }
   };
 
   const [clickedX, setClickedX] = useState(null);
   const [clickedY, setClickedY] = useState(null);
 
+  // Handle left click
   const handleClick = (x, y) => {
     if (gameOver || hasWon || grid[x][y].revealed || grid[x][y].flagged) return;
 
     if (!hasStarted) {
-      setHasStarted(true); // Il gioco parte al primo click
+      setHasStarted(true); // game starts with click
     }
 
     let newGrid = [...grid];
 
     if (newGrid[x][y].mine) {
-      setClickedX(x); // Memorizza la cella cliccata
+      setClickedX(x);
       setClickedY(y);
       setGameOver(true);
       return;
@@ -223,11 +229,11 @@ function Flower() {
 
     revealEmptyCells(newGrid, x, y);
     if (!newGrid[x][y].mine) {
-      setTimeLeft((prevTime) => prevTime + increment); // Aggiunge secondi
+      setTimeLeft((prevTime) => prevTime + increment); // add time
     }
     setGrid([...newGrid]);
 
-    // Imposta il messaggio casuale
+    // Random message
     const randomMessage =
       randomMessages[Math.floor(Math.random() * randomMessages.length)];
     setMessage(randomMessage);
@@ -235,22 +241,22 @@ function Flower() {
     checkWinCondition(newGrid);
   };
 
+  // Handle right click
   const handleRightClick = (e, x, y) => {
-    e.preventDefault(); // Evita il menu del tasto destro
+    e.preventDefault(); // handle right mouse click menu
 
-    if (gameOver || hasWon) return; // Non si può mettere o rimuovere una bandiera se il gioco è finito
+    if (gameOver || hasWon) return;
 
     let newGrid = [...grid];
 
-    // Se la cella è rivelata, possiamo comunque rimuovere la bandiera
     if (newGrid[x][y].flagged) {
       newGrid[x][y].flagged = false;
-      setFlagsLeft(flagsLeft + 1); // Aggiunge una bandiera
+      setFlagsLeft(flagsLeft + 1); // add flag
     } else if (!newGrid[x][y].revealed && flagsLeft > 0) {
       newGrid[x][y].flagged = true;
-      setFlagsLeft(flagsLeft - 1); // Rimuove una bandiera
+      setFlagsLeft(flagsLeft - 1); // remove flag
 
-      // Mostra un messaggio casuale quando si mette una bandierina
+      // onFlag random message
       const randomFlagMessage =
         flagMessages[Math.floor(Math.random() * flagMessages.length)];
       setMessage(randomFlagMessage);
@@ -262,7 +268,7 @@ function Flower() {
 
   return (
     <div>
-      {/* Selezione difficoltà */}
+      {/* Difficulty */}
       <div className="absolute left-2 top-80 flex flex-col gap-2 w-15">
         {Object.keys(DIFFICULTY_SETTINGS).map((level) => (
           <button
@@ -278,6 +284,7 @@ function Flower() {
           </button>
         ))}
       </div>
+      {/* Grid */}
       <div className="absolute left-2 top-150 flex justify-center w-15">
         <button
           onClick={generateGrid}
@@ -296,7 +303,7 @@ function Flower() {
       <p className="text-center text-xl font-bold mb-4 text-orange-800">
         {message}
       </p>{" "}
-      {/* Mostra il messaggio corrente */}
+      {/* Current message */}
       {gameOver && (
         <p className="text-center text-red-600 font-bold mb-2 mt-2">
           {timeRanOut
@@ -322,8 +329,8 @@ function Flower() {
       y === clickedY
         ? "bg-red-500 border-red-800 border-4"
         : ""
-    } // Sfondo rosso per la mina cliccata
-    ${hasWon && cell.mine ? "bg-blue-500" : ""} // Colore per la vittoria
+    } 
+    ${hasWon && cell.mine ? "bg-blue-500" : ""} 
     ${
       highlighted && highlighted[0] === x && highlighted[1] === y
         ? "border-4 border-yellow-500"
@@ -339,7 +346,7 @@ function Flower() {
                 ? "🐣"
                 : cell.revealed || gameOver
                 ? cell.mine
-                  ? "🥚" // Mostra la mina quando il gioco è finito
+                  ? "🥚"
                   : cell.number > 0
                   ? cell.number
                   : ""

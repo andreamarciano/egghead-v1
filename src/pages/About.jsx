@@ -10,12 +10,12 @@ function About() {
 
       <div className="bg-blue-100 py-10">
         <div className="max-w-5xl mx-auto px-6">
-          {/* Titolo */}
+          {/* Title */}
           <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">
             Chi Siamo
           </h1>
 
-          {/* Sezione 1: La Nostra Storia */}
+          {/* Sec 1: La Nostra Storia */}
           <section className="mb-10">
             <h2 className="text-2xl font-semibold text-gray-700 mb-3">
               La Nostra Storia
@@ -30,7 +30,7 @@ function About() {
             </p>
           </section>
 
-          {/* Sezione 2: Missione */}
+          {/* Sec 2: Missione */}
           <section className="mb-10">
             <h2 className="text-2xl font-semibold text-gray-700 mb-3">
               La Nostra Missione
@@ -44,7 +44,7 @@ function About() {
             </p>
           </section>
 
-          {/* Sezione 3: Dove Siamo */}
+          {/* Sec 3: Dove Siamo */}
           <section className="mb-10">
             <h2 className="text-2xl font-semibold text-gray-700 mb-3">
               Dove Siamo
@@ -52,11 +52,12 @@ function About() {
             <p className="text-gray-600 max-w-2xl mx-auto text-center">
               Anche se sogniamo le stelle, la nostra sede principale si trova in
               una tranquilla fattoria
-              <strong> nelle colline dell'Ouagadougou</strong>, circondata da galline
-              felici, scienziati eccentrici e qualche pecora che si è intrufolata
-              per caso.
+              <strong> nelle colline dell'Ouagadougou</strong>, circondata da
+              galline felici, scienziati eccentrici e qualche pecora che si è
+              intrufolata per caso.
             </p>
 
+            {/* Open Map */}
             <div className="bg-white shadow-md p-5 rounded-lg mt-4 max-w-2xl mx-auto text-center hover:scale-105 transition-all ease-linear cursor-pointer">
               <p className="text-gray-700">
                 📍 <strong>Indirizzo:</strong> Via delle Galline Ribelli, 42,
@@ -71,7 +72,7 @@ function About() {
             </div>
           </section>
 
-          {/* Sezione 4: Team */}
+          {/* Sec 4: Team */}
           <section className="mb-10">
             <h2 className="text-2xl font-semibold text-gray-700 mb-3">
               Il Nostro Team
@@ -99,7 +100,7 @@ function About() {
             </ul>
           </section>
 
-          {/* Sezione 5: Prodotti Speciali */}
+          {/* Sec 5: Prodotti Speciali */}
           <section className="mb-10">
             <h2 className="text-2xl font-semibold text-gray-700 mb-3">
               Le Nostre Uova Speciali
@@ -124,7 +125,7 @@ function About() {
             </ul>
           </section>
 
-          {/* Sezione 6: Sostenibilità */}
+          {/* Sec 6: Sostenibilità */}
           <section className="mb-10">
             <h2 className="text-2xl font-semibold text-gray-700 mb-3">
               Sostenibilità e Innovazione
@@ -137,7 +138,7 @@ function About() {
             </p>
           </section>
 
-          {/* Sezione 7: Perché Sceglierci */}
+          {/* Sec 7: Perché Sceglierci */}
           <section className="mb-10">
             <h2 className="text-2xl font-semibold text-gray-700 mb-3">
               Perché Sceglierci?
@@ -161,12 +162,14 @@ function About() {
             </ul>
           </section>
 
+          {/* Carousel */}
           <Carousel />
-
+          {/* Reviews */}
           <Reviews />
         </div>
       </div>
 
+      {/* Footer */}
       <Footer />
     </>
   );

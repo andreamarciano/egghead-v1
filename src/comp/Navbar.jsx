@@ -4,6 +4,7 @@ function Navbar() {
   return (
     <nav className="bg-gray-900 text-white p-4">
       <ul className="flex gap-6">
+        {/* Home */}
         <li>
           <NavLink
             to="/"
@@ -16,6 +17,7 @@ function Navbar() {
             Home
           </NavLink>
         </li>
+        {/* Shop */}
         <li>
           <NavLink
             to="/shop"
@@ -28,6 +30,7 @@ function Navbar() {
             Shop
           </NavLink>
         </li>
+        {/* Checkout */}
         <li>
           <NavLink
             to="/checkout"
@@ -40,6 +43,7 @@ function Navbar() {
             Checkout
           </NavLink>
         </li>
+        {/* About Us */}
         <li>
           <NavLink
             to="/about"

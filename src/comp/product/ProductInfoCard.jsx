@@ -27,9 +27,7 @@ function ProductInfoCard() {
 
   // prod qty to add in the chart
   const [quantity, setQuantity] = useState(1);
-
   const increaseQuantity = () => setQuantity(quantity + 1);
-
   const decreaseQuantity = () => setQuantity(quantity > 1 ? quantity - 1 : 1);
 
   return (

@@ -9,16 +9,19 @@ function ReviewForm({ onTriggerGame }) {
   const [text, setText] = useState("");
   const dispatch = useDispatch();
 
+  // Submit
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(add({ name, rating, text }));
+    dispatch(add({ name, rating, text })); // add to redux store
 
+    // choosing game
     if (rating >= 0 && rating <= 3) {
       onTriggerGame("pokemon");
     } else if (rating === 4) {
       onTriggerGame("forza4");
     }
 
+    // reset
     setName("");
     setRating(0);
     setText("");
@@ -32,6 +35,7 @@ function ReviewForm({ onTriggerGame }) {
       <h2 className="text-2xl pb-3 font-bold text-gray-400">
         Lascia una recensione!
       </h2>
+      {/* Username */}
       <input
         type="text"
         placeholder="Nome Utente"
@@ -41,6 +45,7 @@ function ReviewForm({ onTriggerGame }) {
         required
         maxLength={20}
       />
+      {/* Rating */}
       <div className="mb-3">
         {Array(6)
           .fill()
@@ -60,6 +65,7 @@ function ReviewForm({ onTriggerGame }) {
             </span>
           ))}
       </div>
+      {/* Description */}
       <textarea
         placeholder="Scrivi la tua recensione (max 100 caratteri)"
         value={text}
@@ -67,6 +73,7 @@ function ReviewForm({ onTriggerGame }) {
         maxLength={100}
         className="border p-2 w-full mb-3 rounded text-gray-400"
       />
+      {/* Submit */}
       <button
         type="submit"
         className="bg-yellow-500 px-4 py-2 rounded hover:bg-yellow-600"

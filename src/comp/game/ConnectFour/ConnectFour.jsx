@@ -20,6 +20,7 @@ function ConnectFour({ onClose }) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-blue-800 p-5 rounded-lg shadow-lg text-center h-160 w-120 relative">
+        {/* Title */}
         <h2 className="text-3xl font-bold mb-4 text-white">
           <span className="relative text-4xl">
             C

@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import AnimalCard from "../comp/home/AnimalCard";
 
 function Home() {
-  const animals = useSelector((state) => state.animals.value);
+  const animals = useSelector((state) => state.animals.value); // redux store
 
   return (
     <div className="bg-gray-100 min-h-screen p-4">
@@ -16,9 +16,10 @@ function Home() {
         tacchino, e altre varietà esclusive!
       </p>
 
+      {/* Animal Cards */}
       <div className="space-y-12">
         {animals.map((animal) => (
-          <AnimalCard {...animal}/>
+          <AnimalCard {...animal} />
         ))}
       </div>
 

@@ -1,16 +1,16 @@
 import { checkForWinner } from "./GameLogic";
 
-// Valutazione della griglia (punteggi per le sequenze)
+// Sequences scores
 const SCORE = {
-  WIN: 1000, // Vittoria per l'AI
-  BLOCK_WIN: 900, // Bloccare una vittoria avversaria
-  THREE: 100, // Tre pedine allineate dell'AI
-  BLOCK_THREE: 90, // Tre pedine avversarie bloccate
-  TWO: 10, // Due pedine dell'AI
-  BLOCK_TWO: 9, // Due pedine avversarie bloccate
+  WIN: 1000, // AI - win
+  BLOCK_WIN: 900, // Block player
+  THREE: 100, // AI - 3 lined up
+  BLOCK_THREE: 90, // Block player
+  TWO: 10, // AI - 2 lined up
+  BLOCK_TWO: 9, // Block player
 };
 
-// Funzione per valutare la griglia
+// Evaluate Grid
 function evaluateBoard(board) {
   let score = 0;
 
@@ -54,11 +54,11 @@ function evaluateBoard(board) {
   return score;
 }
 
-// Funzione Minimax con profondità limitata
+// Minimax
 function minimax(board, depth, isMaximizing, alpha, beta) {
   const availableColumns = getAvailableColumns(board);
 
-  // Controllo se c'è un vincitore
+  // check winner
   for (let col of availableColumns) {
     let tempBoard = board.map((row) => [...row]);
     let row = getNextOpenRow(tempBoard, col);
@@ -70,7 +70,6 @@ function minimax(board, depth, isMaximizing, alpha, beta) {
     }
   }
 
-  // Se la profondità è zero o la griglia è piena, ritorna il punteggio della situazione attuale
   if (depth === 0 || availableColumns.length === 0) {
     return evaluateBoard(board);
   }
@@ -85,7 +84,7 @@ function minimax(board, depth, isMaximizing, alpha, beta) {
         let evaluation = minimax(tempBoard, depth - 1, false, alpha, beta);
         maxEval = Math.max(maxEval, evaluation);
         alpha = Math.max(alpha, evaluation);
-        if (beta <= alpha) break; // Alpha-beta pruning
+        if (beta <= alpha) break;
       }
     }
     return maxEval;
@@ -106,7 +105,7 @@ function minimax(board, depth, isMaximizing, alpha, beta) {
   }
 }
 
-// Trova la riga aperta più bassa in una colonna
+// Find row
 function getNextOpenRow(board, col) {
   for (let row = 5; row >= 0; row--) {
     if (board[row][col] === null) return row;
@@ -114,7 +113,7 @@ function getNextOpenRow(board, col) {
   return -1;
 }
 
-// Trova tutte le colonne disponibili per giocare
+// Find all col
 function getAvailableColumns(board) {
   const availableColumns = [];
   for (let col = 0; col < 7; col++) {
@@ -123,7 +122,7 @@ function getAvailableColumns(board) {
   return availableColumns;
 }
 
-// Funzione principale per ottenere la mossa dell'AI
+// Get AI Move
 export function getComputerMove(board) {
   const availableColumns = getAvailableColumns(board);
   let bestScore = -Infinity;
