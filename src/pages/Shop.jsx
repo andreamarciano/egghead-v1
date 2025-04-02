@@ -1,11 +1,16 @@
 import { Outlet, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../comp/Navbar";
 import ProductCard from "../comp/product/ProductCard";
 import Footer from "../comp/Footer";
 
 function Shop() {
+  // Scroll to top
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const eggs = useSelector((state) => state.eggs.value); // redux store
 
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -56,10 +61,10 @@ function Shop() {
           {/* If a product is selected and is in this row, show the product detail */}
           {selectedProduct !== null &&
             row.some((egg) => egg.id === selectedProduct) && (
-              <div className="col-span-4 bg-zinc-900 p-6 rounded-lg shadow-lg border border-gray-700">
+              <div className="col-span-4 bg-zinc-900 p-6 rounded-lg shadow-lg border border-gray-700 relative">
                 {/* Close Outlet */}
                 <button
-                  className="absolute right-100 text-3xl text-white bg-transparent hover:bg-gray-800 hover:text-red-500 p-2 rounded-full"
+                  className="absolute right-0 top-0 text-3xl text-white bg-transparent hover:bg-gray-800 hover:text-red-500 p-2 rounded-full"
                   onClick={handleCloseOutlet}
                 >
                   x

@@ -94,6 +94,26 @@ export const eggsSlice = createSlice({
         price: 1,
         available: 100,
       },
+      {
+        id: "egg-9",
+        imgURL:
+          "https://images.unsplash.com/photo-1587734528720-dc22307700bc?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        alt: "Uova Yoshi",
+        description:
+          "Uovo di Yoshi. Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, enim.",
+        price: 1000,
+        available: 10,
+      },
+      {
+        id: "egg-10",
+        imgURL:
+          "https://images.unsplash.com/photo-1666426265235-81e832ef78a9?q=80&w=1965&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        alt: "Uovo Alieno",
+        description:
+          "Uovo di Alieno. Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, enim.",
+        price: 5000000000,
+        available: 1,
+      },
     ],
   },
   reducers: {},

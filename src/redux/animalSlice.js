@@ -89,6 +89,24 @@ export const animalsSlice = createSlice({
         description:
           "Le uova di Pokémon, in particolare quelle di Togepi, sono magiche! Si dice che queste uova siano portatrici di buona fortuna, e chi sa cosa può succedere quando si schiudono... Mentre Togepi è uno dei più noti Pokémon che depongono uova, molti altri Pokémon leggendari o misteriosi possono deporre uova straordinarie con poteri speciali.",
       },
+      {
+        id: "animal-9",
+        num: 1,
+        imgURL:
+          "https://images.unsplash.com/photo-1592007694563-dc0a128d6c69?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8eW9zaGl8ZW58MHx8MHx8fDA%3D",
+        alt: "Yoshi",
+        description:
+          "Yoshi è un dinosauro agile e forte, noto per la sua capacità di saltare grandi distanze e per il suo spirito laborioso. Non solo è un ottimo compagno di avventure, ma fornisce anche uova particolari, che sono rinomate per la loro forza e resistenza.",
+      },
+      {
+        id: "animal-10",
+        num: 0,
+        imgURL:
+          "https://images.unsplash.com/photo-1607335614551-3062bf90f30e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        alt: "Alieno",
+        description:
+          "Sono facili da curare e molto affettuosi. Dotato di abilità molto utili, è in grado di teletrasportarsi e di adattarsi rapidamente a qualsiasi ambiente. Le sue uova sono ancora più particolari, con poteri che sfidano le leggi della fisica. Non produce escrementi.",
+      },
     ],
   },
   reducers: {},

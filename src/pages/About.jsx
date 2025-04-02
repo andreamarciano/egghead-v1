@@ -1,9 +1,15 @@
+import { useEffect } from "react";
 import Navbar from "../comp/Navbar";
 import Footer from "../comp/Footer";
 import Carousel from "../comp/review/Carousel";
 import Reviews from "../comp/review/Reviews";
 
 function About() {
+  // Scroll to top
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <>
       <Navbar />

@@ -16,9 +16,9 @@ function ReviewForm({ onTriggerGame }) {
 
     // choosing game
     if (rating >= 0 && rating <= 3) {
-      onTriggerGame("pokemon");
+      onTriggerGame("battle");
     } else if (rating === 4) {
-      onTriggerGame("forza4");
+      onTriggerGame("connect4");
     }
 
     // reset
