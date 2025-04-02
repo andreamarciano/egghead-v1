@@ -8,7 +8,7 @@ import "./index.css";
 import store from "./redux/store";
 import App from "./App";
 import Shop from "./pages/Shop";
-import ProductInfoCard from "./comp/ProductInfoCard";
+import ProductInfoCard from "./comp/product/ProductInfoCard";
 import Checkout from "./pages/Checkout";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";

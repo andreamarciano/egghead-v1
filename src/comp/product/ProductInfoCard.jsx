@@ -15,7 +15,7 @@ function ProductInfoCard() {
   // Scroll
   useEffect(() => {
     if (productRef.current) {
-      const offset = -390;
+      const offset = -250;
       const y =
         productRef.current.getBoundingClientRect().top +
         window.scrollY +

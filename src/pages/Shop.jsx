@@ -2,7 +2,7 @@ import { Outlet, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import Navbar from "../comp/Navbar";
-import ProductCard from "../comp/ProductCard";
+import ProductCard from "../comp/product/ProductCard";
 import Footer from "../comp/Footer";
 
 function Shop() {

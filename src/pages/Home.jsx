@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import AnimalCard from "../comp/AnimalCard";
+import AnimalCard from "../comp/home/AnimalCard";
 
 function Home() {
   const animals = useSelector((state) => state.animals.value);
