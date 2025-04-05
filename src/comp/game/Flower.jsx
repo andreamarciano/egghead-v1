@@ -268,8 +268,12 @@ function Flower() {
 
   return (
     <div>
+      {/* Title */}
+      <h2 className="text-center text-3xl font-bold mb-4 text-white">
+        Prat💩... Fiorit🥚?
+      </h2>
       {/* Difficulty */}
-      <div className="absolute left-2 top-80 flex flex-col gap-2 w-15">
+      <div className="absolute left-1 top-25 flex flex-col gap-2 w-10 items-center">
         {Object.keys(DIFFICULTY_SETTINGS).map((level) => (
           <button
             key={level}
@@ -285,7 +289,7 @@ function Flower() {
         ))}
       </div>
       {/* Grid */}
-      <div className="absolute left-2 top-150 flex justify-center w-15">
+      <div className="absolute left-1 bottom-0 flex justify-center w-10">
         <button
           onClick={generateGrid}
           className="bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-800 transition duration-300"

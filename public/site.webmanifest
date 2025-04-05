@@ -1,6 +1,6 @@
 {
-  "name": "Egghead Project",
-  "short_name": "Egghead",
+  "name": "Andrea Factory Project",
+  "short_name": "Andrea Project",
   "description": "Una web app interattiva creata con React, Vite e Tailwind.",
   "start_url": "/",
   "display": "standalone",

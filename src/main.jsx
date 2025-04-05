@@ -3,12 +3,14 @@ import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";
 import { createBrowserRouter } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 import "./index.css";
+import "react-toastify/dist/ReactToastify.css";
 import store from "./redux/store";
 import App from "./App";
 import Shop from "./pages/Shop";
-import ProductInfoCard from "./comp/product/ProductInfoCard";
+import ProductInfoCard from "./comp/shop/ProductInfoCard";
 import Checkout from "./pages/Checkout";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
@@ -46,6 +48,12 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
       <RouterProvider router={router} />
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        theme="dark"
+      />
     </Provider>
   </StrictMode>
 );

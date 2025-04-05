@@ -1,4 +1,13 @@
-function ProductCard({ imgURL, alt, description, price, available, isSelected }) {
+function ProductCard({
+  imgURL,
+  alt,
+  description,
+  price,
+  available,
+  shipping,
+  universe,
+  isSelected,
+}) {
   return (
     <div
       className={`bg-zinc-950 shadow-lg rounded-lg overflow-hidden flex flex-col justify-between p-4 ${
@@ -20,8 +29,17 @@ function ProductCard({ imgURL, alt, description, price, available, isSelected })
         <div className="mt-4">
           <p className="text-gray-400 font-semibold">Prezzo: {price} €</p>
           <p className="text-gray-500">Disponibili: {available}</p>
+          <p className="text-gray-600">
+            1-Day Shipping: {shipping ? "✔️" : "❌"}
+          </p>
+          <p className="text-gray-600">
+            Universe Shipping: {universe ? "✔️" : "❌"}
+          </p>
         </div>
       </div>
+      <button className="bg-cyan-500 text-white py-2 px-6 rounded-lg text-xl font-semibold hover:bg-cyan-700 transition cursor-pointer">
+        Details
+      </button>
     </div>
   );
 }

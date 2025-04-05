@@ -110,7 +110,7 @@ function Footer() {
 
       {/* Tris Modal*/}
       {isTrisOpen && (
-        <div className="fixed inset-0 flex top-20 left-130 justify-center items-center bg-gray-900 bg-opacity-50 z-50 w-135 h-135">
+        <div className="fixed inset-0 flex top-1 left-1 justify-center items-center bg-gray-900 bg-opacity-50 z-50 w-135 h-135">
           <div className="p-6 rounded-lg shadow-lg bg-blue-600 w-125 h-125 items-center justify-center flex flex-col">
             {/* Close */}
             <button
@@ -162,7 +162,7 @@ function Footer() {
 
       {/* Flower Modal */}
       {isFlowerOpen && (
-        <div className="fixed inset-0 flex top-1 left-90 justify-center items-center bg-orange-900 bg-opacity-50 z-50 w-200 h-170 rounded-2xl overflow-y-auto">
+        <div className="fixed inset-0 flex top-0 left-0 justify-center items-center bg-orange-900 bg-opacity-50 z-50 w-190 h-173 rounded-2xl overflow-y-auto">
           <div className="p-6 rounded-lg shadow-lg bg-yellow-600 w-200 h-200 items-center justify-center flex flex-col ">
             {/* Close */}
             <button
@@ -171,10 +171,6 @@ function Footer() {
             >
               x
             </button>
-            {/* Title */}
-            <h2 className="text-center text-3xl font-bold mb-4 text-white">
-              Prat💩... Fiorit🥚?
-            </h2>
             {/* Flower */}
             <Flower />
           </div>

@@ -1,15 +1,18 @@
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useRef, useState } from "react";
+import { addToCart } from "../../redux/cartSlice";
+import { decreaseAvailability } from "../../redux/eggSlice";
+import { toast } from "react-toastify";
+import SidebarCart from "./SidebarCart";
 
 function ProductInfoCard() {
   const { cardID } = useParams(); // get prod id by url
-
   // redux - select prod by id
   const eggs = useSelector((state) =>
     state.eggs.value.filter((egg) => egg.id == cardID.toString())
   );
-
+  const dispatch = useDispatch();
   const productRef = useRef(null); // scroll ref
 
   // Scroll
@@ -21,20 +24,53 @@ function ProductInfoCard() {
         window.scrollY +
         offset;
 
-      window.scrollTo({ top: y, behavior: "smooth" });
+      setTimeout(() => {
+        window.scrollTo({
+          top: y,
+          behavior: "smooth",
+        });
+      }, 200);
     }
   }, [cardID]);
 
-  // prod qty to add in the chart
+  // + - Button
   const [quantity, setQuantity] = useState(1);
-  const increaseQuantity = () => setQuantity(quantity + 1);
+  const increaseQuantity = () => {
+    if (quantity < eggs[0].available) {
+      setQuantity(quantity + 1);
+    }
+  };
+
   const decreaseQuantity = () => setQuantity(quantity > 1 ? quantity - 1 : 1);
+
+  // Add product to Cart
+  const handleAddCart = () => {
+    if (quantity > eggs[0].available) {
+      toast.warning("Hai superato la disponibilità del prodotto!");
+      return;
+    }
+
+    dispatch(
+      addToCart({
+        id: eggs[0].id,
+        name: eggs[0].alt,
+        price: eggs[0].price,
+        imgURL: eggs[0].imgURL,
+        quantity,
+      })
+    );
+
+    dispatch(decreaseAvailability({ id: eggs[0].id, quantity }));
+    setQuantity(1); // reset a 1 dopo l'aggiunta
+    toast.success(`${quantity} ${eggs[0].alt} aggiunto/i al carrello!`);
+  };
 
   return (
     <div
       ref={productRef}
       className="mt-10 max-w-4xl mx-auto bg-zinc-950 rounded-lg shadow-xl min-h-[400px]"
     >
+      {/* Title */}
       <h1 className="text-3xl font-bold text-white text-center mb-6">
         Dettagli prodotto per {eggs[0].alt}
       </h1>
@@ -57,6 +93,12 @@ function ProductInfoCard() {
             <p className="text-gray-300">
               Disponibilità: {eggs[0].available} uova
             </p>
+            <p className="text-gray-300">
+              1-Day Shipping: {eggs[0].shipping ? "✔️" : "❌"}
+            </p>
+            <p className="text-gray-300">
+              Universe Shipping: {eggs[0].universe ? "✔️" : "❌"}
+            </p>
           </div>
 
           {/* Select Quantity */}
@@ -75,13 +117,15 @@ function ProductInfoCard() {
               +
             </button>
 
-            {/* Add to Char */}
+            {/* Add to Cart */}
             <button
-              onClick={() => console.log(`Aggiungi ${quantity} al carrello`)}
+              onClick={handleAddCart}
               className="bg-yellow-500 text-white py-2 px-6 rounded-lg text-xl font-semibold hover:bg-yellow-600 transition"
             >
-              Aggiungi al carrello
+              Add to Cart
             </button>
+            {/* SidebarCart */}
+            <SidebarCart />
           </div>
         </div>
       </div>

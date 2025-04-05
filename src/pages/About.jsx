@@ -3,6 +3,7 @@ import Navbar from "../comp/Navbar";
 import Footer from "../comp/Footer";
 import Carousel from "../comp/review/Carousel";
 import Reviews from "../comp/review/Reviews";
+import Scrollbar from "../comp/Scrollbar";
 
 function About() {
   // Scroll to top
@@ -13,6 +14,8 @@ function About() {
   return (
     <>
       <Navbar />
+      {/* Vertical Scroll Bar */}
+      <Scrollbar />
 
       <div className="bg-blue-100 py-10">
         <div className="max-w-5xl mx-auto px-6">

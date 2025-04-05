@@ -1,9 +1,17 @@
 import { NavLink } from "react-router-dom";
+import Sidebar from "./Sidebar";
+import SidebarCart from "./shop/SidebarCart";
 
 function Navbar() {
   return (
     <nav className="bg-gray-900 text-white p-4">
       <ul className="flex gap-6">
+        {/* Sidebar */}
+        <div className="w-5 relative">
+          <li className="absolute top-[-7px] left-[-9px]">
+            <Sidebar />
+          </li>
+        </div>
         {/* Home */}
         <li>
           <NavLink
@@ -56,6 +64,12 @@ function Navbar() {
             About Us
           </NavLink>
         </li>
+        {/* Sidebar */}
+        <div className="w-5 relative">
+          <li className="absolute top-[-7px] left-[-9px]">
+            <SidebarCart />
+          </li>
+        </div>
       </ul>
     </nav>
   );
