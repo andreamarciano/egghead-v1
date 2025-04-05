@@ -8,7 +8,7 @@ export const animalsSlice = createSlice({
         id: "animal-0",
         num: 0,
         imgURL:
-          "https://plus.unsplash.com/premium_photo-1664971411530-9d2199405d53?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Z2FsbGluYXxlbnwwfHwwfHx8MA%3D%3D",
+          "https://images.unsplash.com/photo-1616225994053-e629b171cfa3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Livornese",
         description:
           "La gallina è un uccello domestico che fornisce le uova bianche. È un animale molto comune nelle aziende agricole e ha bisogno di un ambiente caldo e tranquillo per deporre le uova.",
