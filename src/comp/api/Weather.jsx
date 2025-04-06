@@ -10,6 +10,7 @@ const Weather = () => {
     fetch(`https://andreafactoryproject-v1.onrender.com/meteo?citta=${city}`)
       .then((res) => res.json())
       .then((data) => {
+        console.log(data); // Aggiungi un log per vedere i dati ricevuti
         if (data.errore) {
           setError(data.errore);
         } else {
