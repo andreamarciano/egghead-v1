@@ -16,9 +16,6 @@ function Customer() {
         </p>
         {/* Chatbot */}
         <div className="mt-8 p-6 bg-gray-500 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-4">
-            Inizia la chat con il nostro operatore
-          </h2>
           <Chatbot />
         </div>
       </div>
