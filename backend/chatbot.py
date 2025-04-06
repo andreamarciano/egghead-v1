@@ -10,6 +10,8 @@ CORS(app)
 api_key = os.environ.get("OPENAI_API_KEY")
 if not api_key:
     raise ValueError("API key non trovata nelle variabili d'ambiente!")
+else:
+    print(f"API key letta: {api_key}")  # Aggiungi questa riga per verificare
 
 openai.api_key = api_key
 
@@ -28,6 +30,7 @@ def chat():
             max_tokens=100,  # Imposta un limite ai token
             temperature=0.7,  # Imposta la creatività della risposta
         )
+        print("Risposta OpenAI:", response)  # Aggiungi questa linea per vedere la risposta
         
         # Estrai la risposta dal modello
         ai_message = response.choices[0].text.strip()
@@ -35,6 +38,7 @@ def chat():
         return jsonify({"message": ai_message})
     
     except Exception as e:
+        print(f"Errore: {str(e)}")  # Aggiungi il log dell'errore
         return jsonify({"errore": str(e)}), 500
 
 if __name__ == "__main__":

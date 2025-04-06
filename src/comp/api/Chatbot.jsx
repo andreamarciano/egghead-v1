@@ -28,6 +28,7 @@ const Chatbot = () => {
       );
 
       const data = await response.json();
+      console.log("Risposta dal backend:", data); // Aggiungi questa riga per loggare la risposta
 
       // Aggiungi la risposta dell'AI alla chat
       if (data.message) {
