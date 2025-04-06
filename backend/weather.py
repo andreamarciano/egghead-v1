@@ -26,8 +26,17 @@ def meteo():
     meteo = {
         "citta": data["name"],
         "temperatura": round(data["main"]["temp"]),
+        "temperatura_percepita": round(data["main"]["feels_like"]),
+        "temp_min": round(data["main"]["temp_min"]),
+        "temp_max": round(data["main"]["temp_max"]),
         "descrizione": data["weather"][0]["description"],
-        "vento": round(data["wind"]["speed"] * 3.6)  # from m/s to km/h
+        "vento": round(data["wind"]["speed"] * 3.6), # from m/s to km/h
+        "umidita": data["main"]["humidity"],
+        "pressione": data["main"]["pressure"],
+        "visibilita": data["visibility"] / 1000, # km
+        "icona": f"http://openweathermap.org/img/wn/{data['weather'][0]['icon']}@2x.png", # icon url
+        "alba": data["sys"]["sunrise"],
+        "tramonto": data["sys"]["sunset"]
     }
     
     return jsonify(meteo)
