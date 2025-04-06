@@ -25,7 +25,7 @@ def chat():
     try:
         # Esegui la chiamata API a OpenAI per ottenere una risposta dal modello GPT
         response = openai.Completion.create(
-            model="text-davinci-003",  # Usa il modello GPT-3
+            model="gpt-3.5-turbo",  # Usa il modello GPT-3
             prompt=f"Cliente: {user_message}\nOperatore: ",
             max_tokens=100,  # Imposta un limite ai token
             temperature=0.7,  # Imposta la creatività della risposta
