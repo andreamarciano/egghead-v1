@@ -64,6 +64,19 @@ function Navbar() {
             About Us
           </NavLink>
         </li>
+        {/* About Us */}
+        <li>
+          <NavLink
+            to="/customer"
+            className={({ isActive }) =>
+              `hover:text-yellow-300 transition-colors duration-200 ${
+                isActive ? "text-yellow-400 font-bold" : ""
+              }`
+            }
+          >
+            Customer Service
+          </NavLink>
+        </li>
         {/* Sidebar */}
         <div className="w-5 relative">
           <li className="absolute top-[-7px] left-[-9px]">

@@ -13,6 +13,7 @@ import Shop from "./pages/Shop";
 import ProductInfoCard from "./comp/shop/ProductInfoCard";
 import Checkout from "./pages/Checkout";
 import About from "./pages/About";
+import Customer from "./pages/Customer";
 import NotFound from "./pages/NotFound";
 
 const router = createBrowserRouter([
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
   {
     path: "/about",
     element: <About></About>,
+  },
+  {
+    path: "/customer",
+    element: <Customer></Customer>,
   },
   {
     path: "*",
