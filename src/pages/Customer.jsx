@@ -1,6 +1,5 @@
 import Navbar from "../comp/Navbar";
 import Weather from "../comp/api/Weather";
-import Chatbot from "../comp/api/Chatbot";
 
 function Customer() {
   return (
@@ -11,13 +10,12 @@ function Customer() {
       {/* Customer Service */}
       <div className="mt-8 p-6 bg-gray-600 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold">Hai bisogno di assistenza?</h2>
-        <p className="mt-2 text-gray-300">
+        <p className="mt-2 text-gray-700">
           Se hai domande, il nostro operatore è disponibile per rispondere.
         </p>
-        {/* Chatbot */}
-        <div className="mt-8 p-6 bg-gray-500 rounded-lg shadow-md">
-          <Chatbot />
-        </div>
+        <button className="mt-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-400">
+          Contatta il nostro operatore
+        </button>
       </div>
 
       {/* Weather */}
