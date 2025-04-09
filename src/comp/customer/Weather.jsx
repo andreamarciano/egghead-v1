@@ -122,7 +122,10 @@ const Weather = () => {
   const [tickerText, setTickerText] = useState(ticker.join("   •   "));
 
   return (
-    <div className="space-y-6">
+    <div className="mt-8 p-6 bg-gray-600 rounded-lg shadow-md space-y-6">
+      <p className="mb-8">
+        Nel frattempo, perché non controlli il meteo nella tua città?
+      </p>
       {/* Input City */}
       <div className="flex justify-center items-center space-x-4">
         <input

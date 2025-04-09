@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { clearCart } from "../redux/cartSlice";
 
-const discountCodes = ["TRIS5", "FLOW5", "FOUR5", "SNAKE5", "BATTLE5"];
+const discountCodes = ["TRIS5", "FLOW5", "FOUR5", "SCREWED5", "GRAZIEATE5"];
 
 function Checkout() {
   const cartItems = useSelector((state) => state.cart.items); // redux store

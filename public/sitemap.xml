@@ -24,4 +24,10 @@
         <priority>0.5</priority>
         <changefreq>monthly</changefreq>
     </url>
+    <!-- Customer Page-->
+    <url>
+        <loc>https://ubiquitous-cucurucho-3e3fe5.netlify.app/customer</loc>
+        <priority>0.5</priority>
+        <changefreq>monthly</changefreq>
+    </url>
 </urlset>
