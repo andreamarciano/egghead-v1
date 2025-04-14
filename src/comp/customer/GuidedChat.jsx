@@ -6,7 +6,7 @@ const chatFlow = {
   start: {
     message: "Ciao sono Chatbot e sono qui per aiutarti! Di cosa hai bisogno?",
     options: [
-      { label: "Problema con un ordine", next: "ordine" }, // fai gioco
+      { label: "Problema con un ordine", next: "ordine" },
       { label: "Effettuare un reso", next: "reso" }, // fai gioco
       { label: "Ottieni assistenza per un altro problema", next: "altro" },
       { label: "Le uova sono arrivate già schiuse", next: "uova" },
@@ -63,7 +63,6 @@ const chatFlow = {
       { label: "Parla con un agente", next: "offeso" }, // migliora agente
     ],
   },
-  // da fare
   problemi: {
     message:
       "Mi dispiace sentire che hai problemi con l'ordine, e credo tu sia coraggioso nell'ammettere il tuo Disturbo Ossessivo Compulsivo da ordine e simmetria. Purtroppo i miei poteri mi limitano dal poterti dare un aiuto concreto. Posso allievare il tuo problema facendoti ordinare qualcosa.",
@@ -211,7 +210,7 @@ const chatFlow = {
   },
   istantaneo: {
     message:
-      "Hai scelto di sicuro l'opzione migliore. I tuoi prodotti sono stati smaterializzati istantaneamente e cancellati dall'universo. La tua scelta aiuterà a diminuire l'inquinamento. Per ringraziarti ti offriamo un codice sconto da usare per il tuo prossimo ordine: SCREWED5.",
+      "Hai scelto di sicuro l'opzione migliore. I tuoi prodotti sono stati smaterializzati istantaneamente e cancellati dall'universo. La tua scelta aiuterà a diminuire l'inquinamento.",
     options: [],
   },
   nostri: {
@@ -326,6 +325,8 @@ const GuidedChat = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [isAgentTyping, setIsAgentTyping] = useState(false);
   const [showGame, setShowGame] = useState(false);
+  // LOCAL STORAGE CODE
+  const currentCodes = JSON.parse(localStorage.getItem("unlockedCodes") || "[]");
 
   useEffect(() => {
     // Simula scrittura iniziale
@@ -388,6 +389,11 @@ const GuidedChat = () => {
         },
       ]);
       setChatEnded(true);
+      // LOCAL STORAGE CODE
+      if (!currentCodes.includes("GRAZIEATE5")) {
+        localStorage.setItem("unlockedCodes", JSON.stringify([...currentCodes, "GRAZIEATE5"]));
+      }
+      
     } else {
       setIsAgentTyping(true);
       const randomReply =

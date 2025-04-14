@@ -1,4 +1,5 @@
 import Navbar from "../comp/Navbar";
+import Footer from "../comp/Footer";
 import Weather from "../comp/customer/Weather";
 import Assistenza from "../comp/customer/Assistenza";
 
@@ -13,6 +14,8 @@ function Customer() {
 
       {/* Weather */}
       <Weather />
+
+      <Footer />
     </>
   );
 }

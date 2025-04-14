@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { clearCart } from "../redux/cartSlice";
 
-const discountCodes = ["TRIS5", "FLOW5", "FOUR5", "SCREWED5", "GRAZIEATE5"];
+const discountCodes = ["TRIS5", "FLOW5", "FOUR5", "GRAZIEATE5", "ORDER5"];
 
 function Checkout() {
   const cartItems = useSelector((state) => state.cart.items); // redux store
@@ -24,8 +24,14 @@ function Checkout() {
     numeroCarta: "",
   });
 
+  // Discount Code
+  const [showCodes, setShowCodes] = useState(false);
+  const unlockedCodes = JSON.parse(
+    localStorage.getItem("unlockedCodes") || "[]"
+  );
   const [discountCode, setDiscountCode] = useState("");
   const [appliedDiscounts, setAppliedDiscounts] = useState([]); // already applied
+
   const [errorMessage, setErrorMessage] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
 
@@ -131,7 +137,12 @@ function Checkout() {
                 )}
                 <div className="flex justify-between font-bold border-t pt-2">
                   <span>Totale</span>
-                  <span>€{finalTotal}</span>
+                  <span>
+                    €
+                    {parseFloat(finalTotal.toFixed(4))
+                      .toString()
+                      .replace(".", ",")}
+                  </span>
                 </div>
               </>
             )}
@@ -274,9 +285,11 @@ function Checkout() {
                       formData.numeroCarta
                     )}`}
                     required
+                    pattern="\d{4}-\d{4}-\d{4}-\d{4}"
+                    title="Formato corretto: XXXX-XXXX-XXXX-XXXX"
                   />
                   {/* Discount code */}
-                  <div className="flex space-x-2">
+                  <div className="flex space-x-2 relative">
                     <input
                       type="text"
                       placeholder="Codice sconto"
@@ -291,6 +304,33 @@ function Checkout() {
                     >
                       Applica
                     </button>
+
+                    {/* Show Discount Codes */}
+                    <button
+                      type="button"
+                      onClick={() => setShowCodes(!showCodes)}
+                      className="bg-gray-200 border border-gray-400 px-3 py-2 rounded hover:bg-gray-100 transition text-xl"
+                      title="Mostra codici sbloccati"
+                    >
+                      🗝️
+                    </button>
+                    {/* Discount Codes Window */}
+                    {showCodes && (
+                      <div className="absolute top-12 right-0 text-gray-800 bg-white shadow-md rounded p-4 z-10 w-48 text-sm">
+                        <h3 className="font-semibold mb-2">Discount Codes</h3>
+                        {unlockedCodes.length === 0 ? (
+                          <p className="text-gray-500">
+                            Nessun codice sbloccato
+                          </p>
+                        ) : (
+                          <ul className="list-disc list-outside pl-5 space-y-1">
+                            {unlockedCodes.map((code, index) => (
+                              <li key={index}>{code}</li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

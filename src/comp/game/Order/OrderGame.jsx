@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 
+const LOCAL_STORAGE_KEY = "unlockedLevelsOrder";
+
 const OrderGame = ({ onClose }) => {
   /* STATES */
 
@@ -8,7 +10,7 @@ const OrderGame = ({ onClose }) => {
     1: { numBalls: 15, time: 30 },
     2: { numBalls: 25, time: 60 },
     3: { numBalls: 35, time: 90 },
-    4: { numBalls: 40, time: 100 },
+    4: { numBalls: 42, time: 100 },
   };
   const [selectedLevel, setSelectedLevel] = useState(1);
   const [numBalls, setNumBalls] = useState(levels[1].numBalls);
@@ -23,9 +25,11 @@ const OrderGame = ({ onClose }) => {
   const [victoryMessage, setVictoryMessage] = useState("");
   const [gameStarted, setGameStarted] = useState(false);
   const [cheatMode, setCheatMode] = useState(false);
-  const [score, setScore] = useState(0); // LEVEL5
   const [lastClickTime, setLastClickTime] = useState(Date.now()); // LEVEL5
   // Scoreboard
+  const [score, setScore] = useState(0); // LEVEL5
+  const [displayedScore, setDisplayedScore] = useState(0); // LEVEL5
+  const [scoreTextColor, setScoreTextColor] = useState("white"); // LEVEL5
   const [showScoreBoard, setShowScoreBoard] = useState(false);
   // Balls
   const [items, setItems] = useState([]);
@@ -35,6 +39,10 @@ const OrderGame = ({ onClose }) => {
   // Border
   const maxX = 680;
   const maxY = 440;
+  // LOCAL STORAGE CODE
+  const currentCodes = JSON.parse(
+    localStorage.getItem("unlockedCodes") || "[]"
+  );
 
   /* STATES */
 
@@ -220,6 +228,14 @@ const OrderGame = ({ onClose }) => {
             "Complimenti, sei il primo umano ad aver mai completato il gioco (o forse no). Ecco a te un codice sconto: ORDER5 !"
           );
           setLevel5Unlocked(true); // LEVEL5
+          saveLevel5Unlocked(true);
+          // LOCAL STORAGE CODE
+          if (!currentCodes.includes("ORDER5")) {
+            localStorage.setItem(
+              "unlockedCodes",
+              JSON.stringify([...currentCodes, "ORDER5"])
+            );
+          }
         }
       }
     } else if (selectedLevel === 5) {
@@ -506,6 +522,27 @@ const OrderGame = ({ onClose }) => {
     }
   }, [gameStarted, selectedLevel]);
 
+  // Score ANIMATION
+  useEffect(() => {
+    if (displayedScore === score) return;
+
+    const increment = () => {
+      setDisplayedScore((prev) => {
+        if (prev < score) return Math.min(prev + 5, score);
+        return prev;
+      });
+      setScoreTextColor("text-green-500");
+    };
+
+    const interval = setInterval(increment, 30);
+
+    setTimeout(() => {
+      setScoreTextColor("text-white");
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, [score, displayedScore]);
+
   // Timer
   useEffect(() => {
     if (timeLeft > 0 && !gameOver && !hasWon && gameStarted) {
@@ -538,6 +575,7 @@ const OrderGame = ({ onClose }) => {
       setItems(generated);
       setGameStarted(false);
       setScore(0);
+      setDisplayedScore(0);
       setSpecialBalls([]);
     } else {
       // 1-4
@@ -567,6 +605,7 @@ const OrderGame = ({ onClose }) => {
       setHasWon(false);
       setGameStarted(false);
       setScore(0);
+      setDisplayedScore(0);
       setSpecialBalls([]);
     } else {
       // 1-4
@@ -583,6 +622,15 @@ const OrderGame = ({ onClose }) => {
   /* RESET */
 
   /* LOCAL STORAGE */
+
+  const saveLevel5Unlocked = (isUnlocked) => {
+    localStorage.setItem("orderGameLevel5Unlocked", JSON.stringify(isUnlocked));
+  };
+
+  const getLevel5Unlocked = () => {
+    const stored = localStorage.getItem("orderGameLevel5Unlocked");
+    return stored ? JSON.parse(stored) : false;
+  };
 
   // SCORE - Order Scores
   const getBestScores = () => {
@@ -608,19 +656,21 @@ const OrderGame = ({ onClose }) => {
 
   // LEVEL - Update unlocked levels Array
   const saveUnlockedLevels = (levels) => {
-    localStorage.setItem("unlockedLevels", JSON.stringify(levels));
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(levels));
   };
 
   // LEVEL - Get unlocked levels Array (app start)
   const getUnlockedLevels = () => {
-    const stored = localStorage.getItem("unlockedLevels");
+    const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
     return stored ? JSON.parse(stored) : [1];
   };
 
   // LEVEL - Get unlocked levels (app start)
   useEffect(() => {
     const storedLevels = getUnlockedLevels();
+    const storedLevel5 = getLevel5Unlocked();
     setUnlockedLevels(storedLevels);
+    setLevel5Unlocked(storedLevel5);
   }, []);
 
   /* LOCAL STORAGE */
@@ -635,7 +685,9 @@ const OrderGame = ({ onClose }) => {
           {/* LEVEL5 - Score */}
           {selectedLevel === 5 && (
             <div className="score-display">
-              <h3 className="text-white text-xl">Score: {score}</h3>
+              <h3 className={`text-xl ${scoreTextColor}`}>
+                Score: {displayedScore}
+              </h3>
             </div>
           )}
           <div className="flex gap-2">

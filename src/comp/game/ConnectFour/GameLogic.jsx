@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { getComputerMove } from "./AILogic";
 
-// Winner
+// Winner Function
 export function checkForWinner(board, row, col) {
   const player = board[row][col];
   const directions = [
@@ -51,23 +51,28 @@ export function checkForWinner(board, row, col) {
 }
 
 export function useGameLogic() {
+  /* STATES */
+
+  // Grid
   const [board, setBoard] = useState(
     Array.from({ length: 6 }, () => Array(7).fill(null))
   );
+  // Game
   const [isRedTurn, setIsRedTurn] = useState(true);
   const [isComputerTurn, setIsComputerTurn] = useState(false);
   const [scoreRed, setScoreRed] = useState(0);
   const [scoreYellow, setScoreYellow] = useState(0);
-  const [gameMessage, setGameMessage] = useState("Next player: 🔴");
   const [gameOver, setGameOver] = useState(false);
   const [winningCells, setWinningCells] = useState([]);
-  const [flash, setFlash] = useState(false);
   const [winner, setWinner] = useState(null);
   const [redWins, setRedWins] = useState(0);
+  // Animation
+  const [flash, setFlash] = useState(false);
+  // Message
+  const [gameMessage, setGameMessage] = useState("Next player: 🔴");
   const [computerMessage, setComputerMessage] = useState(
     "A te la prima mossa."
   );
-
   const computerPhrases = {
     play: [
       "Complimenti, hai appena fatto il primo passo verso la sconfitta.",
@@ -95,38 +100,14 @@ export function useGameLogic() {
       "Non ci capisco più niente, che assurdità!",
     ],
   };
+  // LOCAL STORAGE CODE
+  const currentCodes = JSON.parse(
+    localStorage.getItem("unlockedCodes") || "[]"
+  );
 
-  // Flash effect
-  useEffect(() => {
-    if (winningCells.length > 0) {
-      let flashes = 0;
-      const interval = setInterval(() => {
-        setFlash((prev) => !prev);
-        flashes++;
-        if (flashes >= 6) {
-          clearInterval(interval);
-          setFlash(true);
-        }
-      }, 300);
-    }
-  }, [winningCells]);
+  /* STATES */
 
-  // Reset
-  const resetGame = () => {
-    setBoard(Array.from({ length: 6 }, () => Array(7).fill(null)));
-    setIsRedTurn(true);
-    setGameMessage("Next player: 🔴");
-    setGameOver(false);
-    setWinningCells([]);
-    setWinner(null);
-    setComputerMessage("A te la prima mossa.");
-  };
-
-  const resetScore = () => {
-    setScoreRed(0);
-    setScoreYellow(0);
-    setRedWins(0);
-  };
+  /* FUNCTION */
 
   // Move
   const makeMove = (col) => {
@@ -148,6 +129,13 @@ export function useGameLogic() {
               setComputerMessage(
                 "Non male per un umano. Ecco il tuo codice sconto: FOUR5"
               );
+              // LOCAL STORAGE CODE
+              if (!currentCodes.includes("FOUR5")) {
+                localStorage.setItem(
+                  "unlockedCodes",
+                  JSON.stringify([...currentCodes, "FOUR5"])
+                );
+              }
             } else {
               setGameMessage("🔴 Win!");
               setComputerMessage(
@@ -196,11 +184,53 @@ export function useGameLogic() {
     }, 750);
   };
 
+  /* FUNCTION */
+
+  /* USEEFFECT */
+
+  // Flash effect
+  useEffect(() => {
+    if (winningCells.length > 0) {
+      let flashes = 0;
+      const interval = setInterval(() => {
+        setFlash((prev) => !prev);
+        flashes++;
+        if (flashes >= 6) {
+          clearInterval(interval);
+          setFlash(true);
+        }
+      }, 300);
+    }
+  }, [winningCells]);
+
+  // AI Move
   useEffect(() => {
     if (!gameOver && !isRedTurn) {
       makeComputerMove();
     }
   }, [isRedTurn, gameOver]);
+
+  /* USEEFFECT */
+
+  /* RESET */
+
+  // Reset
+  const resetGame = () => {
+    setBoard(Array.from({ length: 6 }, () => Array(7).fill(null)));
+    setIsRedTurn(true);
+    setGameMessage("Next player: 🔴");
+    setGameOver(false);
+    setWinningCells([]);
+    setWinner(null);
+    setComputerMessage("A te la prima mossa.");
+  };
+  const resetScore = () => {
+    setScoreRed(0);
+    setScoreYellow(0);
+    setRedWins(0);
+  };
+
+  /* RESET */
 
   return {
     board,
