@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import "./Flower.css";
 
 const LEVEL_SETTINGS = {
   "🐣": {
     gridWidth: 9,
     gridHeight: 9,
     numMines: 10,
-    timer: 60,
+    timer: 30,
     increment: 3,
   },
   "🐔": {
@@ -25,6 +26,9 @@ const LEVEL_SETTINGS = {
 };
 
 const LOCAL_STORAGE_KEY = "unlockedLevelsFlower";
+
+const gameOverSound = new Audio("/sounds/flower/flower-lose.wav");
+const playerWinSound = new Audio("/sounds/flower/flower-win.wav");
 
 function Flower({ onClose }) {
   /* STATES */
@@ -53,6 +57,12 @@ function Flower({ onClose }) {
   const [timeRanOut, setTimeRanOut] = useState(false);
   const [clickedX, setClickedX] = useState(null);
   const [clickedY, setClickedY] = useState(null);
+  // Sound
+  const [audioEnabled, setAudioEnabled] = useState(true); // master
+  const [musicVolume, setMusicVolume] = useState(0.5); // background music
+  const [sfxVolume, setSfxVolume] = useState(0.5); // sfx
+  const [showVolumeSettings, setShowVolumeSettings] = useState(false);
+  const flowerBgMusic = useRef(null);
   // Message
   const randomMessages = [
     "Attento a non calpestarle!",
@@ -80,6 +90,18 @@ function Flower({ onClose }) {
   );
 
   /* STATES */
+
+  /* SOUNDS */
+
+  const playSound = (sound) => {
+    if (audioEnabled && sound) {
+      sound.volume = sfxVolume;
+      sound.currentTime = 0;
+      sound.play().catch((e) => console.warn("Play error:", e));
+    }
+  };
+
+  /* SOUNDS */
 
   /* FUNCTIONS */
 
@@ -310,6 +332,8 @@ function Flower({ onClose }) {
 
     if (allMinesFlagged && allSafeCellsRevealed) {
       setHasWon(true);
+      // Player Win Sound
+      playSound(playerWinSound);
 
       const levels = ["🐣", "🐔", "🐓"];
       const currentIndex = levels.indexOf(difficulty);
@@ -362,6 +386,8 @@ function Flower({ onClose }) {
       setClickedX(x);
       setClickedY(y);
       setGameOver(true);
+      // Game Over Sound
+      playSound(gameOverSound);
       return;
     }
 
@@ -425,9 +451,12 @@ function Flower({ onClose }) {
   useEffect(() => {
     if (!hasStarted || gameOver || hasWon) return;
 
+    // Lose for time
     if (timeLeft <= 0) {
       setGameOver(true);
-      setTimeRanOut(true); // lose for timer
+      setTimeRanOut(true);
+      // Game Over Sound
+      playSound(gameOverSound);
       return;
     }
 
@@ -438,6 +467,70 @@ function Flower({ onClose }) {
 
     return () => clearInterval(timer); // clear timer
   }, [timeLeft, hasStarted, gameOver, hasWon]);
+
+  // Run-Away Eggs ANIMATION
+  useEffect(() => {
+    if (!timeRanOut) return;
+
+    const cells = document.querySelectorAll(".cell");
+    cells.forEach((cell) => {
+      const hasEgg = cell.textContent === "🥚";
+      if (hasEgg) {
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = 200 + Math.random() * 100;
+        const x = Math.cos(angle) * distance;
+        const y = Math.sin(angle) * distance;
+
+        cell.style.setProperty("--run-x", `${x}px`);
+        cell.style.setProperty("--run-y", `${y}px`);
+        cell.classList.add("run-away");
+      }
+    });
+  }, [timeRanOut]);
+
+  // Hopping Basket ANIMATION
+  useEffect(() => {
+    if (!hasWon) return;
+
+    const cells = document.querySelectorAll(".cell");
+    cells.forEach((cell) => {
+      const isBasket = cell.textContent === "🧺";
+      if (isBasket) {
+        cell.classList.add("basket-hop");
+        setTimeout(() => {
+          cell.classList.remove("basket-hop");
+        }, 800);
+      }
+    });
+  }, [hasWon]);
+
+  // Background Music Volume
+  useEffect(() => {
+    if (flowerBgMusic.current) {
+      flowerBgMusic.current.volume = musicVolume;
+    }
+  }, [musicVolume]);
+
+  // Background Music
+  useEffect(() => {
+    flowerBgMusic.current = new Audio("/sounds/flower/flower-theme.mp3");
+    flowerBgMusic.current.loop = true;
+    flowerBgMusic.current.volume = musicVolume;
+    return () => {
+      flowerBgMusic.current.pause();
+    };
+  }, []);
+
+  // Play/Pause Background Music
+  useEffect(() => {
+    if (hasStarted && !gameOver && !hasWon && audioEnabled) {
+      flowerBgMusic.current?.play().catch((e) => {
+        console.warn("Autoplay error:", e);
+      });
+    } else {
+      flowerBgMusic.current?.pause();
+    }
+  }, [hasStarted, gameOver, hasWon, audioEnabled]);
 
   /* USEEFFECT */
 
@@ -452,8 +545,54 @@ function Flower({ onClose }) {
           <h2 className="text-center text-3xl font-bold text-white">
             Prat💩... Fiorit🥚?
           </h2>
+          {/* Button */}
           <div className="flex gap-2">
-            {/* Close */}
+            {/* Audio Settings */}
+            <button
+              onClick={() => setShowVolumeSettings((prev) => !prev)}
+              className="bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded"
+            >
+              🔊
+            </button>
+            {/* Audio Settings Popup */}
+            {showVolumeSettings && (
+              <div className="absolute top-12 right-4 bg-white shadow-lg p-4 rounded border border-gray-300 z-50">
+                {/* SFX */}
+                <div className="flex items-center gap-2 mb-2 text-black">
+                  <label htmlFor="sfx">Sound</label>
+                  <input
+                    id="sfx"
+                    type="range"
+                    min={0}
+                    max={1}
+                    step={0.01}
+                    value={sfxVolume}
+                    onChange={(e) => setSfxVolume(parseFloat(e.target.value))}
+                  />
+                </div>
+                {/* Background Music */}
+                <div className="flex items-center gap-2 mb-2 text-black">
+                  <label htmlFor="music">Music</label>
+                  <input
+                    id="music"
+                    type="range"
+                    min={0}
+                    max={1}
+                    step={0.01}
+                    value={musicVolume}
+                    onChange={(e) => setMusicVolume(parseFloat(e.target.value))}
+                  />
+                </div>
+                {/* Audio */}
+                <button
+                  onClick={() => setAudioEnabled((prev) => !prev)}
+                  className="bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded w-full"
+                >
+                  {audioEnabled ? "🔊" : "🔇"}
+                </button>
+              </div>
+            )}
+            {/* Restart */}
             <button
               onClick={generateGrid}
               className="px-2 py-1 rounded bg-orange-500 hover:bg-yellow-300 transition duration-300"
@@ -530,7 +669,7 @@ function Flower({ onClose }) {
             row.map((cell, y) => (
               <div
                 key={`${x}-${y}`}
-                className={`text-xs sm:text-base flex items-center justify-center border border-gray-600 font-bold cursor-pointer 
+                className={`cell text-xs sm:text-base flex items-center justify-center border border-gray-600 font-bold cursor-pointer 
     ${cell.revealed || gameOver ? "bg-gray-300" : "bg-gray-400"} 
     ${
       gameOver &&

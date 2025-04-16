@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { clearCart } from "../redux/cartSlice";
 
-const discountCodes = ["TRIS5", "FLOW5", "FOUR5", "GRAZIEATE5", "ORDER5"];
+const discountCodes = ["TRIS5", "FLOW5", "FOUR5", "GRAZIEATE5", "ORDER5", "MAZE5"];
 
 function Checkout() {
   const cartItems = useSelector((state) => state.cart.items); // redux store
@@ -316,7 +316,7 @@ function Checkout() {
                     </button>
                     {/* Discount Codes Window */}
                     {showCodes && (
-                      <div className="absolute top-12 right-0 text-gray-800 bg-white shadow-md rounded p-4 z-10 w-48 text-sm">
+                      <div className="absolute top-12 right-0 text-gray-800 bg-white shadow-md rounded p-4 z-10 w-48 text-sm overflow-y-auto h-40 mt-1">
                         <h3 className="font-semibold mb-2">Discount Codes</h3>
                         {unlockedCodes.length === 0 ? (
                           <p className="text-gray-500">

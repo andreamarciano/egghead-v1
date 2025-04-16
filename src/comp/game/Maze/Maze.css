@@ -1,0 +1,72 @@
+/* +1 Heart Blink Animation */
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+.blink {
+    animation: blink 0.8s infinite;
+}
+
+/* -1 Heart Blink Animation */
+@keyframes blinkTwice {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    25%,
+    75% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+.blink-hearts {
+    animation: blinkTwice 0.6s ease;
+}
+
+/* Healing Animation */
+@keyframes bounceOnce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-6px);
+    }
+}
+
+.bounce-heart {
+    animation: bounceOnce 0.6s ease;
+}
+
+/* Max Health Animation */
+@keyframes blinkZoomOnce {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.6;
+      transform: scale(1.2);
+    }
+  }
+  
+  .blink-zoom {
+    animation: blinkZoomOnce 0.6s ease;
+  }
+  

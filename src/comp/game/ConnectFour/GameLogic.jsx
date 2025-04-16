@@ -1,5 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getComputerMove } from "./AILogic";
+
+const tokenFallingSound = new Audio("/sounds/connect4/falling-token.wav");
+const winSound = new Audio("/sounds/connect4/connect4-win.mp3");
 
 // Winner Function
 export function checkForWinner(board, row, col) {
@@ -66,8 +69,15 @@ export function useGameLogic() {
   const [winningCells, setWinningCells] = useState([]);
   const [winner, setWinner] = useState(null);
   const [redWins, setRedWins] = useState(0);
+  const [hasStarted, setHasStarted] = useState(false);
   // Animation
   const [flash, setFlash] = useState(false);
+  // Sound
+  const [audioEnabled, setAudioEnabled] = useState(true); // master
+  const [musicVolume, setMusicVolume] = useState(0.5); // background music
+  const [sfxVolume, setSfxVolume] = useState(0.5); // sfx
+  const [showVolumeSettings, setShowVolumeSettings] = useState(false);
+  const connect4BgMusic = useRef(null);
   // Message
   const [gameMessage, setGameMessage] = useState("Next player: 🔴");
   const [computerMessage, setComputerMessage] = useState(
@@ -107,6 +117,18 @@ export function useGameLogic() {
 
   /* STATES */
 
+  /* SOUNDS */
+
+  const playSound = (sound) => {
+    if (audioEnabled && sound) {
+      sound.volume = sfxVolume;
+      sound.currentTime = 0;
+      sound.play().catch((e) => console.warn("Play error:", e));
+    }
+  };
+
+  /* SOUNDS */
+
   /* FUNCTION */
 
   // Move
@@ -117,11 +139,16 @@ export function useGameLogic() {
     for (let row = 5; row >= 0; row--) {
       if (newBoard[row][col] === null) {
         newBoard[row][col] = isRedTurn ? "🔴" : "🟡";
+        if (!hasStarted) setHasStarted(true); // start bg music
+        // Token Falling Sound
+        playSound(tokenFallingSound);
         setBoard(newBoard);
         const winningPositions = checkForWinner(newBoard, row, col);
         if (winningPositions) {
           setWinningCells(winningPositions);
           setWinner(newBoard[row][col]);
+          // Win Sound
+          playSound(winSound);
 
           if (newBoard[row][col] === "🔴") {
             setScoreRed((prev) => prev + 1);
@@ -210,6 +237,34 @@ export function useGameLogic() {
     }
   }, [isRedTurn, gameOver]);
 
+  // Background Music Volume
+  useEffect(() => {
+    if (connect4BgMusic.current) {
+      connect4BgMusic.current.volume = musicVolume;
+    }
+  }, [musicVolume]);
+
+  // Background Music
+  useEffect(() => {
+    connect4BgMusic.current = new Audio("/sounds/connect4/connect4-theme.mp3");
+    connect4BgMusic.current.loop = true;
+    connect4BgMusic.current.volume = musicVolume;
+    return () => {
+      connect4BgMusic.current.pause();
+    };
+  }, []);
+
+  // Play/Pause Background Music
+  useEffect(() => {
+    if (hasStarted && !gameOver && audioEnabled) {
+      connect4BgMusic.current?.play().catch((e) => {
+        console.warn("Autoplay error:", e);
+      });
+    } else {
+      connect4BgMusic.current?.pause();
+    }
+  }, [hasStarted, gameOver, audioEnabled]);
+
   /* USEEFFECT */
 
   /* RESET */
@@ -242,9 +297,18 @@ export function useGameLogic() {
     winningCells,
     flash,
     winner,
+    hasStarted,
     makeMove,
     resetGame,
     resetScore,
     computerMessage,
+    audioEnabled,
+    setAudioEnabled,
+    musicVolume,
+    setMusicVolume,
+    sfxVolume,
+    setSfxVolume,
+    showVolumeSettings,
+    setShowVolumeSettings,
   };
 }

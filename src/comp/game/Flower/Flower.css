@@ -1,0 +1,37 @@
+/* Run-Away Eggs Animation */
+
+.cell.run-away {
+    animation: runAway 1s ease-in forwards;
+    z-index: 10;
+}
+
+@keyframes runAway {
+    to {
+        transform: translate(var(--run-x), var(--run-y)) scale(0.3);
+        opacity: 0;
+    }
+}
+
+/* Hopping Basket Animation */
+
+.cell.basket-hop {
+    animation: hop 0.4s ease-in-out 2;
+}
+
+@keyframes hop {
+    0% {
+        transform: translateY(0);
+    }
+
+    30% {
+        transform: translateY(-10px);
+    }
+
+    60% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-5px);
+    }
+}

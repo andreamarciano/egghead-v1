@@ -1,11 +1,14 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../comp/Navbar";
 import Footer from "../comp/Footer";
 import Carousel from "../comp/review/Carousel";
 import Reviews from "../comp/review/Reviews";
 import Scrollbar from "../comp/Scrollbar";
+import Maze from "../comp/game/Maze/Maze";
 
 function About() {
+  const [isMazeOpen, setIsMazeOpen] = useState(false);
+
   // Scroll to top
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -66,8 +69,11 @@ function About() {
               intrufolata per caso.
             </p>
 
-            {/* Open Map */}
-            <div className="bg-white shadow-md p-5 rounded-lg mt-4 max-w-2xl mx-auto text-center hover:scale-105 transition-all ease-linear cursor-pointer">
+            {/* Maze */}
+            <div
+              className="bg-white shadow-md p-5 rounded-lg mt-4 max-w-2xl mx-auto text-center hover:scale-105 transition-all ease-linear cursor-pointer"
+              onClick={() => setIsMazeOpen(true)}
+            >
               <p className="text-gray-700">
                 📍 <strong>Indirizzo:</strong> Via delle Galline Ribelli, 42,
                 00042, Fattoria Lunare, Burchina Faso
@@ -180,6 +186,9 @@ function About() {
 
       {/* Footer */}
       <Footer />
+
+      {/* Maze */}
+      {isMazeOpen && <Maze onClose={() => setIsMazeOpen(false)} />}
     </>
   );
 }

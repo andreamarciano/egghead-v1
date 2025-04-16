@@ -1,13 +1,12 @@
 import { useGameLogic } from "./GameLogic";
+import "./ConnectFour.css";
 
 function ConnectFour({ onClose }) {
   const {
     board,
-    isRedTurn,
     scoreRed,
     scoreYellow,
     gameMessage,
-    gameOver,
     winningCells,
     flash,
     winner,
@@ -15,11 +14,64 @@ function ConnectFour({ onClose }) {
     resetGame,
     resetScore,
     computerMessage,
+    audioEnabled,
+    setAudioEnabled,
+    musicVolume,
+    setMusicVolume,
+    sfxVolume,
+    setSfxVolume,
+    showVolumeSettings,
+    setShowVolumeSettings,
   } = useGameLogic();
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-blue-800 p-5 rounded-lg shadow-lg text-center h-160 w-120 relative">
+        {/* Audio Settings */}
+        <button
+          onClick={() => setShowVolumeSettings((prev) => !prev)}
+          className="bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded absolute top-1 right-1"
+        >
+          🔊
+        </button>
+        {/* Audio Settings Popup */}
+        {showVolumeSettings && (
+          <div className="absolute top-12 right-4 bg-white shadow-lg p-4 rounded border border-gray-300 z-50">
+            {/* SFX */}
+            <div className="flex items-center gap-2 mb-2 text-black">
+              <label htmlFor="sfx">Sound</label>
+              <input
+                id="sfx"
+                type="range"
+                min={0}
+                max={1}
+                step={0.01}
+                value={sfxVolume}
+                onChange={(e) => setSfxVolume(parseFloat(e.target.value))}
+              />
+            </div>
+            {/* Background Music */}
+            <div className="flex items-center gap-2 mb-2 text-black">
+              <label htmlFor="music">Music</label>
+              <input
+                id="music"
+                type="range"
+                min={0}
+                max={1}
+                step={0.01}
+                value={musicVolume}
+                onChange={(e) => setMusicVolume(parseFloat(e.target.value))}
+              />
+            </div>
+            {/* Audio */}
+            <button
+              onClick={() => setAudioEnabled((prev) => !prev)}
+              className="bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded w-full"
+            >
+              {audioEnabled ? "🔊" : "🔇"}
+            </button>
+          </div>
+        )}
         {/* Title */}
         <h2 className="text-3xl font-bold mb-4 text-white">
           <span className="relative text-4xl">
@@ -67,13 +119,17 @@ function ConnectFour({ onClose }) {
                 const darkColor =
                   winner === "🔴" ? "bg-red-700" : "bg-yellow-700";
                 return (
+                  // Token
                   <div
                     key={colIndex}
                     className={`w-14 h-14 rounded-full border-4 border-blue-500 flex items-center justify-center cursor-pointer
                     ${isWinningCell ? (flash ? flashColor : darkColor) : ""}`}
                     onClick={() => makeMove(colIndex)}
                   >
-                    {cell && <span className="text-3xl">{cell}</span>}
+                    {/* Token Animation */}
+                    {cell && (
+                      <span className="text-3xl token-drop">{cell}</span>
+                    )}
                   </div>
                 );
               })}
@@ -83,8 +139,12 @@ function ConnectFour({ onClose }) {
 
         {/* Score */}
         <div className="flex justify-between mb-4">
-          <p className="text-white absolute bottom-15 left-2">🔴 Score: {scoreRed}</p>
-          <p className="text-white absolute bottom-15 right-2">🟡 Score: {scoreYellow}</p>
+          <p className="text-white absolute bottom-15 left-2">
+            🔴 Score: {scoreRed}
+          </p>
+          <p className="text-white absolute bottom-15 right-2">
+            🟡 Score: {scoreYellow}
+          </p>
         </div>
 
         {/* Button */}

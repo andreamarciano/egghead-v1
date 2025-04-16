@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import OrderGame from "../game/Order/OrderGame";
+import "./GuidedChat.css";
 
 // Chat Flow
 const chatFlow = {
@@ -49,7 +50,7 @@ const chatFlow = {
       { label: "No, non voglio fare non niente", next: "start" },
     ],
   },
-  // PROBLEMA ORDINE
+  // PROBLEMA ORDINE -> problemi -> Order
   ordine: {
     message: "Mi dispiace che tu abbia avuto un problema, come posso aiutarti?",
     options: [
@@ -326,7 +327,16 @@ const GuidedChat = () => {
   const [isAgentTyping, setIsAgentTyping] = useState(false);
   const [showGame, setShowGame] = useState(false);
   // LOCAL STORAGE CODE
-  const currentCodes = JSON.parse(localStorage.getItem("unlockedCodes") || "[]");
+  const currentCodes = JSON.parse(
+    localStorage.getItem("unlockedCodes") || "[]"
+  );
+  const [orderGameUnlocked, setOrderGameUnlocked] = useState(false);
+
+  // Get state from localStorage
+  useEffect(() => {
+    const unlocked = localStorage.getItem("unlockedOrderGame") === "true";
+    setOrderGameUnlocked(unlocked);
+  }, []);
 
   useEffect(() => {
     // Simula scrittura iniziale
@@ -346,6 +356,7 @@ const GuidedChat = () => {
 
     if (option.action === "launch-game") {
       setShowGame(true);
+      localStorage.setItem("unlockedOrderGame", "true");
       return;
     }
 
@@ -391,9 +402,11 @@ const GuidedChat = () => {
       setChatEnded(true);
       // LOCAL STORAGE CODE
       if (!currentCodes.includes("GRAZIEATE5")) {
-        localStorage.setItem("unlockedCodes", JSON.stringify([...currentCodes, "GRAZIEATE5"]));
+        localStorage.setItem(
+          "unlockedCodes",
+          JSON.stringify([...currentCodes, "GRAZIEATE5"])
+        );
       }
-      
     } else {
       setIsAgentTyping(true);
       const randomReply =
@@ -463,6 +476,17 @@ const GuidedChat = () => {
               {opt.label}
             </button>
           ))}
+        </div>
+      )}
+
+      {orderGameUnlocked && !showGame && (
+        <div className="mt-4">
+          <button
+            onClick={() => setShowGame(true)}
+            className="bg-purple-500 hover:bg-purple-400 px-4 py-2 rounded w-full"
+          >
+            Replay &rarr; 🎯
+          </button>
         </div>
       )}
 
