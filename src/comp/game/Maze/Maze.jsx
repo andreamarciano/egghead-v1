@@ -4,12 +4,12 @@ import "./Maze.css";
 const MAZE_ROWS = 30;
 const MAZE_COLS = 70;
 const CELL_SIZE = 18;
-const NUM_TRAP = 1;
+const NUM_TRAP = 100;
 const NUM_HEART = 100;
 
-const getLifeSound = new Audio("/sounds/maze/get-life.wav");
-const loseLifeSound = new Audio("/sounds/maze/lose-life.wav");
-const gameOverSound = new Audio("/sounds/maze/game-over.wav");
+const getLifeSound = new Audio("/sounds/maze/get-life.mp3");
+const loseLifeSound = new Audio("/sounds/maze/lose-life.mp3");
+const gameOverSound = new Audio("/sounds/maze/game-over.mp3");
 
 function Maze({ onClose }) {
   /* STATES */

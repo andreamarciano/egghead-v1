@@ -1,22 +1,22 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import "./Maze.css";
 
 const MAZE_ROWS = 30;
 const MAZE_COLS = 70;
 const CELL_SIZE = 18;
-const NUM_TRAP = 100;
+const NUM_TRAP = 1;
 const NUM_HEART = 100;
 
-const getLifeSound = new Audio("/sounds/get-life.wav");
-const loseLifeSound = new Audio("/sounds/lose-life.wav");
-const gameOverSound = new Audio("/sounds/game-over.wav");
+const getLifeSound = new Audio("/sounds/maze/get-life.mp3");
+const loseLifeSound = new Audio("/sounds/maze/lose-life.mp3");
+const gameOverSound = new Audio("/sounds/maze/game-over.mp3");
 
 function Maze({ onClose }) {
   /* STATES */
 
   const [maze, setMaze] = useState([]);
   const [player, setPlayer] = useState({ row: 0, col: 0 });
-  const [message, setMessage] = useState("Ti guido io, vai...da quella parte!");
+  const [message, setMessage] = useState("");
   const [reachedEnd, setReachedEnd] = useState(false);
   const [solutionPath, setSolutionPath] = useState([]);
   const [showHelp, setShowHelp] = useState(false);
@@ -30,6 +30,18 @@ function Maze({ onClose }) {
   // Sound
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [volume, setVolume] = useState(0.6);
+  // Message
+  const [autoMessage, setAutoMessage] = useState(
+    "Ti guido io, vai...da quella parte!"
+  );
+  const autoMessageRef = useRef(null);
+  const guidanceMessages = [
+    "Hai preso la strada giusta? 🤔",
+    "Non fidarti troppo delle scorciatoie...",
+    "Ogni passo ti avvicina alla verità.",
+    "Non tutti i muri sono barriere.",
+    "Chi cerca, trova. Forse.",
+  ];
   // LOCAL STORAGE CODE
   const currentCodes = JSON.parse(
     localStorage.getItem("unlockedCodes") || "[]"
@@ -38,12 +50,14 @@ function Maze({ onClose }) {
   /* STATES */
 
   /* SOUNDS */
+
   const playSound = (sound) => {
     if (audioEnabled) {
       sound.currentTime = 0;
       sound.play();
     }
   };
+
   /* SOUNDS */
 
   /* FUNCTIONS */
@@ -223,7 +237,6 @@ function Maze({ onClose }) {
 
     setPlayer({ row: 0, col: 0 });
     setReachedEnd(false);
-    setMessage("Ti guido io, vai...da quella parte!");
   }, []);
 
   // Move Player
@@ -254,8 +267,9 @@ function Maze({ onClose }) {
           setLives((prev) => Math.max(prev - 1, 0));
           // Lose Life Animation
           setBlinkHearts(true);
-          playSound(loseLifeSound);
           setTimeout(() => setBlinkHearts(false), 600);
+          // Lose Life Sound
+          playSound(loseLifeSound);
 
           if (lives - 1 <= 0) {
             setReachedEnd(true);
@@ -282,8 +296,6 @@ function Maze({ onClose }) {
           }
         }
 
-        updateMessage(dir);
-
         if (newRow === MAZE_ROWS - 1 && newCol === MAZE_COLS - 1) {
           setReachedEnd(true);
           setMessage(
@@ -301,64 +313,6 @@ function Maze({ onClose }) {
     },
     [lives, player, maze, reachedEnd]
   );
-
-  // Message
-  const updateMessage = (dir) => {
-    const trollMessages = {
-      up: [
-        "In alto c’è la speranza. Di perdersi meglio.",
-        "Salire ti dà un bel punto di vista. Sui muri.",
-        "Su è il nuovo giù. Ma con più illusioni.",
-        "Vai su, fidati. Anche se nessuno lo fa.",
-        "Forse si doveva salire..? Boh, proviamo!",
-        "Ottima scelta. Salire confonde anche me.",
-        "Vai pure su, lì ci sono… pareti interessanti.",
-        "Su è sempre un rischio. Quindi vai.",
-        "Potrebbe essere la via giusta. O solo una rampa verso il nulla.",
-        "Non tutti quelli che salgono arrivano da qualche parte.",
-      ],
-      down: [
-        "Sì, sì, era da questa parte... forse!",
-        "Giù dove? Non lo so neanche io.",
-        "Andiamo verso il basso… dove c’è buio e disperazione.",
-        "Giù c’è sempre qualcosa… di solito un vicolo cieco.",
-        "Giù, perché no? Tanto non sappiamo dove andare comunque.",
-        "Vai pure giù… ci sono ottimi muri da abbracciare.",
-        "Giù c’è qualcosa, sì. Tipo un vicolo cieco.",
-        "Scendere è sempre più facile che salire!",
-        "Andando giù potresti trovare risposte. O solo muri.",
-        "Perfetto, giù. Tanto la mappa non la guarda nessuno.",
-      ],
-      left: [
-        "Ora vai a sinistra, mi sa...",
-        "Torna indietro? Nah, esploriamo a sinistra!",
-        "La sinistra è sempre una buona scelta... o no?",
-        "Vai a sinistra. Non so perché, ma sembra divertente.",
-        "Sinistra? Una scelta coraggiosa, forse sbagliata.",
-        "Chi non ha mai sbagliato… non è mai andato a sinistra.",
-        "La sinistra è sopravvalutata. Come i miei consigli.",
-        "Girare a sinistra può sembrare saggio. Sembra.",
-        "Ottimo, a sinistra. Cosa può mai andare storto?",
-        "La sinistra è una scelta. Non ho detto buona.",
-      ],
-      right: [
-        "Vai a destra, poi mi sembra... 🤔",
-        "Destra è la via! Forse...",
-        "Dritto al muro... o alla vittoria?",
-        "La destra è sempre giusta. Finché non sbagli.",
-        "Segui l’istinto… o gira a destra, è uguale.",
-        "A destra… il nulla ti aspetta con pazienza.",
-        "Destra? Molto mainstream. Mi piace.",
-        "Se tutto il resto fallisce, prova a destra.",
-        "Andando a destra, potresti scoprire qualcosa. Tipo la frustrazione.",
-        "Un piccolo passo a destra, un grande salto nel buio.",
-      ],
-    };
-
-    const options = trollMessages[dir];
-    const randomIndex = Math.floor(Math.random() * options.length);
-    setMessage(options[randomIndex]);
-  };
 
   /* FUNCTIONS */
 
@@ -383,6 +337,22 @@ function Maze({ onClose }) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleMove]);
 
+  // Auto Message
+  useEffect(() => {
+    autoMessageRef.current = setInterval(() => {
+      const randomIndex = Math.floor(Math.random() * guidanceMessages.length);
+      setAutoMessage(guidanceMessages[randomIndex]);
+    }, 15000);
+
+    return () => clearInterval(autoMessageRef.current);
+  }, []);
+  // Stop Auto Message
+  useEffect(() => {
+    if (reachedEnd) {
+      clearInterval(autoMessageRef.current);
+    }
+  }, [reachedEnd]);
+
   // Handle Volume
   useEffect(() => {
     getLifeSound.volume = volume;
@@ -399,6 +369,7 @@ function Maze({ onClose }) {
     setLives(4);
     setTraps([]);
     setHearts([]);
+    setMessage("Ti guido io, vai...da quella parte!");
     generateMaze();
   };
 
@@ -409,13 +380,12 @@ function Maze({ onClose }) {
       <div className="p-6 rounded shadow-lg bg-purple-800 items-center justify-center flex flex-col relative">
         {/* Game Header */}
         <div className="w-full flex justify-between items-center absolute top-0 p-2">
-          {/* Message */}
-          <h2 className="text-center text-3xl font-bold text-white">
+          <h2 className="text-center text-xl font-bold text-white">
             Ecco dove puoi trovarci!
           </h2>
           {/* Message Box */}
-          <div className="bg-purple-900 text-white p-2 rounded text-center">
-            {message}
+          <div className="bg-purple-900 text-white p-2 rounded text-center mt-1">
+            {message || autoMessage}
           </div>
           <div className="flex gap-2">
             {/* Volume */}

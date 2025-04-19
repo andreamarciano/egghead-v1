@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { getComputerMove } from "./AILogic";
 
-const tokenFallingSound = new Audio("/sounds/connect4/falling-token.wav");
+const tokenFallingSound = new Audio("/sounds/connect4/falling-token.mp3");
 const winSound = new Audio("/sounds/connect4/connect4-win.mp3");
 
 // Winner Function

@@ -26,8 +26,8 @@ const LEVEL_SETTINGS = {
 
 const LOCAL_STORAGE_KEY = "unlockedLevelsFlower";
 
-const gameOverSound = new Audio("/sounds/flower/flower-lose.wav");
-const playerWinSound = new Audio("/sounds/flower/flower-win.wav");
+const gameOverSound = new Audio("/sounds/flower/flower-lose.mp3");
+const playerWinSound = new Audio("/sounds/flower/flower-win.mp3");
 
 export function useGameLogic() {
   /* STATES */
