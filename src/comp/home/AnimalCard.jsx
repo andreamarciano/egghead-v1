@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-function AnimalCard({ num, imgURL, alt, description, position }) {
+function AnimalCard({ num, imgURL, srcSet, alt, description, position }) {
   let col = num % 2; // col sep
 
   if (col == 0) {
@@ -10,6 +10,7 @@ function AnimalCard({ num, imgURL, alt, description, position }) {
         <Link to={`/shop`} className="w-1/2 h-72 block">
           <img
             src={imgURL}
+            srcSet={srcSet}
             alt={alt}
             className="w-full h-full object-cover rounded-lg shadow-lg hover:scale-105 transition-all ease-linear cursor-pointer"
             style={position ? { objectPosition: position } : {}}
@@ -33,9 +34,11 @@ function AnimalCard({ num, imgURL, alt, description, position }) {
       <Link to={`/shop`} className="w-1/2 h-72 block">
         <img
           src={imgURL}
+          srcSet={srcSet}
           alt={alt}
           className="w-full h-full object-cover rounded-lg shadow-lg hover:scale-105 transition-all ease-linear cursor-pointer"
           style={position ? { objectPosition: position } : {}}
+          loading="lazy"
         />
       </Link>
     </div>
