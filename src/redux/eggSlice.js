@@ -115,7 +115,7 @@ export const eggsSlice = createSlice({
       {
         id: "egg-9",
         imgURL:
-          "https://images.unsplash.com/photo-1587734528720-dc22307700bc?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1587734528720-dc22307700bc?q=80&w=300&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Uova Yoshi",
         description:
           "Uovo di Yoshi. Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, enim.",
@@ -127,7 +127,7 @@ export const eggsSlice = createSlice({
       {
         id: "egg-10",
         imgURL:
-          "https://images.unsplash.com/photo-1666426265235-81e832ef78a9?q=80&w=1965&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1666426265235-81e832ef78a9?q=80&w=300&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Uovo Alieno",
         description:
           "Uovo di Alieno. Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, enim.",
@@ -138,7 +138,8 @@ export const eggsSlice = createSlice({
       },
       {
         id: "egg-11",
-        imgURL: "",
+        imgURL:
+          "https://images.unsplash.com/photo-1744899306747-606549a5e96d?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTUyfHx1b3ZhJTIwY29sb3JhdGV8ZW58MHx8MHx8fDI%3D",
         alt: "Uovo Pinguino",
         description:
           "Uovo di Pinguino. Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, enim.",
@@ -149,7 +150,8 @@ export const eggsSlice = createSlice({
       },
       {
         id: "egg-12",
-        imgURL: "",
+        imgURL:
+          "https://images.unsplash.com/photo-1591476222315-7123c46cc1c7?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTY1fHx1b3ZhJTIwY29sb3JhdGV8ZW58MHx8MHx8fDI%3D",
         alt: "Uovo Aquila",
         description:
           "Uovo di Aquila. Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, enim.",
@@ -160,7 +162,8 @@ export const eggsSlice = createSlice({
       },
       {
         id: "egg-13",
-        imgURL: "",
+        imgURL:
+          "https://images.unsplash.com/photo-1617002937824-1c2f5577ff2f?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTkwfHx1b3ZhJTIwY29sb3JhdGV8ZW58MHx8MHx8fDI%3D",
         alt: "Uovo Serpente",
         description:
           "Uovo di Serpente. Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, enim.",
@@ -171,7 +174,8 @@ export const eggsSlice = createSlice({
       },
       {
         id: "egg-14",
-        imgURL: "",
+        imgURL:
+          "https://images.unsplash.com/photo-1711705422785-1080757d3c84?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTk5fHx1b3ZhJTIwY29sb3JhdGV8ZW58MHx8MHx8fDI%3D",
         alt: "Uovo Squalo",
         description:
           "Uovo di Squalo. Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, enim.",
@@ -182,7 +186,8 @@ export const eggsSlice = createSlice({
       },
       {
         id: "egg-15",
-        imgURL: "",
+        imgURL:
+          "https://images.unsplash.com/photo-1649648075259-952613bff63f?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjMxfHx1b3ZhJTIwY29sb3JhdGV8ZW58MHx8MHx8fDI%3D",
         alt: "Uovo Granchio",
         description:
           "Uovo di Granchio. Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, enim.",
@@ -193,7 +198,8 @@ export const eggsSlice = createSlice({
       },
       {
         id: "egg-16",
-        imgURL: "",
+        imgURL:
+          "https://images.unsplash.com/photo-1651952355771-c07e50437629?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTczfHx1b3ZhJTIwY29sb3JhdGV8ZW58MHx8MHx8fDI%3D",
         alt: "Uovo Rana",
         description:
           "Uovo di Rana. Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, enim.",
@@ -204,7 +210,8 @@ export const eggsSlice = createSlice({
       },
       {
         id: "egg-17",
-        imgURL: "",
+        imgURL:
+          "https://images.unsplash.com/photo-1577781345786-99b30b2cfe07?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8dW92YSUyMGNvbG9yYXRlfGVufDB8fDB8fHwy",
         alt: "Uovo Farfalla",
         description:
           "Uovo di Farfalla. Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, enim.",
@@ -215,7 +222,8 @@ export const eggsSlice = createSlice({
       },
       {
         id: "egg-18",
-        imgURL: "",
+        imgURL:
+          "https://images.unsplash.com/photo-1636407703476-0c9111fecfb7?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjM4fHx1b3ZhJTIwY29sb3JhdGV8ZW58MHx8MHx8fDI%3D",
         alt: "Uovo Mosca",
         description:
           "Uovo di Mosca. Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, enim.",
@@ -226,7 +234,8 @@ export const eggsSlice = createSlice({
       },
       {
         id: "egg-19",
-        imgURL: "",
+        imgURL:
+          "https://images.unsplash.com/photo-1742094509964-800134cb1f75?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjQ0fHx1b3ZhJTIwY29sb3JhdGV8ZW58MHx8MHx8fDI%3D",
         alt: "Uovo Formica",
         description:
           "Uovo di Formica. Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, enim.",
@@ -237,7 +246,8 @@ export const eggsSlice = createSlice({
       },
       {
         id: "egg-20",
-        imgURL: "",
+        imgURL:
+          "https://images.unsplash.com/photo-1645103243269-699b0740dee3?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjU3fHx1b3ZhJTIwY29sb3JhdGV8ZW58MHx8MHx8fDI%3D",
         alt: "Uovo Mantide",
         description:
           "Uovo di Mantide. Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, enim.",
@@ -248,7 +258,8 @@ export const eggsSlice = createSlice({
       },
       {
         id: "egg-21",
-        imgURL: "",
+        imgURL:
+          "https://images.unsplash.com/photo-1650728305461-0249188f4c3e?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjY2fHx1b3ZhJTIwY29sb3JhdGV8ZW58MHx8MHx8fDI%3D",
         alt: "Uovo Ragno",
         description:
           "Uovo di Ragno. Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, enim.",
@@ -259,7 +270,8 @@ export const eggsSlice = createSlice({
       },
       {
         id: "egg-22",
-        imgURL: "",
+        imgURL:
+          "https://images.unsplash.com/photo-1587049857921-303e0f3f1a34?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjgyfHx1b3ZhJTIwY29sb3JhdGV8ZW58MHx8MHx8fDI%3D",
         alt: "Uovo Scorpione",
         description:
           "Uovo di Scorpione. Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, enim.",
@@ -270,7 +282,8 @@ export const eggsSlice = createSlice({
       },
       {
         id: "egg-23",
-        imgURL: "",
+        imgURL:
+          "https://images.unsplash.com/photo-1680535447353-97e1f23ded88?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzA4fHx1b3ZhJTIwY29sb3JhdGV8ZW58MHx8MHx8fDI%3D",
         alt: "Uovo Polpo",
         description:
           "Uovo di Polpo. Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, enim.",
@@ -281,7 +294,8 @@ export const eggsSlice = createSlice({
       },
       {
         id: "egg-24",
-        imgURL: "",
+        imgURL:
+          "https://images.unsplash.com/photo-1583219691003-11f9a428e212?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTA0fHx1b3ZhJTIwY29sb3JhdGV8ZW58MHx8MHx8fDI%3D",
         alt: "Uovo Ornitorinco",
         description:
           "Uovo di Ornitorinco. Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, enim.",
@@ -292,7 +306,8 @@ export const eggsSlice = createSlice({
       },
       {
         id: "egg-25",
-        imgURL: "",
+        imgURL:
+          "https://images.unsplash.com/photo-1649288674128-46334eacf374?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTAxfHx1b3ZhJTIwY29sb3JhdGV8ZW58MHx8MHx8fDI%3D",
         alt: "Uovo Drago",
         description:
           "Uovo di Drago. Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, enim.",
@@ -303,7 +318,8 @@ export const eggsSlice = createSlice({
       },
       {
         id: "egg-26",
-        imgURL: "",
+        imgURL:
+          "https://images.unsplash.com/photo-1743844479489-f6f1e47f4b12?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NjJ8fHVvdmElMjBjb2xvcmF0ZXxlbnwwfHwwfHx8Mg%3D%3D",
         alt: "Uovo Fenice",
         description:
           "Uovo di Fenice. Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, enim.",
@@ -314,7 +330,8 @@ export const eggsSlice = createSlice({
       },
       {
         id: "egg-27",
-        imgURL: "",
+        imgURL:
+          "https://images.unsplash.com/photo-1681485643332-6fe2830a27a5?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NzN8fHVvdmElMjBjb2xvcmF0ZXxlbnwwfHwwfHx8Mg%3D%3D",
         alt: "Uovo Grifone",
         description:
           "Uovo di Grifone. Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, enim.",
@@ -325,7 +342,8 @@ export const eggsSlice = createSlice({
       },
       {
         id: "egg-28",
-        imgURL: "",
+        imgURL:
+          "https://images.unsplash.com/photo-1649797335407-93f09228c8fd?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mzg2fHx1b3ZhJTIwY29sb3JhdGV8ZW58MHx8MHx8fDI%3D",
         alt: "Uovo Kraken",
         description:
           "Uovo di Kraken. Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, enim.",
@@ -336,7 +354,8 @@ export const eggsSlice = createSlice({
       },
       {
         id: "egg-29",
-        imgURL: "",
+        imgURL:
+          "https://images.unsplash.com/photo-1566200417568-75fba9ffb3c9?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTI0fHx1b3ZhJTIwY29sb3JhdGV8ZW58MHx8MHx8fDI%3D",
         alt: "Uovo Vogon",
         description:
           "Uovo di Vogon. Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, enim.",
@@ -347,7 +366,8 @@ export const eggsSlice = createSlice({
       },
       {
         id: "egg-30",
-        imgURL: "",
+        imgURL:
+          "https://images.unsplash.com/photo-1651144440711-9824c0d50520?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NzV8fHVvdmElMjBjb2xvcmF0ZXxlbnwwfHwwfHx8Mg%3D%3D",
         alt: "Uovo Basilisco",
         description:
           "Uovo di Basilisco. Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, enim.",
@@ -358,7 +378,8 @@ export const eggsSlice = createSlice({
       },
       {
         id: "egg-31",
-        imgURL: "",
+        imgURL:
+          "https://images.unsplash.com/vector-1738925710041-c67746b5e168?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8dW92YSUyMG1pbmVjcmFmdHxlbnwwfHwwfHx8Mg%3D%3D",
         alt: "Uovo Steve",
         description:
           "Uovo di Steve. Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, enim.",

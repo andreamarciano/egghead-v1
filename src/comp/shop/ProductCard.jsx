@@ -20,6 +20,7 @@ function ProductCard({
         className="w-full h-48 object-cover hover:scale-105 transition-all ease-linear cursor-pointer"
         src={imgURL}
         alt={alt}
+        loading="lazy"
       ></img>
       <div className="flex flex-col justify-between h-full p-4">
         <h2 className="text-lg text-white font-bold">{alt}</h2>
