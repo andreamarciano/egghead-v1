@@ -53,17 +53,19 @@ const SidebarCart = () => {
   return (
     <div>
       {/* Open Sidebar */}
-      <button
-        onClick={toggleSidebar}
-        className="p-2 hover:bg-gray-700 rounded-2xl relative cursor-pointer"
-        aria-label={isOpen ? "Chiudi Carrello" : "Apri Carrello"} // accessibility
-      >
-        <ShoppingCart size={22} />
-        {/* Product Number - Badge */}
-        <span className="absolute -top-1 -right-1 bg-yellow-400 text-black rounded-full text-xs w-5 h-5 flex items-center justify-center">
-          {totalItems}
-        </span>
-      </button>
+      <div className="relative">
+        <button
+          onClick={toggleSidebar}
+          className="p-2 hover:bg-gray-700 rounded-2xl absolute top-[-7px] left-[-9px] cursor-pointer"
+          aria-label={isOpen ? "Chiudi Carrello" : "Apri Carrello"} // accessibility
+        >
+          <ShoppingCart size={22} />
+          {/* Product Number - Badge */}
+          <span className="absolute -top-1 -right-1 bg-yellow-400 text-black rounded-full text-xs w-5 h-5 flex items-center justify-center">
+            {totalItems}
+          </span>
+        </button>
+      </div>
 
       {/* Sidebar */}
       <div

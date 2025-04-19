@@ -11,15 +11,17 @@ const Sidebar = () => {
 
   return (
     <div>
-      {/* Toggle Button */}
-      <button
-        onClick={toggleSidebar}
-        className="p-2 hover:bg-gray-500 rounded-2xl cursor-pointer"
-        aria-label={isOpen ? "Chiudi menu" : "Apri menu"} // accessibility
-      >
-        {/* Icon */}
-        <Menu size={22} />
-      </button>
+      <div className="w-4 relative">
+        {/* Toggle Button */}
+        <button
+          onClick={toggleSidebar}
+          className="p-2 hover:bg-gray-500 rounded-2xl cursor-pointer absolute top-[-7px] left-[-9px]"
+          aria-label={isOpen ? "Chiudi menu" : "Apri menu"} // accessibility
+        >
+          {/* Icon */}
+          <Menu size={22} />
+        </button>
+      </div>
 
       {/* Sidebar */}
       <div

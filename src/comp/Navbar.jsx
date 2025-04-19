@@ -7,11 +7,9 @@ function Navbar() {
     <nav className="bg-gray-900 text-white p-4">
       <ul className="flex gap-6">
         {/* Sidebar */}
-        <div className="w-5 relative">
-          <li className="absolute top-[-7px] left-[-9px]">
-            <Sidebar />
-          </li>
-        </div>
+        <li>
+          <Sidebar />
+        </li>
         {/* Home */}
         <li>
           <NavLink
@@ -77,12 +75,10 @@ function Navbar() {
             Customer Service
           </NavLink>
         </li>
-        {/* Sidebar */}
-        <div className="w-5 relative">
-          <li className="absolute top-[-7px] left-[-9px]">
-            <SidebarCart />
-          </li>
-        </div>
+        {/* Cart */}
+        <li>
+          <SidebarCart />
+        </li>
       </ul>
     </nav>
   );
