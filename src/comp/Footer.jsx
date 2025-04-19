@@ -14,7 +14,7 @@ function Footer() {
         {/* Logo (1/2) */}
         <div className="md:col-span-2 flex flex-col items-center md:items-start">
           <img
-            src="/logo.png"
+            src="/logo/logo.png"
             alt="Andrea Factory Project Logo"
             className="w-40 h-auto"
           />

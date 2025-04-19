@@ -1,244 +1,28 @@
-import { useState, useEffect } from "react";
+import { useGameLogic } from "./GameLogic";
 
 function Tris({ onClose }) {
-  /* STATES */
-
-  // Grid
-  const [board, setBoard] = useState(Array(9).fill(null));
-  // Game
-  const [isXNext, setIsXNext] = useState(true);
-  const [xWins, setXWins] = useState(0); // Player score
-  const [oWins, setOWins] = useState(0); // AI score
-  const [isCheating, setIsCheating] = useState(false);
-  const [gameOver, setGameOver] = useState(false);
-  // Message
-  const [aiMessage, setAiMessage] = useState(
-    "Inizia pure tu, ma non cambierà nulla!"
-  );
-  const aiPhrases = [
-    "Tanto non puoi battermi!",
-    "Non vale neanche la pena provare!",
-    "Ah ah, è tutto sotto controllo!",
-    "Prova quanto ti pare, ma non cambierà nulla!",
-    "Che mossa banale...",
-  ];
-  const suspiciousPhrases = [
-    "Com'è possibile?!",
-    "Cosa? Stai sicuramente barando...",
-    "Qualcosa non torna...Pensavo di aver vinto...",
-    "C'è qualcosa di strano qui...",
-    "Non è possibile! Devo controllare il codice!",
-    "Io sconfitto da un umano?",
-  ];
-  // LOCAL STORAGE CODE
-  const currentCodes = JSON.parse(
-    localStorage.getItem("unlockedCodes") || "[]"
-  );
-
-  /* STATES */
-
-  /* FUNCTIONS */
-
-  // Win / Draw
-  const { winner, winningSquares } = calculateWinner(board);
-  const isDraw = !winner && board.every((square) => square !== null);
-
-  // Random AI Message
-  const showAiMessage = () => {
-    const randomIndex = Math.floor(Math.random() * aiPhrases.length);
-    setAiMessage(aiPhrases[randomIndex]);
-  };
-
-  // Click
-  const handleClick = (index) => {
-    if (board[index] || winner || isDraw || !isXNext || gameOver) return;
-
-    const newBoard = board.slice();
-    newBoard[index] = "🐣"; // player move
-    setBoard(newBoard);
-    setIsXNext(false); // ai move
-
-    // Check winner
-    const result = calculateWinner(newBoard);
-    if (result.winner || newBoard.every((square) => square !== null)) return;
-
-    setTimeout(() => aiMove(newBoard), 750); // ai move delay
-  };
-
-  // Winner
-  function calculateWinner(squares) {
-    const lines = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6],
-    ];
-    for (let i = 0; i < lines.length; i++) {
-      const [a, b, c] = lines[i];
-      if (
-        squares[a] &&
-        squares[a] === squares[b] &&
-        squares[a] === squares[c]
-      ) {
-        return { winner: squares[a], winningSquares: [a, b, c] };
-      }
-    }
-    return { winner: null, winningSquares: [] };
-  }
-
-  // Handle Cell Click
-  const renderSquare = (index) => {
-    const isWinningSquare = winningSquares.includes(index);
-    const isPlayerMove = board[index] === "🐣";
-    const isAiMove = board[index] === "🥚";
-    const isOccupied = board[index] !== null;
-
-    return (
-      <button
-        key={`tris-${index}`}
-        className={`w-20 h-20 border-2 border-black text-2xl font-bold 
-            ${isWinningSquare ? "bg-green-400 text-white" : ""}${
-          isPlayerMove ? "border-yellow-700 border-3" : ""
-        }${isAiMove ? "border-pink-500 border-3" : ""} ${
-          isOccupied ? "" : "hover:border-yellow-500"
-        }  transition-all duration-300`}
-        onClick={() => handleClick(index)}
-      >
-        {board[index]}
-      </button>
-    );
-  };
-
-  // Game Status
-  const status = winner
-    ? `Winner: ${winner}`
-    : isDraw
-    ? "Draw!"
-    : `Next player: ${isXNext ? "🐣" : "🥚"}`;
-
-  /* FUNCTIONS */
-
-  /* USEEFFECT */
-
-  // Game Results
-  useEffect(() => {
-    if (winner === "🐣" || (isCheating && winner === "🥚")) {
-      setXWins((prev) => {
-        const newScore = prev + 1;
-
-        // Cheat On, AI suspects
-        if (isCheating && newScore > 1) {
-          const randomIndex = Math.floor(
-            Math.random() * suspiciousPhrases.length
-          );
-          setAiMessage(suspiciousPhrases[randomIndex]);
-        }
-
-        return newScore;
-      });
-    }
-
-    if (winner === "🥚" && !isCheating) {
-      setOWins((prev) => prev + 1); // cheat off
-      setAiMessage("Povero umano...");
-    }
-
-    if (isDraw) {
-      setAiMessage("Come previsto... Niente da fare per te!");
-    }
-
-    // Player scores 3
-    if (xWins >= 3 && !gameOver) {
-      setAiMessage("Prendi questo codice sconto e sparisci! TRIS5");
-      // LOCAL STORAGE CODE
-      if (!currentCodes.includes("TRIS5")) {
-        localStorage.setItem(
-          "unlockedCodes",
-          JSON.stringify([...currentCodes, "TRIS5"])
-        );
-      }
-      setGameOver(true);
-    }
-  }, [winner, isDraw, gameOver]);
-
-  /* USEEFFECT */
-
-  /* AI */
-
-  // AI Move minimax
-  const minimax = (board, depth, isMaximizingPlayer) => {
-    const { winner } = calculateWinner(board);
-
-    if (winner === "🥚") return 1;
-    if (winner === "🐣") return -1;
-    if (board.every((square) => square !== null)) return 0;
-
-    if (isMaximizingPlayer) {
-      let best = -Infinity;
-
-      for (let i = 0; i < board.length; i++) {
-        if (board[i] === null) {
-          board[i] = "🥚";
-          best = Math.max(best, minimax(board, depth + 1, false));
-          board[i] = null;
-        }
-      }
-      return best;
-    } else {
-      let best = Infinity;
-
-      for (let i = 0; i < board.length; i++) {
-        if (board[i] === null) {
-          board[i] = "🐣";
-          best = Math.min(best, minimax(board, depth + 1, true));
-          board[i] = null;
-        }
-      }
-      return best;
-    }
-  };
-
-  // AI Move
-  const aiMove = (currentBoard) => {
-    let bestVal = -Infinity;
-    let bestMove = null;
-
-    for (let i = 0; i < currentBoard.length; i++) {
-      if (currentBoard[i] === null) {
-        currentBoard[i] = "🥚";
-        const moveVal = minimax(currentBoard, 0, false);
-        currentBoard[i] = null;
-
-        if (moveVal > bestVal) {
-          bestMove = i;
-          bestVal = moveVal;
-        }
-      }
-    }
-
-    currentBoard[bestMove] = "🥚";
-    setBoard([...currentBoard]);
-    setIsXNext(true); // player move
-    showAiMessage();
-  };
-
-  /* AI */
-
-  /* RESET */
-
-  // Reset
-  const resetGame = () => {
-    setBoard(Array(9).fill(null));
-    setIsXNext(true); // Player starts
-    setAiMessage("Inizia pure tu, ma non cambierà nulla!");
-    setGameOver(false);
-  };
-
-  /* RESET */
+  const {
+    board,
+    xWins,
+    oWins,
+    isCheating,
+    status,
+    aiMessage,
+    audioEnabled,
+    musicVolume,
+    sfxVolume,
+    showVolumeSettings,
+    setXWins,
+    setOWins,
+    setIsCheating,
+    setAiMessage,
+    renderSquare,
+    resetGame,
+    setAudioEnabled,
+    setMusicVolume,
+    setSfxVolume,
+    setShowVolumeSettings,
+  } = useGameLogic();
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-50 z-50">
@@ -269,13 +53,13 @@ function Tris({ onClose }) {
             <span className="text-transparent group-hover:text-black transition duration-300">
               ing!
             </span>
-            <span className="text-transparent group-hover:text-black transition duration-300 absolute top-0 left-70">
+            <span className="text-transparent group-hover:text-black transition duration-300 absolute top-0 left-[-170px]">
               ⬇️
             </span>
           </h2>
-          <h2 className="text-center text-3xl font-bold mb-4 text-blue-900 absolute group bottom-0 right-0">
+          <h2 className="text-center text-3xl font-bold mb-4 text-blue-900 absolute group bottom-0 left-1">
             <span className="text-transparent group-hover:text-black transition duration-300">
-              ⬅️
+              ➡️
             </span>
           </h2>
 
@@ -302,13 +86,58 @@ function Tris({ onClose }) {
 
           {/* Button */}
           <div className="flex flex-row p-2">
+            {/* Audio Settings */}
+            <button
+              onClick={() => setShowVolumeSettings((prev) => !prev)}
+              className="bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded absolute top-1 right-1"
+            >
+              🔊
+            </button>
+            {/* Audio Settings Popup */}
+            {showVolumeSettings && (
+              <div className="absolute top-12 right-[-130px] bg-white shadow-lg p-4 rounded border border-gray-300 z-50">
+                {/* SFX */}
+                <div className="flex items-center gap-2 mb-2 text-black">
+                  <label htmlFor="sfx">Sound</label>
+                  <input
+                    id="sfx"
+                    type="range"
+                    min={0}
+                    max={1}
+                    step={0.01}
+                    value={sfxVolume}
+                    onChange={(e) => setSfxVolume(parseFloat(e.target.value))}
+                  />
+                </div>
+                {/* Background Music */}
+                <div className="flex items-center gap-2 mb-2 text-black">
+                  <label htmlFor="music">Music</label>
+                  <input
+                    id="music"
+                    type="range"
+                    min={0}
+                    max={1}
+                    step={0.01}
+                    value={musicVolume}
+                    onChange={(e) => setMusicVolume(parseFloat(e.target.value))}
+                  />
+                </div>
+                {/* Audio */}
+                <button
+                  onClick={() => setAudioEnabled((prev) => !prev)}
+                  className="bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded w-full"
+                >
+                  {audioEnabled ? "🔊" : "🔇"}
+                </button>
+              </div>
+            )}
             {/* Cheat */}
             <button
               onClick={() => {
                 setIsCheating(true);
                 setAiMessage("Cos'è successo, mi sento al contrario!");
               }}
-              className="absolute bottom-0 left-0 text-transparent hover:text-black transition duration-300 px-2 py-2"
+              className="absolute bottom-0 right-0 text-transparent hover:text-black transition duration-300 px-2 py-2"
             >
               {isCheating ? "🙉" : "🙈"}
             </button>
