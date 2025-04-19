@@ -18,7 +18,6 @@ function Footer() {
             alt="Andrea Factory Project Logo"
             width="160"
             height="160"
-            className="w-40 h-auto"
           />
           <p className="text-sm mt-4 text-center md:text-left">
             © 2025 Andrea Factory Project Inc. <br />

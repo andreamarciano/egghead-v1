@@ -56,6 +56,7 @@ const SidebarCart = () => {
       <button
         onClick={toggleSidebar}
         className="p-2 hover:bg-gray-700 rounded-2xl relative cursor-pointer"
+        aria-label={isOpen ? "Chiudi Carrello" : "Apri Carrello"} // accessibility
       >
         <ShoppingCart size={22} />
         {/* Product Number - Badge */}
@@ -73,7 +74,11 @@ const SidebarCart = () => {
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-bold text-gray-800">Carrello</h2>
-          <button onClick={toggleSidebar} className="cursor-pointer">
+          <button
+            onClick={toggleSidebar}
+            className="cursor-pointer"
+            aria-label="Chiudi Carrello" // accessibility
+          >
             <X size={24} className="hover:bg-gray-300 rounded-full" />
           </button>
         </div>

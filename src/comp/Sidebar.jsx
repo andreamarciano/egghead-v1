@@ -15,6 +15,7 @@ const Sidebar = () => {
       <button
         onClick={toggleSidebar}
         className="p-2 hover:bg-gray-500 rounded-2xl cursor-pointer"
+        aria-label={isOpen ? "Chiudi menu" : "Apri menu"} // accessibility
       >
         {/* Icon */}
         <Menu size={22} />
@@ -28,9 +29,15 @@ const Sidebar = () => {
       >
         {/* Close Button */}
         <div className="flex justify-between items-center mb-4 text-gray-900">
-          <h2 className="text-lg font-bold ">Menu</h2>
-          <button onClick={toggleSidebar} className="p-1">
-            <X size={24} className="hover:bg-gray-500 rounded-2xl" />
+          <h2 className="text-lg font-bold">Menu</h2>
+          <button
+            onClick={toggleSidebar}
+            aria-label="Chiudi menu" // accessibility
+          >
+            <X
+              size={24}
+              className="hover:bg-gray-500 rounded-2xl cursor-pointer"
+            />
           </button>
         </div>
 
