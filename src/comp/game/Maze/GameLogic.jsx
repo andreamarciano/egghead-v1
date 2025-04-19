@@ -1,17 +1,28 @@
 import { useEffect, useState, useCallback, useRef } from "react";
-import "./Maze.css";
+import { useGameSounds } from "./GameSound";
 
 const MAZE_ROWS = 30;
 const MAZE_COLS = 70;
 const CELL_SIZE = 18;
-const NUM_TRAP = 1;
+const NUM_TRAP = 100;
 const NUM_HEART = 100;
 
-const getLifeSound = new Audio("/sounds/maze/get-life.mp3");
-const loseLifeSound = new Audio("/sounds/maze/lose-life.mp3");
-const gameOverSound = new Audio("/sounds/maze/game-over.mp3");
-
-function Maze({ onClose }) {
+export function useGameLogic() {
+  const {
+    getLifeSound,
+    loseLifeSound,
+    gameOverSound,
+    winSound,
+    audioEnabled,
+    musicVolume,
+    sfxVolume,
+    playSound,
+    playBackgroundMusic,
+    pauseBackgroundMusic,
+    setAudioEnabled,
+    setMusicVolume,
+    setSfxVolume,
+  } = useGameSounds();
   /* STATES */
 
   const [maze, setMaze] = useState([]);
@@ -24,12 +35,13 @@ function Maze({ onClose }) {
   const [lives, setLives] = useState(4);
   const [traps, setTraps] = useState([]);
   const [hearts, setHearts] = useState([]);
+  // Animation
   const [bounceHearts, setBounceHearts] = useState(false); // Healing Animation
   const [blinkHearts, setBlinkHearts] = useState(false); // -1 Heart Blink Animation
   const [blinkZoomHearts, setBlinkZoomHearts] = useState(false); // Max Health Animation
   // Sound
-  const [audioEnabled, setAudioEnabled] = useState(true);
-  const [volume, setVolume] = useState(0.6);
+  const [hasStarted, setHasStarted] = useState(false);
+  const [showVolumeSettings, setShowVolumeSettings] = useState(false);
   // Message
   const [autoMessage, setAutoMessage] = useState(
     "Ti guido io, vai...da quella parte!"
@@ -48,17 +60,6 @@ function Maze({ onClose }) {
   );
 
   /* STATES */
-
-  /* SOUNDS */
-
-  const playSound = (sound) => {
-    if (audioEnabled) {
-      sound.currentTime = 0;
-      sound.play();
-    }
-  };
-
-  /* SOUNDS */
 
   /* FUNCTIONS */
 
@@ -242,6 +243,10 @@ function Maze({ onClose }) {
   // Move Player
   const handleMove = useCallback(
     (dir) => {
+      if (!hasStarted) {
+        setHasStarted(true);
+      }
+
       if (reachedEnd) return;
 
       const { row, col } = player;
@@ -274,6 +279,7 @@ function Maze({ onClose }) {
           if (lives - 1 <= 0) {
             setReachedEnd(true);
             setMessage("Game Over!");
+            // Game Over Sound
             playSound(gameOverSound);
             return;
           }
@@ -288,6 +294,7 @@ function Maze({ onClose }) {
             setLives((prev) => prev + 1);
             // Healing Animation
             setBounceHearts(true);
+            // Get Life Sound
             playSound(getLifeSound);
             setTimeout(() => setBounceHearts(false), 700);
           } else {
@@ -298,6 +305,8 @@ function Maze({ onClose }) {
 
         if (newRow === MAZE_ROWS - 1 && newCol === MAZE_COLS - 1) {
           setReachedEnd(true);
+          // Win Sound
+          playSound(winSound);
           setMessage(
             "Eccoti sei arrivato! Forse... Nel caso ti fossi perso... puoi avere questo codice sconto: MAZE5"
           );
@@ -353,12 +362,14 @@ function Maze({ onClose }) {
     }
   }, [reachedEnd]);
 
-  // Handle Volume
+  // Play/Pause Background Music
   useEffect(() => {
-    getLifeSound.volume = volume;
-    loseLifeSound.volume = volume;
-    gameOverSound.volume = volume;
-  }, [volume]);
+    if (audioEnabled && !reachedEnd && hasStarted) {
+      playBackgroundMusic();
+    } else {
+      pauseBackgroundMusic();
+    }
+  }, [reachedEnd, audioEnabled, hasStarted]);
 
   /* USEEFFECT */
 
@@ -369,153 +380,41 @@ function Maze({ onClose }) {
     setLives(4);
     setTraps([]);
     setHearts([]);
+    setHasStarted(false);
     setMessage("Ti guido io, vai...da quella parte!");
     generateMaze();
   };
 
   /* RESET */
 
-  return (
-    <div className="fixed inset-0 flex justify-center items-center bg-purple-950 bg-opacity-50 z-50">
-      <div className="p-6 rounded shadow-lg bg-purple-800 items-center justify-center flex flex-col relative">
-        {/* Game Header */}
-        <div className="w-full flex justify-between items-center absolute top-0 p-2">
-          <h2 className="text-center text-xl font-bold text-white">
-            Ecco dove puoi trovarci!
-          </h2>
-          {/* Message Box */}
-          <div className="bg-purple-900 text-white p-2 rounded text-center mt-1">
-            {message || autoMessage}
-          </div>
-          <div className="flex gap-2">
-            {/* Volume */}
-            <div className="flex items-center gap-2">
-              <label htmlFor="volume">🔉</label>
-              <input
-                id="volume"
-                type="range"
-                min={0}
-                max={1}
-                step={0.01}
-                value={volume}
-                onChange={(e) => setVolume(parseFloat(e.target.value))}
-              />
-            </div>
-            {/* Sound On/Off */}
-            <button
-              onClick={() => setAudioEnabled((prev) => !prev)}
-              className="bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded"
-            >
-              {audioEnabled ? "🔊" : "🔇"}
-            </button>
-            {/* Solution */}
-            <button
-              onClick={() => setShowHelp((prev) => !prev)}
-              className="bg-green-500 hover:bg-green-600 px-2 py-1 rounded"
-            >
-              🧭
-            </button>
-            {/* Restart */}
-            <button
-              onClick={handleRestart}
-              className="bg-yellow-500 hover:bg-yellow-600 px-2 py-1 rounded"
-            >
-              🔁
-            </button>
-            {/* Close */}
-            <button
-              onClick={onClose}
-              className="bg-red-600 hover:bg-red-700 px-2 py-1 rounded"
-            >
-              ✖
-            </button>
-          </div>
-        </div>
-
-        {/* Maze Container */}
-        <div
-          className="mt-20"
-          style={{
-            display: "grid",
-            gridTemplateRows: `repeat(${MAZE_ROWS}, ${CELL_SIZE}px)`,
-            gridTemplateColumns: `repeat(${MAZE_COLS}, ${CELL_SIZE}px)`,
-          }}
-        >
-          {maze.flatMap((row, r) =>
-            row.map((cell, c) => {
-              const isPlayer = player.row === r && player.col === c;
-              const isEnd = r === MAZE_ROWS - 1 && c === MAZE_COLS - 1;
-              const isTrap = traps.some((p) => p.row === r && p.col === c);
-              const isHeart = hearts.some((p) => p.row === r && p.col === c);
-              const isSolution =
-                showHelp &&
-                solutionPath.some((pos) => pos.row === r && pos.col === c);
-              return (
-                <div
-                  key={`${r}-${c}`}
-                  className={
-                    isPlayer
-                      ? "bg-lime-500"
-                      : isEnd
-                      ? "bg-sky-500"
-                      : isSolution
-                      ? "bg-yellow-400"
-                      : isTrap
-                      ? "bg-purple-900"
-                      : "bg-transparent"
-                  }
-                  style={{
-                    width: CELL_SIZE,
-                    height: CELL_SIZE,
-                    boxSizing: "border-box",
-                    borderTop: cell.top ? "2px solid black" : "none",
-                    borderRight: cell.right ? "2px solid black" : "none",
-                    borderBottom: cell.bottom ? "2px solid black" : "none",
-                    borderLeft: cell.left ? "2px solid black" : "none",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: CELL_SIZE - 4,
-                    userSelect: "none",
-                  }}
-                >
-                  {isHeart && "❤️"}
-                </div>
-              );
-            })
-          )}
-        </div>
-        {/* Hearts */}
-        <div className="flex flex-row text-center">
-          <div
-            className={`text-xl font-bold mb-1 ${
-              blinkHearts ? "blink-hearts" : ""
-            } ${blinkZoomHearts ? "blink-zoom" : ""}`}
-          >
-            {Array.from({ length: 4 }, (_, i) => {
-              const isFilled = i < lives;
-              const isLastLife = lives === 1 && i === 0;
-              const bounceClass = bounceHearts ? `bounce-heart delay-${i}` : "";
-              return (
-                <span
-                  key={i}
-                  className={`${isLastLife ? "blink" : ""} ${bounceClass}`}
-                  style={{
-                    fontSize: "1.8rem",
-                    marginRight: "0.25rem",
-                    display: "inline-block",
-                    animationDelay: bounceHearts ? `${i * 0.15}s` : undefined,
-                  }}
-                >
-                  {isFilled ? "❤️" : "🤍"}
-                </span>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  return {
+    MAZE_ROWS,
+    MAZE_COLS,
+    CELL_SIZE,
+    maze,
+    solutionPath,
+    player,
+    lives,
+    message,
+    reachedEnd,
+    bounceHearts,
+    blinkHearts,
+    blinkZoomHearts,
+    traps,
+    hearts,
+    audioEnabled,
+    musicVolume,
+    sfxVolume,
+    showVolumeSettings,
+    autoMessage,
+    showHelp,
+    generateMaze,
+    handleMove,
+    handleRestart,
+    setAudioEnabled,
+    setMusicVolume,
+    setSfxVolume,
+    setShowVolumeSettings,
+    setShowHelp,
+  };
 }
-
-export default Maze;
