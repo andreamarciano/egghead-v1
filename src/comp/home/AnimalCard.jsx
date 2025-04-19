@@ -14,7 +14,7 @@ function AnimalCard({ num, imgURL, srcSet, alt, description, position }) {
             alt={alt}
             className="w-full h-full object-cover rounded-lg shadow-lg hover:scale-105 transition-all ease-linear cursor-pointer"
             style={position ? { objectPosition: position } : {}}
-            loading={num === 0 ? "eager" : "lazy"}
+            loading={num < 2 ? "eager" : "lazy"}
           />
         </Link>
         <div className="w-1/2 p-4">

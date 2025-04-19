@@ -30,7 +30,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-2",
-        num: 0,
+        num: 2,
         imgURL:
           "https://images.unsplash.com/photo-1615871704593-b59726bcb7e8?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
@@ -41,7 +41,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-3",
-        num: 1,
+        num: 3,
         imgURL:
           "https://images.unsplash.com/photo-1610847188112-fda7a87b39a3?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
@@ -52,7 +52,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-4",
-        num: 0,
+        num: 4,
         imgURL:
           "https://images.unsplash.com/photo-1567428289786-cddc036eadfb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHQlMjByZXh8ZW58MHx8MHx8fDA%3D",
         srcSet:
@@ -64,7 +64,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-5",
-        num: 1,
+        num: 5,
         imgURL:
           "https://images.unsplash.com/photo-1605649461784-7d5e4df56c97?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
@@ -75,7 +75,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-6",
-        num: 0,
+        num: 6,
         imgURL:
           "https://images.unsplash.com/photo-1597245623587-82578a8b0c90?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Lucertola",
@@ -86,7 +86,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-7",
-        num: 1,
+        num: 7,
         imgURL:
           "https://images.unsplash.com/photo-1521217155737-0d5632e9813f?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Tartaruga",
@@ -98,7 +98,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-8",
-        num: 0,
+        num: 8,
         imgURL:
           "https://images.unsplash.com/photo-1613771404721-1f92d799e49f?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
@@ -109,7 +109,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-9",
-        num: 1,
+        num: 9,
         imgURL:
           "https://images.unsplash.com/photo-1592007694563-dc0a128d6c69?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8eW9zaGl8ZW58MHx8MHx8fDA%3D",
         srcSet:
@@ -120,7 +120,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-10",
-        num: 0,
+        num: 10,
         imgURL:
           "https://images.unsplash.com/photo-1607335614551-3062bf90f30e?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
@@ -131,7 +131,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-11",
-        num: 1,
+        num: 11,
         imgURL:
           "https://images.unsplash.com/photo-1598439210625-5067c578f3f6?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
@@ -142,7 +142,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-12",
-        num: 0,
+        num: 12,
         imgURL:
           "https://images.unsplash.com/photo-1531884070720-875c7622d4c6?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
@@ -153,7 +153,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-13",
-        num: 1,
+        num: 13,
         imgURL:
           "https://images.unsplash.com/photo-1592220806191-fc82daadd2fd?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
@@ -164,7 +164,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-14",
-        num: 0,
+        num: 14,
         imgURL:
           "https://images.unsplash.com/photo-1560275619-4662e36fa65c?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
@@ -175,7 +175,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-15",
-        num: 1,
+        num: 15,
         imgURL:
           "https://images.unsplash.com/photo-1509415173911-37ff7a1aa29c?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
@@ -186,7 +186,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-16",
-        num: 0,
+        num: 16,
         imgURL:
           "https://images.unsplash.com/photo-1598537179958-687e6cc625fb?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
@@ -197,7 +197,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-17",
-        num: 1,
+        num: 17,
         imgURL:
           "https://images.unsplash.com/photo-1484704193309-27eaa53936a7?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
@@ -208,7 +208,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-18",
-        num: 0,
+        num: 18,
         imgURL:
           "https://images.unsplash.com/photo-1596296455028-bb216ae02ff7?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
@@ -219,7 +219,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-19",
-        num: 1,
+        num: 19,
         imgURL:
           "https://images.unsplash.com/photo-1588470045344-4393b295297c?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
@@ -230,7 +230,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-20",
-        num: 0,
+        num: 20,
         imgURL:
           "https://images.unsplash.com/photo-1523151594509-9d2e49774fec?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
@@ -241,7 +241,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-21",
-        num: 1,
+        num: 21,
         imgURL:
           "https://images.unsplash.com/photo-1440952306150-7f239990787e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cmFnbm98ZW58MHx8MHx8fDI%3D",
         srcSet:
@@ -252,7 +252,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-22",
-        num: 0,
+        num: 22,
         imgURL:
           "https://images.unsplash.com/photo-1618752362049-bcc57fb5ddb0?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
@@ -263,7 +263,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-23",
-        num: 1,
+        num: 23,
         imgURL:
           "https://images.unsplash.com/photo-1628944681206-2ee8d63b0a6b?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
@@ -274,7 +274,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-24",
-        num: 0,
+        num: 24,
         imgURL:
           "https://images.unsplash.com/photo-1579570806650-b335656b96a9?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
@@ -285,7 +285,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-25",
-        num: 1,
+        num: 25,
         imgURL:
           "https://images.unsplash.com/photo-1521584934521-f27ac11b7523?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
@@ -296,7 +296,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-26",
-        num: 0,
+        num: 26,
         imgURL:
           "https://images.unsplash.com/photo-1544923408-75c5cef46f14?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cGFwcGFnYWxsb3xlbnwwfHwwfHx8Mg%3D%3D",
         srcSet:
@@ -308,7 +308,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-27",
-        num: 1,
+        num: 27,
         imgURL:
           "https://images.unsplash.com/photo-1643324759759-d765bed49091?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
@@ -319,7 +319,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-28",
-        num: 0,
+        num: 28,
         imgURL:
           "https://images.unsplash.com/photo-1683163826671-7c79d06088b7?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
@@ -330,7 +330,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-29",
-        num: 1,
+        num: 29,
         imgURL:
           "https://images.unsplash.com/photo-1601814933824-fd0b574dd592?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
@@ -341,7 +341,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-30",
-        num: 0,
+        num: 30,
         imgURL:
           "https://images.unsplash.com/photo-1728755291200-e259f5a60eeb?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
@@ -352,7 +352,7 @@ export const animalsSlice = createSlice({
       },
       {
         id: "animal-31",
-        num: 1,
+        num: 31,
         imgURL:
           "https://images.unsplash.com/photo-1524685794168-52985e79c1f8?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
