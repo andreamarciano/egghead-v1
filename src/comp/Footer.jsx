@@ -14,7 +14,7 @@ function Footer() {
         {/* Logo (1/2) */}
         <div className="md:col-span-2 flex flex-col items-center md:items-start">
           <img
-            src="/logo/logo.png"
+            src="/logo/logo.webp"
             alt="Andrea Factory Project Logo"
             width="160"
             height="160"
@@ -74,7 +74,7 @@ function Footer() {
               className="hover:opacity-75 transition cursor-pointer"
             >
               <img
-                src="https://images.unsplash.com/vector-1739889223593-5c0789dbad4f?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjJ8fHNuYWtlJTIwbG9nb3xlbnwwfHwwfHx8Mg%3D%3D"
+                src="https://images.unsplash.com/vector-1739889223593-5c0789dbad4f?q=50&w=100&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjJ8fHNuYWtlJTIwbG9nb3xlbnwwfHwwfHx8Mg%3D%3D"
                 alt="Snake"
                 className="w-10 h-10"
               />
@@ -86,7 +86,7 @@ function Footer() {
               className="hover:opacity-75 transition cursor-pointer"
             >
               <img
-                src="https://images.unsplash.com/vector-1739891195183-b18fb97ba750?q=80&w=2360&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                src="https://images.unsplash.com/vector-1739891195183-b18fb97ba750?q=50&w=100&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 alt="Tris"
                 className="w-10 h-10"
               />
@@ -98,7 +98,7 @@ function Footer() {
               className="hover:opacity-75 transition cursor-pointer"
             >
               <img
-                src="https://images.unsplash.com/vector-1739889220891-0e74223c0330?q=80&w=2360&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                src="https://images.unsplash.com/vector-1739889220891-0e74223c0330?q=50&w=100&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 alt="Flower"
                 className="w-10 h-10"
               />

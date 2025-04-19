@@ -8,7 +8,7 @@ export const animalsSlice = createSlice({
         id: "animal-0",
         num: 0,
         imgURL:
-          "https://images.unsplash.com/photo-1616225994053-e629b171cfa3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1616225994053-e629b171cfa3?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Livornese",
         description:
           "La gallina è un uccello domestico che fornisce le uova bianche. È un animale molto comune nelle aziende agricole e ha bisogno di un ambiente caldo e tranquillo per deporre le uova.",
@@ -18,7 +18,7 @@ export const animalsSlice = createSlice({
         id: "animal-1",
         num: 1,
         imgURL:
-          "https://images.unsplash.com/photo-1569396327972-6231a5b05ea8?q=80&w=1889&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1569396327972-6231a5b05ea8?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Ovaiole",
         description:
           "La gallina è un uccello domestico che fornisce le uova marroni. È un animale molto comune nelle aziende agricole e ha bisogno di un ambiente caldo e tranquillo per deporre le uova.",
@@ -28,7 +28,7 @@ export const animalsSlice = createSlice({
         id: "animal-2",
         num: 0,
         imgURL:
-          "https://images.unsplash.com/photo-1615871704593-b59726bcb7e8?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1615871704593-b59726bcb7e8?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Quaglia",
         description:
           "La quaglia è un piccolo uccello noto per le sue uova più piccole, di colore chiaro e con macchie scure. È apprezzata per la qualità delle sue uova, che sono ricche di proteine e vitamine.",
@@ -37,7 +37,7 @@ export const animalsSlice = createSlice({
         id: "animal-3",
         num: 1,
         imgURL:
-          "https://images.unsplash.com/photo-1610847188112-fda7a87b39a3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1610847188112-fda7a87b39a3?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Tacchino",
         description:
           "Il tacchino è un altro animale che fornisce uova di grandi dimensioni. La sua carne e le sue uova sono molto ricercate per il loro sapore delicato e la loro alta qualità.",
@@ -56,7 +56,7 @@ export const animalsSlice = createSlice({
         id: "animal-5",
         num: 1,
         imgURL:
-          "https://images.unsplash.com/photo-1605649461784-7d5e4df56c97?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1605649461784-7d5e4df56c97?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Coccodrillo",
         description:
           "I coccodrilli, animali preistorici sopravvissuti fino ai giorni nostri, depongono uova robuste che si schiudono sotto le calde sabbie. Questi rettili possono sembrare minacciosi, ma le loro uova sono il simbolo di una specie che ha resistito per milioni di anni.",
@@ -65,7 +65,7 @@ export const animalsSlice = createSlice({
         id: "animal-6",
         num: 0,
         imgURL:
-          "https://images.unsplash.com/photo-1597245623587-82578a8b0c90?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1597245623587-82578a8b0c90?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Lucertola",
         description:
           "Le lucertole, che vivono in ambienti desertici e temperati, depongono uova di dimensioni variabili, a seconda della specie. Questi rettili sono noti per la loro velocità e la capacità di sfuggire ai predatori, grazie anche alla loro fertilità e capacità di moltiplicarsi velocemente.",
@@ -74,7 +74,7 @@ export const animalsSlice = createSlice({
         id: "animal-7",
         num: 1,
         imgURL:
-          "https://images.unsplash.com/photo-1521217155737-0d5632e9813f?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1521217155737-0d5632e9813f?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Tartaruga",
         description:
           "Le tartarughe, con la loro lunga vita, sono famose per deporre uova in nidi nascosti nelle sabbie delle spiagge. Alcune specie, come la tartaruga marina, percorrono migliaia di chilometri per ritornare al loro luogo di deposizione, mostrando una straordinaria capacità di orientamento.",
@@ -84,7 +84,7 @@ export const animalsSlice = createSlice({
         id: "animal-8",
         num: 0,
         imgURL:
-          "https://images.unsplash.com/photo-1613771404721-1f92d799e49f?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1613771404721-1f92d799e49f?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Pokemon",
         description:
           "Le uova di Pokémon, in particolare quelle di Togepi, sono magiche! Si dice che queste uova siano portatrici di buona fortuna, e chi sa cosa può succedere quando si schiudono... Mentre Togepi è uno dei più noti Pokémon che depongono uova, molti altri Pokémon leggendari o misteriosi possono deporre uova straordinarie con poteri speciali.",
@@ -102,7 +102,7 @@ export const animalsSlice = createSlice({
         id: "animal-10",
         num: 0,
         imgURL:
-          "https://images.unsplash.com/photo-1607335614551-3062bf90f30e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1607335614551-3062bf90f30e?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Alieno",
         description:
           "Sono facili da curare e molto affettuosi. Dotato di abilità molto utili, è in grado di teletrasportarsi e di adattarsi rapidamente a qualsiasi ambiente. Le sue uova sono ancora più particolari, con poteri che sfidano le leggi della fisica. Non produce escrementi.",
@@ -111,7 +111,7 @@ export const animalsSlice = createSlice({
         id: "animal-11",
         num: 1,
         imgURL:
-          "https://images.unsplash.com/photo-1598439210625-5067c578f3f6?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1598439210625-5067c578f3f6?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Pinguino",
         description:
           "Il pinguino è un uccello incapace di volare, ma un abile nuotatore. Vive nelle regioni fredde e le sue uova vengono deposte in luoghi gelidi, protette sotto il corpo per mantenere il calore.",
@@ -120,7 +120,7 @@ export const animalsSlice = createSlice({
         id: "animal-12",
         num: 0,
         imgURL:
-          "https://images.unsplash.com/photo-1531884070720-875c7622d4c6?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1531884070720-875c7622d4c6?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Aquila",
         description:
           "L'aquila è un rapace maestoso, simbolo di forza e coraggio. Depone le sue uova in alte scogliere, dove i piccoli possono crescere in sicurezza, lontano dai predatori.",
@@ -129,7 +129,7 @@ export const animalsSlice = createSlice({
         id: "animal-13",
         num: 1,
         imgURL:
-          "https://images.unsplash.com/photo-1592220806191-fc82daadd2fd?q=80&w=1786&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1592220806191-fc82daadd2fd?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Serpente",
         description:
           "Il serpente è un rettile che depone uova in luoghi sicuri e nascosti. Le sue uova sono circondate da una membrana che le protegge da predatori e cambiamenti climatici.",
@@ -138,7 +138,7 @@ export const animalsSlice = createSlice({
         id: "animal-14",
         num: 0,
         imgURL:
-          "https://images.unsplash.com/photo-1560275619-4662e36fa65c?q=80&w=1800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1560275619-4662e36fa65c?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Squalo",
         description:
           "Lo squalo è un predatore marino temibile. Alcuni squali depongono uova, ma molti danno alla luce piccoli già sviluppati, in un processo noto come parto viviparo.",
@@ -147,7 +147,7 @@ export const animalsSlice = createSlice({
         id: "animal-15",
         num: 1,
         imgURL:
-          "https://images.unsplash.com/photo-1509415173911-37ff7a1aa29c?q=80&w=2035&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1509415173911-37ff7a1aa29c?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Granchio",
         description:
           "Il granchio è un crostaceo che depone centinaia di piccole uova sotto il carapace, in ambienti sabbiosi dove sono protette dal mare e dai predatori.",
@@ -156,7 +156,7 @@ export const animalsSlice = createSlice({
         id: "animal-16",
         num: 0,
         imgURL:
-          "https://images.unsplash.com/photo-1598537179958-687e6cc625fb?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1598537179958-687e6cc625fb?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Rana",
         description:
           "La rana depone le sue uova in acqua stagnante, dove le larve si trasformano rapidamente in girini e successivamente in rane adulte. Il loro ciclo di vita è affascinante e unico.",
@@ -165,7 +165,7 @@ export const animalsSlice = createSlice({
         id: "animal-17",
         num: 1,
         imgURL:
-          "https://images.unsplash.com/photo-1484704193309-27eaa53936a7?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1484704193309-27eaa53936a7?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Farfalla",
         description:
           "La farfalla depone le sue uova su piante specifiche, da cui nasceranno le larve che, in breve tempo, si trasformeranno in crisalidi e infine in magnifiche farfalle.",
@@ -174,7 +174,7 @@ export const animalsSlice = createSlice({
         id: "animal-18",
         num: 0,
         imgURL:
-          "https://images.unsplash.com/photo-1596296455028-bb216ae02ff7?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1596296455028-bb216ae02ff7?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Mosca",
         description:
           "La mosca è un insetto prolifico che depone le uova in luoghi umidi e in decomposizione. Da queste uova nascono rapidamente le larve che si sviluppano in pochi giorni.",
@@ -183,7 +183,7 @@ export const animalsSlice = createSlice({
         id: "animal-19",
         num: 1,
         imgURL:
-          "https://images.unsplash.com/photo-1588470045344-4393b295297c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1588470045344-4393b295297c?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Formica",
         description:
           "Le formiche sono insetti sociali che depongono le uova nel loro formicaio. Ogni colonia è governata da una regina che produce tutte le uova necessarie per mantenere la popolazione.",
@@ -192,7 +192,7 @@ export const animalsSlice = createSlice({
         id: "animal-20",
         num: 0,
         imgURL:
-          "https://images.unsplash.com/photo-1523151594509-9d2e49774fec?q=80&w=2024&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1523151594509-9d2e49774fec?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Mantide",
         description:
           "La mantide depone le sue uova in una protezione spessa chiamata ooteca, dove le uova si schiuderanno dopo un periodo di incubazione, dando vita a numerosi piccoli predatori.",
@@ -210,7 +210,7 @@ export const animalsSlice = createSlice({
         id: "animal-22",
         num: 0,
         imgURL:
-          "https://images.unsplash.com/photo-1618752362049-bcc57fb5ddb0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1618752362049-bcc57fb5ddb0?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Scorpione",
         description:
           "Lo scorpione è un aracnide che protegge le sue uova fino alla schiusa, durante la quale i piccoli scorpioni rimangono sulla schiena della madre per un po' di tempo.",
@@ -219,7 +219,7 @@ export const animalsSlice = createSlice({
         id: "animal-23",
         num: 1,
         imgURL:
-          "https://images.unsplash.com/photo-1628944681206-2ee8d63b0a6b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1628944681206-2ee8d63b0a6b?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Polpo",
         description:
           "Il polpo depone le sue uova in grotte subacquee. La madre le custodisce con grande cura, morendo spesso poco dopo che le uova si schiudono.",
@@ -228,7 +228,7 @@ export const animalsSlice = createSlice({
         id: "animal-24",
         num: 0,
         imgURL:
-          "https://images.unsplash.com/photo-1579570806650-b335656b96a9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1579570806650-b335656b96a9?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Ornitorinco",
         description:
           "L'ornitorinco è uno degli unici mammiferi che depongono uova. Le sue uova sono incassate in un nido che la madre costruisce lungo le rive di fiumi e torrenti.",
@@ -237,7 +237,7 @@ export const animalsSlice = createSlice({
         id: "animal-25",
         num: 1,
         imgURL:
-          "https://images.unsplash.com/photo-1521584934521-f27ac11b7523?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1521584934521-f27ac11b7523?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Drago",
         description:
           "Il drago è una creatura leggendaria, maestosa e potente. Depone uova infuocate, che si schiudono solo quando la temperatura è abbastanza alta, dando vita a piccoli draghi pronti a volare.",
@@ -256,7 +256,7 @@ export const animalsSlice = createSlice({
         id: "animal-27",
         num: 1,
         imgURL:
-          "https://images.unsplash.com/photo-1643324759759-d765bed49091?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1643324759759-d765bed49091?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Grifone",
         description:
           "Il grifone è una creatura mitologica con il corpo di un leone e la testa di un'aquila. Le sue uova sono considerate sacre e vengono deposte in luoghi remoti e protetti.",
@@ -265,7 +265,7 @@ export const animalsSlice = createSlice({
         id: "animal-28",
         num: 0,
         imgURL:
-          "https://images.unsplash.com/photo-1683163826671-7c79d06088b7?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1683163826671-7c79d06088b7?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Kraken",
         description:
           "Il kraken è un gigantesco mostro marino che depone uova nelle profondità più oscure degli oceani. Queste uova possono rimanere in attesa per secoli prima di schiudersi.",
@@ -274,7 +274,7 @@ export const animalsSlice = createSlice({
         id: "animal-29",
         num: 1,
         imgURL:
-          "https://images.unsplash.com/photo-1601814933824-fd0b574dd592?q=80&w=2012&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1601814933824-fd0b574dd592?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Vogon",
         description:
           "Depongono uova che emettono un odore acre, noto per la sua potenza nauseante.",
@@ -283,7 +283,7 @@ export const animalsSlice = createSlice({
         id: "animal-30",
         num: 0,
         imgURL:
-          "https://images.unsplash.com/photo-1728755291200-e259f5a60eeb?q=80&w=2063&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1728755291200-e259f5a60eeb?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Basilisco",
         description:
           "Il basilisco è una creatura mitologica che, con il suo sguardo, può pietrificare chiunque. Le sue uova sono custodite in luoghi segreti, spesso protetti da magie oscure.",
@@ -292,7 +292,7 @@ export const animalsSlice = createSlice({
         id: "animal-31",
         num: 1,
         imgURL:
-          "https://images.unsplash.com/photo-1524685794168-52985e79c1f8?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1524685794168-52985e79c1f8?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         alt: "Steve",
         description:
           "Con la sua abilità nel crafting e nell'esplorazione, è in grado di produrre uova uniche e magiche, che possono dare vita a creature straordinarie nel suo mondo blocchettato.",
