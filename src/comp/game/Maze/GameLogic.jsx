@@ -8,6 +8,8 @@ const NUM_TRAP = 100;
 const NUM_HEART = 100;
 
 export function useGameLogic() {
+  /* SOUNDS */
+
   const {
     getLifeSound,
     loseLifeSound,
@@ -23,6 +25,9 @@ export function useGameLogic() {
     setMusicVolume,
     setSfxVolume,
   } = useGameSounds();
+
+  /* SOUNDS */
+
   /* STATES */
 
   const [maze, setMaze] = useState([]);
@@ -278,7 +283,9 @@ export function useGameLogic() {
 
           if (lives - 1 <= 0) {
             setReachedEnd(true);
-            setMessage("Game Over!");
+            setMessage(
+              "Sei arrivato a destinazione? Aspetta forse sei morto.."
+            );
             // Game Over Sound
             playSound(gameOverSound);
             return;

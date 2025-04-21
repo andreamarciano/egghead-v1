@@ -54,7 +54,7 @@ const OrderGame = ({ onClose }) => {
             {/* Audio Settings */}
             <button
               onClick={() => setShowVolumeSettings((prev) => !prev)}
-              className="bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded"
+              className="bg-gray-100 hover:bg-gray-300 px-2 py-1 rounded cursor-pointer"
             >
               🔊
             </button>
@@ -90,7 +90,7 @@ const OrderGame = ({ onClose }) => {
                 {/* Audio */}
                 <button
                   onClick={() => setAudioEnabled((prev) => !prev)}
-                  className="bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded w-full"
+                  className="bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded w-full cursor-pointer"
                 >
                   {audioEnabled ? "🔊" : "🔇"}
                 </button>
@@ -99,7 +99,7 @@ const OrderGame = ({ onClose }) => {
             {/* Cheat */}
             <button
               onClick={() => setCheatMode((prev) => !prev)}
-              className={`px-4 py-1 rounded text-sm font-semibold transition ${
+              className={`px-4 py-1 rounded text-sm font-semibold transition cursor-pointer ${
                 cheatMode
                   ? "bg-black text-white"
                   : "bg-white text-blue-700 hover:bg-gray-200"
@@ -110,14 +110,14 @@ const OrderGame = ({ onClose }) => {
             {/* Restart */}
             <button
               onClick={restartGame}
-              className="bg-yellow-400 hover:bg-yellow-300 text-black px-3 py-1 rounded font-bold"
+              className="bg-yellow-400 hover:bg-yellow-300 text-black px-3 py-1 rounded font-bold cursor-pointer"
             >
               🔁
             </button>
             {/* Close */}
             <button
               onClick={onClose}
-              className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded font-bold"
+              className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded font-bold cursor-pointer"
             >
               ✖
             </button>
@@ -126,7 +126,7 @@ const OrderGame = ({ onClose }) => {
 
         {/* Scoreboard */}
         {showScoreBoard && selectedLevel === 5 && (
-          <div className="absolute right-3 top-18 bg-white p-2 rounded shadow text-black w-40">
+          <div className="absolute right-5 top-15 z-50 bg-white p-2 rounded shadow text-black w-40">
             <h3 className="font-bold text-lg mb-2">🏆 High Scores</h3>
             {getBestScores().map((s, i) => (
               <div key={i}>
@@ -179,7 +179,7 @@ const OrderGame = ({ onClose }) => {
                 unlockedLevels.includes(lvl) && handleLevelChange(lvl)
               }
               disabled={!unlockedLevels.includes(lvl)}
-              className={`px-4 py-1 rounded text-sm font-semibold transition ${
+              className={`px-4 py-1 rounded text-sm font-semibold transition cursor-pointer ${
                 selectedLevel === lvl
                   ? "bg-white text-blue-700"
                   : !unlockedLevels.includes(lvl)
@@ -194,9 +194,9 @@ const OrderGame = ({ onClose }) => {
           {level5Unlocked && (
             <button
               onClick={() => handleLevelChange(5)}
-              className={`px-4 py-1 rounded text-sm font-semibold transition ${
+              className={`px-4 py-1 rounded text-sm font-semibold transition cursor-pointer ${
                 selectedLevel === 5
-                  ? "bg-white text-blue-700"
+                  ? "bg-yellow-200 text-blue-700"
                   : "bg-yellow-300 text-black hover:bg-yellow-400"
               }`}
             >
@@ -207,7 +207,7 @@ const OrderGame = ({ onClose }) => {
           {level5Unlocked && selectedLevel === 5 && (
             <button
               onClick={() => setShowScoreBoard((prev) => !prev)}
-              className="bg-white text-yellow-600 px-3 py-1 rounded font-bold hover:bg-yellow-200 text-xl"
+              className="bg-white text-yellow-600 rounded font-bold hover:bg-yellow-200 text-xl cursor-pointer"
             >
               🏆
             </button>
@@ -218,9 +218,20 @@ const OrderGame = ({ onClose }) => {
         {!gameStarted && !hasWon && !gameOver && (
           <button
             onClick={() => setGameStarted(true)}
-            className="mb-4 px-6 py-2 bg-green-500 text-white rounded font-bold hover:bg-green-600 transition"
+            className="px-6 py-6 bg-red-500 text-white rounded cursor-pointer font-bold hover:bg-red-600 transition absolute top-11/20 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50"
           >
             ▶️ Play
+          </button>
+        )}
+
+        {/* Restart */}
+        {gameOver && (
+          <button
+            onClick={restartGame}
+            className="text-3xl cursor-pointer
+             bg-yellow-400 hover:bg-yellow-300 text-black px-6 py-6 rounded font-bold absolute top-11/20 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50"
+          >
+            🔁
           </button>
         )}
 
