@@ -93,7 +93,7 @@ function ReviewForm({ onTriggerGame }) {
           {/* Submit */}
           <button
             type="submit"
-            className="bg-yellow-500 px-4 py-2 rounded hover:bg-yellow-600"
+            className="bg-yellow-500 px-4 py-2 rounded hover:bg-yellow-600 cursor-pointer"
           >
             Submit
           </button>

@@ -137,7 +137,7 @@ const Weather = () => {
         />
         <button
           onClick={handleSubmit}
-          className="p-2 bg-blue-500 text-white rounded hover:bg-blue-400"
+          className="p-2 bg-blue-500 text-white rounded hover:bg-blue-400 cursor-pointer"
         >
           Cerca
         </button>

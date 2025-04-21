@@ -32,7 +32,7 @@ function Reviews() {
           <select
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className="bg-gray-500 p-2 rounded"
+            className="bg-gray-500 p-2 rounded cursor-pointer"
           >
             <option value="all">All</option>
             <option value="spontaneity">Spontaneous</option>

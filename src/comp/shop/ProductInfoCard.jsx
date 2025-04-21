@@ -120,7 +120,7 @@ function ProductInfoCard() {
             {/* Add to Cart */}
             <button
               onClick={handleAddCart}
-              className="bg-yellow-500 text-white py-2 px-6 rounded-lg text-xl font-semibold hover:bg-yellow-600 transition"
+              className="bg-yellow-500 text-white py-2 px-6 rounded-lg text-xl font-semibold hover:bg-yellow-600 transition cursor-pointer"
             >
               Add to Cart
             </button>

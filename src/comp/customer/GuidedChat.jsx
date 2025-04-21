@@ -447,6 +447,7 @@ const GuidedChat = () => {
           {msg.text}
         </div>
       ))}
+      {/* Agent Typing Animation */}
       {isAgentTyping && (
         <div className="text-green-400 italic flex space-x-1">
           <span className="bounce-dot">.</span>
@@ -454,6 +455,7 @@ const GuidedChat = () => {
           <span className="bounce-dot">.</span>
         </div>
       )}
+      {/* Chatbot Typing Animation */}
       {isTyping && (
         <div className="italic text-gray-400">
           <div className="flex space-x-1 text-gray-400 italic">
@@ -465,13 +467,14 @@ const GuidedChat = () => {
         </div>
       )}
 
+      {/* Chatbot Options */}
       {!isAgentActive && !chatEnded && !isTyping && (
         <div className="space-y-2">
           {chatFlow[step]?.options?.map((opt, idx) => (
             <button
               key={idx}
               onClick={() => handleOptionClick(opt)}
-              className="block w-full bg-blue-500 hover:bg-blue-400 p-2 rounded"
+              className="block w-full bg-blue-500 hover:bg-blue-400 p-2 rounded cursor-pointer"
             >
               {opt.label}
             </button>
@@ -479,17 +482,7 @@ const GuidedChat = () => {
         </div>
       )}
 
-      {orderGameUnlocked && !showGame && (
-        <div className="mt-4">
-          <button
-            onClick={() => setShowGame(true)}
-            className="bg-purple-500 hover:bg-purple-400 px-4 py-2 rounded w-full"
-          >
-            Replay &rarr; 🎯
-          </button>
-        </div>
-      )}
-
+      {/* Agent Chat */}
       {isAgentActive && !chatEnded && (
         <div className="flex gap-2 mt-4">
           <input
@@ -501,9 +494,21 @@ const GuidedChat = () => {
           />
           <button
             onClick={handleUserSubmit}
-            className="bg-green-600 hover:bg-green-500 p-2 rounded"
+            className="bg-green-600 hover:bg-green-500 p-2 rounded cursor-pointer"
           >
             Invia
+          </button>
+        </div>
+      )}
+
+      {/* Order Game Shortcut */}
+      {orderGameUnlocked && !showGame && (
+        <div>
+          <button
+            onClick={() => setShowGame(true)}
+            className="bg-purple-500 hover:bg-purple-400 py-2 rounded w-full cursor-pointer"
+          >
+            Replay &rarr; 🎯
           </button>
         </div>
       )}

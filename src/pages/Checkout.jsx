@@ -300,7 +300,7 @@ function Checkout() {
                     <button
                       type="button"
                       onClick={applyDiscount}
-                      className="bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700 transition"
+                      className="bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700 transition cursor-pointer"
                     >
                       Applica
                     </button>
@@ -309,7 +309,7 @@ function Checkout() {
                     <button
                       type="button"
                       onClick={() => setShowCodes(!showCodes)}
-                      className="bg-gray-200 border border-gray-400 px-3 py-2 rounded hover:bg-gray-100 transition text-xl"
+                      className="bg-gray-100 border border-gray-400 px-3 py-2 rounded hover:bg-gray-300 transition text-xl cursor-pointer"
                       title="Mostra codici sbloccati"
                     >
                       🗝️
@@ -349,7 +349,7 @@ function Checkout() {
             <div className="text-center mt-6">
               <button
                 type="submit"
-                className="bg-amber-600 text-white px-6 py-3 rounded hover:bg-amber-700 transition"
+                className="bg-amber-600 text-white px-6 py-3 rounded hover:bg-amber-700 transition cursor-pointer"
               >
                 Completa l'ordine
               </button>
