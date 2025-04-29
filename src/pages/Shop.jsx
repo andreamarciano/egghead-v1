@@ -5,12 +5,21 @@ import Navbar from "../comp/Navbar";
 import ProductCard from "../comp/shop/ProductCard";
 import Footer from "../comp/Footer";
 import Filter from "../comp/shop/Filter";
+// import BubbleShooter from "../comp/game/BubbleShooter/BubbleShooter";
 
 function Shop() {
   // Scroll to top
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  // bubble shooter shortcut
+  // const [isBubbleOpen, setIsBubbleOpen] = useState(false);
+  // const [isUnlocked, setIsUnlocked] = useState(false);
+  // useEffect(() => {
+  //   const unlocked = localStorage.getItem("unlockedBubbleShooter") === "true";
+  //   setIsUnlocked(unlocked);
+  // }, []);
 
   const eggs = useSelector((state) => state.eggs.value); // redux store
   const [selectedProduct, setSelectedProduct] = useState(null); // outlet
@@ -81,7 +90,19 @@ function Shop() {
       <h1 className="text-4xl p-5 font-bold">Trova l'uovo che fa per te!</h1>
 
       {/* Filter */}
-      <Filter onFilterChange={handleFilterChange} />
+      <div className="relative">
+        <Filter onFilterChange={handleFilterChange} />
+        {/* Bubble Shooter Shortcut */}
+        {/* {isUnlocked && (
+          <button
+            onClick={() => setIsBubbleOpen(true)}
+            className="bg-zinc-700 hover:bg-zinc-800 text-2xl transition cursor-pointer absolute top-1 left-25 rounded-2xl"
+          >
+            🫧
+          </button>
+        )} */}
+      </div>
+      {/* {isBubbleOpen && <BubbleShooter onClose={() => setIsBubbleOpen(false)} />} */}
 
       {/* Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mb-5">

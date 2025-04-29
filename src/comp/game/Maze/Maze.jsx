@@ -16,6 +16,7 @@ function Maze({ onClose }) {
     blinkZoomHearts,
     traps,
     hearts,
+    enemies,
     audioEnabled,
     musicVolume,
     sfxVolume,
@@ -34,12 +35,12 @@ function Maze({ onClose }) {
     <div className="fixed inset-0 flex justify-center items-center bg-purple-950 bg-opacity-50 z-50">
       <div className="p-6 rounded shadow-lg bg-purple-800 items-center justify-center flex flex-col relative">
         {/* Game Header */}
-        <div className="w-full flex justify-between items-center absolute top-0 p-2">
+        <div className="w-full flex justify-between items-center absolute top-0 p-2 mt-1">
           <h2 className="text-center text-xl font-bold text-white">
             Ecco dove puoi trovarci!
           </h2>
           {/* Message Box */}
-          <div className="bg-purple-900 text-white p-2 rounded text-center mt-1">
+          <div className="bg-purple-900 text-white p-2 rounded text-center">
             {message || autoMessage}
           </div>
           <div className="flex gap-2">
@@ -114,7 +115,7 @@ function Maze({ onClose }) {
 
         {/* Maze Container */}
         <div
-          className="mt-20"
+          className="mt-15"
           style={{
             display: "grid",
             gridTemplateRows: `repeat(${MAZE_ROWS}, ${CELL_SIZE}px)`,
@@ -127,6 +128,7 @@ function Maze({ onClose }) {
               const isEnd = r === MAZE_ROWS - 1 && c === MAZE_COLS - 1;
               const isTrap = traps.some((p) => p.row === r && p.col === c);
               const isHeart = hearts.some((p) => p.row === r && p.col === c);
+              const isEnemy = enemies.some((p) => p.row === r && p.col === c);
               const isSolution =
                 showHelp &&
                 solutionPath.some((pos) => pos.row === r && pos.col === c);
@@ -160,15 +162,17 @@ function Maze({ onClose }) {
                   }}
                 >
                   {isHeart && "❤️"}
+                  {isEnemy && "🐓"}
                 </div>
               );
             })
           )}
         </div>
+
         {/* Hearts */}
-        <div className="flex flex-row text-center">
+        <div className="flex flex-row text-center mt-2">
           <div
-            className={`text-xl font-bold mb-1 ${
+            className={`text-xl font-bold ${
               blinkHearts ? "blink-hearts" : ""
             } ${blinkZoomHearts ? "blink-zoom" : ""}`}
           >

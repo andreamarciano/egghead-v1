@@ -5,8 +5,11 @@ import { addToCart } from "../../redux/cartSlice";
 import { decreaseAvailability } from "../../redux/eggSlice";
 import { toast } from "react-toastify";
 import SidebarCart from "./SidebarCart";
+// import BubbleShooter from "../game/BubbleShooter/BubbleShooter";
 
 function ProductInfoCard() {
+  // const [isBubbleOpen, setIsBubbleOpen] = useState(false);
+
   const { cardID } = useParams(); // get prod id by url
   // redux - select prod by id
   const eggs = useSelector((state) =>
@@ -68,7 +71,7 @@ function ProductInfoCard() {
   return (
     <div
       ref={productRef}
-      className="mt-10 max-w-4xl mx-auto bg-zinc-950 rounded-lg shadow-xl min-h-[400px]"
+      className="mt-10 max-w-4xl mx-auto bg-zinc-950 rounded-lg shadow-xl min-h-[400px] relative"
     >
       {/* Title */}
       <h1 className="text-3xl font-bold text-white text-center mb-6">
@@ -124,11 +127,28 @@ function ProductInfoCard() {
             >
               Add to Cart
             </button>
+
             {/* SidebarCart */}
             <SidebarCart />
           </div>
         </div>
       </div>
+
+      {/* Bubble Shooter */}
+      {/* {eggs[0].game && (
+        <button
+          onClick={() => {
+            setIsBubbleOpen(true);
+            localStorage.setItem("unlockedBubbleShooter", "true");
+          }}
+          className="bg-zinc-700 hover:bg-zinc-800 text-2xl transition cursor-pointer absolute bottom-1 right-1 rounded-2xl"
+        >
+          🫧
+        </button>
+      )} */}
+
+      {/* Bubble Shooter */}
+      {/* {isBubbleOpen && <BubbleShooter onClose={() => setIsBubbleOpen(false)} />} */}
     </div>
   );
 }

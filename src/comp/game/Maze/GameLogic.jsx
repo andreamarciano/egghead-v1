@@ -1,15 +1,32 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useGameSounds } from "./GameSound";
+import { generateMazeData } from "./mazeGenerator";
 
 const MAZE_ROWS = 30;
 const MAZE_COLS = 70;
 const CELL_SIZE = 18;
-const NUM_TRAP = 100;
-const NUM_HEART = 100;
+const NUM_TRAP = 10;
+const NUM_HEART = 5;
+const NUM_ENEMY = 100;
 
 export function useGameLogic() {
-  /* SOUNDS */
-
+  /* STATES */
+  const [maze, setMaze] = useState([]);
+  const [player, setPlayer] = useState({ row: 0, col: 0 });
+  const [message, setMessage] = useState("");
+  const [reachedEnd, setReachedEnd] = useState(false);
+  const [solutionPath, setSolutionPath] = useState([]);
+  const [showHelp, setShowHelp] = useState(false);
+  // Game
+  const [lives, setLives] = useState(4);
+  const [traps, setTraps] = useState([]);
+  const [hearts, setHearts] = useState([]);
+  const [enemies, setEnemies] = useState([]);
+  // Animation
+  const [bounceHearts, setBounceHearts] = useState(false); // +1
+  const [blinkHearts, setBlinkHearts] = useState(false); // -1
+  const [blinkZoomHearts, setBlinkZoomHearts] = useState(false); // max
+  // Sound
   const {
     getLifeSound,
     loseLifeSound,
@@ -25,26 +42,6 @@ export function useGameLogic() {
     setMusicVolume,
     setSfxVolume,
   } = useGameSounds();
-
-  /* SOUNDS */
-
-  /* STATES */
-
-  const [maze, setMaze] = useState([]);
-  const [player, setPlayer] = useState({ row: 0, col: 0 });
-  const [message, setMessage] = useState("");
-  const [reachedEnd, setReachedEnd] = useState(false);
-  const [solutionPath, setSolutionPath] = useState([]);
-  const [showHelp, setShowHelp] = useState(false);
-  // Game
-  const [lives, setLives] = useState(4);
-  const [traps, setTraps] = useState([]);
-  const [hearts, setHearts] = useState([]);
-  // Animation
-  const [bounceHearts, setBounceHearts] = useState(false); // Healing Animation
-  const [blinkHearts, setBlinkHearts] = useState(false); // -1 Heart Blink Animation
-  const [blinkZoomHearts, setBlinkZoomHearts] = useState(false); // Max Health Animation
-  // Sound
   const [hasStarted, setHasStarted] = useState(false);
   const [showVolumeSettings, setShowVolumeSettings] = useState(false);
   // Message
@@ -64,183 +61,23 @@ export function useGameLogic() {
     localStorage.getItem("unlockedCodes") || "[]"
   );
 
-  /* STATES */
-
   /* FUNCTIONS */
 
   // Generate Maze
   const generateMaze = useCallback(() => {
-    const rows = MAZE_ROWS;
-    const cols = MAZE_COLS;
-    const visited = Array.from({ length: rows }, () => Array(cols).fill(false));
-
-    const dirs = [
-      [0, 1], // right
-      [1, 0], // down
-      [0, -1], // left
-      [-1, 0], // up
-    ];
-
-    const isValid = (r, c) =>
-      r >= 0 && c >= 0 && r < rows && c < cols && !visited[r][c];
-
-    const mazeGrid = Array.from({ length: rows }, () =>
-      Array.from({ length: cols }, () => ({
-        top: true,
-        right: true,
-        bottom: true,
-        left: true,
-      }))
-    );
-
-    // DFS Algorithm
-    function dfs(r, c) {
-      visited[r][c] = true;
-      dirs.sort(() => Math.random() - 0.5);
-
-      for (let [dr, dc] of dirs) {
-        const nr = r + dr;
-        const nc = c + dc;
-        if (isValid(nr, nc)) {
-          if (dr === -1) {
-            mazeGrid[r][c].top = false;
-            mazeGrid[nr][nc].bottom = false;
-          } else if (dr === 1) {
-            mazeGrid[r][c].bottom = false;
-            mazeGrid[nr][nc].top = false;
-          } else if (dc === -1) {
-            mazeGrid[r][c].left = false;
-            mazeGrid[nr][nc].right = false;
-          } else if (dc === 1) {
-            mazeGrid[r][c].right = false;
-            mazeGrid[nr][nc].left = false;
-          }
-          dfs(nr, nc);
-        }
-      }
-    }
-
-    // Break Walls
-    function addFakePaths(grid, extraConnections = 25) {
-      let count = 0;
-
-      while (count < extraConnections) {
-        const r = Math.floor(Math.random() * (rows - 1));
-        const c = Math.floor(Math.random() * (cols - 1));
-
-        const directions = [
-          { dr: -1, dc: 0, wall: "top", opposite: "bottom" },
-          { dr: 1, dc: 0, wall: "bottom", opposite: "top" },
-          { dr: 0, dc: -1, wall: "left", opposite: "right" },
-          { dr: 0, dc: 1, wall: "right", opposite: "left" },
-        ];
-
-        const { dr, dc, wall, opposite } =
-          directions[Math.floor(Math.random() * directions.length)];
-
-        const nr = r + dr;
-        const nc = c + dc;
-
-        if (
-          nr >= 0 &&
-          nc >= 0 &&
-          nr < rows &&
-          nc < cols &&
-          grid[r][c][wall] &&
-          grid[nr][nc][opposite]
-        ) {
-          grid[r][c][wall] = false;
-          grid[nr][nc][opposite] = false;
-          count++;
-        }
-      }
-    }
-
-    dfs(0, 0); // start
-
-    // Find Solution
-    const findSolutionPath = () => {
-      const visited = Array.from({ length: rows }, () =>
-        Array(cols).fill(false)
-      );
-      const path = [];
-
-      function dfsPath(r, c) {
-        if (r === rows - 1 && c === cols - 1) {
-          path.push({ row: r, col: c });
-          return true;
-        }
-
-        visited[r][c] = true;
-        const cell = mazeGrid[r][c];
-
-        const directions = [
-          { dr: -1, dc: 0, wall: "top" },
-          { dr: 1, dc: 0, wall: "bottom" },
-          { dr: 0, dc: -1, wall: "left" },
-          { dr: 0, dc: 1, wall: "right" },
-        ];
-
-        for (let { dr, dc, wall } of directions) {
-          const nr = r + dr;
-          const nc = c + dc;
-          if (
-            nr >= 0 &&
-            nc >= 0 &&
-            nr < rows &&
-            nc < cols &&
-            !visited[nr][nc] &&
-            !cell[wall]
-          ) {
-            if (dfsPath(nr, nc)) {
-              path.push({ row: r, col: c });
-              return true;
-            }
-          }
-        }
-
-        return false;
-      }
-
-      dfsPath(0, 0);
-      setSolutionPath(path.reverse());
-    };
-
-    addFakePaths(mazeGrid, 200); // break walls
-    findSolutionPath(); // show solution
+    const {
+      mazeGrid,
+      solutionPath,
+      traps: newTraps,
+      hearts: newHearts,
+      enemies: newEnemies,
+    } = generateMazeData(MAZE_ROWS, MAZE_COLS, NUM_TRAP, NUM_HEART, NUM_ENEMY);
 
     setMaze(mazeGrid);
-
-    // Trap & Heart
-    const forbidden = new Set(["0-0", `${rows - 1}-${cols - 1}`]);
-
-    function generateItems(count, existingSet = new Set()) {
-      const positions = new Set();
-      while (positions.size < count) {
-        const r = Math.floor(Math.random() * rows);
-        const c = Math.floor(Math.random() * cols);
-        const key = `${r}-${c}`;
-        if (
-          !forbidden.has(key) &&
-          !positions.has(key) &&
-          !existingSet.has(key)
-        ) {
-          positions.add(key);
-        }
-      }
-      return Array.from(positions).map((key) => {
-        const [row, col] = key.split("-").map(Number);
-        return { row, col };
-      });
-    }
-
-    const newTraps = generateItems(NUM_TRAP);
-    const trapSet = new Set(newTraps.map(({ row, col }) => `${row}-${col}`));
-    const newHearts = generateItems(NUM_HEART, trapSet);
-
+    setSolutionPath(solutionPath);
     setTraps(newTraps);
     setHearts(newHearts);
-
+    setEnemies(newEnemies);
     setPlayer({ row: 0, col: 0 });
     setReachedEnd(false);
   }, []);
@@ -330,8 +167,6 @@ export function useGameLogic() {
     [lives, player, maze, reachedEnd]
   );
 
-  /* FUNCTIONS */
-
   /* USEEFFECT */
 
   // Generate Maze
@@ -378,8 +213,6 @@ export function useGameLogic() {
     }
   }, [reachedEnd, audioEnabled, hasStarted]);
 
-  /* USEEFFECT */
-
   /* RESET */
 
   // New Maze
@@ -392,8 +225,6 @@ export function useGameLogic() {
     generateMaze();
   };
 
-  /* RESET */
-
   return {
     MAZE_ROWS,
     MAZE_COLS,
@@ -403,20 +234,18 @@ export function useGameLogic() {
     player,
     lives,
     message,
-    reachedEnd,
     bounceHearts,
     blinkHearts,
     blinkZoomHearts,
     traps,
     hearts,
+    enemies,
     audioEnabled,
     musicVolume,
     sfxVolume,
     showVolumeSettings,
     autoMessage,
     showHelp,
-    generateMaze,
-    handleMove,
     handleRestart,
     setAudioEnabled,
     setMusicVolume,
