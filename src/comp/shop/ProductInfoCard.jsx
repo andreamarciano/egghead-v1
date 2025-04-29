@@ -6,9 +6,11 @@ import { decreaseAvailability } from "../../redux/eggSlice";
 import { toast } from "react-toastify";
 import SidebarCart from "./SidebarCart";
 // import BubbleShooter from "../game/BubbleShooter/BubbleShooter";
+import SpaceInvaders from "../game/SpaceInvaders/SpaceInvaders";
 
 function ProductInfoCard() {
   // const [isBubbleOpen, setIsBubbleOpen] = useState(false);
+  const [isSpaceInvadersOpen, setIsSpaceInvadersOpen] = useState(false);
 
   const { cardID } = useParams(); // get prod id by url
   // redux - select prod by id
@@ -134,6 +136,23 @@ function ProductInfoCard() {
         </div>
       </div>
 
+      {/* Space Invaders */}
+      {eggs[0].game && (
+        <button
+          onClick={() => {
+            setIsSpaceInvadersOpen(true);
+            localStorage.setItem("unlockedSpaceInvaders", "true");
+          }}
+          className="bg-zinc-700 hover:bg-zinc-800 text-2xl transition cursor-pointer absolute bottom-1 right-1 rounded-2xl"
+        >
+          👾
+        </button>
+      )}
+      {/* Space Invaders */}
+      {isSpaceInvadersOpen && (
+        <SpaceInvaders onClose={() => setIsSpaceInvadersOpen(false)} />
+      )}
+
       {/* Bubble Shooter */}
       {/* {eggs[0].game && (
         <button
@@ -146,7 +165,6 @@ function ProductInfoCard() {
           🫧
         </button>
       )} */}
-
       {/* Bubble Shooter */}
       {/* {isBubbleOpen && <BubbleShooter onClose={() => setIsBubbleOpen(false)} />} */}
     </div>

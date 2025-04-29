@@ -135,6 +135,7 @@ export const eggsSlice = createSlice({
         available: 1,
         shipping: false,
         universe: true,
+        game: true,
       },
       {
         id: "egg-11",
@@ -243,7 +244,7 @@ export const eggsSlice = createSlice({
         available: 10000,
         shipping: true,
         universe: true,
-        game: true,
+        // game: true,
       },
       {
         id: "egg-20",

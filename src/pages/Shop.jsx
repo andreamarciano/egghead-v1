@@ -6,11 +6,20 @@ import ProductCard from "../comp/shop/ProductCard";
 import Footer from "../comp/Footer";
 import Filter from "../comp/shop/Filter";
 // import BubbleShooter from "../comp/game/BubbleShooter/BubbleShooter";
+import SpaceInvaders from "../comp/game/SpaceInvaders/SpaceInvaders";
 
 function Shop() {
   // Scroll to top
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  // space invaders shortcut
+  const [isSpaceInvadersOpen, setIsSpaceInvadersOpen] = useState(false);
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  useEffect(() => {
+    const unlocked = localStorage.getItem("unlockedSpaceInvaders") === "true";
+    setIsUnlocked(unlocked);
   }, []);
 
   // bubble shooter shortcut
@@ -92,6 +101,20 @@ function Shop() {
       {/* Filter */}
       <div className="relative">
         <Filter onFilterChange={handleFilterChange} />
+        {/* Space Invaders Shortcut */}
+        {isUnlocked && (
+          <button
+            onClick={() => setIsSpaceInvadersOpen(true)}
+            className="bg-zinc-700 hover:bg-zinc-800 text-2xl transition cursor-pointer absolute top-1 left-25 rounded-2xl"
+          >
+            👾
+          </button>
+        )}
+        {/* Space Invaders */}
+        {isSpaceInvadersOpen && (
+          <SpaceInvaders onClose={() => setIsSpaceInvadersOpen(false)} />
+        )}
+
         {/* Bubble Shooter Shortcut */}
         {/* {isUnlocked && (
           <button
