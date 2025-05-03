@@ -1,19 +1,23 @@
 import { useState, useEffect, useRef } from "react";
-
 const imgURL = "/images/spaceInvaders/playerShip1_green.webp";
 
 function SpaceInvaders({ onClose }) {
   const canvasRef = useRef(null);
+  /* Player */
   const playerImageRef = useRef(new Image());
   const playerRotationRef = useRef(0);
   const playerScale = 0.5;
-
   const [playerX, setPlayerX] = useState(0); // player position
   const playerXRef = useRef(playerX);
-
   const playerWidth = 99 * playerScale;
   const playerHeight = 75 * playerScale;
   const playerSpeed = 5;
+  /* Projectile */
+  const lastShotTimeRef = useRef(0);
+  const projectilesRef = useRef([]);
+  const projectileCooldown = 200;
+  const projectileRadius = 4;
+  const projectileSpeed = 7;
 
   // Synchronize ref with state value (used in loop)
   useEffect(() => {
@@ -31,7 +35,6 @@ function SpaceInvaders({ onClose }) {
     canvas.height = 576;
 
     playerImageRef.current.src = imgURL; // load player image
-
     // initial position
     const initialPlayerX = canvas.width / 2 - playerWidth / 2;
     setPlayerX(initialPlayerX);
@@ -63,15 +66,56 @@ function SpaceInvaders({ onClose }) {
         playerRotationRef.current *= 0.9; // smooth return
       }
 
+      // Continuous Shooting
+      const now = Date.now();
+      if (keysPressed.has(" ")) {
+        if (now - lastShotTimeRef.current > projectileCooldown) {
+          const newProjectile = {
+            x: playerXRef.current + playerWidth / 2,
+            y: canvas.height - playerHeight - 20,
+            radius: projectileRadius,
+            speed: projectileSpeed,
+          };
+          projectilesRef.current.push(newProjectile);
+          lastShotTimeRef.current = now;
+
+          // debug - projectile
+          // console.log("new projectile:", newProjectile);
+        }
+      }
+
       setPlayerX(playerXRef.current); // update state, possible future use
 
       // clear canvas
       c.clearRect(0, 0, canvas.width, canvas.height);
 
+      // === update & draw Projectiles ===
+      projectilesRef.current = projectilesRef.current
+        .map((p) => {
+          const updated = { ...p, y: p.y - p.speed };
+          // debug - projectile position
+          //   console.log("projectile updated:", updated);
+          return updated;
+        })
+        .filter((p) => {
+          const isVisible = p.y + p.radius > 0;
+          // debug - projectile removed
+          //   if (!isVisible)
+          //     console.log("projectile removed:", p);
+          return isVisible;
+        });
+
+      projectilesRef.current.forEach((p) => {
+        c.beginPath();
+        c.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        c.fillStyle = "red";
+        c.fill();
+        c.closePath();
+      });
+
       // Player
       const playerY = canvas.height - playerHeight - 20;
       c.save();
-
       // rotation
       c.translate(
         playerXRef.current + playerWidth / 2,
