@@ -4,47 +4,59 @@ const invaderURL = "/images/spaceInvaders/invader.png";
 
 function SpaceInvaders({ onClose }) {
   const canvasRef = useRef(null);
-  const canvasWidth = 1260;
-  const canvasHeight = 690;
+  const canvasSize = {
+    width: 1260,
+    height: 690,
+  };
 
   const [isGameRunning, setIsGameRunning] = useState(false);
   const [gameOver, setGameOver] = useState(false);
 
   const playerImageRef = useRef(new Image());
   const playerScale = 0.5;
-  const playerWidth = 99 * playerScale;
-  const playerHeight = 75 * playerScale;
+  const playerConfig = {
+    width: 99 * playerScale,
+    height: 75 * playerScale,
+    speed: 5,
+  };
   const playerRotationRef = useRef(0);
   const [playerX, setPlayerX] = useState(0);
   const playerXRef = useRef(playerX);
-  const playerSpeed = 5;
 
   const [lives, setLives] = useState(3);
   const livesRef = useRef(3);
 
   const lastShotTimeRef = useRef(0);
   const projectilesRef = useRef([]);
-  const projectileCooldown = 200;
-  const projectileRadius = 4;
-  const projectileSpeed = 7;
+  const projectileConfig = {
+    cooldown: 200,
+    radius: 4,
+    speed: 7,
+  };
 
   const invaderImageRef = useRef(new Image());
   const invaderScale = 1;
-  const invaderWidth = 30 * invaderScale;
-  const invaderHeight = 30 * invaderScale;
+  const invaderConfig = {
+    width: 30 * invaderScale,
+    height: 30 * invaderScale,
+    maxSpeed: 3,
+    minSpeed: 2,
+  };
   const invaderGridsRef = useRef([]);
-  const maxInvaderGridSpeed = 3;
-  const minInvaderGridSpeed = 2;
 
   const invaderProjectilesRef = useRef([]);
-  const invaderProjectileWidth = 4;
-  const invaderProjectileHeight = 12;
-  const invaderProjectileSpeed = 4;
-  const invaderProjectileFrameFreq = 100;
+  const invaderProjectileConfig = {
+    width: 4,
+    height: 12,
+    speed: 4,
+    frame: 100,
+  };
 
   const [score, setScore] = useState(0);
-  const clearInvaderScore = 10;
-  const clearInvaderGridScore = 50;
+  const scoreParams = {
+    single: 10,
+    grid: 50,
+  };
 
   const particlesRef = useRef([]);
   const invaderParticles = {
@@ -86,17 +98,17 @@ function SpaceInvaders({ onClose }) {
     const canvas = canvasRef.current;
     const c = canvas.getContext("2d");
     if (!c) return;
-    canvas.width = canvasWidth;
-    canvas.height = canvasHeight;
+    canvas.width = canvasSize.width;
+    canvas.height = canvasSize.height;
 
     playerImageRef.current.src = playerURL;
     invaderImageRef.current.src = invaderURL;
 
     // === INIT PLAYER ===
-    const initialPlayerX = canvas.width / 2 - playerWidth / 2;
+    const initialPlayerX = canvas.width / 2 - playerConfig.width / 2;
     setPlayerX(initialPlayerX);
     playerXRef.current = initialPlayerX;
-    const playerY = canvas.height - playerHeight - 10;
+    const playerY = canvas.height - playerConfig.height - 10;
 
     // === INPUT HANDLING ===
     const keysPressed = new Set();
@@ -113,8 +125,8 @@ function SpaceInvaders({ onClose }) {
     const spawnInvaderGrid = () => {
       const cols = Math.floor(Math.random() * 10 + 5);
       const rows = Math.floor(Math.random() * 5 + 2);
-      const gridWidth = cols * invaderWidth;
-      const gridHeight = rows * invaderHeight;
+      const gridWidth = cols * invaderConfig.width;
+      const gridHeight = rows * invaderConfig.height;
 
       const x = 0;
       const y = 0;
@@ -123,9 +135,9 @@ function SpaceInvaders({ onClose }) {
       const minSize = 5 * 2;
       const maxSize = 15 * 7;
       const speed =
-        maxInvaderGridSpeed -
+        invaderConfig.maxSpeed -
         ((sizeFactor - minSize) / (maxSize - minSize)) *
-          (maxInvaderGridSpeed - minInvaderGridSpeed);
+          (invaderConfig.maxSpeed - invaderConfig.minSpeed);
 
       invaderGridsRef.current.push({
         x,
@@ -148,12 +160,15 @@ function SpaceInvaders({ onClose }) {
     const gameLoop = () => {
       // === PLAYER MOVEMENT ===
       if (keysPressed.has("ArrowLeft")) {
-        playerXRef.current = Math.max(playerXRef.current - playerSpeed, 0);
+        playerXRef.current = Math.max(
+          playerXRef.current - playerConfig.speed,
+          0
+        );
         playerRotationRef.current = -0.15;
       } else if (keysPressed.has("ArrowRight")) {
         playerXRef.current = Math.min(
-          playerXRef.current + playerSpeed,
-          canvas.width - playerWidth
+          playerXRef.current + playerConfig.speed,
+          canvas.width - playerConfig.width
         );
         playerRotationRef.current = 0.15;
       } else {
@@ -163,12 +178,12 @@ function SpaceInvaders({ onClose }) {
       // === SHOOT PROJECTILES ===
       const now = Date.now();
       if (keysPressed.has(" ")) {
-        if (now - lastShotTimeRef.current > projectileCooldown) {
+        if (now - lastShotTimeRef.current > projectileConfig.cooldown) {
           const newProjectile = {
-            x: playerXRef.current + playerWidth / 2,
-            y: canvas.height - playerHeight - 10,
-            radius: projectileRadius,
-            speed: projectileSpeed,
+            x: playerXRef.current + playerConfig.width / 2,
+            y: canvas.height - playerConfig.height - 10,
+            radius: projectileConfig.radius,
+            speed: projectileConfig.speed,
           };
           projectilesRef.current.push(newProjectile);
           lastShotTimeRef.current = now;
@@ -219,15 +234,15 @@ function SpaceInvaders({ onClose }) {
       // === CHECK COLLISION INVADER PROJECTILE-PLAYER ===
       invaderProjectilesRef.current.forEach((p, index) => {
         const hit =
-          p.x < playerXRef.current + playerWidth &&
+          p.x < playerXRef.current + playerConfig.width &&
           p.x + p.width > playerXRef.current &&
-          p.y < playerY + playerHeight &&
+          p.y < playerY + playerConfig.height &&
           p.y + p.height > playerY;
 
         if (hit) {
           createExplosion(
-            playerXRef.current + playerWidth / 2,
-            playerY + playerHeight / 2,
+            playerXRef.current + playerConfig.width / 2,
+            playerY + playerConfig.height / 2,
             playerParticles
           );
           invaderProjectilesRef.current.splice(index, 1);
@@ -269,25 +284,25 @@ function SpaceInvaders({ onClose }) {
           for (let row = 0; row < grid.rows; row++) {
             for (let col = 0; col < grid.cols; col++) {
               if (grid.invaders[row][col]) {
-                const invaderX = grid.x + col * invaderWidth;
-                const invaderY = grid.y + row * invaderHeight;
+                const invaderX = grid.x + col * invaderConfig.width;
+                const invaderY = grid.y + row * invaderConfig.height;
 
-                const distanceX = p.x - (invaderX + invaderWidth / 2);
-                const distanceY = p.y - (invaderY + invaderHeight / 2);
+                const distanceX = p.x - (invaderX + invaderConfig.width / 2);
+                const distanceY = p.y - (invaderY + invaderConfig.height / 2);
                 const distance = Math.sqrt(
                   distanceX * distanceX + distanceY * distanceY
                 );
 
                 // remove invader
-                if (distance < p.radius + invaderWidth / 2) {
+                if (distance < p.radius + invaderConfig.width / 2) {
                   grid.invaders[row][col] = false;
                   createExplosion(
-                    invaderX + invaderWidth / 2,
-                    invaderY + invaderHeight / 2,
+                    invaderX + invaderConfig.width / 2,
+                    invaderY + invaderConfig.height / 2,
                     invaderParticles
                   );
 
-                  setScore((prevScore) => prevScore + clearInvaderScore);
+                  setScore((prevScore) => prevScore + scoreParams.single);
                   projectilesRef.current.splice(pIndex, 1);
                 }
               }
@@ -302,7 +317,7 @@ function SpaceInvaders({ onClose }) {
             row.some((inv) => inv)
           );
           if (!stillHasInvaders) {
-            setScore((prevScore) => prevScore + clearInvaderGridScore);
+            setScore((prevScore) => prevScore + scoreParams.grid);
           }
           return stillHasInvaders;
         }
@@ -311,25 +326,30 @@ function SpaceInvaders({ onClose }) {
       // === DRAW PLAYER ===
       c.save();
       c.translate(
-        playerXRef.current + playerWidth / 2,
-        playerY + playerHeight / 2
+        playerXRef.current + playerConfig.width / 2,
+        playerY + playerConfig.height / 2
       );
       c.rotate(playerRotationRef.current);
       c.translate(
-        -playerXRef.current - playerWidth / 2,
-        -playerY - playerHeight / 2
+        -playerXRef.current - playerConfig.width / 2,
+        -playerY - playerConfig.height / 2
       );
       if (playerImageRef.current.complete) {
         c.drawImage(
           playerImageRef.current,
           playerXRef.current,
           playerY,
-          playerWidth,
-          playerHeight
+          playerConfig.width,
+          playerConfig.height
         );
       } else {
         c.fillStyle = "green";
-        c.fillRect(playerXRef.current, playerY, playerWidth, playerHeight);
+        c.fillRect(
+          playerXRef.current,
+          playerY,
+          playerConfig.width,
+          playerConfig.height
+        );
       }
       c.restore();
 
@@ -339,20 +359,20 @@ function SpaceInvaders({ onClose }) {
           for (let col = 0; col < grid.cols; col++) {
             if (!grid.invaders[row][col]) continue;
 
-            const x = grid.x + col * invaderWidth;
-            const y = grid.y + row * invaderHeight;
+            const x = grid.x + col * invaderConfig.width;
+            const y = grid.y + row * invaderConfig.height;
 
             if (invaderImageRef.current.complete) {
               c.drawImage(
                 invaderImageRef.current,
                 x,
                 y,
-                invaderWidth,
-                invaderHeight
+                invaderConfig.width,
+                invaderConfig.height
               );
             } else {
               c.fillStyle = "white";
-              c.fillRect(x, y, invaderWidth, invaderHeight);
+              c.fillRect(x, y, invaderConfig.width, invaderConfig.height);
             }
           }
         }
@@ -366,7 +386,7 @@ function SpaceInvaders({ onClose }) {
       frames++;
 
       // === INVADER SHOOTING ===
-      if (frames % invaderProjectileFrameFreq === 0) {
+      if (frames % invaderProjectileConfig.frame === 0) {
         invaderGridsRef.current.forEach((grid) => {
           const aliveInvaders = [];
           for (let row = 0; row < grid.rows; row++) {
@@ -382,17 +402,18 @@ function SpaceInvaders({ onClose }) {
               aliveInvaders[Math.floor(Math.random() * aliveInvaders.length)];
             const x =
               grid.x +
-              col * invaderWidth +
-              invaderWidth / 2 -
-              invaderProjectileWidth / 2;
-            const y = grid.y + row * invaderHeight + invaderHeight;
+              col * invaderConfig.width +
+              invaderConfig.width / 2 -
+              invaderProjectileConfig.width / 2;
+            const y =
+              grid.y + row * invaderConfig.height + invaderConfig.height;
 
             invaderProjectilesRef.current.push({
               x,
               y,
-              width: invaderProjectileWidth,
-              height: invaderProjectileHeight,
-              speed: invaderProjectileSpeed,
+              width: invaderProjectileConfig.width,
+              height: invaderProjectileConfig.height,
+              speed: invaderProjectileConfig.speed,
             });
           }
         });
@@ -441,7 +462,7 @@ function SpaceInvaders({ onClose }) {
       invaderProjectilesRef.current = [];
       particlesRef.current = [];
 
-      playerXRef.current = canvasRef.current.width / 2 - playerWidth / 2;
+      playerXRef.current = canvasRef.current.width / 2 - playerConfig.width / 2;
       playerRotationRef.current = 0;
       lastShotTimeRef.current = 0;
       livesRef.current = 3;
@@ -461,8 +482,8 @@ function SpaceInvaders({ onClose }) {
         <canvas
           ref={canvasRef}
           className="border border-white bg-black"
-          width={canvasWidth}
-          height={canvasHeight}
+          width={canvasSize.width}
+          height={canvasSize.height}
         />
       </div>
       <button
