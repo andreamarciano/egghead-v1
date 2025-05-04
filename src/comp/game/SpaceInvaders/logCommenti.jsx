@@ -33,6 +33,10 @@ function SpaceInvaders({ onClose }) {
   const invaderGridsRef = useRef([]);
   const maxInvaderGridSpeed = 3;
   const minInvaderGridSpeed = 2;
+  /* Score */
+  const [score, setScore] = useState(0);
+  const clearInvaderScore = 10;
+  const clearInvaderGridScore = 50;
 
   // Synchronize ref with state value (used in loop)
   useEffect(() => {
@@ -104,7 +108,6 @@ function SpaceInvaders({ onClose }) {
         invaders: Array.from({ length: rows }, () => Array(cols).fill(true)),
       });
     };
-
     // === INVADER GRID FRAME CONTROL ===
     spawnInvaderGrid(); // first spawn
     let frames = 1;
@@ -198,6 +201,60 @@ function SpaceInvaders({ onClose }) {
         c.fill();
         c.closePath();
       });
+      // === CHECK PROJECTILE-INVADER COLLISION ===
+      projectilesRef.current.forEach((p, pIndex) => {
+        invaderGridsRef.current.forEach((grid) => {
+          for (let row = 0; row < grid.rows; row++) {
+            for (let col = 0; col < grid.cols; col++) {
+              if (grid.invaders[row][col]) {
+                // invader position
+                const invaderX = grid.x + col * invaderWidth;
+                const invaderY = grid.y + row * invaderHeight;
+
+                // check collision
+                const distanceX = p.x - (invaderX + invaderWidth / 2);
+                const distanceY = p.y - (invaderY + invaderHeight / 2);
+                const distance = Math.sqrt(
+                  distanceX * distanceX + distanceY * distanceY
+                );
+                // remove invader
+                if (distance < p.radius + invaderWidth / 2) {
+                  grid.invaders[row][col] = false;
+                  // debug - invader eliminated
+                  // console.log(
+                  //   `Invader Hit: grid @ (${grid.x}, ${grid.y}) - cell [${row}][${col}]`
+                  // );
+
+                  setScore((prevScore) => prevScore + clearInvaderScore);
+                  // debug - single invader score
+                  // console.log(`+${clearInvaderScore} points`);
+
+                  projectilesRef.current.splice(pIndex, 1); // remove projectile
+                }
+              }
+            }
+          }
+        });
+      });
+      // === REMOVE EMPTY GRID ===
+      invaderGridsRef.current = invaderGridsRef.current.filter(
+        (grid, index) => {
+          const stillHasInvaders = grid.invaders.some((row) =>
+            row.some((inv) => inv)
+          );
+          if (!stillHasInvaders) {
+            // debug - full grid eliminated
+            // console.log(
+            //   `Grid completely eliminated: index ${index}, position (${grid.x}, ${grid.y})`
+            // );
+
+            setScore((prevScore) => prevScore + clearInvaderGridScore);
+            // debug - full grid score
+            // console.log(`+${clearInvaderGridScore} points`);
+          }
+          return stillHasInvaders;
+        }
+      );
 
       // === DRAW PLAYER ===
       const playerY = canvas.height - playerHeight - 10;
@@ -322,6 +379,10 @@ function SpaceInvaders({ onClose }) {
       >
         ✖
       </button>
+      {/* Score */}
+      <div className="absolute top-2 left-2 text-white text-lg">
+        Score: {score}
+      </div>
       {/* Start & Reset */}
       {!isGameRunning && (
         <button

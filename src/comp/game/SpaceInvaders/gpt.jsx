@@ -172,19 +172,4 @@ function SpaceInvaders({ onClose }) {
   };
 
   return (
-    <>
-      <canvas
-        ref={canvasRef}
-        className="border border-white bg-black"
-        width={canvasWidth}
-        height={canvasHeight}
-      />
-      <button onClick={onClose}>✖</button>
-      {!isGameRunning && (
-        <button onClick={handleGameStart}>
-          {gameOver ? "New Game" : "Start Game"}
-        </button>
-      )}
-    </>
-  );
-}
+    
