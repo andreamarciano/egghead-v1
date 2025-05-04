@@ -5,12 +5,12 @@ function SpaceInvaders({ onClose }) {
   const canvasRef = useRef(null);
   /* Player */
   const playerImageRef = useRef(new Image());
-  const playerRotationRef = useRef(0);
   const playerScale = 0.5;
-  const [playerX, setPlayerX] = useState(0); // player position
-  const playerXRef = useRef(playerX);
   const playerWidth = 99 * playerScale;
   const playerHeight = 75 * playerScale;
+  const playerRotationRef = useRef(0);
+  const [playerX, setPlayerX] = useState(0);
+  const playerXRef = useRef(playerX);
   const playerSpeed = 5;
   /* Projectile */
   const lastShotTimeRef = useRef(0);
@@ -18,6 +18,17 @@ function SpaceInvaders({ onClose }) {
   const projectileCooldown = 200;
   const projectileRadius = 4;
   const projectileSpeed = 7;
+  /* Invader */
+  const invaderImageRef = useRef(new Image());
+  const invaderScale = 1;
+  const invaderWidth = 30 * invaderScale;
+  const invaderHeight = 30 * invaderScale;
+  const [invaderX, setInvaderX] = useState(0);
+  const [invaderY, setInvaderY] = useState(0);
+  const invaderXRef = useRef(0);
+  const invaderYRef = useRef(0);
+  const invaderDirectionRef = useRef(1); // 1: right, -1: left
+  const invaderSpeed = 3;
 
   // Synchronize ref with state value (used in loop)
   useEffect(() => {
@@ -26,33 +37,45 @@ function SpaceInvaders({ onClose }) {
 
   // initialization & main game cycle
   useEffect(() => {
-    document.body.style.overflow = "hidden"; // disable page-scroll
-    // canvas
+    // === INIT CANVAS ===
+    document.body.style.overflow = "hidden";
     const canvas = canvasRef.current;
     const c = canvas.getContext("2d");
     if (!c) return;
     canvas.width = 1024;
     canvas.height = 576;
 
-    playerImageRef.current.src = imgURL; // load player image
-    // initial position
+    // === LOAD IMAGES ===
+    playerImageRef.current.src = imgURL;
+    invaderImageRef.current.src = invaderURL;
+
+    // === INIT PLAYER ===
     const initialPlayerX = canvas.width / 2 - playerWidth / 2;
     setPlayerX(initialPlayerX);
     playerXRef.current = initialPlayerX;
 
-    // keyboard
+    // === INIT INVADER ===
+    const initialInvaderX = 0;
+    const initialInvaderY = 0;
+    setInvaderX(initialInvaderX);
+    setInvaderY(initialInvaderY);
+    invaderXRef.current = initialInvaderX;
+    invaderYRef.current = initialInvaderY;
+
+    // === INPUT HANDLING ===
     const keysPressed = new Set(); // track keystrokes
-    let animationId;
     const handleKeyDown = (e) => {
       keysPressed.add(e.key);
     };
     const handleKeyUp = (e) => {
       keysPressed.delete(e.key);
     };
+    addEventListener("keydown", handleKeyDown);
+    addEventListener("keyup", handleKeyUp);
 
-    // Game Loop Main
+    // === GAME LOOP ===
     const gameLoop = () => {
-      // Smooth motion + Tilt effect
+      // === PLAYER MOVEMENT ===
       if (keysPressed.has("ArrowLeft")) {
         playerXRef.current = Math.max(playerXRef.current - playerSpeed, 0);
         playerRotationRef.current = -0.15; // tilt left
@@ -66,7 +89,7 @@ function SpaceInvaders({ onClose }) {
         playerRotationRef.current *= 0.9; // smooth return
       }
 
-      // Continuous Shooting
+      // === SHOOT PROJECTILES ===
       const now = Date.now();
       if (keysPressed.has(" ")) {
         if (now - lastShotTimeRef.current > projectileCooldown) {
@@ -84,12 +107,26 @@ function SpaceInvaders({ onClose }) {
         }
       }
 
-      setPlayerX(playerXRef.current); // update state, possible future use
+      // === INVADER MOVEMENT ===
+      invaderXRef.current += invaderSpeed * invaderDirectionRef.current;
+      // border bouncing
+      if (
+        invaderXRef.current <= 0 ||
+        invaderXRef.current + invaderWidth >= canvas.width
+      ) {
+        invaderDirectionRef.current *= -1; // change direction
+        invaderYRef.current += 30; // down 1 row
+      }
 
-      // clear canvas
+      // === STATE UPDATES FOR DRAWING ===
+      setInvaderX(invaderXRef.current);
+      setInvaderY(invaderYRef.current);
+      setPlayerX(playerXRef.current);
+
+      // === CLEAR CANVAS ===
       c.clearRect(0, 0, canvas.width, canvas.height);
 
-      // === update & draw Projectiles ===
+      // === UPDATE & DRAW PROJECTILES ===
       projectilesRef.current = projectilesRef.current
         .map((p) => {
           const updated = { ...p, y: p.y - p.speed };
@@ -104,7 +141,6 @@ function SpaceInvaders({ onClose }) {
           //     console.log("projectile removed:", p);
           return isVisible;
         });
-
       projectilesRef.current.forEach((p) => {
         c.beginPath();
         c.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
@@ -113,7 +149,7 @@ function SpaceInvaders({ onClose }) {
         c.closePath();
       });
 
-      // Player
+      // === DRAW PLAYER ===
       const playerY = canvas.height - playerHeight - 20;
       c.save();
       // rotation
@@ -126,8 +162,6 @@ function SpaceInvaders({ onClose }) {
         -playerXRef.current - playerWidth / 2,
         -playerY - playerHeight / 2
       );
-
-      // Draw player (if loaded)
       if (playerImageRef.current.complete) {
         c.drawImage(
           playerImageRef.current,
@@ -137,10 +171,10 @@ function SpaceInvaders({ onClose }) {
           playerHeight
         );
       } else {
+        // fallback
         c.fillStyle = "green";
         c.fillRect(playerXRef.current, playerY, playerWidth, playerHeight);
       }
-
       // debug - hitbox
       // c.fillStyle = "rgba(255, 0, 0, 0.2)";
       // c.fillRect(playerXRef.current, playerY, playerWidth, playerHeight);
@@ -153,17 +187,29 @@ function SpaceInvaders({ onClose }) {
       //   height: playerHeight,
       //   rotation: playerRotationRef.current.toFixed(2),
       // });
-
       c.restore();
 
-      animationId = requestAnimationFrame(gameLoop); // next frame
+      // === DRAW INVADER ===
+      if (invaderImageRef.current.complete) {
+        c.drawImage(
+          invaderImageRef.current,
+          invaderXRef.current,
+          invaderYRef.current,
+          invaderWidth,
+          invaderHeight
+        );
+      } else {
+        c.fillStyle = "white";
+        c.fillRect(invaderX, invaderY, invaderWidth, invaderHeight);
+      }
+
+      animationId = requestAnimationFrame(gameLoop);
     };
 
-    animationId = requestAnimationFrame(gameLoop); // start animation
+    // === NEXT FRAME ===
+    animationId = requestAnimationFrame(gameLoop);
 
-    addEventListener("keydown", handleKeyDown);
-    addEventListener("keyup", handleKeyUp);
-
+    // === CLEANUP ===
     return () => {
       document.body.style.overflow = "";
       removeEventListener("keydown", handleKeyDown);
