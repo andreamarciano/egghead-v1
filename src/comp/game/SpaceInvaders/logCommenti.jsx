@@ -2,7 +2,10 @@ import { useState, useEffect, useRef } from "react";
 const imgURL = "/images/spaceInvaders/playerShip1_green.webp";
 
 function SpaceInvaders({ onClose }) {
+  /* Canvas */
   const canvasRef = useRef(null);
+  /* Start Game */
+  const [isGameRunning, setIsGameRunning] = useState(false);
   /* Player */
   const playerImageRef = useRef(new Image());
   const playerScale = 0.5;
@@ -35,8 +38,10 @@ function SpaceInvaders({ onClose }) {
     playerXRef.current = playerX;
   }, [playerX]);
 
-  // initialization & main game cycle
+  // main game cycle
   useEffect(() => {
+    if (!isGameRunning) return;
+
     // === INIT CANVAS ===
     document.body.style.overflow = "hidden";
     const canvas = canvasRef.current;
@@ -122,6 +127,14 @@ function SpaceInvaders({ onClose }) {
       setInvaderX(invaderXRef.current);
       setInvaderY(invaderYRef.current);
       setPlayerX(playerXRef.current);
+
+      // === LOSE CONDITION ===
+      if (invaderYRef.current >= canvas.height - 30) {
+        cancelAnimationFrame(animationId);
+        alert("Game Over!");
+        setIsGameRunning(false);
+        return;
+      }
 
       // === CLEAR CANVAS ===
       c.clearRect(0, 0, canvas.width, canvas.height);
@@ -216,7 +229,7 @@ function SpaceInvaders({ onClose }) {
       removeEventListener("keyup", handleKeyUp);
       cancelAnimationFrame(animationId);
     };
-  }, []);
+  }, [isGameRunning]);
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-80 z-50">
@@ -236,6 +249,15 @@ function SpaceInvaders({ onClose }) {
       >
         ✖
       </button>
+      {/* Start */}
+      {!isGameRunning && (
+        <button
+          onClick={() => setIsGameRunning(true)}
+          className="absolute bottom-5 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+        >
+          Start Game
+        </button>
+      )}
     </div>
   );
 }

@@ -3,6 +3,7 @@ const playerURL = "/images/spaceInvaders/playerShip1_green.webp";
 const invaderURL = "/images/spaceInvaders/invader.png";
 
 function SpaceInvaders({ onClose }) {
+  const [isGameRunning, setIsGameRunning] = useState(false);
   const canvasRef = useRef(null);
 
   const playerImageRef = useRef(new Image());
@@ -36,6 +37,8 @@ function SpaceInvaders({ onClose }) {
   }, [playerX]);
 
   useEffect(() => {
+    if (!isGameRunning) return;
+
     document.body.style.overflow = "hidden";
     const canvas = canvasRef.current;
     const c = canvas.getContext("2d");
@@ -115,6 +118,14 @@ function SpaceInvaders({ onClose }) {
       setInvaderY(invaderYRef.current);
       setPlayerX(playerXRef.current);
 
+      // === LOSE CONDITION ===
+      if (invaderYRef.current >= canvas.height - 30) {
+        cancelAnimationFrame(animationId);
+        alert("Game Over!");
+        setIsGameRunning(false);
+        return;
+      }
+
       c.clearRect(0, 0, canvas.width, canvas.height);
 
       // === UPDATE & DRAW PROJECTILES ===
@@ -186,7 +197,7 @@ function SpaceInvaders({ onClose }) {
       removeEventListener("keyup", handleKeyUp);
       cancelAnimationFrame(animationId);
     };
-  }, []);
+  }, [isGameRunning]);
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-80 z-50">
@@ -204,6 +215,14 @@ function SpaceInvaders({ onClose }) {
       >
         ✖
       </button>
+      {!isGameRunning && (
+        <button
+          onClick={() => setIsGameRunning(true)}
+          className="absolute bottom-5 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+        >
+          Start Game
+        </button>
+      )}
     </div>
   );
 }
