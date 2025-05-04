@@ -33,6 +33,12 @@ function SpaceInvaders({ onClose }) {
   const maxInvaderGridSpeed = 3;
   const minInvaderGridSpeed = 2;
 
+  const invaderProjectilesRef = useRef([]);
+  const invaderProjectileWidth = 4;
+  const invaderProjectileHeight = 12;
+  const invaderProjectileSpeed = 4;
+  const invaderProjectileFrameFreq = 100;
+
   const [score, setScore] = useState(0);
   const clearInvaderScore = 10;
   const clearInvaderGridScore = 50;
@@ -165,6 +171,19 @@ function SpaceInvaders({ onClose }) {
 
       c.clearRect(0, 0, canvas.width, canvas.height);
 
+      // === UPDATE & DRAW INVADER PROJECTILES ===
+      invaderProjectilesRef.current = invaderProjectilesRef.current
+        .map((p) => ({
+          ...p,
+          y: p.y + p.speed,
+        }))
+        .filter((p) => p.y < canvas.height); // Mantieni solo quelli visibili
+
+      invaderProjectilesRef.current.forEach((p) => {
+        c.fillStyle = "white";
+        c.fillRect(p.x, p.y, p.width, p.height);
+      });
+
       // === UPDATE & DRAW PROJECTILES ===
       projectilesRef.current = projectilesRef.current
         .map((p) => {
@@ -182,6 +201,7 @@ function SpaceInvaders({ onClose }) {
         c.fill();
         c.closePath();
       });
+
       // === CHECK PROJECTILE-INVADER COLLISION ===
       projectilesRef.current.forEach((p, pIndex) => {
         invaderGridsRef.current.forEach((grid) => {
@@ -279,6 +299,39 @@ function SpaceInvaders({ onClose }) {
 
       frames++;
 
+      // === INVADER SHOOTING ===
+      if (frames % invaderProjectileFrameFreq === 0) {
+        invaderGridsRef.current.forEach((grid) => {
+          const aliveInvaders = [];
+          for (let row = 0; row < grid.rows; row++) {
+            for (let col = 0; col < grid.cols; col++) {
+              if (grid.invaders[row][col]) {
+                aliveInvaders.push({ row, col });
+              }
+            }
+          }
+
+          if (aliveInvaders.length > 0) {
+            const { row, col } =
+              aliveInvaders[Math.floor(Math.random() * aliveInvaders.length)];
+            const x =
+              grid.x +
+              col * invaderWidth +
+              invaderWidth / 2 -
+              invaderProjectileWidth / 2;
+            const y = grid.y + row * invaderHeight + invaderHeight;
+
+            invaderProjectilesRef.current.push({
+              x,
+              y,
+              width: invaderProjectileWidth,
+              height: invaderProjectileHeight,
+              speed: invaderProjectileSpeed,
+            });
+          }
+        });
+      }
+
       animationId = requestAnimationFrame(gameLoop);
     };
 
@@ -329,13 +382,18 @@ function SpaceInvaders({ onClose }) {
       {!isGameRunning && (
         <button
           onClick={handleGameStart}
-          className={`absolute bottom-5 ${
+          className={`absolute ${
             gameOver
               ? "bg-blue-600 hover:bg-blue-700"
               : "bg-green-600 hover:bg-green-700"
           } text-white px-4 py-2 rounded`}
+          style={{
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
         >
-          {gameOver ? "New Game" : "Start Game"}
+          {gameOver ? "Restart" : "Play"}
         </button>
       )}
     </div>

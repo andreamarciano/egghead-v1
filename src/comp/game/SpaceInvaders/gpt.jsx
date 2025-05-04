@@ -1,19 +1,25 @@
-//import
 function SpaceInvaders({ onClose }) {
-  // canvas states
-  const [isGameRunning, setIsGameRunning] = useState(false);
-  const [gameOver, setGameOver] = useState(false);
-  // player states
-  // projectile states
-  // invader grid states
+  /* States */
+  // canvas, player, score, gameOver
+  const lastShotTimeRef = useRef(0);
+  const projectilesRef = useRef([]);
+  const projectileCooldown = 200;
+  const projectileRadius = 4;
+  const projectileSpeed = 7;
 
-  // update playerx useffect
+  const invaderImageRef = useRef(new Image());
+  const invaderScale = 1;
+  const invaderWidth = 30 * invaderScale;
+  const invaderHeight = 30 * invaderScale;
+  const invaderGridsRef = useRef([]);
+  const maxInvaderGridSpeed = 3;
+  const minInvaderGridSpeed = 2;
 
+  /* useEffect update x player */
+
+  /* useEffect main */
   useEffect(() => {
-    if (!isGameRunning) return;
-    // === canvas configuration ===
-    // === initial player position ===
-    // === INPUT HANDLING ===
+    // canvas, url, initial player position, handling input
 
     // === INVADER GRID SPAWNING ===
     const spawnInvaderGrid = () => {
@@ -45,8 +51,6 @@ function SpaceInvaders({ onClose }) {
         invaders: Array.from({ length: rows }, () => Array(cols).fill(true)),
       });
     };
-
-    // === FRAME CONTROL ===
     spawnInvaderGrid();
     let frames = 1;
     let randomInterval = Math.floor(Math.random() * 500 + 500);
@@ -55,18 +59,6 @@ function SpaceInvaders({ onClose }) {
     let animationId;
     const gameLoop = () => {
       // === PLAYER MOVEMENT ===
-      if (keysPressed.has("ArrowLeft")) {
-        playerXRef.current = Math.max(playerXRef.current - playerSpeed, 0);
-        playerRotationRef.current = -0.15;
-      } else if (keysPressed.has("ArrowRight")) {
-        playerXRef.current = Math.min(
-          playerXRef.current + playerSpeed,
-          canvas.width - playerWidth
-        );
-        playerRotationRef.current = 0.15;
-      } else {
-        playerRotationRef.current *= 0.9;
-      }
 
       // === SHOOT PROJECTILES ===
       const now = Date.now();
@@ -99,7 +91,6 @@ function SpaceInvaders({ onClose }) {
       setPlayerX(playerXRef.current);
 
       // === LOSE CONDITION ===
-      // invader reach bottom
 
       c.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -120,9 +111,46 @@ function SpaceInvaders({ onClose }) {
         c.fill();
         c.closePath();
       });
+      // === CHECK PROJECTILE-INVADER COLLISION ===
+      projectilesRef.current.forEach((p, pIndex) => {
+        invaderGridsRef.current.forEach((grid) => {
+          for (let row = 0; row < grid.rows; row++) {
+            for (let col = 0; col < grid.cols; col++) {
+              if (grid.invaders[row][col]) {
+                const invaderX = grid.x + col * invaderWidth;
+                const invaderY = grid.y + row * invaderHeight;
+
+                const distanceX = p.x - (invaderX + invaderWidth / 2);
+                const distanceY = p.y - (invaderY + invaderHeight / 2);
+                const distance = Math.sqrt(
+                  distanceX * distanceX + distanceY * distanceY
+                );
+
+                // remove invader
+                if (distance < p.radius + invaderWidth / 2) {
+                  grid.invaders[row][col] = false;
+                  setScore((prevScore) => prevScore + clearInvaderScore);
+                  projectilesRef.current.splice(pIndex, 1);
+                }
+              }
+            }
+          }
+        });
+      });
+      // === REMOVE EMPTY GRID ===
+      invaderGridsRef.current = invaderGridsRef.current.filter(
+        (grid, index) => {
+          const stillHasInvaders = grid.invaders.some((row) =>
+            row.some((inv) => inv)
+          );
+          if (!stillHasInvaders) {
+            setScore((prevScore) => prevScore + clearInvaderGridScore);
+          }
+          return stillHasInvaders;
+        }
+      );
 
       // === DRAW PLAYER ===
-      // ...
 
       // === DRAW INVADER GRIDS ===
       invaderGridsRef.current.forEach((grid) => {
@@ -162,14 +190,10 @@ function SpaceInvaders({ onClose }) {
     animationId = requestAnimationFrame(gameLoop);
 
     return () => {
-      // ... altri clear
-      cancelAnimationFrame(animationId);
+      // clear
     };
   }, [isGameRunning]);
 
-  const handleGameStart = () => {
-    // start & reset game
-  };
+  // handle Game Start
 
-  return (
-    
+  return ( // UI ...

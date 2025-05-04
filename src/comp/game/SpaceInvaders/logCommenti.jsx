@@ -33,6 +33,12 @@ function SpaceInvaders({ onClose }) {
   const invaderGridsRef = useRef([]);
   const maxInvaderGridSpeed = 3;
   const minInvaderGridSpeed = 2;
+  /* Invader Projectile */
+  const invaderProjectilesRef = useRef([]);
+  const invaderProjectileWidth = 4;
+  const invaderProjectileHeight = 12;
+  const invaderProjectileSpeed = 4;
+  const invaderProjectileFrameFreq = 100;
   /* Score */
   const [score, setScore] = useState(0);
   const clearInvaderScore = 10;
@@ -330,6 +336,43 @@ function SpaceInvaders({ onClose }) {
 
       frames++;
 
+      // === INVADER SHOOTING ===
+      if (frames % invaderProjectileFrameFreq === 0) {
+        invaderGridsRef.current.forEach((grid) => {
+          // alive invaders inside a grid
+          const aliveInvaders = [];
+          for (let row = 0; row < grid.rows; row++) {
+            for (let col = 0; col < grid.cols; col++) {
+              if (grid.invaders[row][col]) {
+                aliveInvaders.push({ row, col });
+              }
+            }
+          }
+
+          if (aliveInvaders.length > 0) {
+            const { row, col } =
+              aliveInvaders[Math.floor(Math.random() * aliveInvaders.length)];
+            const x =
+              grid.x +
+              col * invaderWidth +
+              invaderWidth / 2 -
+              invaderProjectileWidth / 2;
+            const y = grid.y + row * invaderHeight + invaderHeight;
+
+            // debug - invader shoot
+            // console.log(`Invader at [${row}, ${col}] fired a shot`);
+
+            invaderProjectilesRef.current.push({
+              x,
+              y,
+              width: invaderProjectileWidth,
+              height: invaderProjectileHeight,
+              speed: invaderProjectileSpeed,
+            });
+          }
+        });
+      }
+
       animationId = requestAnimationFrame(gameLoop);
     };
 
@@ -371,6 +414,25 @@ function SpaceInvaders({ onClose }) {
           width={1024}
           height={576}
         />
+        {/* debug - Canvas Center */}
+        {/* <div
+          className="absolute"
+          style={{
+            top: `${canvasHeight / 2}px`,
+            left: 0,
+            width: "100%",
+            borderTop: "2px solid red",
+          }}
+        ></div>
+        <div
+          className="absolute"
+          style={{
+            top: 0,
+            left: `${canvasWidth / 2}px`,
+            height: "100%",
+            borderLeft: "2px solid red",
+          }}
+        ></div> */}
       </div>
       {/* Close */}
       <button
@@ -387,13 +449,18 @@ function SpaceInvaders({ onClose }) {
       {!isGameRunning && (
         <button
           onClick={handleGameStart}
-          className={`absolute bottom-5 ${
+          className={`absolute ${
             gameOver
               ? "bg-blue-600 hover:bg-blue-700"
               : "bg-green-600 hover:bg-green-700"
           } text-white px-4 py-2 rounded`}
+          style={{
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
         >
-          {gameOver ? "New Game" : "Start Game"}
+          {gameOver ? "Restart" : "Play"}
         </button>
       )}
     </div>
