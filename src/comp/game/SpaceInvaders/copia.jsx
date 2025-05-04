@@ -46,6 +46,34 @@ function SpaceInvaders({ onClose }) {
   const clearInvaderScore = 10;
   const clearInvaderGridScore = 50;
 
+  const particlesRef = useRef([]);
+  const invaderParticles = {
+    color: "#BAA0DE",
+    opacity: 0.4,
+    count: 20,
+  };
+  const playerParticles = {
+    color: "white",
+    opacity: 1,
+    count: 25,
+  };
+
+  function createExplosion(x, y, { color, count, opacity }) {
+    for (let i = 0; i < count; i++) {
+      particlesRef.current.push({
+        x,
+        y,
+        radius: Math.random() * 3 + 1,
+        color,
+        velocity: {
+          x: (Math.random() - 0.5) * 2,
+          y: (Math.random() - 0.5) * 2,
+        },
+        opacity,
+      });
+    }
+  }
+
   useEffect(() => {
     playerXRef.current = playerX;
     livesRef.current = lives;
@@ -197,6 +225,11 @@ function SpaceInvaders({ onClose }) {
           p.y + p.height > playerY;
 
         if (hit) {
+          createExplosion(
+            playerXRef.current + playerWidth / 2,
+            playerY + playerHeight / 2,
+            playerParticles
+          );
           invaderProjectilesRef.current.splice(index, 1);
 
           const newLives = livesRef.current - 1;
@@ -248,6 +281,12 @@ function SpaceInvaders({ onClose }) {
                 // remove invader
                 if (distance < p.radius + invaderWidth / 2) {
                   grid.invaders[row][col] = false;
+                  createExplosion(
+                    invaderX + invaderWidth / 2,
+                    invaderY + invaderHeight / 2,
+                    invaderParticles
+                  );
+
                   setScore((prevScore) => prevScore + clearInvaderScore);
                   projectilesRef.current.splice(pIndex, 1);
                 }
@@ -359,6 +398,29 @@ function SpaceInvaders({ onClose }) {
         });
       }
 
+      // === PARTICLES UPDATE & DRAW ===
+      particlesRef.current = particlesRef.current
+        .map((p) => {
+          return {
+            ...p,
+            x: p.x + p.velocity.x,
+            y: p.y + p.velocity.y,
+            opacity: p.opacity - 0.02,
+          };
+        })
+        .filter((p) => p.opacity > 0);
+
+      particlesRef.current.forEach((p) => {
+        c.save();
+        c.globalAlpha = p.opacity;
+        c.beginPath();
+        c.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        c.fillStyle = p.color;
+        c.fill();
+        c.closePath();
+        c.restore();
+      });
+
       animationId = requestAnimationFrame(gameLoop);
     };
 
@@ -377,6 +439,8 @@ function SpaceInvaders({ onClose }) {
       invaderGridsRef.current = [];
       projectilesRef.current = [];
       invaderProjectilesRef.current = [];
+      particlesRef.current = [];
+
       playerXRef.current = canvasRef.current.width / 2 - playerWidth / 2;
       playerRotationRef.current = 0;
       lastShotTimeRef.current = 0;
