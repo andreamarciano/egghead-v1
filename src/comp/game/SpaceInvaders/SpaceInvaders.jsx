@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 const imgURL = {
   player: "/images/spaceInvaders/playerShip1_green.webp",
-  invader: "/images/spaceInvaders/invader.png",
+  invader: "/images/spaceInvaders/invader.webp",
 };
 
 function SpaceInvaders({ onClose }) {
@@ -61,6 +61,7 @@ function SpaceInvaders({ onClose }) {
   };
 
   const particlesRef = useRef([]);
+  const backgroundParticlesRef = useRef([]);
   const invaderParticles = {
     color: "#BAA0DE",
     opacity: 0.4,
@@ -102,6 +103,22 @@ function SpaceInvaders({ onClose }) {
     if (!c) return;
     canvas.width = canvasSize.width;
     canvas.height = canvasSize.height;
+
+    const spawnBackgroundParticles = () => {
+      const particles = [];
+      for (let i = 0; i < 100; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius: Math.random() * 2,
+          speedY: 0.3,
+          opacity: 0.5 + Math.random() * 0.5,
+          color: "white",
+        });
+      }
+      backgroundParticlesRef.current = particles;
+    };
+    spawnBackgroundParticles();
 
     playerImageRef.current.src = imgURL.player;
     invaderImageRef.current.src = imgURL.invader;
@@ -220,6 +237,25 @@ function SpaceInvaders({ onClose }) {
       }
 
       c.clearRect(0, 0, canvas.width, canvas.height);
+
+      // === BACKGROUND ANIMATION DRAW ===
+      backgroundParticlesRef.current.forEach((p) => {
+        p.y += p.speedY;
+
+        if (p.y - p.radius > canvas.height) {
+          p.x = Math.random() * canvas.width;
+          p.y = -p.radius;
+        }
+
+        c.save();
+        c.globalAlpha = p.opacity;
+        c.beginPath();
+        c.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        c.fillStyle = p.color;
+        c.fill();
+        c.closePath();
+        c.restore();
+      });
 
       // === UPDATE & DRAW INVADER PROJECTILES ===
       invaderProjectilesRef.current = invaderProjectilesRef.current
@@ -432,7 +468,6 @@ function SpaceInvaders({ onClose }) {
           };
         })
         .filter((p) => p.opacity > 0);
-
       particlesRef.current.forEach((p) => {
         c.save();
         c.globalAlpha = p.opacity;
@@ -463,6 +498,7 @@ function SpaceInvaders({ onClose }) {
       projectilesRef.current = [];
       invaderProjectilesRef.current = [];
       particlesRef.current = [];
+      backgroundParticlesRef.current = [];
 
       playerXRef.current = canvasRef.current.width / 2 - playerConfig.width / 2;
       playerRotationRef.current = 0;
