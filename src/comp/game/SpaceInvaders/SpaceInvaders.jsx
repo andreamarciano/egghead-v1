@@ -19,6 +19,9 @@ function SpaceInvaders({ onClose }) {
   const playerXRef = useRef(playerX);
   const playerSpeed = 5;
 
+  const [lives, setLives] = useState(3);
+  const livesRef = useRef(3);
+
   const lastShotTimeRef = useRef(0);
   const projectilesRef = useRef([]);
   const projectileCooldown = 200;
@@ -45,7 +48,8 @@ function SpaceInvaders({ onClose }) {
 
   useEffect(() => {
     playerXRef.current = playerX;
-  }, [playerX]);
+    livesRef.current = lives;
+  }, [playerX, lives]);
 
   useEffect(() => {
     if (!isGameRunning) return;
@@ -64,6 +68,7 @@ function SpaceInvaders({ onClose }) {
     const initialPlayerX = canvas.width / 2 - playerWidth / 2;
     setPlayerX(initialPlayerX);
     playerXRef.current = initialPlayerX;
+    const playerY = canvas.height - playerHeight - 10;
 
     // === INPUT HANDLING ===
     const keysPressed = new Set();
@@ -177,11 +182,34 @@ function SpaceInvaders({ onClose }) {
           ...p,
           y: p.y + p.speed,
         }))
-        .filter((p) => p.y < canvas.height); // Mantieni solo quelli visibili
-
+        .filter((p) => p.y < canvas.height);
       invaderProjectilesRef.current.forEach((p) => {
         c.fillStyle = "white";
         c.fillRect(p.x, p.y, p.width, p.height);
+      });
+
+      // === CHECK COLLISION INVADER PROJECTILE-PLAYER ===
+      invaderProjectilesRef.current.forEach((p, index) => {
+        const hit =
+          p.x < playerXRef.current + playerWidth &&
+          p.x + p.width > playerXRef.current &&
+          p.y < playerY + playerHeight &&
+          p.y + p.height > playerY;
+
+        if (hit) {
+          invaderProjectilesRef.current.splice(index, 1);
+
+          const newLives = livesRef.current - 1;
+          setLives(newLives);
+
+          // === LOSE CONDITION ===
+          if (newLives <= 0) {
+            cancelAnimationFrame(animationId);
+            alert("Game Over!");
+            setGameOver(true);
+            setIsGameRunning(false);
+          }
+        }
       });
 
       // === UPDATE & DRAW PROJECTILES ===
@@ -242,7 +270,6 @@ function SpaceInvaders({ onClose }) {
       );
 
       // === DRAW PLAYER ===
-      const playerY = canvas.height - playerHeight - 10;
       c.save();
       c.translate(
         playerXRef.current + playerWidth / 2,
@@ -349,10 +376,14 @@ function SpaceInvaders({ onClose }) {
     if (gameOver) {
       invaderGridsRef.current = [];
       projectilesRef.current = [];
+      invaderProjectilesRef.current = [];
       playerXRef.current = canvasRef.current.width / 2 - playerWidth / 2;
       playerRotationRef.current = 0;
       lastShotTimeRef.current = 0;
+      livesRef.current = 3;
 
+      setScore(0);
+      setLives(3);
       setPlayerX(playerXRef.current);
     }
 
@@ -378,6 +409,9 @@ function SpaceInvaders({ onClose }) {
       </button>
       <div className="absolute top-2 left-2 text-white text-lg">
         Score: {score}
+      </div>
+      <div className="absolute top-10 left-2 text-white text-lg">
+        Lives: {lives}
       </div>
       {!isGameRunning && (
         <button
