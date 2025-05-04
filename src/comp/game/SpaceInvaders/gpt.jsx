@@ -1,70 +1,19 @@
-import { useState, useEffect, useRef } from "react";
-const playerURL = "/images/spaceInvaders/playerShip1_green.webp";
-const invaderURL = "/images/spaceInvaders/invader.png";
-
+//import
 function SpaceInvaders({ onClose }) {
-  const canvasRef = useRef(null);
-  const canvasWidth = 1260;
-  const canvasHeight = 690;
-
+  // canvas states
   const [isGameRunning, setIsGameRunning] = useState(false);
   const [gameOver, setGameOver] = useState(false);
+  // player states
+  // projectile states
+  // invader grid states
 
-  const playerImageRef = useRef(new Image());
-  const playerScale = 0.5;
-  const playerWidth = 99 * playerScale;
-  const playerHeight = 75 * playerScale;
-  const playerRotationRef = useRef(0);
-  const [playerX, setPlayerX] = useState(0);
-  const playerXRef = useRef(playerX);
-  const playerSpeed = 5;
-
-  const lastShotTimeRef = useRef(0);
-  const projectilesRef = useRef([]);
-  const projectileCooldown = 200;
-  const projectileRadius = 4;
-  const projectileSpeed = 7;
-
-  const invaderImageRef = useRef(new Image());
-  const invaderScale = 1;
-  const invaderWidth = 30 * invaderScale;
-  const invaderHeight = 30 * invaderScale;
-  const invaderGridsRef = useRef([]);
-  const maxInvaderGridSpeed = 3;
-  const minInvaderGridSpeed = 2;
-
-  useEffect(() => {
-    playerXRef.current = playerX;
-  }, [playerX]);
+  // update playerx useffect
 
   useEffect(() => {
     if (!isGameRunning) return;
-
-    document.body.style.overflow = "hidden";
-    const canvas = canvasRef.current;
-    const c = canvas.getContext("2d");
-    if (!c) return;
-    canvas.width = canvasWidth;
-    canvas.height = canvasHeight;
-
-    playerImageRef.current.src = playerURL;
-    invaderImageRef.current.src = invaderURL;
-
-    // === INIT PLAYER ===
-    const initialPlayerX = canvas.width / 2 - playerWidth / 2;
-    setPlayerX(initialPlayerX);
-    playerXRef.current = initialPlayerX;
-
+    // === canvas configuration ===
+    // === initial player position ===
     // === INPUT HANDLING ===
-    const keysPressed = new Set();
-    const handleKeyDown = (e) => {
-      keysPressed.add(e.key);
-    };
-    const handleKeyUp = (e) => {
-      keysPressed.delete(e.key);
-    };
-    addEventListener("keydown", handleKeyDown);
-    addEventListener("keyup", handleKeyUp);
 
     // === INVADER GRID SPAWNING ===
     const spawnInvaderGrid = () => {
@@ -150,16 +99,7 @@ function SpaceInvaders({ onClose }) {
       setPlayerX(playerXRef.current);
 
       // === LOSE CONDITION ===
-      const hasLost = invaderGridsRef.current.some(
-        (grid) => grid.y + grid.height >= canvas.height + 10
-      );
-      if (hasLost) {
-        cancelAnimationFrame(animationId);
-        alert("Game Over!");
-        setGameOver(true);
-        setIsGameRunning(false);
-        return;
-      }
+      // invader reach bottom
 
       c.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -182,30 +122,7 @@ function SpaceInvaders({ onClose }) {
       });
 
       // === DRAW PLAYER ===
-      const playerY = canvas.height - playerHeight - 10;
-      c.save();
-      c.translate(
-        playerXRef.current + playerWidth / 2,
-        playerY + playerHeight / 2
-      );
-      c.rotate(playerRotationRef.current);
-      c.translate(
-        -playerXRef.current - playerWidth / 2,
-        -playerY - playerHeight / 2
-      );
-      if (playerImageRef.current.complete) {
-        c.drawImage(
-          playerImageRef.current,
-          playerXRef.current,
-          playerY,
-          playerWidth,
-          playerHeight
-        );
-      } else {
-        c.fillStyle = "green";
-        c.fillRect(playerXRef.current, playerY, playerWidth, playerHeight);
-      }
-      c.restore();
+      // ...
 
       // === DRAW INVADER GRIDS ===
       invaderGridsRef.current.forEach((grid) => {
@@ -245,58 +162,29 @@ function SpaceInvaders({ onClose }) {
     animationId = requestAnimationFrame(gameLoop);
 
     return () => {
-      document.body.style.overflow = "";
-      removeEventListener("keydown", handleKeyDown);
-      removeEventListener("keyup", handleKeyUp);
+      // ... altri clear
       cancelAnimationFrame(animationId);
     };
   }, [isGameRunning]);
 
   const handleGameStart = () => {
-    if (gameOver) {
-      invaderGridsRef.current = [];
-      projectilesRef.current = [];
-      playerXRef.current = canvasRef.current.width / 2 - playerWidth / 2;
-      playerRotationRef.current = 0;
-      lastShotTimeRef.current = 0;
-
-      setPlayerX(playerXRef.current);
-    }
-
-    setGameOver(false);
-    setIsGameRunning(true);
+    // start & reset game
   };
 
   return (
-    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-80 z-50">
-      <div className="relative flex flex-col items-center">
-        <canvas
-          ref={canvasRef}
-          className="border border-white bg-black"
-          width={canvasWidth}
-          height={canvasHeight}
-        />
-      </div>
-      <button
-        onClick={onClose}
-        className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 px-1 rounded text-white cursor-pointer"
-      >
-        ✖
-      </button>
+    <>
+      <canvas
+        ref={canvasRef}
+        className="border border-white bg-black"
+        width={canvasWidth}
+        height={canvasHeight}
+      />
+      <button onClick={onClose}>✖</button>
       {!isGameRunning && (
-        <button
-          onClick={handleGameStart}
-          className={`absolute bottom-5 ${
-            gameOver
-              ? "bg-blue-600 hover:bg-blue-700"
-              : "bg-green-600 hover:bg-green-700"
-          } text-white px-4 py-2 rounded`}
-        >
+        <button onClick={handleGameStart}>
           {gameOver ? "New Game" : "Start Game"}
         </button>
       )}
-    </div>
+    </>
   );
 }
-
-export default SpaceInvaders;

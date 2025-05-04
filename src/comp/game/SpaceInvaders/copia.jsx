@@ -3,8 +3,12 @@ const playerURL = "/images/spaceInvaders/playerShip1_green.webp";
 const invaderURL = "/images/spaceInvaders/invader.png";
 
 function SpaceInvaders({ onClose }) {
-  const [isGameRunning, setIsGameRunning] = useState(false);
   const canvasRef = useRef(null);
+  const canvasWidth = 1260;
+  const canvasHeight = 690;
+
+  const [isGameRunning, setIsGameRunning] = useState(false);
+  const [gameOver, setGameOver] = useState(false);
 
   const playerImageRef = useRef(new Image());
   const playerScale = 0.5;
@@ -25,12 +29,9 @@ function SpaceInvaders({ onClose }) {
   const invaderScale = 1;
   const invaderWidth = 30 * invaderScale;
   const invaderHeight = 30 * invaderScale;
-  const [invaderX, setInvaderX] = useState(0);
-  const [invaderY, setInvaderY] = useState(0);
-  const invaderXRef = useRef(0);
-  const invaderYRef = useRef(0);
-  const invaderDirectionRef = useRef(1);
-  const invaderSpeed = 3;
+  const invaderGridsRef = useRef([]);
+  const maxInvaderGridSpeed = 3;
+  const minInvaderGridSpeed = 2;
 
   useEffect(() => {
     playerXRef.current = playerX;
@@ -43,8 +44,8 @@ function SpaceInvaders({ onClose }) {
     const canvas = canvasRef.current;
     const c = canvas.getContext("2d");
     if (!c) return;
-    canvas.width = 1024;
-    canvas.height = 576;
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
 
     playerImageRef.current.src = playerURL;
     invaderImageRef.current.src = invaderURL;
@@ -54,14 +55,7 @@ function SpaceInvaders({ onClose }) {
     setPlayerX(initialPlayerX);
     playerXRef.current = initialPlayerX;
 
-    // === INIT INVADER ===
-    const initialInvaderX = 0;
-    const initialInvaderY = 0;
-    setInvaderX(initialInvaderX);
-    setInvaderY(initialInvaderY);
-    invaderXRef.current = initialInvaderX;
-    invaderYRef.current = initialInvaderY;
-
+    // === INPUT HANDLING ===
     const keysPressed = new Set();
     const handleKeyDown = (e) => {
       keysPressed.add(e.key);
@@ -71,6 +65,42 @@ function SpaceInvaders({ onClose }) {
     };
     addEventListener("keydown", handleKeyDown);
     addEventListener("keyup", handleKeyUp);
+
+    // === INVADER GRID SPAWNING ===
+    const spawnInvaderGrid = () => {
+      const cols = Math.floor(Math.random() * 10 + 5);
+      const rows = Math.floor(Math.random() * 5 + 2);
+      const gridWidth = cols * invaderWidth;
+      const gridHeight = rows * invaderHeight;
+
+      const x = 0;
+      const y = 0;
+
+      const sizeFactor = cols * rows;
+      const minSize = 5 * 2;
+      const maxSize = 15 * 7;
+      const speed =
+        maxInvaderGridSpeed -
+        ((sizeFactor - minSize) / (maxSize - minSize)) *
+          (maxInvaderGridSpeed - minInvaderGridSpeed);
+
+      invaderGridsRef.current.push({
+        x,
+        y,
+        direction: 1,
+        width: gridWidth,
+        height: gridHeight,
+        cols,
+        rows,
+        speed,
+        invaders: Array.from({ length: rows }, () => Array(cols).fill(true)),
+      });
+    };
+
+    // === FRAME CONTROL ===
+    spawnInvaderGrid();
+    let frames = 1;
+    let randomInterval = Math.floor(Math.random() * 500 + 500);
 
     // === GAME LOOP ===
     let animationId;
@@ -95,7 +125,7 @@ function SpaceInvaders({ onClose }) {
         if (now - lastShotTimeRef.current > projectileCooldown) {
           const newProjectile = {
             x: playerXRef.current + playerWidth / 2,
-            y: canvas.height - playerHeight - 20,
+            y: canvas.height - playerHeight - 10,
             radius: projectileRadius,
             speed: projectileSpeed,
           };
@@ -104,24 +134,29 @@ function SpaceInvaders({ onClose }) {
         }
       }
 
-      // === INVADER MOVEMENT ===
-      invaderXRef.current += invaderSpeed * invaderDirectionRef.current;
-      if (
-        invaderXRef.current <= 0 ||
-        invaderXRef.current + invaderWidth >= canvas.width
-      ) {
-        invaderDirectionRef.current *= -1;
-        invaderYRef.current += 30;
-      }
+      // === INVADER GRIDS MOVEMENT ===
+      invaderGridsRef.current.forEach((grid) => {
+        grid.x += grid.speed * grid.direction;
 
-      setInvaderX(invaderXRef.current);
-      setInvaderY(invaderYRef.current);
+        const hitLeft = grid.x <= 0;
+        const hitRight = grid.x + grid.width >= canvas.width;
+
+        if (hitLeft || hitRight) {
+          grid.direction *= -1;
+          grid.y += 30;
+        }
+      });
+
       setPlayerX(playerXRef.current);
 
       // === LOSE CONDITION ===
-      if (invaderYRef.current >= canvas.height - 30) {
+      const hasLost = invaderGridsRef.current.some(
+        (grid) => grid.y + grid.height >= canvas.height + 10
+      );
+      if (hasLost) {
         cancelAnimationFrame(animationId);
         alert("Game Over!");
+        setGameOver(true);
         setIsGameRunning(false);
         return;
       }
@@ -147,7 +182,7 @@ function SpaceInvaders({ onClose }) {
       });
 
       // === DRAW PLAYER ===
-      const playerY = canvas.height - playerHeight - 20;
+      const playerY = canvas.height - playerHeight - 10;
       c.save();
       c.translate(
         playerXRef.current + playerWidth / 2,
@@ -172,19 +207,37 @@ function SpaceInvaders({ onClose }) {
       }
       c.restore();
 
-      // === DRAW INVADER ===
-      if (invaderImageRef.current.complete) {
-        c.drawImage(
-          invaderImageRef.current,
-          invaderXRef.current,
-          invaderYRef.current,
-          invaderWidth,
-          invaderHeight
-        );
-      } else {
-        c.fillStyle = "white";
-        c.fillRect(invaderX, invaderY, invaderWidth, invaderHeight);
+      // === DRAW INVADER GRIDS ===
+      invaderGridsRef.current.forEach((grid) => {
+        for (let row = 0; row < grid.rows; row++) {
+          for (let col = 0; col < grid.cols; col++) {
+            if (!grid.invaders[row][col]) continue;
+
+            const x = grid.x + col * invaderWidth;
+            const y = grid.y + row * invaderHeight;
+
+            if (invaderImageRef.current.complete) {
+              c.drawImage(
+                invaderImageRef.current,
+                x,
+                y,
+                invaderWidth,
+                invaderHeight
+              );
+            } else {
+              c.fillStyle = "white";
+              c.fillRect(x, y, invaderWidth, invaderHeight);
+            }
+          }
+        }
+      });
+      if (frames % randomInterval === 0) {
+        spawnInvaderGrid();
+        frames = 0;
+        randomInterval = Math.floor(Math.random() * 500 + 500);
       }
+
+      frames++;
 
       animationId = requestAnimationFrame(gameLoop);
     };
@@ -199,28 +252,47 @@ function SpaceInvaders({ onClose }) {
     };
   }, [isGameRunning]);
 
+  const handleGameStart = () => {
+    if (gameOver) {
+      invaderGridsRef.current = [];
+      projectilesRef.current = [];
+      playerXRef.current = canvasRef.current.width / 2 - playerWidth / 2;
+      playerRotationRef.current = 0;
+      lastShotTimeRef.current = 0;
+
+      setPlayerX(playerXRef.current);
+    }
+
+    setGameOver(false);
+    setIsGameRunning(true);
+  };
+
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-80 z-50">
       <div className="relative flex flex-col items-center">
         <canvas
           ref={canvasRef}
           className="border border-white bg-black"
-          width={1024}
-          height={576}
+          width={canvasWidth}
+          height={canvasHeight}
         />
       </div>
       <button
         onClick={onClose}
-        className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 px-1 rounded text-white"
+        className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 px-1 rounded text-white cursor-pointer"
       >
         ✖
       </button>
       {!isGameRunning && (
         <button
-          onClick={() => setIsGameRunning(true)}
-          className="absolute bottom-5 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+          onClick={handleGameStart}
+          className={`absolute bottom-5 ${
+            gameOver
+              ? "bg-blue-600 hover:bg-blue-700"
+              : "bg-green-600 hover:bg-green-700"
+          } text-white px-4 py-2 rounded`}
         >
-          Start Game
+          {gameOver ? "New Game" : "Start Game"}
         </button>
       )}
     </div>
