@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-const imgURL = "/images/spaceInvaders/playerShip1_green.webp";
-const invaderURL = "/images/spaceInvaders/invader.png";
+const imgURL = {
+  player: "/images/spaceInvaders/playerShip1_green.webp",
+  invader: "/images/spaceInvaders/invader.png",
+};
 
 function SpaceInvaders({ onClose }) {
   /* Canvas */
@@ -107,8 +109,8 @@ function SpaceInvaders({ onClose }) {
     canvas.height = canvasSize.height;
 
     // === LOAD IMAGES ===
-    playerImageRef.current.src = imgURL;
-    invaderImageRef.current.src = invaderURL;
+    playerImageRef.current.src = imgURL.player;
+    invaderImageRef.current.src = imgURL.invader;
 
     // === INIT PLAYER ===
     const initialPlayerX = canvas.width / 2 - playerConfig.width / 2;
