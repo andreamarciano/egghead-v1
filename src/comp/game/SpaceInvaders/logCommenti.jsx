@@ -72,6 +72,13 @@ function SpaceInvaders({ onClose }) {
     single: 10,
     grid: 50,
   };
+  /* Menu */
+  const [playerColor, setPlayerColor] = useState("greenPlayer");
+  const [selectedColor, setSelectedColor] = useState(null);
+  const handleColorChange = (color) => {
+    setSelectedColor(color);
+    setPlayerColor(color);
+  };
   /* Particles */
   const particlesRef = useRef([]);
   const backgroundParticlesRef = useRef([]);
@@ -168,7 +175,7 @@ function SpaceInvaders({ onClose }) {
     spawnBackgroundParticles();
 
     // === LOAD IMAGES ===
-    playerImageRef.current.src = imgURL.greenPlayer;
+    playerImageRef.current.src = imgURL[playerColor];
     invaderImageRef.current.src = imgURL.invader;
 
     // === INIT PLAYER ===
@@ -604,7 +611,7 @@ function SpaceInvaders({ onClose }) {
       removeEventListener("keyup", handleKeyUp);
       cancelAnimationFrame(animationIdRef.current);
     };
-  }, [isGameRunning]);
+  }, [isGameRunning, playerColor]);
 
   /* Start & Reset */
   const handleGameStart = () => {
@@ -669,6 +676,7 @@ function SpaceInvaders({ onClose }) {
           }}
         ></div> */}
       </div>
+
       {/* Close */}
       <button
         onClick={onClose}
@@ -676,6 +684,7 @@ function SpaceInvaders({ onClose }) {
       >
         ✖
       </button>
+
       {/* Score */}
       <div className="absolute top-2 left-2 text-white text-lg">
         Score: {score}
@@ -684,23 +693,44 @@ function SpaceInvaders({ onClose }) {
       <div className="absolute top-10 left-2 text-white text-lg">
         Lives: {lives}
       </div>
-      {/* Start & Reset */}
+
+      {/* Menu */}
       {!isGameRunning && (
-        <button
-          onClick={handleGameStart}
-          className={`absolute ${
-            gameOver
-              ? "bg-blue-600 hover:bg-blue-700"
-              : "bg-green-600 hover:bg-green-700"
-          } text-white px-4 py-2 rounded`}
-          style={{
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-        >
-          {gameOver ? "Restart" : "Play"}
-        </button>
+        <div className="absolute flex flex-col justify-center items-center bg-opacity-75 z-50">
+          <div className="text-center text-white bg-opacity-80 p-6 bg-gray-950 rounded-lg shadow-xl">
+            {/* Select Ship */}
+            <p className="mb-6 text-2xl font-semibold">Select Ship</p>
+            <div className="flex gap-6 mb-6 justify-center">
+              {["greenPlayer", "bluePlayer", "redPlayer"].map((color) => (
+                <button
+                  key={color}
+                  onClick={() => handleColorChange(color)}
+                  className={`p-2 cursor-pointer transform hover:scale-105 transition-transform rounded-lg border-2 ${
+                    selectedColor === color
+                      ? `border-${color.split("Player")[0]}-500`
+                      : "border-white"
+                  }`}
+                >
+                  <img
+                    src={imgURL[color]}
+                    alt={`${
+                      color.charAt(0).toUpperCase() + color.slice(1)
+                    } Player`}
+                    width="70"
+                    className="rounded-lg"
+                  />
+                </button>
+              ))}
+            </div>
+            {/* Start Game */}
+            <button
+              onClick={handleGameStart}
+              className="cursor-pointer bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-full shadow-lg transition duration-200 transform hover:scale-105"
+            >
+              {gameOver ? "New Game" : "Start Game"}
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
