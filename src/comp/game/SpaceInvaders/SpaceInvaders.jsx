@@ -71,6 +71,19 @@ function SpaceInvaders({ onClose }) {
     single: 10,
     grid: 50,
   };
+  const [topScores, setTopScores] = useState([]);
+  const SCORE_KEY = "spaceInvadersTopScores";
+  const getBestScores = () => {
+    const stored = localStorage.getItem(SCORE_KEY);
+    return stored ? JSON.parse(stored) : [];
+  };
+  const saveScoreIfHigh = (newScore) => {
+    const scores = getBestScores();
+    scores.push(newScore);
+    const sorted = scores.sort((a, b) => b - a).slice(0, 3);
+    localStorage.setItem(SCORE_KEY, JSON.stringify(sorted));
+    setTopScores(sorted);
+  };
 
   const [playerColor, setPlayerColor] = useState("greenPlayer");
   const [selectedColor, setSelectedColor] = useState(null);
@@ -127,6 +140,15 @@ function SpaceInvaders({ onClose }) {
       }
     }, interval);
   }
+
+  useEffect(() => {
+    if (gameOver && score > 0) {
+      saveScoreIfHigh(score);
+    }
+  }, [gameOver]);
+  useEffect(() => {
+    setTopScores(getBestScores());
+  }, []);
 
   useEffect(() => {
     playerXRef.current = playerX;
@@ -592,7 +614,22 @@ function SpaceInvaders({ onClose }) {
       {!isGameRunning && (
         <div className="absolute flex flex-col justify-center items-center bg-opacity-75 z-50">
           <div className="text-center text-white bg-opacity-80 p-6 bg-gray-950 rounded-lg shadow-xl">
-            {/* Select Ship */}
+            {topScores.length > 0 && (
+              <div className="mb-6">
+                <h3 className="text-xl font-bold mb-2 text-yellow-400">
+                  🏆 Top Scores
+                </h3>
+                <ul className="space-y-1">
+                  {topScores.map((s, i) => (
+                    <li key={i}>
+                      <span className="font-semibold">{i + 1}.</span> {s} pts
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <p className="text-xl text-blue-600 mb-6 ">Final score: {score}</p>
+
             <p className="mb-6 text-2xl font-semibold">Select Ship</p>
             <div className="flex gap-6 mb-6 justify-center">
               {["greenPlayer", "bluePlayer", "redPlayer"].map((color) => (
@@ -616,7 +653,7 @@ function SpaceInvaders({ onClose }) {
                 </button>
               ))}
             </div>
-            {/* Start Game */}
+
             <button
               onClick={handleGameStart}
               className="cursor-pointer bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-full shadow-lg transition duration-200 transform hover:scale-105"

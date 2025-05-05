@@ -37,7 +37,7 @@ function SpaceInvaders({ onClose }) {
   const [playerX, setPlayerX] = useState(0);
   const playerXRef = useRef(playerX);
   const isPlayerActiveRef = useRef(true);
-
+  // Lives
   const [lives, setLives] = useState(3);
   const livesRef = useRef(3);
   /* Projectile */
@@ -71,6 +71,19 @@ function SpaceInvaders({ onClose }) {
   const scoreParams = {
     single: 10,
     grid: 50,
+  };
+  const [topScores, setTopScores] = useState([]);
+  const SCORE_KEY = "spaceInvadersTopScores";
+  const getBestScores = () => {
+    const stored = localStorage.getItem(SCORE_KEY);
+    return stored ? JSON.parse(stored) : [];
+  };
+  const saveScoreIfHigh = (newScore) => {
+    const scores = getBestScores();
+    scores.push(newScore);
+    const sorted = scores.sort((a, b) => b - a).slice(0, 3); // top 3
+    localStorage.setItem(SCORE_KEY, JSON.stringify(sorted));
+    setTopScores(sorted);
   };
   /* Menu */
   const [playerColor, setPlayerColor] = useState("greenPlayer");
@@ -130,6 +143,17 @@ function SpaceInvaders({ onClose }) {
       }
     }, interval);
   }
+
+  // Save Higher Score
+  useEffect(() => {
+    if (gameOver && score > 0) {
+      saveScoreIfHigh(score);
+    }
+  }, [gameOver]);
+  // Get Top Scores
+  useEffect(() => {
+    setTopScores(getBestScores());
+  }, []);
 
   // Synchronize ref with state values (used in loop)
   useEffect(() => {
@@ -698,6 +722,23 @@ function SpaceInvaders({ onClose }) {
       {!isGameRunning && (
         <div className="absolute flex flex-col justify-center items-center bg-opacity-75 z-50">
           <div className="text-center text-white bg-opacity-80 p-6 bg-gray-950 rounded-lg shadow-xl">
+            {/* Top Scores */}
+            {topScores.length > 0 && (
+              <div className="mb-6">
+                <h3 className="text-xl font-bold mb-2 text-yellow-400">
+                  🏆 Top Scores
+                </h3>
+                <ul className="space-y-1">
+                  {topScores.map((s, i) => (
+                    <li key={i}>
+                      <span className="font-semibold">{i + 1}.</span> {s} pts
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <p className="text-xl text-blue-600 mb-6 ">Final score: {score}</p>
+
             {/* Select Ship */}
             <p className="mb-6 text-2xl font-semibold">Select Ship</p>
             <div className="flex gap-6 mb-6 justify-center">
