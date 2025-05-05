@@ -1,6 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 const imgURL = {
-  player: "/images/spaceInvaders/playerShip1_green.webp",
+  greenPlayer: "/images/spaceInvaders/playerShip1_green.webp",
+  bluePlayer: "/images/spaceInvaders/playerShip1_blue.webp",
+  redPlayer: "/images/spaceInvaders/playerShip1_red.webp",
+  greenPlayerLives: "/images/spaceInvaders/playerLife1_green.webp",
+  bluePlayerLives: "/images/spaceInvaders/playerLife1_blue.webp",
+  redPlayerLives: "/images/spaceInvaders/playerLife1_red.webp",
+  projectile: "images/spaceInvaders/laserRed04.webp",
+  shield1: "images/spaceInvaders/shield1.webp",
+  shield2: "images/spaceInvaders/shield2.webp",
+  shield3: "images/spaceInvaders/shield3.webp",
   invader: "/images/spaceInvaders/invader.webp",
 };
 
@@ -145,7 +154,7 @@ function SpaceInvaders({ onClose }) {
     };
     spawnBackgroundParticles();
 
-    playerImageRef.current.src = imgURL.player;
+    playerImageRef.current.src = imgURL.greenPlayer;
     invaderImageRef.current.src = imgURL.invader;
 
     // === INIT PLAYER ===
