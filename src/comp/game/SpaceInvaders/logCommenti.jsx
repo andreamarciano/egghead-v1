@@ -22,6 +22,7 @@ function SpaceInvaders({ onClose }) {
     height: 75 * playerScale,
     speed: 5,
   };
+  const playerOpacityRef = useRef(1);
   const playerRotationRef = useRef(0);
   const [playerX, setPlayerX] = useState(0);
   const playerXRef = useRef(playerX);
@@ -89,6 +90,22 @@ function SpaceInvaders({ onClose }) {
         opacity,
       });
     }
+  }
+
+  // Player Hit Animation
+  function flashEffect(
+    ref,
+    { min = 0.2, max = 1, flashes = 10, interval = 100 } = {}
+  ) {
+    let count = 0;
+    const intervalId = setInterval(() => {
+      ref.current = ref.current === max ? min : max;
+      count++;
+      if (count > flashes) {
+        clearInterval(intervalId);
+        ref.current = max;
+      }
+    }, interval);
   }
 
   // Synchronize ref with state values (used in loop)
@@ -297,6 +314,9 @@ function SpaceInvaders({ onClose }) {
           // debug - invader projectile hits player
           // console.log("Player hit!");
 
+          // Flash Animation
+          flashEffect(playerOpacityRef);
+
           // particles
           createExplosion(
             playerXRef.current + playerConfig.width / 2,
@@ -405,6 +425,7 @@ function SpaceInvaders({ onClose }) {
 
       // === DRAW PLAYER ===
       c.save();
+      c.globalAlpha = playerOpacityRef.current; // flash
       // rotation
       c.translate(
         playerXRef.current + playerConfig.width / 2,

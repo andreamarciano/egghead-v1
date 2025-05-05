@@ -21,6 +21,7 @@ function SpaceInvaders({ onClose }) {
     height: 75 * playerScale,
     speed: 5,
   };
+  const playerOpacityRef = useRef(1);
   const playerRotationRef = useRef(0);
   const [playerX, setPlayerX] = useState(0);
   const playerXRef = useRef(playerX);
@@ -87,6 +88,21 @@ function SpaceInvaders({ onClose }) {
         opacity,
       });
     }
+  }
+
+  function flashEffect(
+    ref,
+    { min = 0.2, max = 1, flashes = 10, interval = 100 } = {}
+  ) {
+    let count = 0;
+    const intervalId = setInterval(() => {
+      ref.current = ref.current === max ? min : max;
+      count++;
+      if (count > flashes) {
+        clearInterval(intervalId);
+        ref.current = max;
+      }
+    }, interval);
   }
 
   useEffect(() => {
@@ -278,6 +294,9 @@ function SpaceInvaders({ onClose }) {
           p.y + p.height > playerY;
 
         if (hit) {
+          // === FLASH PLAYER ===
+          flashEffect(playerOpacityRef);
+
           createExplosion(
             playerXRef.current + playerConfig.width / 2,
             playerY + playerConfig.height / 2,
@@ -363,6 +382,7 @@ function SpaceInvaders({ onClose }) {
 
       // === DRAW PLAYER ===
       c.save();
+      c.globalAlpha = playerOpacityRef.current;
       c.translate(
         playerXRef.current + playerConfig.width / 2,
         playerY + playerConfig.height / 2
