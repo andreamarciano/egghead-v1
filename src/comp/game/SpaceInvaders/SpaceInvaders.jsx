@@ -13,6 +13,7 @@ function SpaceInvaders({ onClose }) {
 
   const [isGameRunning, setIsGameRunning] = useState(false);
   const [gameOver, setGameOver] = useState(false);
+  const animationIdRef = useRef(null);
 
   const playerImageRef = useRef(new Image());
   const playerScale = 0.5;
@@ -25,6 +26,7 @@ function SpaceInvaders({ onClose }) {
   const playerRotationRef = useRef(0);
   const [playerX, setPlayerX] = useState(0);
   const playerXRef = useRef(playerX);
+  const isPlayerActiveRef = useRef(true);
 
   const [lives, setLives] = useState(3);
   const livesRef = useRef(3);
@@ -92,10 +94,15 @@ function SpaceInvaders({ onClose }) {
 
   function flashEffect(
     ref,
-    { min = 0.2, max = 1, flashes = 10, interval = 100 } = {}
+    { min = 0.2, max = 1, flashes = 10, interval = 100, playerActive } = {}
   ) {
     let count = 0;
     const intervalId = setInterval(() => {
+      if (!playerActive) {
+        clearInterval(intervalId);
+        return;
+      }
+
       ref.current = ref.current === max ? min : max;
       count++;
       if (count > flashes) {
@@ -112,6 +119,8 @@ function SpaceInvaders({ onClose }) {
 
   useEffect(() => {
     if (!isGameRunning) return;
+    isPlayerActiveRef.current = true;
+    playerOpacityRef.current = 1;
 
     document.body.style.overflow = "hidden";
     const canvas = canvasRef.current;
@@ -191,37 +200,38 @@ function SpaceInvaders({ onClose }) {
     let randomInterval = Math.floor(Math.random() * 500 + 500);
 
     // === GAME LOOP ===
-    let animationId;
     const gameLoop = () => {
-      // === PLAYER MOVEMENT ===
-      if (keysPressed.has("ArrowLeft")) {
-        playerXRef.current = Math.max(
-          playerXRef.current - playerConfig.speed,
-          0
-        );
-        playerRotationRef.current = -0.15;
-      } else if (keysPressed.has("ArrowRight")) {
-        playerXRef.current = Math.min(
-          playerXRef.current + playerConfig.speed,
-          canvas.width - playerConfig.width
-        );
-        playerRotationRef.current = 0.15;
-      } else {
-        playerRotationRef.current *= 0.9;
-      }
+      if (isPlayerActiveRef.current) {
+        // === PLAYER MOVEMENT ===
+        if (keysPressed.has("ArrowLeft")) {
+          playerXRef.current = Math.max(
+            playerXRef.current - playerConfig.speed,
+            0
+          );
+          playerRotationRef.current = -0.15;
+        } else if (keysPressed.has("ArrowRight")) {
+          playerXRef.current = Math.min(
+            playerXRef.current + playerConfig.speed,
+            canvas.width - playerConfig.width
+          );
+          playerRotationRef.current = 0.15;
+        } else {
+          playerRotationRef.current *= 0.9;
+        }
 
-      // === SHOOT PROJECTILES ===
-      const now = Date.now();
-      if (keysPressed.has(" ")) {
-        if (now - lastShotTimeRef.current > projectileConfig.cooldown) {
-          const newProjectile = {
-            x: playerXRef.current + playerConfig.width / 2,
-            y: canvas.height - playerConfig.height - 10,
-            radius: projectileConfig.radius,
-            speed: projectileConfig.speed,
-          };
-          projectilesRef.current.push(newProjectile);
-          lastShotTimeRef.current = now;
+        // === SHOOT PROJECTILES ===
+        const now = Date.now();
+        if (keysPressed.has(" ")) {
+          if (now - lastShotTimeRef.current > projectileConfig.cooldown) {
+            const newProjectile = {
+              x: playerXRef.current + playerConfig.width / 2,
+              y: canvas.height - playerConfig.height - 10,
+              radius: projectileConfig.radius,
+              speed: projectileConfig.speed,
+            };
+            projectilesRef.current.push(newProjectile);
+            lastShotTimeRef.current = now;
+          }
         }
       }
 
@@ -245,10 +255,7 @@ function SpaceInvaders({ onClose }) {
         (grid) => grid.y + grid.height >= canvas.height + 10
       );
       if (hasLost) {
-        cancelAnimationFrame(animationId);
-        alert("Game Over!");
-        setGameOver(true);
-        setIsGameRunning(false);
+        handleGameOver();
         return;
       }
 
@@ -294,8 +301,9 @@ function SpaceInvaders({ onClose }) {
           p.y + p.height > playerY;
 
         if (hit) {
-          // === FLASH PLAYER ===
-          flashEffect(playerOpacityRef);
+          flashEffect(playerOpacityRef, {
+            playerActive: isPlayerActiveRef,
+          });
 
           createExplosion(
             playerXRef.current + playerConfig.width / 2,
@@ -304,15 +312,12 @@ function SpaceInvaders({ onClose }) {
           );
           invaderProjectilesRef.current.splice(index, 1);
 
-          const newLives = livesRef.current - 1;
+          const newLives = Math.max(0, livesRef.current - 1);
           setLives(newLives);
 
           // === LOSE CONDITION ===
           if (newLives <= 0) {
-            cancelAnimationFrame(animationId);
-            alert("Game Over!");
-            setGameOver(true);
-            setIsGameRunning(false);
+            handleGameOver();
           }
         }
       });
@@ -382,7 +387,7 @@ function SpaceInvaders({ onClose }) {
 
       // === DRAW PLAYER ===
       c.save();
-      c.globalAlpha = playerOpacityRef.current;
+      c.globalAlpha = isPlayerActiveRef.current ? playerOpacityRef.current : 0;
       c.translate(
         playerXRef.current + playerConfig.width / 2,
         playerY + playerConfig.height / 2
@@ -499,16 +504,16 @@ function SpaceInvaders({ onClose }) {
         c.restore();
       });
 
-      animationId = requestAnimationFrame(gameLoop);
+      animationIdRef.current = requestAnimationFrame(gameLoop);
     };
 
-    animationId = requestAnimationFrame(gameLoop);
+    animationIdRef.current = requestAnimationFrame(gameLoop);
 
     return () => {
       document.body.style.overflow = "";
       removeEventListener("keydown", handleKeyDown);
       removeEventListener("keyup", handleKeyUp);
-      cancelAnimationFrame(animationId);
+      cancelAnimationFrame(animationIdRef.current);
     };
   }, [isGameRunning]);
 
@@ -532,6 +537,16 @@ function SpaceInvaders({ onClose }) {
 
     setGameOver(false);
     setIsGameRunning(true);
+  };
+
+  const handleGameOver = () => {
+    isPlayerActiveRef.current = false;
+
+    setTimeout(() => {
+      cancelAnimationFrame(animationIdRef.current);
+      setGameOver(true);
+      setIsGameRunning(false);
+    }, 1500);
   };
 
   return (
