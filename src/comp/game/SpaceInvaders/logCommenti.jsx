@@ -2,17 +2,36 @@ import { useState, useEffect, useRef } from "react";
 
 /* Images */
 const imgURL = {
-  greenPlayer: "/images/spaceInvaders/playerShip1_green.webp",
-  bluePlayer: "/images/spaceInvaders/playerShip1_blue.webp",
-  redPlayer: "/images/spaceInvaders/playerShip1_red.webp",
-  greenPlayerLives: "/images/spaceInvaders/playerLife1_green.webp",
-  bluePlayerLives: "/images/spaceInvaders/playerLife1_blue.webp",
-  redPlayerLives: "/images/spaceInvaders/playerLife1_red.webp",
-  projectile: "images/spaceInvaders/laserRed04.webp",
-  shield1: "images/spaceInvaders/shield1.webp",
-  shield2: "images/spaceInvaders/shield2.webp",
-  shield3: "images/spaceInvaders/shield3.webp",
-  invader: "/images/spaceInvaders/invader.webp",
+  // player
+  greenPlayer: "/images/spaceInvaders/ship/playerShip1_green.webp",
+  bluePlayer: "/images/spaceInvaders/ship/playerShip1_blue.webp",
+  redPlayer: "/images/spaceInvaders/ship/playerShip1_red.webp",
+  greenPlayerLives: "/images/spaceInvaders/ship/playerLife1_green.webp",
+  bluePlayerLives: "/images/spaceInvaders/ship/playerLife1_blue.webp",
+  redPlayerLives: "/images/spaceInvaders/ship/playerLife1_red.webp",
+  // laser
+  laser: "images/spaceInvaders/laser/laserRed04.webp",
+  // shield
+  shield1: "images/spaceInvaders/shield/shield1.webp",
+  shield2: "images/spaceInvaders/shield/shield2.webp",
+  shield3: "images/spaceInvaders/shield/shield3.webp",
+  // enemy
+  invader: "/images/spaceInvaders/invader/invader.webp",
+  meteorBig: "/images/spaceInvaders/invader/meteorBrown_big4.webp",
+  meteorMed: "/images/spaceInvaders/invader/meteorBrown_med1.webp",
+  meteorSmall: "/images/spaceInvaders/invader/meteorBrown_small1.webp",
+  // numeral
+  n0: "images/spaceInvaders/numeral/numeral0.webp",
+  n1: "images/spaceInvaders/numeral/numeral1.webp",
+  n2: "images/spaceInvaders/numeral/numeral2.webp",
+  n3: "images/spaceInvaders/numeral/numeral3.webp",
+  n4: "images/spaceInvaders/numeral/numeral4.webp",
+  n5: "images/spaceInvaders/numeral/numeral5.webp",
+  n6: "images/spaceInvaders/numeral/numeral6.webp",
+  n7: "images/spaceInvaders/numeral/numeral7.webp",
+  n8: "images/spaceInvaders/numeral/numeral8.webp",
+  n9: "images/spaceInvaders/numeral/numeral9.webp",
+  nX: "images/spaceInvaders/numeral/numeralX.webp",
 };
 
 /* Sounds */
