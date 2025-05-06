@@ -1,8 +1,56 @@
 # Credits
 
-## Images (Unsplash)
+## Images
 
-- Photo by [autore](https://unsplash.com/@autore)
+### Unsplash
+
+- Photo by [Kashif Afridi](https://unsplash.com/it/@kashu555)
+- Photo by [Monika Kubala](https://unsplash.com/it/@monca)
+- Photo by [Dana Davis](https://unsplash.com/it/@dana0137)
+- Photo by [Tyler Donaghy](https://unsplash.com/it/@tylerdonaghy)
+- Photo by [Serafima Lazarenko](https://unsplash.com/it/@sera_fima)
+- Photo by [Shelly Collins](https://unsplash.com/it/@eyedealstuff)
+- Photo by [Joshua J. Cotten](https://unsplash.com/it/@jcotten)
+- Photo by [Cedric Fox](https://unsplash.com/it/@thecedfox)
+- Photo by [Thimo Pedersen](https://unsplash.com/it/@thimo)
+- Photo by [Javier Martínez](https://unsplash.com/it/@cjdante)
+- Photo by [Leo_Visions](https://unsplash.com/it/@leo_visions_)
+- Photo by [Jonathan Cooper](https://unsplash.com/it/@theshuttervision)
+- Photo by [Cornelius Ventures](https://unsplash.com/it/@corneliusventures)
+- Photo by [Mathew Schwartz](https://unsplash.com/it/@cadop)
+- Photo by [David Clode](https://unsplash.com/it/@davidclode)
+- Photo by [Gerald Schömbs](https://unsplash.com/it/@geerald)
+- Photo by [Adam Currie](https://unsplash.com/it/@acekabogen)
+- Photo by [Gary Bendig](https://unsplash.com/it/@kris_ricepees)
+- Photo by [Chris Curry](https://unsplash.com/it/@chriscurry92)
+- Photo by [Peter F. Wolf](https://unsplash.com/it/@peterfwolf)
+- Photo by [michael podger](https://unsplash.com/it/@jammypodger7470)
+- Photo by [Leon Pauleikhoff](https://unsplash.com/it/@lebalu)
+- Photo by [Diane Picchiottino](https://unsplash.com/it/@diane_soko)
+- Photo by [Masaaki Komori](https://unsplash.com/it/@gaspanik)
+- Photo by [Christopher Alvarenga](https://unsplash.com/it/@krizphoto)
+- Photo by [Deborah L Carlson](https://unsplash.com/it/@ratlady)
+- Photo by [Nick Brice](https://unsplash.com/it/@vellavi)
+- Photo by [Bernd 📷 Dittrich](https://unsplash.com/it/@hdbernd)
+- Photo by [Nina Rivas](https://unsplash.com/it/@nina_eyes)
+- Photo by [Jasmin Egger](https://unsplash.com/it/@vitya_photography)
+- Photo by [Mockup Graphics](https://unsplash.com/it/@mockupgraphics)
+- Photo by [Brett Jordan](https://unsplash.com/it/@brett_jordan)
+- Photo by [Karyna Panchenko](https://unsplash.com/it/@karyna_panchenko)
+- Photo by [Alin Luna](https://unsplash.com/it/@alin_luna)
+- Photo by [Round Icons](https://unsplash.com/it/@roundicons/illustrazioni)
+- Photo by [Annie Spratt](https://unsplash.com/it/@anniespratt)
+- Photo by [Milada Vigerova](https://unsplash.com/it/@milada_vigerova)
+- Photo by [Tim Mossholder](https://unsplash.com/it/@timmossholder)
+- Photo by [Ines Iachelini](https://unsplash.com/it/@nekoburro)
+- Photo by [Frances Gunn](https://unsplash.com/it/@francesgunn)
+- Photo by [History in HD](https://unsplash.com/it/@historyhd)
+- Photo by [NASA](https://unsplash.com/it/@nasa)
+- Photo by [Michael Surazhsky](https://unsplash.com/it/@michael_surazhsky)
+
+### Adobe Stock
+
+- Photo by [Sasa Kadrijevic](https://stock.adobe.com/it/contributor/206956416/sasa-kadrijevic)
 
 ## Game Assets
 
@@ -90,4 +138,4 @@
   By **Universfield**
   Downloaded on May 6th, 2025 from [pixabay](https://pixabay.com/users/universfield-28281460/)
 
-> All assets used in this game are either in the public domain (CC0) or free to use under their respective licenses. Where possible, authors have been credited.
+> All assets used are either in the public domain (CC0) or free to use under their respective licenses. Where possible, authors have been credited.
