@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from "react";
+
+/* Images */
 const imgURL = {
   greenPlayer: "/images/spaceInvaders/playerShip1_green.webp",
   bluePlayer: "/images/spaceInvaders/playerShip1_blue.webp",
@@ -12,6 +14,22 @@ const imgURL = {
   shield3: "images/spaceInvaders/shield3.webp",
   invader: "/images/spaceInvaders/invader.webp",
 };
+
+/* Sounds */
+const laserSound = "/sounds/spaceInvaders/laser.mp3";
+const laserInvaderSound = "/sounds/spaceInvaders/laserInvader.mp3";
+const themeURL = [
+  "/sounds/spaceInvaders/spaceInvaders-theme1.mp3",
+  "/sounds/spaceInvaders/spaceInvaders-theme2.mp3",
+  "/sounds/spaceInvaders/spaceInvaders-theme3.mp3",
+  "/sounds/spaceInvaders/spaceInvaders-theme4.mp3",
+];
+const destroyInvaderSound = new Audio(
+  "/sounds/spaceInvaders/destroyInvader.mp3"
+);
+const gameOverSound = new Audio("/sounds/spaceInvaders/gameOver.mp3");
+const playerHitSound = new Audio("/sounds/spaceInvaders/playerHit.mp3");
+const destroyGridSound = new Audio("/sounds/spaceInvaders/destroyGrid.mp3");
 
 function SpaceInvaders({ onClose }) {
   /* Canvas */
@@ -100,6 +118,34 @@ function SpaceInvaders({ onClose }) {
   const DISCOUNT_CODE = "INVADER5";
   const SCORE_THRESHOLD = 10000;
   const [hasUnlockedDiscount, setHasUnlockedDiscount] = useState(false);
+  /* Sound */
+  const [audioEnabled, setAudioEnabled] = useState(true); // master
+  const [musicVolume, setMusicVolume] = useState(0.4); // background music
+  const [sfxVolume, setSfxVolume] = useState(0.8); // sfx
+  const [laserVolume, setlaserVolume] = useState(0.2); // sfx - laser
+  const [showVolumeSettings, setShowVolumeSettings] = useState(false);
+  const gameBgMusic = useRef(null);
+  const [currentTheme, setCurrentTheme] = useState(themeURL[0]);
+  const sfxVolumeRef = useRef(sfxVolume);
+  const laserVolumeRef = useRef(laserVolume);
+  const audioEnabledRef = useRef(audioEnabled);
+  // play sfx
+  const playSound = (sound) => {
+    if (audioEnabledRef.current && sound) {
+      sound.volume = sfxVolumeRef.current;
+      sound.currentTime = 0;
+      sound.play().catch((e) => console.warn("Play error:", e));
+    }
+  };
+  // play sfx with laser volume
+  const playLaserSound = (url) => {
+    if (audioEnabledRef.current && url) {
+      const laser = new Audio(url);
+      laser.volume = laserVolumeRef.current;
+      laser.currentTime = 0;
+      laser.play().catch((e) => console.warn("Play error:", e));
+    }
+  };
   /* Particles */
   const particlesRef = useRef([]);
   const backgroundParticlesRef = useRef([]);
@@ -151,6 +197,52 @@ function SpaceInvaders({ onClose }) {
       }
     }, interval);
   }
+
+  // Projectile Volume
+  useEffect(() => {
+    sfxVolumeRef.current = sfxVolume;
+    laserVolumeRef.current = laserVolume;
+    audioEnabledRef.current = audioEnabled;
+  }, [sfxVolume, laserVolume, audioEnabled]);
+
+  // Background Music Volume
+  useEffect(() => {
+    if (gameBgMusic.current) {
+      gameBgMusic.current.volume = musicVolume;
+    }
+  }, [musicVolume]);
+
+  // Background Music
+  useEffect(() => {
+    if (gameBgMusic.current) {
+      gameBgMusic.current.pause();
+    }
+
+    gameBgMusic.current = new Audio(currentTheme);
+    gameBgMusic.current.loop = true;
+    gameBgMusic.current.volume = musicVolume;
+
+    if (isGameRunning && !gameOver && audioEnabled) {
+      gameBgMusic.current
+        .play()
+        .catch((e) => console.warn("Autoplay error:", e));
+    }
+
+    return () => {
+      gameBgMusic.current?.pause();
+    };
+  }, [currentTheme]);
+
+  // Play/Pause Background Music
+  useEffect(() => {
+    if (isGameRunning && !gameOver && audioEnabled) {
+      gameBgMusic.current?.play().catch((e) => {
+        console.warn("Autoplay error:", e);
+      });
+    } else {
+      gameBgMusic.current?.pause();
+    }
+  }, [isGameRunning, gameOver, audioEnabled]);
 
   /* Game Over */
   useEffect(() => {
@@ -320,6 +412,8 @@ function SpaceInvaders({ onClose }) {
 
             // debug - projectile
             // console.log("new projectile:", newProjectile);
+
+            playLaserSound(laserSound);
           }
         }
       }
@@ -404,6 +498,8 @@ function SpaceInvaders({ onClose }) {
             playerActive: isPlayerActiveRef,
           });
 
+          playSound(playerHitSound);
+
           // particles
           createExplosion(
             playerXRef.current + playerConfig.width / 2,
@@ -476,6 +572,8 @@ function SpaceInvaders({ onClose }) {
                     invaderParticles
                   );
 
+                  playSound(destroyInvaderSound);
+
                   setScore((prevScore) => prevScore + scoreParams.single);
                   // debug - single invader score
                   // console.log(`+${scoreParams.single} points`);
@@ -499,6 +597,7 @@ function SpaceInvaders({ onClose }) {
             //   `Grid completely eliminated: index ${index}, position (${grid.x}, ${grid.y})`
             // );
 
+            playSound(destroyGridSound);
             setScore((prevScore) => prevScore + scoreParams.grid);
             // debug - full grid score
             // console.log(`+${scoreParams.grid} points`);
@@ -621,6 +720,8 @@ function SpaceInvaders({ onClose }) {
               height: invaderProjectileConfig.height,
               speed: invaderProjectileConfig.speed,
             });
+
+            playLaserSound(laserInvaderSound);
           }
         });
       }
@@ -664,6 +765,11 @@ function SpaceInvaders({ onClose }) {
 
   /* Start & Reset */
   const handleGameStart = () => {
+    const randomTheme = themeURL[Math.floor(Math.random() * themeURL.length)];
+    // debug - current theme
+    // console.log("Playing theme:", randomTheme);
+    setCurrentTheme(randomTheme);
+
     if (gameOver) {
       invaderGridsRef.current = [];
       projectilesRef.current = [];
@@ -687,6 +793,7 @@ function SpaceInvaders({ onClose }) {
 
   const handleGameOver = () => {
     isPlayerActiveRef.current = false;
+    playSound(gameOverSound);
 
     setTimeout(() => {
       cancelAnimationFrame(animationIdRef.current);
@@ -733,6 +840,65 @@ function SpaceInvaders({ onClose }) {
       >
         ✖
       </button>
+
+      {/* Audio Settings */}
+      <button
+        onClick={() => setShowVolumeSettings((prev) => !prev)}
+        className="absolute top-2 right-10 bg-gray-200 hover:bg-gray-300 px-1 rounded cursor-pointer"
+      >
+        🔊
+      </button>
+      {/* Audio Settings Popup */}
+      {showVolumeSettings && (
+        <div className="absolute top-12 right-4 bg-white shadow-lg p-4 rounded border border-gray-300 z-50">
+          {/* SFX */}
+          <div className="flex items-center gap-2 mb-2 text-black">
+            <label htmlFor="sfx">Sound</label>
+            <input
+              id="sfx"
+              type="range"
+              min={0}
+              max={1}
+              step={0.01}
+              value={sfxVolume}
+              onChange={(e) => setSfxVolume(parseFloat(e.target.value))}
+            />
+          </div>
+          {/* Laser Volume */}
+          <div className="flex items-center gap-2 mb-2 text-black">
+            <label htmlFor="laser">Shoot</label>
+            <input
+              id="laser"
+              type="range"
+              min={0}
+              max={1}
+              step={0.01}
+              value={laserVolume}
+              onChange={(e) => setlaserVolume(parseFloat(e.target.value))}
+            />
+          </div>
+          {/* Background Music */}
+          <div className="flex items-center gap-2 mb-2 text-black">
+            <label htmlFor="music">Music</label>
+            <input
+              id="music"
+              type="range"
+              min={0}
+              max={1}
+              step={0.01}
+              value={musicVolume}
+              onChange={(e) => setMusicVolume(parseFloat(e.target.value))}
+            />
+          </div>
+          {/* Audio */}
+          <button
+            onClick={() => setAudioEnabled((prev) => !prev)}
+            className="bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded w-full"
+          >
+            {audioEnabled ? "🔊" : "🔇"}
+          </button>
+        </div>
+      )}
 
       {/* Score */}
       <div className="absolute top-2 left-2 text-white text-lg">
