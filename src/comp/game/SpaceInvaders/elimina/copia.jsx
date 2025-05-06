@@ -91,6 +91,11 @@ function SpaceInvaders({ onClose }) {
     setSelectedColor(color);
     setPlayerColor(color);
   };
+  const borderColorMap = {
+    greenPlayer: "border-green-500",
+    bluePlayer: "border-blue-500",
+    redPlayer: "border-red-500",
+  };
 
   const particlesRef = useRef([]);
   const backgroundParticlesRef = useRef([]);
@@ -632,26 +637,27 @@ function SpaceInvaders({ onClose }) {
 
             <p className="mb-6 text-2xl font-semibold">Select Ship</p>
             <div className="flex gap-6 mb-6 justify-center">
-              {["greenPlayer", "bluePlayer", "redPlayer"].map((color) => (
-                <button
-                  key={color}
-                  onClick={() => handleColorChange(color)}
-                  className={`p-2 cursor-pointer transform hover:scale-105 transition-transform rounded-lg border-2 ${
-                    selectedColor === color
-                      ? `border-${color.split("Player")[0]}-500`
-                      : "border-white"
-                  }`}
-                >
-                  <img
-                    src={imgURL[color]}
-                    alt={`${
-                      color.charAt(0).toUpperCase() + color.slice(1)
-                    } Player`}
-                    width="70"
-                    className="rounded-lg"
-                  />
-                </button>
-              ))}
+              {["greenPlayer", "bluePlayer", "redPlayer"].map((color) => {
+                const isSelected = selectedColor === color;
+                const borderClass = isSelected
+                  ? borderColorMap[color]
+                  : "border-white";
+
+                return (
+                  <button
+                    key={color}
+                    onClick={() => handleColorChange(color)}
+                    className={`p-2 cursor-pointer transform hover:scale-105 transition-transform rounded-lg border-2 ${borderClass}`}
+                  >
+                    <img
+                      src={imgURL[color]}
+                      alt={`${color} image`}
+                      width="70"
+                      className="rounded-lg"
+                    />
+                  </button>
+                );
+              })}
             </div>
 
             <button
