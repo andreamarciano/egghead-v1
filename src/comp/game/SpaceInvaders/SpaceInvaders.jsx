@@ -96,6 +96,9 @@ function SpaceInvaders({ onClose }) {
     bluePlayer: "border-blue-500",
     redPlayer: "border-red-500",
   };
+  const DISCOUNT_CODE = "INVADER5";
+  const SCORE_THRESHOLD = 10000;
+  const [hasUnlockedDiscount, setHasUnlockedDiscount] = useState(false);
 
   const particlesRef = useRef([]);
   const backgroundParticlesRef = useRef([]);
@@ -149,8 +152,23 @@ function SpaceInvaders({ onClose }) {
   useEffect(() => {
     if (gameOver && score > 0) {
       saveScoreIfHigh(score);
+
+      if (score >= SCORE_THRESHOLD) {
+        const currentCodes = JSON.parse(
+          localStorage.getItem("unlockedCodes") || "[]"
+        );
+        if (!currentCodes.includes(DISCOUNT_CODE)) {
+          localStorage.setItem(
+            "unlockedCodes",
+            JSON.stringify([...currentCodes, DISCOUNT_CODE])
+          );
+        }
+        setHasUnlockedDiscount(true);
+      } else {
+        setHasUnlockedDiscount(false);
+      }
     }
-  }, [gameOver]);
+  }, [gameOver, score]);
   useEffect(() => {
     setTopScores(getBestScores());
   }, []);
@@ -634,6 +652,12 @@ function SpaceInvaders({ onClose }) {
               </div>
             )}
             <p className="text-xl text-blue-600 mb-6 ">Final score: {score}</p>
+            {hasUnlockedDiscount && (
+              <div className="mb-6 text-green-400 text-lg font-semibold text-center bg-green-900 bg-opacity-40 p-4 rounded">
+                Amazing Score! You’ve earned a discount code:
+                <span className="text-yellow-300 ml-2">{DISCOUNT_CODE}</span>
+              </div>
+            )}
 
             <p className="mb-6 text-2xl font-semibold">Select Ship</p>
             <div className="flex gap-6 mb-6 justify-center">
