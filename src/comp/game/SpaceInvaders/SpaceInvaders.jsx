@@ -8,16 +8,16 @@ const imgURL = {
   greenPlayerLives: "/images/spaceInvaders/ship/playerLife1_green.webp",
   bluePlayerLives: "/images/spaceInvaders/ship/playerLife1_blue.webp",
   redPlayerLives: "/images/spaceInvaders/ship/playerLife1_red.webp",
-  laserGreen: "images/spaceInvaders/laser/laserGreen04.webp",
-  laserBlue: "images/spaceInvaders/laser/laserBlue04.webp",
-  laserRed: "images/spaceInvaders/laser/laserRed04.webp",
+  laserGreen: "images/spaceInvaders/laser/laserGreen.webp",
+  laserBlue: "images/spaceInvaders/laser/laserBlue.webp",
+  laserRed: "images/spaceInvaders/laser/laserRed.webp",
   shield1: "images/spaceInvaders/shield/shield1.webp",
   shield2: "images/spaceInvaders/shield/shield2.webp",
   shield3: "images/spaceInvaders/shield/shield3.webp",
   invader: "/images/spaceInvaders/invader/invader.webp",
-  meteorBig: "/images/spaceInvaders/invader/meteorBrown_big4.webp",
-  meteorMed: "/images/spaceInvaders/invader/meteorBrown_med1.webp",
-  meteorSmall: "/images/spaceInvaders/invader/meteorBrown_small1.webp",
+  meteorBig: "/images/spaceInvaders/invader/meteorbig.webp",
+  meteorMed: "/images/spaceInvaders/invader/meteormed.webp",
+  meteorSmall: "/images/spaceInvaders/invader/meteorsmall.webp",
   n0: "images/spaceInvaders/numeral/numeral0.webp",
   n1: "images/spaceInvaders/numeral/numeral1.webp",
   n2: "images/spaceInvaders/numeral/numeral2.webp",
@@ -75,11 +75,20 @@ function SpaceInvaders({ onClose }) {
   const [animateLifeLoss, setAnimateLifeLoss] = useState(false);
   const previousLivesRef = useRef(lives);
 
+  const projectileImages = {
+    greenPlayer: new Image(),
+    bluePlayer: new Image(),
+    redPlayer: new Image(),
+  };
+  projectileImages.greenPlayer.src = imgURL.laserGreen;
+  projectileImages.bluePlayer.src = imgURL.laserBlue;
+  projectileImages.redPlayer.src = imgURL.laserRed;
   const lastShotTimeRef = useRef(0);
   const projectilesRef = useRef([]);
   const projectileConfig = {
     cooldown: 200,
-    radius: 4,
+    width: 8,
+    height: 20,
     speed: 7,
   };
 
@@ -463,10 +472,12 @@ function SpaceInvaders({ onClose }) {
         if (keysPressed.has(" ")) {
           if (now - lastShotTimeRef.current > projectileConfig.cooldown) {
             const newProjectile = {
-              x: playerXRef.current + playerConfig.width / 2,
+              x: playerXRef.current + playerConfig.width / 2 - 4,
               y: canvas.height - playerConfig.height - 10,
-              radius: projectileConfig.radius,
+              width: projectileConfig.width,
+              height: projectileConfig.height,
               speed: projectileConfig.speed,
+              color: playerColor,
             };
             projectilesRef.current.push(newProjectile);
             lastShotTimeRef.current = now;
@@ -572,15 +583,14 @@ function SpaceInvaders({ onClose }) {
           return updated;
         })
         .filter((p) => {
-          const isVisible = p.y + p.radius > 0;
+          const isVisible = p.y + p.height > 0;
           return isVisible;
         });
       projectilesRef.current.forEach((p) => {
-        c.beginPath();
-        c.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        c.fillStyle = "red";
-        c.fill();
-        c.closePath();
+        const img = projectileImages[p.color];
+        if (img.complete) {
+          c.drawImage(img, p.x, p.y, p.width, p.height);
+        }
       });
 
       // === CHECK PROJECTILE-INVADER COLLISION ===
@@ -592,14 +602,14 @@ function SpaceInvaders({ onClose }) {
                 const invaderX = grid.x + col * invaderConfig.width;
                 const invaderY = grid.y + row * invaderConfig.height;
 
-                const distanceX = p.x - (invaderX + invaderConfig.width / 2);
-                const distanceY = p.y - (invaderY + invaderConfig.height / 2);
-                const distance = Math.sqrt(
-                  distanceX * distanceX + distanceY * distanceY
-                );
+                const hit =
+                  p.x < invaderX + invaderConfig.width &&
+                  p.x + p.width > invaderX &&
+                  p.y < invaderY + invaderConfig.height &&
+                  p.y + p.height > invaderY;
 
                 // remove invader
-                if (distance < p.radius + invaderConfig.width / 2) {
+                if (hit) {
                   grid.invaders[row][col] = false;
                   createExplosion(
                     invaderX + invaderConfig.width / 2,
