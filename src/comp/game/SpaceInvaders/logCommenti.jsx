@@ -90,9 +90,6 @@ function SpaceInvaders({ onClose }) {
     bluePlayer: new Image(),
     redPlayer: new Image(),
   };
-  projectileImages.greenPlayer.src = imgURL.laserGreen;
-  projectileImages.bluePlayer.src = imgURL.laserBlue;
-  projectileImages.redPlayer.src = imgURL.laserRed;
   const lastShotTimeRef = useRef(0);
   const projectilesRef = useRef([]);
   const projectileConfig = {
@@ -118,6 +115,31 @@ function SpaceInvaders({ onClose }) {
     height: 12,
     speed: 4,
     frame: 100,
+  };
+  /* Meteor */
+  const meteorsRef = useRef([]);
+  const meteorConfig = {
+    speed: {
+      big: 2,
+      med: 3,
+      small: 4,
+    },
+    lives: {
+      big: 3,
+      med: 2,
+      small: 1,
+    },
+    size: {
+      big: 96,
+      med: 43,
+      small: 28,
+    },
+    frameRate: 400,
+  };
+  const meteorImages = {
+    big: new Image(),
+    med: new Image(),
+    small: new Image(),
   };
   /* Score */
   const [score, setScore] = useState(0);
@@ -434,6 +456,12 @@ function SpaceInvaders({ onClose }) {
     // === LOAD IMAGES ===
     playerImageRef.current.src = imgURL[playerColor];
     invaderImageRef.current.src = imgURL.invader;
+    projectileImages.greenPlayer.src = imgURL.laserGreen;
+    projectileImages.bluePlayer.src = imgURL.laserBlue;
+    projectileImages.redPlayer.src = imgURL.laserRed;
+    meteorImages.big.src = imgURL.meteorBig;
+    meteorImages.med.src = imgURL.meteorMed;
+    meteorImages.small.src = imgURL.meteorSmall;
 
     // === INIT PLAYER ===
     const initialPlayerX = canvas.width / 2 - playerConfig.width / 2;
