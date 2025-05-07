@@ -846,8 +846,12 @@ function SpaceInvaders({ onClose }) {
             playerParticles
           );
 
-          const newLives = Math.max(0, livesRef.current - 1);
+          const damage = m.type === "big" ? 2 : 1;
+          const newLives = Math.max(0, livesRef.current - damage);
           setLives(newLives);
+          console.log(
+            `🚨 Meteora ${m.type.toUpperCase()} ha colpito il player: -${damage} vite`
+          );
 
           // === LOSE CONDITION ===
           if (newLives <= 0) {

@@ -841,7 +841,7 @@ function SpaceInvaders({ onClose }) {
                 const newScore = prevScore + scoreParams.meteorSmall;
                 // debug - small meteor score
                 // console.log(
-                //   `Small Meteor Hit: +${scoreParams.meteorSmall} (da ${prevScore} a ${newScore})`
+                //   `Small Meteor Hit: +${scoreParams.meteorSmall} (${prevScore} -> ${newScore})`
                 // );
                 return newScore;
               });
@@ -857,7 +857,7 @@ function SpaceInvaders({ onClose }) {
                   const newScore = prevScore + scoreParams.meteorBig;
                   // debug - big meteor score
                   // console.log(
-                  //   `Big Meteor Hit: +${scoreParams.meteorBig} (da ${prevScore} a ${newScore})`
+                  //   `Big Meteor Hit: +${scoreParams.meteorBig} (${prevScore} -> ${newScore})`
                   // );
                   return newScore;
                 });
@@ -870,7 +870,7 @@ function SpaceInvaders({ onClose }) {
                   const newScore = prevScore + scoreParams.meteorMed;
                   // debug - med meteor score
                   // console.log(
-                  //   `Med Meteor Hit: +${scoreParams.meteorMed} (da ${prevScore} a ${newScore})`
+                  //   `Med Meteor Hit: +${scoreParams.meteorMed} (${prevScore} -> ${newScore})`
                   // );
                   return newScore;
                 });
@@ -887,12 +887,12 @@ function SpaceInvaders({ onClose }) {
                 m.y + m.height / 2,
                 meteorParticles[currentType]
               );
-              playSound(destroyGridSound); // big & med - cambia suono
+              playSound(destroyGridSound);
             }
           }
         });
       });
-      // === CHECK PLAYER PROJECTILE-METEOR COLLISION ===
+      // === CHECK METEOR-PLAYER COLLISION ===
       meteorsRef.current.forEach((m, index) => {
         const hit =
           m.x < playerXRef.current + playerConfig.width &&
@@ -915,8 +915,13 @@ function SpaceInvaders({ onClose }) {
             playerParticles
           );
 
-          const newLives = Math.max(0, livesRef.current - 1);
+          const damage = m.type === "big" ? 2 : 1;
+          const newLives = Math.max(0, livesRef.current - damage);
           setLives(newLives);
+          // debug - meteor damage
+          // console.log(
+          //   `${m.type.toUpperCase()} Meteor Hit player: -${damage} lives`
+          // );
 
           // === LOSE CONDITION ===
           if (newLives <= 0) {
