@@ -11,7 +11,9 @@ const imgURL = {
   bluePlayerLives: "/images/spaceInvaders/ship/playerLife1_blue.webp",
   redPlayerLives: "/images/spaceInvaders/ship/playerLife1_red.webp",
   // laser
-  laser: "images/spaceInvaders/laser/laserRed04.webp",
+  laserGreen: "images/spaceInvaders/laser/laserGreen04.webp",
+  laserBlue: "images/spaceInvaders/laser/laserBlue04.webp",
+  laserRed: "images/spaceInvaders/laser/laserRed04.webp",
   // shield
   shield1: "images/spaceInvaders/shield/shield1.webp",
   shield2: "images/spaceInvaders/shield/shield2.webp",
@@ -626,7 +628,7 @@ function SpaceInvaders({ onClose }) {
         }
       });
 
-      // === UPDATE & DRAW PROJECTILES ===
+      // === UPDATE & DRAW PLAYER PROJECTILES ===
       projectilesRef.current = projectilesRef.current
         .map((p) => {
           const updated = { ...p, y: p.y - p.speed };
