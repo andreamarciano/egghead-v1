@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import "./SpaceInvaders.css";
 
 /* Images */
 const imgURL = {
@@ -77,6 +78,8 @@ function SpaceInvaders({ onClose }) {
   // Lives
   const [lives, setLives] = useState(3);
   const livesRef = useRef(3);
+  const [animateLifeLoss, setAnimateLifeLoss] = useState(false);
+  const previousLivesRef = useRef(lives);
   /* Projectile */
   const lastShotTimeRef = useRef(0);
   const projectilesRef = useRef([]);
@@ -241,7 +244,13 @@ function SpaceInvaders({ onClose }) {
 
     return (
       <div className="flex items-center bg-black/60 px-2 py-1 rounded">
-        <img src={imgURL[lifeIconKey]} alt="life" className="w-6 h-auto mr-1" />
+        <img
+          src={imgURL[lifeIconKey]}
+          alt="life"
+          className={`w-6 h-auto mr-1 transition-transform duration-300 ${
+            animateLifeLoss ? "scale-175" : ""
+          }`}
+        />
         <img src={imgURL.nX} alt="x" className="w-3 h-3 mx-0.5" />
         {livesStr.split("").map((digit, idx) => (
           <img
@@ -254,6 +263,15 @@ function SpaceInvaders({ onClose }) {
       </div>
     );
   };
+
+  /* Lives Animation */
+  useEffect(() => {
+    if (lives < previousLivesRef.current) {
+      setAnimateLifeLoss(true);
+      setTimeout(() => setAnimateLifeLoss(false), 300);
+    }
+    previousLivesRef.current = lives;
+  }, [lives]);
 
   /* Score Animation */
   useEffect(() => {
@@ -994,7 +1012,13 @@ function SpaceInvaders({ onClose }) {
         {renderScoreImages(displayedScore)}
       </div>
       {/* Lives */}
-      <div className="absolute top-10 left-2">{renderLives(lives)}</div>
+      <div
+        className={`absolute top-10 left-2 ${
+          animateLifeLoss ? "animate-shake" : ""
+        }`}
+      >
+        {renderLives(lives)}
+      </div>
 
       {/* Menu */}
       {!isGameRunning && (
