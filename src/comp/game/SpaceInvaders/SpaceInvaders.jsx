@@ -592,6 +592,8 @@ function SpaceInvaders({ onClose }) {
           speed: meteorConfig.speed[type],
           lives: meteorConfig.lives[type],
           image: meteorImages[type],
+          rotation: Math.random() * Math.PI,
+          rotationSpeed: Math.random() * 0.02 + 0.01,
         });
       }
 
@@ -659,7 +661,17 @@ function SpaceInvaders({ onClose }) {
         .map((m) => ({ ...m, y: m.y + m.speed }))
         .filter((m) => m.y < canvas.height);
       meteorsRef.current.forEach((m) => {
+        m.rotation += m.rotationSpeed;
+
+        // rotation
+        c.save();
+        c.translate(m.x + m.width / 2, m.y + m.height / 2);
+        c.rotate(m.rotation);
+        c.translate(-m.x - m.width / 2, -m.y - m.height / 2);
+
         c.drawImage(m.image, m.x, m.y, m.width, m.height);
+
+        c.restore();
       });
 
       // === CHECK COLLISION INVADER PROJECTILE-PLAYER ===
@@ -849,9 +861,6 @@ function SpaceInvaders({ onClose }) {
           const damage = m.type === "big" ? 2 : 1;
           const newLives = Math.max(0, livesRef.current - damage);
           setLives(newLives);
-          console.log(
-            `🚨 Meteora ${m.type.toUpperCase()} ha colpito il player: -${damage} vite`
-          );
 
           // === LOSE CONDITION ===
           if (newLives <= 0) {
