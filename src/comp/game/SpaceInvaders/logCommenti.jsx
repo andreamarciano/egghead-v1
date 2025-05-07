@@ -109,6 +109,8 @@ function SpaceInvaders({ onClose }) {
     single: 10,
     grid: 50,
   };
+  const [displayedScore, setDisplayedScore] = useState(0);
+  const [scoreTextSize, setScoreTextSize] = useState("w-4.5 h-4.5");
   const [topScores, setTopScores] = useState([]);
   const SCORE_KEY = "spaceInvadersTopScores";
   const getBestScores = () => {
@@ -227,7 +229,7 @@ function SpaceInvaders({ onClose }) {
           key={index}
           src={imgURL[`n${digit}`]}
           alt={digit}
-          className="w-4.5 h-4.5 mx-0.5"
+          className={`${scoreTextSize} mx-0.5 transition-all duration-200`}
         />
       ));
   };
@@ -252,6 +254,38 @@ function SpaceInvaders({ onClose }) {
       </div>
     );
   };
+
+  /* Score Animation */
+  useEffect(() => {
+    if (displayedScore === score) return;
+
+    const interval = setInterval(() => {
+      setDisplayedScore((prev) => {
+        const next = Math.min(prev + 2, score);
+
+        const currentK = Math.floor(prev / 1000);
+        const nextK = Math.floor(next / 1000);
+
+        const current10K = Math.floor(prev / 10000);
+        const next10K = Math.floor(next / 10000);
+
+        // Large expansion every 10k multiples
+        if (current10K !== next10K) {
+          setScoreTextSize("w-8 h-8");
+          setTimeout(() => setScoreTextSize("w-4.5 h-4.5"), 400);
+        }
+        // Average Expansion every 1k (only if it's not 10k multiple)
+        else if (currentK !== nextK) {
+          setScoreTextSize("w-6 h-6");
+          setTimeout(() => setScoreTextSize("w-4.5 h-4.5"), 300);
+        }
+
+        return next;
+      });
+    }, 30);
+
+    return () => clearInterval(interval);
+  }, [score, displayedScore]);
 
   // Projectile Volume
   useEffect(() => {
@@ -957,7 +991,7 @@ function SpaceInvaders({ onClose }) {
 
       {/* Score */}
       <div className="absolute top-2 left-1 flex">
-        {renderScoreImages(score)}
+        {renderScoreImages(displayedScore)}
       </div>
       {/* Lives */}
       <div className="absolute top-10 left-2">{renderLives(lives)}</div>
