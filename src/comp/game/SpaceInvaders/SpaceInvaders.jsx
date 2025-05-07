@@ -146,6 +146,9 @@ function SpaceInvaders({ onClose }) {
   const scoreParams = {
     single: 10,
     grid: 50,
+    meteorBig: 10,
+    meteorMed: 20,
+    meteorSmall: 50,
   };
   const [displayedScore, setDisplayedScore] = useState(0);
   const [scoreTextSize, setScoreTextSize] = useState("w-4.5 h-4.5");
@@ -770,8 +773,7 @@ function SpaceInvaders({ onClose }) {
             projectilesRef.current.splice(pIndex, 1);
 
             if (m.lives <= 0) {
-              // remove meteor
-              console.log(`✅ Meteora ${m.type.toUpperCase()} distrutta`);
+              // remove meteor - small
               meteorsRef.current.splice(mIndex, 1);
 
               createExplosion(
@@ -779,16 +781,30 @@ function SpaceInvaders({ onClose }) {
                 m.y + m.height / 2,
                 meteorParticles[m.type]
               );
+
               playSound(destroyInvaderSound); // small - cambia suono
+
+              setScore((prevScore) => {
+                const newScore = prevScore + scoreParams.meteorSmall;
+                return newScore;
+              });
             } else {
               // downgrade meteor
               const currentType = m.type;
 
               if (m.lives === 2) {
-                console.log("⚠️ Meteora BIG colpita → diventa MED");
+                // big
+                setScore((prevScore) => {
+                  const newScore = prevScore + scoreParams.meteorBig;
+                  return newScore;
+                });
                 m.type = "med";
               } else if (m.lives === 1) {
-                console.log("⚠️ Meteora MED colpita → diventa SMALL");
+                // med
+                setScore((prevScore) => {
+                  const newScore = prevScore + scoreParams.meteorMed;
+                  return newScore;
+                });
                 m.type = "small";
               }
 

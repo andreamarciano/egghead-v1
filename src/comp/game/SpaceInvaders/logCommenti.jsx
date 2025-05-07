@@ -146,6 +146,9 @@ function SpaceInvaders({ onClose }) {
   const scoreParams = {
     single: 10,
     grid: 50,
+    meteorBig: 10,
+    meteorMed: 20,
+    meteorSmall: 50,
   };
   const [displayedScore, setDisplayedScore] = useState(0);
   const [scoreTextSize, setScoreTextSize] = useState("w-4.5 h-4.5");
@@ -821,8 +824,9 @@ function SpaceInvaders({ onClose }) {
             projectilesRef.current.splice(pIndex, 1);
 
             if (m.lives <= 0) {
-              // remove meteor
-              console.log(`✅ Meteora ${m.type.toUpperCase()} distrutta`);
+              // remove meteor - small
+              // debug - destroy meteor
+              // console.log(`${m.type.toUpperCase()} Meteor destroyed`);
               meteorsRef.current.splice(mIndex, 1);
 
               createExplosion(
@@ -830,16 +834,46 @@ function SpaceInvaders({ onClose }) {
                 m.y + m.height / 2,
                 meteorParticles[m.type]
               );
-              playSound(destroyInvaderSound); // small - cambia suono
+
+              playSound(destroyInvaderSound);
+
+              setScore((prevScore) => {
+                const newScore = prevScore + scoreParams.meteorSmall;
+                // debug - small meteor score
+                // console.log(
+                //   `Small Meteor Hit: +${scoreParams.meteorSmall} (da ${prevScore} a ${newScore})`
+                // );
+                return newScore;
+              });
             } else {
               // downgrade meteor
               const currentType = m.type;
 
               if (m.lives === 2) {
-                console.log("⚠️ Meteora BIG colpita → diventa MED");
+                // big
+                // debug - meteor downgrade
+                // console.log("BIG Meteor Hit → Becomes MED");
+                setScore((prevScore) => {
+                  const newScore = prevScore + scoreParams.meteorBig;
+                  // debug - big meteor score
+                  // console.log(
+                  //   `Big Meteor Hit: +${scoreParams.meteorBig} (da ${prevScore} a ${newScore})`
+                  // );
+                  return newScore;
+                });
                 m.type = "med";
               } else if (m.lives === 1) {
-                console.log("⚠️ Meteora MED colpita → diventa SMALL");
+                // med
+                // debug - meteor downgrade
+                // console.log("MED Meteor Hit → Becomes SMALL");
+                setScore((prevScore) => {
+                  const newScore = prevScore + scoreParams.meteorMed;
+                  // debug - med meteor score
+                  // console.log(
+                  //   `Med Meteor Hit: +${scoreParams.meteorMed} (da ${prevScore} a ${newScore})`
+                  // );
+                  return newScore;
+                });
                 m.type = "small";
               }
 
