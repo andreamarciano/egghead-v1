@@ -218,17 +218,44 @@ function SpaceInvaders({ onClose }) {
     opacity: 1,
     count: 25,
   };
+  const meteorParticles = {
+    big: {
+      color: "#FFA726",
+      opacity: 0.6,
+      count: 500,
+      radiusRange: [2, 6],
+      velocityRange: [2, 6],
+    },
+    med: {
+      color: "#FFCC26",
+      opacity: 0.5,
+      count: 250,
+      radiusRange: [1.5, 4],
+      velocityRange: [1.5, 4],
+    },
+    small: { color: "#FFDB26", opacity: 0.4, count: 15 },
+  };
   // Create Particles
-  function createExplosion(x, y, { color, count, opacity }) {
+  function createExplosion(
+    x,
+    y,
+    { color, count, opacity, radiusRange = [1, 3], velocityRange = [1, 2] }
+  ) {
     for (let i = 0; i < count; i++) {
+      const radius =
+        Math.random() * (radiusRange[1] - radiusRange[0]) + radiusRange[0];
+      const speed =
+        Math.random() * (velocityRange[1] - velocityRange[0]) +
+        velocityRange[0];
+
       particlesRef.current.push({
         x,
         y,
-        radius: Math.random() * 3 + 1,
+        radius,
         color,
         velocity: {
-          x: (Math.random() - 0.5) * 2,
-          y: (Math.random() - 0.5) * 2,
+          x: (Math.random() - 0.5) * speed,
+          y: (Math.random() - 0.5) * speed,
         },
         opacity,
       });
@@ -568,6 +595,26 @@ function SpaceInvaders({ onClose }) {
       //   console.log("Player inactive – movement and shooting disabled");
       // }
 
+      // === METEOR MOVEMENT ===
+      if (frames % meteorConfig.frameRate === 0) {
+        const types = ["big", "med", "small"];
+        const type = types[Math.floor(Math.random() * types.length)];
+
+        const x = Math.random() * (canvas.width - meteorConfig.size[type]);
+        const y = -meteorConfig.size[type];
+
+        meteorsRef.current.push({
+          x,
+          y,
+          type,
+          width: meteorConfig.size[type],
+          height: meteorConfig.size[type],
+          speed: meteorConfig.speed[type],
+          lives: meteorConfig.lives[type],
+          image: meteorImages[type],
+        });
+      }
+
       // === INVADER GRIDS MOVEMENT ===
       invaderGridsRef.current.forEach((grid) => {
         grid.x += grid.speed * grid.direction;
@@ -625,6 +672,14 @@ function SpaceInvaders({ onClose }) {
       invaderProjectilesRef.current.forEach((p) => {
         c.fillStyle = "white";
         c.fillRect(p.x, p.y, p.width, p.height);
+      });
+
+      // === UPDATE & DRAW METEOR ===
+      meteorsRef.current = meteorsRef.current
+        .map((m) => ({ ...m, y: m.y + m.speed }))
+        .filter((m) => m.y < canvas.height);
+      meteorsRef.current.forEach((m) => {
+        c.drawImage(m.image, m.x, m.y, m.width, m.height);
       });
 
       // === CHECK COLLISION INVADER PROJECTILE-PLAYER ===
@@ -686,7 +741,8 @@ function SpaceInvaders({ onClose }) {
           c.drawImage(img, p.x, p.y, p.width, p.height);
         }
       });
-      // === CHECK PROJECTILE-INVADER COLLISION ===
+
+      // === CHECK PLAYER PROJECTILE-INVADER COLLISION ===
       projectilesRef.current.forEach((p, pIndex) => {
         invaderGridsRef.current.forEach((grid) => {
           for (let row = 0; row < grid.rows; row++) {
@@ -750,6 +806,90 @@ function SpaceInvaders({ onClose }) {
           return stillHasInvaders;
         }
       );
+
+      // === CHECK PLAYER PROJECTILE-METEOR COLLISION ===
+      projectilesRef.current.forEach((p, pIndex) => {
+        meteorsRef.current.forEach((m, mIndex) => {
+          const hit =
+            p.x > m.x &&
+            p.x < m.x + m.width &&
+            p.y > m.y &&
+            p.y < m.y + m.height;
+
+          if (hit) {
+            m.lives -= 1;
+            projectilesRef.current.splice(pIndex, 1);
+
+            if (m.lives <= 0) {
+              // remove meteor
+              console.log(`✅ Meteora ${m.type.toUpperCase()} distrutta`);
+              meteorsRef.current.splice(mIndex, 1);
+
+              createExplosion(
+                m.x + m.width / 2,
+                m.y + m.height / 2,
+                meteorParticles[m.type]
+              );
+              playSound(destroyInvaderSound); // small - cambia suono
+            } else {
+              // downgrade meteor
+              const currentType = m.type;
+
+              if (m.lives === 2) {
+                console.log("⚠️ Meteora BIG colpita → diventa MED");
+                m.type = "med";
+              } else if (m.lives === 1) {
+                console.log("⚠️ Meteora MED colpita → diventa SMALL");
+                m.type = "small";
+              }
+
+              m.width = meteorConfig.size[m.type];
+              m.height = meteorConfig.size[m.type];
+              m.image = meteorImages[m.type];
+              m.speed = meteorConfig.speed[m.type];
+
+              createExplosion(
+                m.x + m.width / 2,
+                m.y + m.height / 2,
+                meteorParticles[currentType]
+              );
+              playSound(destroyGridSound); // big & med - cambia suono
+            }
+          }
+        });
+      });
+      // === CHECK PLAYER PROJECTILE-METEOR COLLISION ===
+      meteorsRef.current.forEach((m, index) => {
+        const hit =
+          m.x < playerXRef.current + playerConfig.width &&
+          m.x + m.width > playerXRef.current &&
+          m.y < playerY + playerConfig.height &&
+          m.y + m.height > playerY;
+
+        if (hit) {
+          meteorsRef.current.splice(index, 1);
+
+          flashEffect(playerOpacityRef, {
+            playerActive: isPlayerActiveRef,
+          });
+
+          playSound(playerHitSound, 0.7);
+
+          createExplosion(
+            playerXRef.current + playerConfig.width / 2,
+            playerY + playerConfig.height / 2,
+            playerParticles
+          );
+
+          const newLives = Math.max(0, livesRef.current - 1);
+          setLives(newLives);
+
+          // === LOSE CONDITION ===
+          if (newLives <= 0) {
+            handleGameOver();
+          }
+        }
+      });
 
       // === DRAW PLAYER ===
       c.save();
@@ -917,6 +1057,7 @@ function SpaceInvaders({ onClose }) {
 
     if (gameOver) {
       invaderGridsRef.current = [];
+      meteorsRef.current = [];
       projectilesRef.current = [];
       invaderProjectilesRef.current = [];
       particlesRef.current = [];
