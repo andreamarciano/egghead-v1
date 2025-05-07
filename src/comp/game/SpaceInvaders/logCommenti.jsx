@@ -149,9 +149,9 @@ function SpaceInvaders({ onClose }) {
   const laserVolumeRef = useRef(laserVolume);
   const audioEnabledRef = useRef(audioEnabled);
   // play sfx
-  const playSound = (sound) => {
+  const playSound = (sound, volumeMultiplier = 1) => {
     if (audioEnabledRef.current && sound) {
-      sound.volume = sfxVolumeRef.current;
+      sound.volume = sfxVolumeRef.current * volumeMultiplier;
       sound.currentTime = 0;
       sound.play().catch((e) => console.warn("Play error:", e));
     }
@@ -517,7 +517,7 @@ function SpaceInvaders({ onClose }) {
             playerActive: isPlayerActiveRef,
           });
 
-          playSound(playerHitSound);
+          playSound(playerHitSound, 0.7);
 
           // particles
           createExplosion(
@@ -591,7 +591,7 @@ function SpaceInvaders({ onClose }) {
                     invaderParticles
                   );
 
-                  playSound(destroyInvaderSound);
+                  playSound(destroyInvaderSound, 0.5);
 
                   setScore((prevScore) => prevScore + scoreParams.single);
                   // debug - single invader score
