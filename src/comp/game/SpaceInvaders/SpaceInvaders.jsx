@@ -254,13 +254,10 @@ function SpaceInvaders({ onClose }) {
         const current10K = Math.floor(prev / 10000);
         const next10K = Math.floor(next / 10000);
 
-        // Espansione grande ogni 10k multipli (10k, 20k, 30k…)
         if (current10K !== next10K) {
           setScoreTextSize("w-8 h-8");
           setTimeout(() => setScoreTextSize("w-4.5 h-4.5"), 400);
-        }
-        // Espansione media ogni 1k (solo se non è 10k multiplo)
-        else if (currentK !== nextK) {
+        } else if (currentK !== nextK) {
           setScoreTextSize("w-6 h-6");
           setTimeout(() => setScoreTextSize("w-4.5 h-4.5"), 300);
         }
