@@ -217,6 +217,42 @@ function SpaceInvaders({ onClose }) {
     }, interval);
   }
 
+  // Score UI
+  const renderScoreImages = (score) => {
+    const padded = score.toString().padStart(5, "0");
+    return padded
+      .split("")
+      .map((digit, index) => (
+        <img
+          key={index}
+          src={imgURL[`n${digit}`]}
+          alt={digit}
+          className="w-4.5 h-4.5 mx-0.5"
+        />
+      ));
+  };
+
+  // Lives UI
+  const renderLives = (lives) => {
+    const livesStr = lives.toString().padStart(1, "0");
+    const lifeIconKey = `${playerColor}Lives`;
+
+    return (
+      <div className="flex items-center bg-black/60 px-2 py-1 rounded">
+        <img src={imgURL[lifeIconKey]} alt="life" className="w-6 h-auto mr-1" />
+        <img src={imgURL.nX} alt="x" className="w-3 h-3 mx-0.5" />
+        {livesStr.split("").map((digit, idx) => (
+          <img
+            key={idx}
+            src={imgURL[`n${digit}`]}
+            alt={digit}
+            className="w-4.5 h-4.5 mx-0.5"
+          />
+        ))}
+      </div>
+    );
+  };
+
   // Projectile Volume
   useEffect(() => {
     sfxVolumeRef.current = sfxVolume;
@@ -616,7 +652,7 @@ function SpaceInvaders({ onClose }) {
             //   `Grid completely eliminated: index ${index}, position (${grid.x}, ${grid.y})`
             // );
 
-            playSound(destroyGridSound);
+            playSound(destroyGridSound, 0.5);
             setScore((prevScore) => prevScore + scoreParams.grid);
             // debug - full grid score
             // console.log(`+${scoreParams.grid} points`);
@@ -920,13 +956,11 @@ function SpaceInvaders({ onClose }) {
       )}
 
       {/* Score */}
-      <div className="absolute top-2 left-2 text-white text-lg">
-        Score: {score}
+      <div className="absolute top-2 left-1 flex">
+        {renderScoreImages(score)}
       </div>
       {/* Lives */}
-      <div className="absolute top-10 left-2 text-white text-lg">
-        Lives: {lives}
-      </div>
+      <div className="absolute top-10 left-2">{renderLives(lives)}</div>
 
       {/* Menu */}
       {!isGameRunning && (
