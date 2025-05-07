@@ -1,23 +1,29 @@
 import { useState, useEffect, useRef } from "react";
 import "./SpaceInvaders.css";
 
+/* Images */
 const imgURL = {
+  // player
   greenPlayer: "/images/spaceInvaders/ship/playerShip1_green.webp",
   bluePlayer: "/images/spaceInvaders/ship/playerShip1_blue.webp",
   redPlayer: "/images/spaceInvaders/ship/playerShip1_red.webp",
   greenPlayerLives: "/images/spaceInvaders/ship/playerLife1_green.webp",
   bluePlayerLives: "/images/spaceInvaders/ship/playerLife1_blue.webp",
   redPlayerLives: "/images/spaceInvaders/ship/playerLife1_red.webp",
+  // laser
   laserGreen: "images/spaceInvaders/laser/laserGreen.webp",
   laserBlue: "images/spaceInvaders/laser/laserBlue.webp",
   laserRed: "images/spaceInvaders/laser/laserRed.webp",
+  // shield
   shield1: "images/spaceInvaders/shield/shield1.webp",
   shield2: "images/spaceInvaders/shield/shield2.webp",
   shield3: "images/spaceInvaders/shield/shield3.webp",
+  // enemy
   invader: "/images/spaceInvaders/invader/invader.webp",
   meteorBig: "/images/spaceInvaders/invader/meteorbig.webp",
   meteorMed: "/images/spaceInvaders/invader/meteormed.webp",
   meteorSmall: "/images/spaceInvaders/invader/meteorsmall.webp",
+  // numeral
   n0: "images/spaceInvaders/numeral/numeral0.webp",
   n1: "images/spaceInvaders/numeral/numeral1.webp",
   n2: "images/spaceInvaders/numeral/numeral2.webp",
@@ -31,32 +37,36 @@ const imgURL = {
   nX: "images/spaceInvaders/numeral/numeralX.webp",
 };
 
+/* Sounds */
+// sfx
 const laserSound = "/sounds/spaceInvaders/laser.mp3";
 const laserInvaderSound = "/sounds/spaceInvaders/laserInvader.mp3";
+const destroyInvaderSound = new Audio(
+  "/sounds/spaceInvaders/destroyInvader.mp3"
+);
+const playerHitSound = new Audio("/sounds/spaceInvaders/playerHit.mp3");
+const destroyGridSound = new Audio("/sounds/spaceInvaders/destroyGrid.mp3");
+// theme
+const gameOverSound = new Audio("/sounds/spaceInvaders/gameOver.mp3");
 const themeURL = [
   "/sounds/spaceInvaders/spaceInvaders-theme1.mp3",
   "/sounds/spaceInvaders/spaceInvaders-theme2.mp3",
   "/sounds/spaceInvaders/spaceInvaders-theme3.mp3",
   "/sounds/spaceInvaders/spaceInvaders-theme4.mp3",
 ];
-const destroyInvaderSound = new Audio(
-  "/sounds/spaceInvaders/destroyInvader.mp3"
-);
-const gameOverSound = new Audio("/sounds/spaceInvaders/gameOver.mp3");
-const playerHitSound = new Audio("/sounds/spaceInvaders/playerHit.mp3");
-const destroyGridSound = new Audio("/sounds/spaceInvaders/destroyGrid.mp3");
 
 function SpaceInvaders({ onClose }) {
+  /* Canvas */
   const canvasRef = useRef(null);
   const canvasSize = {
     width: 1260,
     height: 690,
   };
-
+  /* Start Game */
   const [isGameRunning, setIsGameRunning] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const animationIdRef = useRef(null);
-
+  /* Player */
   const playerImageRef = useRef(new Image());
   const playerScale = 0.5;
   const playerConfig = {
@@ -69,12 +79,12 @@ function SpaceInvaders({ onClose }) {
   const [playerX, setPlayerX] = useState(0);
   const playerXRef = useRef(playerX);
   const isPlayerActiveRef = useRef(true);
-
+  // Lives
   const [lives, setLives] = useState(3);
   const livesRef = useRef(3);
   const [animateLifeLoss, setAnimateLifeLoss] = useState(false);
   const previousLivesRef = useRef(lives);
-
+  /* Projectile */
   const projectileImages = {
     greenPlayer: new Image(),
     bluePlayer: new Image(),
@@ -91,7 +101,7 @@ function SpaceInvaders({ onClose }) {
     height: 20,
     speed: 7,
   };
-
+  /* Invader */
   const invaderImageRef = useRef(new Image());
   const invaderScale = 1;
   const invaderConfig = {
@@ -101,7 +111,7 @@ function SpaceInvaders({ onClose }) {
     minSpeed: 2,
   };
   const invaderGridsRef = useRef([]);
-
+  /* Invader Projectile */
   const invaderProjectilesRef = useRef([]);
   const invaderProjectileConfig = {
     width: 4,
@@ -109,7 +119,7 @@ function SpaceInvaders({ onClose }) {
     speed: 4,
     frame: 100,
   };
-
+  /* Score */
   const [score, setScore] = useState(0);
   const scoreParams = {
     single: 10,
@@ -130,7 +140,7 @@ function SpaceInvaders({ onClose }) {
     localStorage.setItem(SCORE_KEY, JSON.stringify(sorted));
     setTopScores(sorted);
   };
-
+  /* Menu */
   const [playerColor, setPlayerColor] = useState("greenPlayer");
   const [selectedColor, setSelectedColor] = useState(null);
   const handleColorChange = (color) => {
@@ -145,7 +155,7 @@ function SpaceInvaders({ onClose }) {
   const DISCOUNT_CODE = "INVADER5";
   const SCORE_THRESHOLD = 10000;
   const [hasUnlockedDiscount, setHasUnlockedDiscount] = useState(false);
-
+  /* Sound */
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [musicVolume, setMusicVolume] = useState(0.4);
   const [sfxVolume, setSfxVolume] = useState(0.8);
@@ -156,6 +166,7 @@ function SpaceInvaders({ onClose }) {
   const sfxVolumeRef = useRef(sfxVolume);
   const laserVolumeRef = useRef(laserVolume);
   const audioEnabledRef = useRef(audioEnabled);
+  // play sfx
   const playSound = (sound, volumeMultiplier = 1) => {
     if (audioEnabledRef.current && sound) {
       sound.volume = sfxVolumeRef.current * volumeMultiplier;
@@ -163,6 +174,7 @@ function SpaceInvaders({ onClose }) {
       sound.play().catch((e) => console.warn("Play error:", e));
     }
   };
+  // play sfx - laser volume
   const playLaserSound = (url) => {
     if (audioEnabledRef.current && url) {
       const laser = new Audio(url);
@@ -171,7 +183,7 @@ function SpaceInvaders({ onClose }) {
       laser.play().catch((e) => console.warn("Play error:", e));
     }
   };
-
+  /* Particles */
   const particlesRef = useRef([]);
   const backgroundParticlesRef = useRef([]);
   const invaderParticles = {
@@ -184,7 +196,7 @@ function SpaceInvaders({ onClose }) {
     opacity: 1,
     count: 25,
   };
-
+  // Create Particles
   function createExplosion(x, y, { color, count, opacity }) {
     for (let i = 0; i < count; i++) {
       particlesRef.current.push({
@@ -201,6 +213,7 @@ function SpaceInvaders({ onClose }) {
     }
   }
 
+  // Player Hit Animation
   function flashEffect(
     ref,
     { min = 0.2, max = 1, flashes = 10, interval = 100, playerActive } = {}
@@ -221,6 +234,7 @@ function SpaceInvaders({ onClose }) {
     }, interval);
   }
 
+  // Score UI
   const renderScoreImages = (score) => {
     const padded = score.toString().padStart(5, "0");
     return padded
@@ -235,6 +249,7 @@ function SpaceInvaders({ onClose }) {
       ));
   };
 
+  // Lives UI
   const renderLives = (lives) => {
     const livesStr = lives.toString().padStart(1, "0");
     const lifeIconKey = `${playerColor}Lives`;
@@ -261,6 +276,7 @@ function SpaceInvaders({ onClose }) {
     );
   };
 
+  /* Lives Animation */
   useEffect(() => {
     if (lives < previousLivesRef.current) {
       setAnimateLifeLoss(true);
@@ -268,7 +284,7 @@ function SpaceInvaders({ onClose }) {
     }
     previousLivesRef.current = lives;
   }, [lives]);
-
+  /* Score Animation */
   useEffect(() => {
     if (displayedScore === score) return;
 
@@ -297,16 +313,20 @@ function SpaceInvaders({ onClose }) {
     return () => clearInterval(interval);
   }, [score, displayedScore]);
 
+  /* Volume */
+  // sfx
   useEffect(() => {
     sfxVolumeRef.current = sfxVolume;
     laserVolumeRef.current = laserVolume;
     audioEnabledRef.current = audioEnabled;
   }, [sfxVolume, laserVolume, audioEnabled]);
+  // Background Music Volume
   useEffect(() => {
     if (gameBgMusic.current) {
       gameBgMusic.current.volume = musicVolume;
     }
   }, [musicVolume]);
+  // Background Music
   useEffect(() => {
     if (gameBgMusic.current) {
       gameBgMusic.current.pause();
@@ -326,6 +346,7 @@ function SpaceInvaders({ onClose }) {
       gameBgMusic.current?.pause();
     };
   }, [currentTheme]);
+  // Play/Pause Background Music
   useEffect(() => {
     if (isGameRunning && !gameOver && audioEnabled) {
       gameBgMusic.current?.play().catch((e) => {
@@ -336,6 +357,7 @@ function SpaceInvaders({ onClose }) {
     }
   }, [isGameRunning, gameOver, audioEnabled]);
 
+  /* Game Over - Score + Discount Code */
   useEffect(() => {
     if (gameOver && score > 0) {
       saveScoreIfHigh(score);
@@ -356,20 +378,25 @@ function SpaceInvaders({ onClose }) {
       }
     }
   }, [gameOver, score]);
+  // Get Top Scores
   useEffect(() => {
     setTopScores(getBestScores());
   }, []);
 
+  /* Synchronize ref */
   useEffect(() => {
     playerXRef.current = playerX;
     livesRef.current = lives;
   }, [playerX, lives]);
 
+  /* Main */
   useEffect(() => {
     if (!isGameRunning) return;
+    // player active
     isPlayerActiveRef.current = true;
     playerOpacityRef.current = 1;
 
+    // === INIT CANVAS ===
     document.body.style.overflow = "hidden";
     const canvas = canvasRef.current;
     const c = canvas.getContext("2d");
@@ -377,6 +404,7 @@ function SpaceInvaders({ onClose }) {
     canvas.width = canvasSize.width;
     canvas.height = canvasSize.height;
 
+    // === BACKGROUND ANIMATION ===
     const spawnBackgroundParticles = () => {
       const particles = [];
       for (let i = 0; i < 100; i++) {
@@ -393,6 +421,7 @@ function SpaceInvaders({ onClose }) {
     };
     spawnBackgroundParticles();
 
+    // === LOAD IMAGES ===
     playerImageRef.current.src = imgURL[playerColor];
     invaderImageRef.current.src = imgURL.invader;
 
@@ -443,6 +472,7 @@ function SpaceInvaders({ onClose }) {
         invaders: Array.from({ length: rows }, () => Array(cols).fill(true)),
       });
     };
+    // === INVADER GRID FRAME CONTROL ===
     spawnInvaderGrid();
     let frames = 1;
     let randomInterval = Math.floor(Math.random() * 500 + 500);
@@ -500,6 +530,7 @@ function SpaceInvaders({ onClose }) {
         }
       });
 
+      // === STATE UPDATES FOR DRAWING ===
       setPlayerX(playerXRef.current);
 
       // === LOSE CONDITION ===
@@ -511,6 +542,7 @@ function SpaceInvaders({ onClose }) {
         return;
       }
 
+      // === CLEAR CANVAS ===
       c.clearRect(0, 0, canvas.width, canvas.height);
 
       // === BACKGROUND ANIMATION DRAW ===
@@ -696,6 +728,7 @@ function SpaceInvaders({ onClose }) {
           }
         }
       });
+      // === SPAWN NEW INVADER GRIDS ===
       if (frames % randomInterval === 0) {
         spawnInvaderGrid();
         frames = 0;
@@ -765,8 +798,10 @@ function SpaceInvaders({ onClose }) {
       animationIdRef.current = requestAnimationFrame(gameLoop);
     };
 
+    // === NEXT FRAME ===
     animationIdRef.current = requestAnimationFrame(gameLoop);
 
+    // === CLEANUP ===
     return () => {
       document.body.style.overflow = "";
       removeEventListener("keydown", handleKeyDown);
@@ -775,6 +810,7 @@ function SpaceInvaders({ onClose }) {
     };
   }, [isGameRunning, playerColor]);
 
+  /* Start & Reset */
   const handleGameStart = () => {
     const randomTheme = themeURL[Math.floor(Math.random() * themeURL.length)];
     setCurrentTheme(randomTheme);
@@ -800,6 +836,7 @@ function SpaceInvaders({ onClose }) {
     setIsGameRunning(true);
   };
 
+  /* Game Over */
   const handleGameOver = () => {
     isPlayerActiveRef.current = false;
     playSound(gameOverSound);
@@ -813,6 +850,7 @@ function SpaceInvaders({ onClose }) {
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-80 z-50">
+      {/* Canvas */}
       <div className="relative flex flex-col items-center">
         <canvas
           ref={canvasRef}
@@ -822,6 +860,7 @@ function SpaceInvaders({ onClose }) {
         />
       </div>
 
+      {/* Close */}
       <button
         onClick={onClose}
         className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 px-1 rounded text-white cursor-pointer"
@@ -851,6 +890,7 @@ function SpaceInvaders({ onClose }) {
               onChange={(e) => setSfxVolume(parseFloat(e.target.value))}
             />
           </div>
+          {/* Laser Volume */}
           <div className="flex items-center gap-2 mb-2 text-black">
             <label htmlFor="laser">Shoot</label>
             <input
@@ -863,6 +903,7 @@ function SpaceInvaders({ onClose }) {
               onChange={(e) => setlaserVolume(parseFloat(e.target.value))}
             />
           </div>
+          {/* Background Music */}
           <div className="flex items-center gap-2 mb-2 text-black">
             <label htmlFor="music">Music</label>
             <input
@@ -875,6 +916,7 @@ function SpaceInvaders({ onClose }) {
               onChange={(e) => setMusicVolume(parseFloat(e.target.value))}
             />
           </div>
+          {/* Audio */}
           <button
             onClick={() => setAudioEnabled((prev) => !prev)}
             className="bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded w-full"
@@ -884,9 +926,11 @@ function SpaceInvaders({ onClose }) {
         </div>
       )}
 
+      {/* Score */}
       <div className="absolute top-2 left-1 flex">
         {renderScoreImages(displayedScore)}
       </div>
+      {/* Lives */}
       <div
         className={`absolute top-10 left-2 ${
           animateLifeLoss ? "animate-shake" : ""
@@ -899,6 +943,7 @@ function SpaceInvaders({ onClose }) {
       {!isGameRunning && (
         <div className="absolute flex flex-col justify-center items-center bg-opacity-75 z-50">
           <div className="text-center text-white bg-opacity-80 p-6 bg-gray-950 rounded-lg shadow-xl">
+            {/* Top Scores */}
             {topScores.length > 0 && (
               <div className="mb-6">
                 <h3 className="text-xl font-bold mb-2 text-yellow-400">
@@ -914,6 +959,7 @@ function SpaceInvaders({ onClose }) {
               </div>
             )}
             <p className="text-xl text-blue-600 mb-6 ">Final score: {score}</p>
+            {/* Discount Code */}
             {hasUnlockedDiscount && (
               <div className="mb-6 text-green-400 text-lg font-semibold text-center bg-green-900 bg-opacity-40 p-4 rounded">
                 Amazing Score! You’ve earned a discount code:
@@ -921,6 +967,7 @@ function SpaceInvaders({ onClose }) {
               </div>
             )}
 
+            {/* Select Ship */}
             <p className="mb-6 text-2xl font-semibold">Select Ship</p>
             <div className="flex gap-6 mb-6 justify-center">
               {["greenPlayer", "bluePlayer", "redPlayer"].map((color) => {
@@ -946,6 +993,7 @@ function SpaceInvaders({ onClose }) {
               })}
             </div>
 
+            {/* Start Game */}
             <button
               onClick={handleGameStart}
               className="cursor-pointer bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-full shadow-lg transition duration-200 transform hover:scale-105"

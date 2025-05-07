@@ -38,20 +38,22 @@ const imgURL = {
 };
 
 /* Sounds */
+// sfx
 const laserSound = "/sounds/spaceInvaders/laser.mp3";
 const laserInvaderSound = "/sounds/spaceInvaders/laserInvader.mp3";
+const destroyInvaderSound = new Audio(
+  "/sounds/spaceInvaders/destroyInvader.mp3"
+);
+const playerHitSound = new Audio("/sounds/spaceInvaders/playerHit.mp3");
+const destroyGridSound = new Audio("/sounds/spaceInvaders/destroyGrid.mp3");
+// theme
+const gameOverSound = new Audio("/sounds/spaceInvaders/gameOver.mp3");
 const themeURL = [
   "/sounds/spaceInvaders/spaceInvaders-theme1.mp3",
   "/sounds/spaceInvaders/spaceInvaders-theme2.mp3",
   "/sounds/spaceInvaders/spaceInvaders-theme3.mp3",
   "/sounds/spaceInvaders/spaceInvaders-theme4.mp3",
 ];
-const destroyInvaderSound = new Audio(
-  "/sounds/spaceInvaders/destroyInvader.mp3"
-);
-const gameOverSound = new Audio("/sounds/spaceInvaders/gameOver.mp3");
-const playerHitSound = new Audio("/sounds/spaceInvaders/playerHit.mp3");
-const destroyGridSound = new Audio("/sounds/spaceInvaders/destroyGrid.mp3");
 
 function SpaceInvaders({ onClose }) {
   /* Canvas */
@@ -172,7 +174,7 @@ function SpaceInvaders({ onClose }) {
       sound.play().catch((e) => console.warn("Play error:", e));
     }
   };
-  // play sfx with laser volume
+  // play sfx - laser volume
   const playLaserSound = (url) => {
     if (audioEnabledRef.current && url) {
       const laser = new Audio(url);
@@ -194,7 +196,6 @@ function SpaceInvaders({ onClose }) {
     opacity: 1,
     count: 25,
   };
-
   // Create Particles
   function createExplosion(x, y, { color, count, opacity }) {
     for (let i = 0; i < count; i++) {
@@ -283,7 +284,6 @@ function SpaceInvaders({ onClose }) {
     }
     previousLivesRef.current = lives;
   }, [lives]);
-
   /* Score Animation */
   useEffect(() => {
     if (displayedScore === score) return;
@@ -316,20 +316,19 @@ function SpaceInvaders({ onClose }) {
     return () => clearInterval(interval);
   }, [score, displayedScore]);
 
-  // Projectile Volume
+  /* Volume */
+  // sfx
   useEffect(() => {
     sfxVolumeRef.current = sfxVolume;
     laserVolumeRef.current = laserVolume;
     audioEnabledRef.current = audioEnabled;
   }, [sfxVolume, laserVolume, audioEnabled]);
-
   // Background Music Volume
   useEffect(() => {
     if (gameBgMusic.current) {
       gameBgMusic.current.volume = musicVolume;
     }
   }, [musicVolume]);
-
   // Background Music
   useEffect(() => {
     if (gameBgMusic.current) {
@@ -350,7 +349,6 @@ function SpaceInvaders({ onClose }) {
       gameBgMusic.current?.pause();
     };
   }, [currentTheme]);
-
   // Play/Pause Background Music
   useEffect(() => {
     if (isGameRunning && !gameOver && audioEnabled) {
@@ -362,7 +360,7 @@ function SpaceInvaders({ onClose }) {
     }
   }, [isGameRunning, gameOver, audioEnabled]);
 
-  /* Game Over */
+  /* Game Over - Score + Discount Code */
   useEffect(() => {
     if (gameOver && score > 0) {
       // Save Higher Score
@@ -385,7 +383,7 @@ function SpaceInvaders({ onClose }) {
       }
     }
   }, [gameOver, score]);
-  /* Get Top Scores */
+  // Get Top Scores
   useEffect(() => {
     setTopScores(getBestScores());
   }, []);
@@ -396,7 +394,7 @@ function SpaceInvaders({ onClose }) {
     livesRef.current = lives;
   }, [playerX, lives]);
 
-  // main game cycle
+  /* Main */
   useEffect(() => {
     if (!isGameRunning) return;
     // player active
@@ -910,6 +908,7 @@ function SpaceInvaders({ onClose }) {
     setIsGameRunning(true);
   };
 
+  /* Game Over */
   const handleGameOver = () => {
     isPlayerActiveRef.current = false;
     playSound(gameOverSound);
@@ -1085,6 +1084,7 @@ function SpaceInvaders({ onClose }) {
                 );
               })}
             </div>
+
             {/* Start Game */}
             <button
               onClick={handleGameStart}
