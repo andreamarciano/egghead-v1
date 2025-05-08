@@ -61,7 +61,17 @@ const themeURL = [
   "/sounds/spaceInvaders/theme/theme4.mp3",
 ];
 
-/* MAIN */
+/******************************************************************************
+ *                                                                            *
+ *      ▀▄   ▄▀   ▀▄   ▄▀   ▀▄   ▄▀   ▀▄   ▄▀   ▀▄   ▄▀   ▀▄   ▄▀              *
+ *     ▄█▀███▀█▄ ▄█▀███▀█▄ ▄█▀███▀█▄ ▄█▀███▀█▄ ▄█▀███▀█▄ ▄█▀███▀█▄             *
+ *     █▀█████▀█ █▀█████▀█ █▀█████▀█ █▀█████▀█ █▀█████▀█ █▀█████▀█             *
+ *     ▀ ▀▀ ▀▀ ▀ ▀ ▀▀ ▀▀ ▀ ▀ ▀▀ ▀▀ ▀ ▀ ▀▀ ▀▀ ▀ ▀ ▀▀ ▀▀ ▀ ▀ ▀▀ ▀▀ ▀             *
+ *                                                                            *
+ *                         S P A C E   I N V A D E R S                        *
+ *                                                                            *
+ ******************************************************************************/
+
 function SpaceInvaders({ onClose }) {
   /* Canvas */
   const canvasRef = useRef(null);
@@ -93,6 +103,7 @@ function SpaceInvaders({ onClose }) {
   const livesRef = useRef(3);
   const [animateLifeLoss, setAnimateLifeLoss] = useState(false);
   const previousLivesRef = useRef(lives);
+
   /* Projectile */
   const projectileImages = {
     greenPlayer: new Image(),
@@ -307,7 +318,11 @@ function SpaceInvaders({ onClose }) {
     }
   }
 
-  // Player Hit Animation
+  /***************************************************************
+   *                       ANIMATION & UI                        *
+   ***************************************************************/
+
+  /* Player Hit Animation */
   function flashEffect(
     ref,
     { min = 0.2, max = 1, flashes = 10, interval = 100, playerActive } = {}
@@ -328,7 +343,7 @@ function SpaceInvaders({ onClose }) {
     }, interval);
   }
 
-  // Score UI
+  /* Score UI */
   const renderScoreImages = (score) => {
     const padded = score.toString().padStart(5, "0");
     return padded
@@ -343,7 +358,7 @@ function SpaceInvaders({ onClose }) {
       ));
   };
 
-  // Lives UI
+  /* Lives UI */
   const renderLives = (lives) => {
     const livesStr = lives.toString().padStart(1, "0");
     const lifeIconKey = `${playerColor}Lives`;
@@ -407,7 +422,10 @@ function SpaceInvaders({ onClose }) {
     return () => clearInterval(interval);
   }, [score, displayedScore]);
 
-  /* Volume */
+  /***************************************************************
+   *                      useEFFECT: VOLUME                       *
+   ***************************************************************/
+
   // sfx
   useEffect(() => {
     sfxVolumeRef.current = sfxVolume;
@@ -451,6 +469,10 @@ function SpaceInvaders({ onClose }) {
     }
   }, [isGameRunning, gameOver, audioEnabled]);
 
+  /***************************************************************
+   *                      useEFFECT: SCORE                       *
+   ***************************************************************/
+
   /* Game Over - Score + Discount Code */
   useEffect(() => {
     if (gameOver && score > 0) {
@@ -477,20 +499,27 @@ function SpaceInvaders({ onClose }) {
     setTopScores(getBestScores());
   }, []);
 
-  /* Synchronize ref */
+  /****************************************************************
+   *                                                              *
+   *                                                              *
+   *                        < GAME LOGIC >                        *
+   *                                                              *
+   *                                                              *
+   ****************************************************************/
+
+  /* === SYNCHRO === */
   useEffect(() => {
     playerXRef.current = playerX;
     livesRef.current = lives;
   }, [playerX, lives]);
 
-  /* Main */
+  /* === MAIN === */
   useEffect(() => {
     if (!isGameRunning) return;
-    // player active
     isPlayerActiveRef.current = true;
     playerOpacityRef.current = 1;
 
-    // === INIT CANVAS ===
+    /* === INIT CANVAS === */
     document.body.style.overflow = "hidden";
     const canvas = canvasRef.current;
     const c = canvas.getContext("2d");
@@ -498,7 +527,7 @@ function SpaceInvaders({ onClose }) {
     canvas.width = canvasSize.width;
     canvas.height = canvasSize.height;
 
-    // === BACKGROUND ANIMATION ===
+    /* === BACKGROUND ANIMATION === */
     const spawnBackgroundParticles = () => {
       const particles = [];
       for (let i = 0; i < 100; i++) {
@@ -515,7 +544,7 @@ function SpaceInvaders({ onClose }) {
     };
     spawnBackgroundParticles();
 
-    // === LOAD IMAGES ===
+    /* === LOAD IMAGES === */
     playerImageRef.current.src = imgURL[playerColor];
     invaderImageRef.current.src = imgURL.invader;
     projectileImages.greenPlayer.src = imgURL.laserGreen;
@@ -527,13 +556,13 @@ function SpaceInvaders({ onClose }) {
     shieldImage.src = imgURL.shield;
     shieldImageRef.current.src = imgURL.shield;
 
-    // === INIT PLAYER ===
+    /* === INIT PLAYER === */
     const initialPlayerX = canvas.width / 2 - playerConfig.width / 2;
     setPlayerX(initialPlayerX);
     playerXRef.current = initialPlayerX;
     const playerY = canvas.height - playerConfig.height - 10;
 
-    // === PLAYER HITBOX ===
+    /* === PLAYER HITBOX === */
     const getPlayerHitbox = () => {
       // === SHIELD HITBOX ===
       if (isShieldActiveRef.current) {
@@ -556,7 +585,7 @@ function SpaceInvaders({ onClose }) {
       };
     };
 
-    // === ACTIVATE SHIELD ===
+    /* === ACTIVATE SHIELD === */
     const activateShield = () => {
       isShieldActiveRef.current = true;
 
@@ -569,7 +598,7 @@ function SpaceInvaders({ onClose }) {
       }, shieldConfig.time);
     };
 
-    // === INPUT HANDLING ===
+    /* === INPUT HANDLING === */
     const keysPressed = new Set();
     const handleKeyDown = (e) => {
       keysPressed.add(e.key);
@@ -580,7 +609,7 @@ function SpaceInvaders({ onClose }) {
     addEventListener("keydown", handleKeyDown);
     addEventListener("keyup", handleKeyUp);
 
-    // === INVADER GRID SPAWNING ===
+    /* === INVADER GRID SPAWNING === */
     const spawnInvaderGrid = () => {
       const cols = Math.floor(Math.random() * 10 + 5);
       const rows = Math.floor(Math.random() * 5 + 2);
@@ -617,10 +646,17 @@ function SpaceInvaders({ onClose }) {
       Math.random() * frameRate.invaderGrid + frameRate.invaderGrid
     );
 
-    // === GAME LOOP ===
+    /****************************************************************
+     *                                                              *
+     *                         < GAME LOOP >                        *
+     *                                                              *
+     ****************************************************************/
     const gameLoop = () => {
+      /***************************************************************
+       *                        SECTION: PLAYER                      *
+       ***************************************************************/
       if (isPlayerActiveRef.current) {
-        // === PLAYER MOVEMENT ===
+        /* === PLAYER MOVEMENT === */
         if (keysPressed.has("ArrowLeft")) {
           playerXRef.current = Math.max(
             playerXRef.current - playerConfig.speed,
@@ -637,7 +673,7 @@ function SpaceInvaders({ onClose }) {
           playerRotationRef.current *= 0.9;
         }
 
-        // === SHOOT PROJECTILES ===
+        /* === SHOOT PROJECTILES === */
         const now = Date.now();
         if (keysPressed.has(" ")) {
           if (now - lastShotTimeRef.current > projectileConfig.cooldown) {
@@ -657,7 +693,7 @@ function SpaceInvaders({ onClose }) {
         }
       }
 
-      // === FRAME CONTROL: SPAWN SHIELD ===
+      /* === FRAME CONTROL: SPAWN SHIELD === */
       if (frames % frameRate.shield === 0) {
         const x = Math.random() * (canvas.width - 40);
         const y = -40;
@@ -672,7 +708,7 @@ function SpaceInvaders({ onClose }) {
         });
       }
 
-      // === FRAME CONTROL: METEOR MOVEMENT ===
+      /* === FRAME CONTROL: METEOR MOVEMENT === */
       if (frames % frameRate.meteor === 0) {
         const types = ["big", "med", "small"];
         const type = types[Math.floor(Math.random() * types.length)];
@@ -694,7 +730,7 @@ function SpaceInvaders({ onClose }) {
         });
       }
 
-      // === INVADER GRIDS MOVEMENT ===
+      /* === INVADER GRIDS MOVEMENT === */
       invaderGridsRef.current.forEach((grid) => {
         grid.x += grid.speed * grid.direction;
 
@@ -722,7 +758,7 @@ function SpaceInvaders({ onClose }) {
       // === CLEAR CANVAS ===
       c.clearRect(0, 0, canvas.width, canvas.height);
 
-      // === BACKGROUND ANIMATION DRAW ===
+      /* === BACKGROUND ANIMATION DRAW === */
       backgroundParticlesRef.current.forEach((p) => {
         p.y += p.speedY;
 
@@ -741,7 +777,28 @@ function SpaceInvaders({ onClose }) {
         c.restore();
       });
 
-      // === UPDATE & DRAW INVADER PROJECTILES ===
+      /***************************************************************
+       *                   SECTION: UPDATE POSITION                  *
+       ***************************************************************/
+
+      /* === UPDATE POSITION: PLAYER PROJECTILES === */
+      projectilesRef.current = projectilesRef.current
+        .map((p) => {
+          const updated = { ...p, y: p.y - p.speed };
+          return updated;
+        })
+        .filter((p) => {
+          const isVisible = p.y + p.height > 0;
+          return isVisible;
+        });
+      projectilesRef.current.forEach((p) => {
+        const img = projectileImages[p.color];
+        if (img.complete) {
+          c.drawImage(img, p.x, p.y, p.width, p.height);
+        }
+      });
+
+      /* === UPDATE POSITION: INVADER PROJECTILES === */
       invaderProjectilesRef.current = invaderProjectilesRef.current
         .map((p) => ({
           ...p,
@@ -753,7 +810,7 @@ function SpaceInvaders({ onClose }) {
         c.fillRect(p.x, p.y, p.width, p.height);
       });
 
-      // === UPDATE & DRAW METEOR ===
+      /* === UPDATE POSITION: METEOR === */
       meteorsRef.current = meteorsRef.current
         .map((m) => ({ ...m, y: m.y + m.speed }))
         .filter((m) => m.y < canvas.height);
@@ -771,16 +828,19 @@ function SpaceInvaders({ onClose }) {
         c.restore();
       });
 
-      // === UPDATE & DRAW SHIELD ===
+      /* === UPDATE POSITION: SHIELD === */
       shieldPowerUpRef.current = shieldPowerUpRef.current
         .map((p) => ({ ...p, y: p.y + p.speed }))
         .filter((p) => p.y < canvas.height);
-
       shieldPowerUpRef.current.forEach((p) => {
         c.drawImage(p.image, p.x, p.y, p.width, p.height);
       });
 
-      // === CHECK COLLISION: PLAYER PROJECTILE → SHIELD ===
+      /***************************************************************
+       *                SECTION: COLLISION DETECTION                 *
+       ***************************************************************/
+
+      /* === COLLISION DETECTION: PLAYER PROJECTILE → SHIELD === */
       projectilesRef.current.forEach((proj, pIndex) => {
         shieldPowerUpRef.current.forEach((powerUp, sIndex) => {
           const hit =
@@ -797,7 +857,8 @@ function SpaceInvaders({ onClose }) {
           }
         });
       });
-      // === CHECK COLLISION: SHIELD → PLAYER ===
+
+      /* === COLLISION DETECTION: SHIELD → PLAYER === */
       shieldPowerUpRef.current.forEach((powerUp, sIndex) => {
         const hit =
           powerUp.x < playerXRef.current + playerConfig.width &&
@@ -812,7 +873,7 @@ function SpaceInvaders({ onClose }) {
         }
       });
 
-      // === CHECK COLLISION: INVADER PROJECTILE → PLAYER ===
+      /* === COLLISION DETECTION: INVADER PROJECTILE → PLAYER === */
       invaderProjectilesRef.current.forEach((p, index) => {
         const hitbox = getPlayerHitbox();
 
@@ -823,7 +884,7 @@ function SpaceInvaders({ onClose }) {
           p.y + p.height > hitbox.y;
 
         if (hit) {
-          // === CHECK COLLISION: INVADER PROJECTILE → SHIELD ===
+          // === COLLISION DETECTION: INVADER PROJECTILE → SHIELD ===
           if (isShieldActiveRef.current) {
             invaderProjectilesRef.current.splice(index, 1);
 
@@ -855,24 +916,7 @@ function SpaceInvaders({ onClose }) {
         }
       });
 
-      // === UPDATE & DRAW PLAYER PROJECTILES ===
-      projectilesRef.current = projectilesRef.current
-        .map((p) => {
-          const updated = { ...p, y: p.y - p.speed };
-          return updated;
-        })
-        .filter((p) => {
-          const isVisible = p.y + p.height > 0;
-          return isVisible;
-        });
-      projectilesRef.current.forEach((p) => {
-        const img = projectileImages[p.color];
-        if (img.complete) {
-          c.drawImage(img, p.x, p.y, p.width, p.height);
-        }
-      });
-
-      // === CHECK COLLISION: PLAYER PROJECTILE → INVADER ===
+      /* === COLLISION DETECTION: PLAYER PROJECTILE → INVADER === */
       projectilesRef.current.forEach((p, pIndex) => {
         invaderGridsRef.current.forEach((grid) => {
           for (let row = 0; row < grid.rows; row++) {
@@ -920,7 +964,7 @@ function SpaceInvaders({ onClose }) {
         }
       );
 
-      // === CHECK COLLISION: PLAYER PROJECTILE → METEOR ===
+      /* === COLLISION DETECTION: PLAYER PROJECTILE → METEOR === */
       projectilesRef.current.forEach((p, pIndex) => {
         meteorsRef.current.forEach((m, mIndex) => {
           const hit =
@@ -979,13 +1023,13 @@ function SpaceInvaders({ onClose }) {
                 m.y + m.height / 2,
                 meteorParticles[currentType]
               );
-
               playSound(soundURL.destroyMeteor, 0.4);
             }
           }
         });
       });
-      // === CHECK COLLISION: METEOR → PLAYER ===
+
+      /* === COLLISION DETECTION: METEOR → PLAYER === */
       meteorsRef.current.forEach((m, index) => {
         const hitbox = getPlayerHitbox();
 
@@ -996,7 +1040,7 @@ function SpaceInvaders({ onClose }) {
           m.y + m.height > hitbox.y;
 
         if (hit) {
-          // === CHECK COLLISION: METEOR → SHIELD ===
+          // === COLLISION DETECTION: METEOR → SHIELD ===
           if (isShieldActiveRef.current) {
             meteorsRef.current.splice(index, 1);
 
@@ -1035,7 +1079,11 @@ function SpaceInvaders({ onClose }) {
         }
       });
 
-      // === DRAW PLAYER ===
+      /***************************************************************
+       *                        SECTION: DRAW                        *
+       ***************************************************************/
+
+      /* === DRAW PLAYER === */
       c.save();
       c.globalAlpha = isPlayerActiveRef.current ? playerOpacityRef.current : 0;
       c.translate(
@@ -1066,7 +1114,7 @@ function SpaceInvaders({ onClose }) {
       }
       c.restore();
 
-      // === DRAW SHIELD ON PLAYER ===
+      /* === DRAW SHIELD ON PLAYER === */
       if (isShieldActiveRef.current && shieldImageRef.current.complete) {
         const shieldX =
           playerXRef.current + playerConfig.width / 2 - shieldConfig.width / 2;
@@ -1082,7 +1130,7 @@ function SpaceInvaders({ onClose }) {
         );
       }
 
-      // === DRAW INVADER GRIDS ===
+      /* === DRAW INVADER GRIDS === */
       invaderGridsRef.current.forEach((grid) => {
         for (let row = 0; row < grid.rows; row++) {
           for (let col = 0; col < grid.cols; col++) {
@@ -1106,7 +1154,12 @@ function SpaceInvaders({ onClose }) {
           }
         }
       });
-      // === FRAME CONTROL: NEW INVADER GRIDS SPAWN ===
+
+      /***************************************************************
+       *                   SECTION: FRAME CONTROL                    *
+       ***************************************************************/
+
+      /*  === FRAME CONTROL: NEW INVADER GRIDS SPAWN === */
       if (frames % randomInterval === 0) {
         spawnInvaderGrid();
         frames = 0;
@@ -1117,7 +1170,7 @@ function SpaceInvaders({ onClose }) {
 
       frames++;
 
-      // === FRAME CONTROL: INVADER SHOOTING ===
+      /* === FRAME CONTROL: INVADER SHOOTING === */
       if (frames % frameRate.invaderProjectile === 0) {
         invaderGridsRef.current.forEach((grid) => {
           const aliveInvaders = [];
@@ -1153,7 +1206,11 @@ function SpaceInvaders({ onClose }) {
         });
       }
 
-      // === PARTICLES UPDATE & DRAW ===
+      /***************************************************************
+       *                      SECTION: PARTICLES                     *
+       ***************************************************************/
+
+      /* === UPDATE: PARTICLES  === */
       particlesRef.current = particlesRef.current
         .map((p) => {
           return {
@@ -1178,6 +1235,12 @@ function SpaceInvaders({ onClose }) {
       animationIdRef.current = requestAnimationFrame(gameLoop);
     };
 
+    /****************************************************************
+     *                                                              *
+     *                        </ GAME LOOP >                        *
+     *                                                              *
+     ****************************************************************/
+
     // === NEXT FRAME ===
     animationIdRef.current = requestAnimationFrame(gameLoop);
 
@@ -1190,7 +1253,11 @@ function SpaceInvaders({ onClose }) {
     };
   }, [isGameRunning, playerColor]);
 
-  /* Start & Reset */
+  /***************************************************************
+   *                      SECTION: GAMEPLAY                      *
+   ***************************************************************/
+
+  /* === START & RESET === */
   const handleGameStart = () => {
     const randomTheme = themeURL[Math.floor(Math.random() * themeURL.length)];
     setCurrentTheme(randomTheme);
@@ -1218,7 +1285,7 @@ function SpaceInvaders({ onClose }) {
     setIsGameRunning(true);
   };
 
-  /* Game Over */
+  /* === GAME OVER === */
   const handleGameOver = () => {
     isPlayerActiveRef.current = false;
     playSound(soundURL.gameOver);
