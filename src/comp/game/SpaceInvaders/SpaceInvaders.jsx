@@ -153,7 +153,6 @@ function SpaceInvaders({ onClose }) {
   const shieldImage = new Image();
   const shieldImageRef = useRef(new Image());
   const shieldPowerUpRef = useRef([]);
-  const [isShieldActive, setIsShieldActive] = useState(false);
   const isShieldActiveRef = useRef(false);
   const shieldTimerRef = useRef(null);
   const shieldConfig = {
@@ -755,13 +754,11 @@ function SpaceInvaders({ onClose }) {
             projectilesRef.current.splice(pIndex, 1);
             shieldPowerUpRef.current.splice(sIndex, 1);
 
-            setIsShieldActive(true);
             isShieldActiveRef.current = true;
 
             if (shieldTimerRef.current) clearTimeout(shieldTimerRef.current);
 
             shieldTimerRef.current = setTimeout(() => {
-              setIsShieldActive(false);
               isShieldActiveRef.current = false;
             }, shieldConfig.time);
           }
@@ -778,13 +775,11 @@ function SpaceInvaders({ onClose }) {
         if (hit) {
           shieldPowerUpRef.current.splice(sIndex, 1);
 
-          setIsShieldActive(true);
           isShieldActiveRef.current = true;
 
           if (shieldTimerRef.current) clearTimeout(shieldTimerRef.current);
 
           shieldTimerRef.current = setTimeout(() => {
-            setIsShieldActive(false);
             isShieldActiveRef.current = false;
           }, shieldConfig.time);
         }
