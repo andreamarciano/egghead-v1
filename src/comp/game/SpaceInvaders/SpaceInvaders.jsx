@@ -151,7 +151,13 @@ function SpaceInvaders({ onClose }) {
   /* PowerUp */
   // Shield
   const shieldImage = new Image();
+  const shieldImageRef = useRef(new Image());
   const shieldPowerUpRef = useRef([]);
+  const [isShieldActive, setIsShieldActive] = useState(false);
+  const isShieldActiveRef = useRef(false);
+  const shieldTimerRef = useRef(null);
+  const shieldWidth = 144;
+  const shieldHeight = 137;
   /* Score */
   const [score, setScore] = useState(0);
   const scoreParams = {
@@ -249,6 +255,11 @@ function SpaceInvaders({ onClose }) {
       velocityRange: [1.5, 4],
     },
     small: { color: "#FFDB26", opacity: 0.4, count: 15 },
+  };
+  const shieldParticles = {
+    color: "#B5B0A8",
+    opacity: 0.5,
+    count: 100,
   };
   // Create Particles
   function createExplosion(
@@ -495,12 +506,26 @@ function SpaceInvaders({ onClose }) {
     meteorImages.med.src = imgURL.meteorMed;
     meteorImages.small.src = imgURL.meteorSmall;
     shieldImage.src = imgURL.shield;
+    shieldImageRef.current.src = imgURL.shield;
 
     // === INIT PLAYER ===
     const initialPlayerX = canvas.width / 2 - playerConfig.width / 2;
     setPlayerX(initialPlayerX);
     playerXRef.current = initialPlayerX;
     const playerY = canvas.height - playerConfig.height - 10;
+
+    // === SHIELD HITBOX ===
+    const getShieldHitbox = () => {
+      const shieldX =
+        playerXRef.current + playerConfig.width / 2 - shieldWidth / 2;
+      const shieldY = playerY + playerConfig.height / 2 - shieldHeight / 2;
+      return {
+        x: shieldX,
+        y: shieldY,
+        width: shieldWidth,
+        height: shieldHeight,
+      };
+    };
 
     // === INPUT HANDLING ===
     const keysPressed = new Set();
@@ -725,6 +750,16 @@ function SpaceInvaders({ onClose }) {
           if (hit) {
             projectilesRef.current.splice(pIndex, 1);
             shieldPowerUpRef.current.splice(sIndex, 1);
+
+            setIsShieldActive(true);
+            isShieldActiveRef.current = true;
+
+            if (shieldTimerRef.current) clearTimeout(shieldTimerRef.current);
+
+            shieldTimerRef.current = setTimeout(() => {
+              setIsShieldActive(false);
+              isShieldActiveRef.current = false;
+            }, 5000);
           }
         });
       });
@@ -738,18 +773,44 @@ function SpaceInvaders({ onClose }) {
 
         if (hit) {
           shieldPowerUpRef.current.splice(sIndex, 1);
+
+          setIsShieldActive(true);
+          isShieldActiveRef.current = true;
+
+          if (shieldTimerRef.current) clearTimeout(shieldTimerRef.current);
+
+          shieldTimerRef.current = setTimeout(() => {
+            setIsShieldActive(false);
+            isShieldActiveRef.current = false;
+          }, 5000);
         }
       });
 
       // === CHECK COLLISION: INVADER PROJECTILE → PLAYER ===
       invaderProjectilesRef.current.forEach((p, index) => {
+        const hitbox = isShieldActiveRef.current
+          ? getShieldHitbox()
+          : {
+              x: playerXRef.current,
+              y: playerY,
+              width: playerConfig.width,
+              height: playerConfig.height,
+            };
+
         const hit =
-          p.x < playerXRef.current + playerConfig.width &&
-          p.x + p.width > playerXRef.current &&
-          p.y < playerY + playerConfig.height &&
-          p.y + p.height > playerY;
+          p.x < hitbox.x + hitbox.width &&
+          p.x + p.width > hitbox.x &&
+          p.y < hitbox.y + hitbox.height &&
+          p.y + p.height > hitbox.y;
 
         if (hit) {
+          // === CHECK COLLISION: INVADER PROJECTILE → SHIELD ===
+          if (isShieldActiveRef.current) {
+            invaderProjectilesRef.current.splice(index, 1);
+            createExplosion(p.x, p.y, shieldParticles);
+            return;
+          }
+
           flashEffect(playerOpacityRef, {
             playerActive: isPlayerActiveRef,
           });
@@ -905,13 +966,33 @@ function SpaceInvaders({ onClose }) {
       });
       // === CHECK COLLISION: METEOR → PLAYER ===
       meteorsRef.current.forEach((m, index) => {
+        const hitbox = isShieldActiveRef.current
+          ? getShieldHitbox()
+          : {
+              x: playerXRef.current,
+              y: playerY,
+              width: playerConfig.width,
+              height: playerConfig.height,
+            };
+
         const hit =
-          m.x < playerXRef.current + playerConfig.width &&
-          m.x + m.width > playerXRef.current &&
-          m.y < playerY + playerConfig.height &&
-          m.y + m.height > playerY;
+          m.x < hitbox.x + hitbox.width &&
+          m.x + m.width > hitbox.x &&
+          m.y < hitbox.y + hitbox.height &&
+          m.y + m.height > hitbox.y;
 
         if (hit) {
+          // === CHECK COLLISION: METEOR → SHIELD ===
+          if (isShieldActiveRef.current) {
+            meteorsRef.current.splice(index, 1);
+            createExplosion(
+              m.x + m.width / 2,
+              m.y + m.height / 2,
+              shieldParticles
+            );
+            return;
+          }
+
           meteorsRef.current.splice(index, 1);
 
           flashEffect(playerOpacityRef, {
@@ -967,6 +1048,21 @@ function SpaceInvaders({ onClose }) {
         );
       }
       c.restore();
+
+      // === DRAW SHIELD ON PLAYER ===
+      if (isShieldActiveRef.current && shieldImageRef.current.complete) {
+        const shieldX =
+          playerXRef.current + playerConfig.width / 2 - shieldWidth / 2;
+        const shieldY = playerY + playerConfig.height / 2 - shieldHeight / 2;
+
+        c.drawImage(
+          shieldImageRef.current,
+          shieldX,
+          shieldY,
+          shieldWidth,
+          shieldHeight
+        );
+      }
 
       // === DRAW INVADER GRIDS ===
       invaderGridsRef.current.forEach((grid) => {
@@ -1088,6 +1184,7 @@ function SpaceInvaders({ onClose }) {
       invaderProjectilesRef.current = [];
       particlesRef.current = [];
       backgroundParticlesRef.current = [];
+      shieldPowerUpRef.current = [];
 
       playerXRef.current = canvasRef.current.width / 2 - playerConfig.width / 2;
       playerRotationRef.current = 0;
