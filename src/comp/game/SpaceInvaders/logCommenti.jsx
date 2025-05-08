@@ -38,16 +38,19 @@ const imgURL = {
 };
 
 /* Sounds */
-// sfx
-const laserSound = "/sounds/spaceInvaders/laser.mp3";
-const laserInvaderSound = "/sounds/spaceInvaders/laserInvader.mp3";
-const destroyInvaderSound = "/sounds/spaceInvaders/destroyInvader.mp3";
-const playerHitSound = "/sounds/spaceInvaders/playerHit.mp3";
-const destroyGridSound = "/sounds/spaceInvaders/destroyGrid.mp3";
-const destroyMeteorSound = "/sounds/spaceInvaders/destroyMeteor.mp3";
-const destroyMeteor2Sound = "/sounds/spaceInvaders/destroyMeteorSmall.mp3";
+const soundURL = {
+  // sfx
+  laser: "/sounds/spaceInvaders/laser.mp3",
+  laserInvader: "/sounds/spaceInvaders/laserInvader.mp3",
+  destroyInvader: "/sounds/spaceInvaders/destroyInvader.mp3",
+  playerHit: "/sounds/spaceInvaders/playerHit.mp3",
+  destroyGrid: "/sounds/spaceInvaders/destroyGrid.mp3",
+  destroyMeteor: "/sounds/spaceInvaders/destroyMeteor.mp3",
+  destroyMeteor2: "/sounds/spaceInvaders/destroyMeteorSmall.mp3",
+  // theme
+  gameOver: "/sounds/spaceInvaders/gameOver.mp3",
+};
 // theme
-const gameOverSound = "/sounds/spaceInvaders/gameOver.mp3";
 const themeURL = [
   "/sounds/spaceInvaders/spaceInvaders-theme1.mp3",
   "/sounds/spaceInvaders/spaceInvaders-theme2.mp3",
@@ -591,7 +594,7 @@ function SpaceInvaders({ onClose }) {
             // debug - projectile
             // console.log("new projectile:", newProjectile);
 
-            playLaserSound(laserSound);
+            playLaserSound(soundURL.laser);
           }
         }
       }
@@ -719,7 +722,7 @@ function SpaceInvaders({ onClose }) {
             playerActive: isPlayerActiveRef,
           });
 
-          playSound(playerHitSound, 0.7);
+          playSound(soundURL.playerHit, 0.7);
 
           // particles
           createExplosion(
@@ -793,7 +796,7 @@ function SpaceInvaders({ onClose }) {
                     invaderParticles
                   );
 
-                  playSound(destroyInvaderSound, 0.5);
+                  playSound(soundURL.destroyInvader, 0.5);
 
                   setScore((prevScore) => prevScore + scoreParams.single);
                   // debug - single invader score
@@ -818,7 +821,7 @@ function SpaceInvaders({ onClose }) {
             //   `Grid completely eliminated: index ${index}, position (${grid.x}, ${grid.y})`
             // );
 
-            playSound(destroyGridSound, 0.5);
+            playSound(soundURL.destroyGrid, 0.5);
             setScore((prevScore) => prevScore + scoreParams.grid);
             // debug - full grid score
             // console.log(`+${scoreParams.grid} points`);
@@ -852,7 +855,7 @@ function SpaceInvaders({ onClose }) {
                 meteorParticles[m.type]
               );
 
-              playSound(destroyMeteor2Sound, 0.4);
+              playSound(soundURL.destroyMeteor2, 0.4);
 
               setScore((prevScore) => {
                 const newScore = prevScore + scoreParams.meteorSmall;
@@ -905,7 +908,7 @@ function SpaceInvaders({ onClose }) {
                 meteorParticles[currentType]
               );
 
-              playSound(destroyMeteorSound, 0.4);
+              playSound(soundURL.destroyMeteor, 0.4);
             }
           }
         });
@@ -925,7 +928,7 @@ function SpaceInvaders({ onClose }) {
             playerActive: isPlayerActiveRef,
           });
 
-          playSound(playerHitSound, 0.7);
+          playSound(soundURL.playerHit, 0.7);
 
           createExplosion(
             playerXRef.current + playerConfig.width / 2,
@@ -1063,7 +1066,7 @@ function SpaceInvaders({ onClose }) {
               speed: invaderProjectileConfig.speed,
             });
 
-            playLaserSound(laserInvaderSound);
+            playLaserSound(soundURL.laserInvader);
           }
         });
       }
@@ -1137,7 +1140,7 @@ function SpaceInvaders({ onClose }) {
   /* Game Over */
   const handleGameOver = () => {
     isPlayerActiveRef.current = false;
-    playSound(gameOverSound);
+    playSound(soundURL.gameOver);
 
     setTimeout(() => {
       cancelAnimationFrame(animationIdRef.current);
