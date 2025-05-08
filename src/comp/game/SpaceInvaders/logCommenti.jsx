@@ -11,28 +11,28 @@ const imgURL = {
   bluePlayerLives: "/images/spaceInvaders/ship/playerLife1_blue.webp",
   redPlayerLives: "/images/spaceInvaders/ship/playerLife1_red.webp",
   // laser
-  laserGreen: "images/spaceInvaders/laser/laserGreen.webp",
-  laserBlue: "images/spaceInvaders/laser/laserBlue.webp",
-  laserRed: "images/spaceInvaders/laser/laserRed.webp",
+  laserGreen: "/images/spaceInvaders/laser/laserGreen.webp",
+  laserBlue: "/images/spaceInvaders/laser/laserBlue.webp",
+  laserRed: "/images/spaceInvaders/laser/laserRed.webp",
   // powerUp
-  shield: "images/spaceInvaders/powerUp/shield.webp",
+  shield: "/images/spaceInvaders/powerUp/shield.webp",
   // enemy
   invader: "/images/spaceInvaders/invader/invader.webp",
   meteorBig: "/images/spaceInvaders/invader/meteorbig.webp",
   meteorMed: "/images/spaceInvaders/invader/meteormed.webp",
   meteorSmall: "/images/spaceInvaders/invader/meteorsmall.webp",
   // numeral
-  n0: "images/spaceInvaders/numeral/numeral0.webp",
-  n1: "images/spaceInvaders/numeral/numeral1.webp",
-  n2: "images/spaceInvaders/numeral/numeral2.webp",
-  n3: "images/spaceInvaders/numeral/numeral3.webp",
-  n4: "images/spaceInvaders/numeral/numeral4.webp",
-  n5: "images/spaceInvaders/numeral/numeral5.webp",
-  n6: "images/spaceInvaders/numeral/numeral6.webp",
-  n7: "images/spaceInvaders/numeral/numeral7.webp",
-  n8: "images/spaceInvaders/numeral/numeral8.webp",
-  n9: "images/spaceInvaders/numeral/numeral9.webp",
-  nX: "images/spaceInvaders/numeral/numeralX.webp",
+  n0: "/images/spaceInvaders/numeral/numeral0.webp",
+  n1: "/images/spaceInvaders/numeral/numeral1.webp",
+  n2: "/images/spaceInvaders/numeral/numeral2.webp",
+  n3: "/images/spaceInvaders/numeral/numeral3.webp",
+  n4: "/images/spaceInvaders/numeral/numeral4.webp",
+  n5: "/images/spaceInvaders/numeral/numeral5.webp",
+  n6: "/images/spaceInvaders/numeral/numeral6.webp",
+  n7: "/images/spaceInvaders/numeral/numeral7.webp",
+  n8: "/images/spaceInvaders/numeral/numeral8.webp",
+  n9: "/images/spaceInvaders/numeral/numeral9.webp",
+  nX: "/images/spaceInvaders/numeral/numeralX.webp",
 };
 
 /* Sounds */
@@ -143,6 +143,10 @@ function SpaceInvaders({ onClose }) {
     med: new Image(),
     small: new Image(),
   };
+  /* PowerUp */
+  // Shield
+  const shieldImage = new Image();
+  const shieldPowerUpRef = useRef([]);
   /* Score */
   const [score, setScore] = useState(0);
   const scoreParams = {
@@ -495,6 +499,7 @@ function SpaceInvaders({ onClose }) {
     meteorImages.big.src = imgURL.meteorBig;
     meteorImages.med.src = imgURL.meteorMed;
     meteorImages.small.src = imgURL.meteorSmall;
+    shieldImage.src = imgURL.shield;
 
     // === INIT PLAYER ===
     const initialPlayerX = canvas.width / 2 - playerConfig.width / 2;
@@ -601,6 +606,21 @@ function SpaceInvaders({ onClose }) {
       //   console.log("Player inactive – movement and shooting disabled");
       // }
 
+      // === SHIELD FRAME CONTROL ===
+      if (frames % 100 === 0) {
+        const x = Math.random() * (canvas.width - 40);
+        const y = -40;
+
+        shieldPowerUpRef.current.push({
+          x,
+          y,
+          width: 40,
+          height: 40,
+          speed: 2,
+          image: shieldImage,
+        });
+      }
+
       // === METEOR MOVEMENT ===
       if (frames % meteorConfig.frameRate === 0) {
         const types = ["big", "med", "small"];
@@ -701,6 +721,52 @@ function SpaceInvaders({ onClose }) {
         // c.fillRect(m.x, m.y, m.width, m.height);
 
         c.restore();
+      });
+
+      // === UPDATE & DRAW SHIELD ===
+      shieldPowerUpRef.current = shieldPowerUpRef.current
+        .map((p) => ({ ...p, y: p.y + p.speed }))
+        .filter((p) => p.y < canvas.height);
+
+      shieldPowerUpRef.current.forEach((p) => {
+        c.drawImage(p.image, p.x, p.y, p.width, p.height);
+        // debug - hitbox shield
+        // c.fillStyle = "rgba(0, 0, 255, 0.2)";
+        // c.fillRect(p.x, p.y, p.width, p.height);
+      });
+
+      // === CHECK COLLISION: PLAYER PROJECTILE → SHIELD ===
+      projectilesRef.current.forEach((proj, pIndex) => {
+        shieldPowerUpRef.current.forEach((powerUp, sIndex) => {
+          const hit =
+            proj.x < powerUp.x + powerUp.width &&
+            proj.x + proj.width > powerUp.x &&
+            proj.y < powerUp.y + powerUp.height &&
+            proj.y + proj.height > powerUp.y;
+
+          if (hit) {
+            projectilesRef.current.splice(pIndex, 1);
+            shieldPowerUpRef.current.splice(sIndex, 1);
+
+            // debug - collect shield (projectile)
+            // console.log("collect shield (projectile)");
+          }
+        });
+      });
+      // === CHECK COLLISION: SHIELD → PLAYER ===
+      shieldPowerUpRef.current.forEach((powerUp, sIndex) => {
+        const hit =
+          powerUp.x < playerXRef.current + playerConfig.width &&
+          powerUp.x + powerUp.width > playerXRef.current &&
+          powerUp.y < playerY + playerConfig.height &&
+          powerUp.y + powerUp.height > playerY;
+
+        if (hit) {
+          shieldPowerUpRef.current.splice(sIndex, 1);
+
+          // debug - collect shield (collision)
+          // console.log("collect shield (collision)");
+        }
       });
 
       // === CHECK COLLISION: INVADER PROJECTILE → PLAYER ===
