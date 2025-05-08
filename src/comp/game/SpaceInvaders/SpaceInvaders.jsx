@@ -697,7 +697,7 @@ function SpaceInvaders({ onClose }) {
         c.restore();
       });
 
-      // === UPDATE & DRAW SHIELD POWERUP ===
+      // === UPDATE & DRAW SHIELD ===
       shieldPowerUpRef.current = shieldPowerUpRef.current
         .map((p) => ({ ...p, y: p.y + p.speed }))
         .filter((p) => p.y < canvas.height);
