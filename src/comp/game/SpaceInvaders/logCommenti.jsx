@@ -156,8 +156,11 @@ function SpaceInvaders({ onClose }) {
   const [isShieldActive, setIsShieldActive] = useState(false);
   const isShieldActiveRef = useRef(false);
   const shieldTimerRef = useRef(null);
-  const shieldWidth = 144;
-  const shieldHeight = 137;
+  const shieldConfig = {
+    width: 144,
+    height: 137,
+    time: 5000,
+  };
   /* Score */
   const [score, setScore] = useState(0);
   const scoreParams = {
@@ -527,13 +530,14 @@ function SpaceInvaders({ onClose }) {
     // === SHIELD HITBOX ===
     const getShieldHitbox = () => {
       const shieldX =
-        playerXRef.current + playerConfig.width / 2 - shieldWidth / 2;
-      const shieldY = playerY + playerConfig.height / 2 - shieldHeight / 2;
+        playerXRef.current + playerConfig.width / 2 - shieldConfig.width / 2;
+      const shieldY =
+        playerY + playerConfig.height / 2 - shieldConfig.height / 2;
       return {
         x: shieldX,
         y: shieldY,
-        width: shieldWidth,
-        height: shieldHeight,
+        width: shieldConfig.width,
+        height: shieldConfig.height,
       };
     };
 
@@ -792,7 +796,7 @@ function SpaceInvaders({ onClose }) {
               isShieldActiveRef.current = false;
               // debug - shield end
               // console.log("shield end");
-            }, 5000);
+            }, shieldConfig.time);
           }
         });
       });
@@ -817,7 +821,7 @@ function SpaceInvaders({ onClose }) {
             isShieldActiveRef.current = false;
             // debug - shield end
             // console.log("shield end");
-          }, 5000);
+          }, shieldConfig.time);
         }
       });
 
@@ -1156,22 +1160,23 @@ function SpaceInvaders({ onClose }) {
       // === DRAW SHIELD ON PLAYER ===
       if (isShieldActiveRef.current && shieldImageRef.current.complete) {
         const shieldX =
-          playerXRef.current + playerConfig.width / 2 - shieldWidth / 2;
-        const shieldY = playerY + playerConfig.height / 2 - shieldHeight / 2;
+          playerXRef.current + playerConfig.width / 2 - shieldConfig.width / 2;
+        const shieldY =
+          playerY + playerConfig.height / 2 - shieldConfig.height / 2;
 
         c.drawImage(
           shieldImageRef.current,
           shieldX,
           shieldY,
-          shieldWidth,
-          shieldHeight
+          shieldConfig.width,
+          shieldConfig.height
         );
 
         // debug - shield hitbox
         // c.save();
         // c.strokeStyle = "rgba(0, 255, 255, 0.7)";
         // c.lineWidth = 2;
-        // c.strokeRect(shieldX, shieldY, shieldWidth, shieldHeight);
+        // c.strokeRect(shieldX, shieldY, shieldConfig.width, shieldConfig.height);
         // c.restore();
       }
 
