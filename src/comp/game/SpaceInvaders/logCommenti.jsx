@@ -45,6 +45,9 @@ const soundURL = {
   destroyGrid: "/sounds/spaceInvaders/destroyGrid.mp3",
   destroyMeteor: "/sounds/spaceInvaders/destroyMeteor.mp3",
   destroyMeteor2: "/sounds/spaceInvaders/destroyMeteorSmall.mp3",
+  shieldUp: "/sounds/spaceInvaders/shieldUp.mp3",
+  shieldDown: "/sounds/spaceInvaders/shieldDown.mp3",
+  shieldBlock: "/sounds/spaceInvaders/shieldBlock.mp3",
   // theme
   gameOver: "/sounds/spaceInvaders/gameOver.mp3",
 };
@@ -552,11 +555,15 @@ function SpaceInvaders({ onClose }) {
     // === ACTIVATE SHIELD ===
     const activateShield = () => {
       isShieldActiveRef.current = true;
+
+      playSound(soundURL.shieldUp, 0.4);
+
       if (shieldTimerRef.current) clearTimeout(shieldTimerRef.current);
       shieldTimerRef.current = setTimeout(() => {
         isShieldActiveRef.current = false;
         // debug - shield end
         // console.log("shield end");
+        playSound(soundURL.shieldDown);
       }, shieldConfig.time);
     };
 
@@ -840,9 +847,12 @@ function SpaceInvaders({ onClose }) {
           // === CHECK COLLISION: INVADER PROJECTILE → SHIELD ===
           if (isShieldActiveRef.current) {
             invaderProjectilesRef.current.splice(index, 1);
+
             createExplosion(p.x, p.y, shieldParticles);
+            playSound(soundURL.shieldBlock, 0.5);
             // debug - shield protection
             // console.log("invader projectile destroyed by shield");
+
             return;
           }
 
@@ -855,7 +865,6 @@ function SpaceInvaders({ onClose }) {
           });
 
           playSound(soundURL.playerHit, 0.7);
-
           // particles
           createExplosion(
             playerXRef.current + playerConfig.width / 2,
@@ -1059,6 +1068,8 @@ function SpaceInvaders({ onClose }) {
           // === CHECK COLLISION: METEOR → SHIELD ===
           if (isShieldActiveRef.current) {
             meteorsRef.current.splice(index, 1);
+
+            playSound(soundURL.shieldBlock, 0.5);
             createExplosion(
               m.x + m.width / 2,
               m.y + m.height / 2,
@@ -1066,6 +1077,7 @@ function SpaceInvaders({ onClose }) {
             );
             // debug - shield protection
             // console.log("meteor destroyed by shield");
+
             return;
           }
 

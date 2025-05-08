@@ -146,4 +146,12 @@
   By **freesound_community**
   Downloaded on May 8th, 2025 from [pixabay](https://pixabay.com/users/freesound_community-46691455/)
 
+- **Retro video game sfx - Reflect**
+  By **OwlStorm**
+  Downloaded on May 8th, 2025 from [freesound](https://freesound.org/people/OwlStorm/)
+
+- **Block - Rpg 1**
+  By **colorsCrimsonTears**
+  Downloaded on May 8th, 2025 from [freesound](https://freesound.org/people/colorsCrimsonTears/)
+
 > All assets, images, and sounds used are either in the public domain (CC0) or free to use under their respective licenses. Where possible, authors have been credited.
