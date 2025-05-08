@@ -138,4 +138,12 @@
   By **Universfield**
   Downloaded on May 6th, 2025 from [pixabay](https://pixabay.com/users/universfield-28281460/)
 
-> All assets used are either in the public domain (CC0) or free to use under their respective licenses. Where possible, authors have been credited.
+- **Small Rock Break**
+  By **LordSonny**
+  Downloaded on May 8th, 2025 from [pixabay](https://pixabay.com/users/lordsonny-38439655/)
+
+- **Rock destroy**
+  By **freesound_community**
+  Downloaded on May 8th, 2025 from [pixabay](https://pixabay.com/users/freesound_community-46691455/)
+
+> All assets, images, and sounds used are either in the public domain (CC0) or free to use under their respective licenses. Where possible, authors have been credited.

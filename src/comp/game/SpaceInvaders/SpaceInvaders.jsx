@@ -41,13 +41,13 @@ const imgURL = {
 // sfx
 const laserSound = "/sounds/spaceInvaders/laser.mp3";
 const laserInvaderSound = "/sounds/spaceInvaders/laserInvader.mp3";
-const destroyInvaderSound = new Audio(
-  "/sounds/spaceInvaders/destroyInvader.mp3"
-);
-const playerHitSound = new Audio("/sounds/spaceInvaders/playerHit.mp3");
-const destroyGridSound = new Audio("/sounds/spaceInvaders/destroyGrid.mp3");
+const destroyInvaderSound = "/sounds/spaceInvaders/destroyInvader.mp3";
+const playerHitSound = "/sounds/spaceInvaders/playerHit.mp3";
+const destroyGridSound = "/sounds/spaceInvaders/destroyGrid.mp3";
+const destroyMeteorSound = "/sounds/spaceInvaders/destroyMeteor.mp3";
+const destroyMeteor2Sound = "/sounds/spaceInvaders/destroyMeteorSmall.mp3";
 // theme
-const gameOverSound = new Audio("/sounds/spaceInvaders/gameOver.mp3");
+const gameOverSound = "/sounds/spaceInvaders/gameOver.mp3";
 const themeURL = [
   "/sounds/spaceInvaders/spaceInvaders-theme1.mp3",
   "/sounds/spaceInvaders/spaceInvaders-theme2.mp3",
@@ -55,6 +55,7 @@ const themeURL = [
   "/sounds/spaceInvaders/spaceInvaders-theme4.mp3",
 ];
 
+/* MAIN */
 function SpaceInvaders({ onClose }) {
   /* Canvas */
   const canvasRef = useRef(null);
@@ -192,8 +193,9 @@ function SpaceInvaders({ onClose }) {
   const laserVolumeRef = useRef(laserVolume);
   const audioEnabledRef = useRef(audioEnabled);
   // play sfx
-  const playSound = (sound, volumeMultiplier = 1) => {
-    if (audioEnabledRef.current && sound) {
+  const playSound = (url, volumeMultiplier = 1) => {
+    if (audioEnabledRef.current && url) {
+      const sound = new Audio(url);
       sound.volume = sfxVolumeRef.current * volumeMultiplier;
       sound.currentTime = 0;
       sound.play().catch((e) => console.warn("Play error:", e));
@@ -794,7 +796,7 @@ function SpaceInvaders({ onClose }) {
                 meteorParticles[m.type]
               );
 
-              playSound(destroyInvaderSound); // small - cambia suono
+              playSound(destroyMeteor2Sound, 0.4);
 
               setScore((prevScore) => {
                 const newScore = prevScore + scoreParams.meteorSmall;
@@ -830,7 +832,8 @@ function SpaceInvaders({ onClose }) {
                 m.y + m.height / 2,
                 meteorParticles[currentType]
               );
-              playSound(destroyGridSound); // big & med - cambia suono
+
+              playSound(destroyMeteorSound, 0.4);
             }
           }
         });
