@@ -100,6 +100,13 @@ function SpaceInvaders({ onClose }) {
     height: 20,
     speed: 7,
   };
+  /* Frame Rate */
+  const frameRate = {
+    invaderProjectile: 100,
+    invaderGrid: 500, //400
+    meteor: 500,
+    shield: 100, // 800
+  };
   /* Invader */
   const invaderImageRef = useRef(new Image());
   const invaderScale = 1;
@@ -116,7 +123,6 @@ function SpaceInvaders({ onClose }) {
     width: 4,
     height: 12,
     speed: 4,
-    frame: 100,
   };
   /* Meteor */
   const meteorsRef = useRef([]);
@@ -136,7 +142,6 @@ function SpaceInvaders({ onClose }) {
       med: 43,
       small: 28,
     },
-    frameRate: 400,
   };
   const meteorImages = {
     big: new Image(),
@@ -538,10 +543,12 @@ function SpaceInvaders({ onClose }) {
         invaders: Array.from({ length: rows }, () => Array(cols).fill(true)),
       });
     };
-    // === INVADER GRID FRAME CONTROL ===
+    // === FRAME CONTROL: INVADER GRID SPAWN ===
     spawnInvaderGrid();
     let frames = 1;
-    let randomInterval = Math.floor(Math.random() * 500 + 500);
+    let randomInterval = Math.floor(
+      Math.random() * frameRate.invaderGrid + frameRate.invaderGrid
+    );
 
     // === GAME LOOP ===
     const gameLoop = () => {
@@ -583,8 +590,8 @@ function SpaceInvaders({ onClose }) {
         }
       }
 
-      // === SHIELD FRAME CONTROL ===
-      if (frames % 100 === 0) {
+      // === FRAME CONTROL: SPAWN SHIELD ===
+      if (frames % frameRate.shield === 0) {
         const x = Math.random() * (canvas.width - 40);
         const y = -40;
 
@@ -598,8 +605,8 @@ function SpaceInvaders({ onClose }) {
         });
       }
 
-      // === METEOR MOVEMENT ===
-      if (frames % meteorConfig.frameRate === 0) {
+      // === FRAME CONTROL: METEOR MOVEMENT ===
+      if (frames % frameRate.meteor === 0) {
         const types = ["big", "med", "small"];
         const type = types[Math.floor(Math.random() * types.length)];
 
@@ -985,17 +992,19 @@ function SpaceInvaders({ onClose }) {
           }
         }
       });
-      // === SPAWN NEW INVADER GRIDS ===
+      // === FRAME CONTROL: NEW INVADER GRIDS SPAWN ===
       if (frames % randomInterval === 0) {
         spawnInvaderGrid();
         frames = 0;
-        randomInterval = Math.floor(Math.random() * 500 + 500);
+        randomInterval = Math.floor(
+          Math.random() * frameRate.invaderGrid + frameRate.invaderGrid
+        );
       }
 
       frames++;
 
-      // === INVADER SHOOTING ===
-      if (frames % invaderProjectileConfig.frame === 0) {
+      // === FRAME CONTROL: INVADER SHOOTING ===
+      if (frames % frameRate.invaderProjectile === 0) {
         invaderGridsRef.current.forEach((grid) => {
           const aliveInvaders = [];
           for (let row = 0; row < grid.rows; row++) {
