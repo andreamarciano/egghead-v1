@@ -3,25 +3,25 @@ import "./SpaceInvaders.css";
 
 /* Images */
 const imgURL = {
-  // player
+  // Player
   greenPlayer: "/images/spaceInvaders/ship/playerShip1_green.webp",
   bluePlayer: "/images/spaceInvaders/ship/playerShip1_blue.webp",
   redPlayer: "/images/spaceInvaders/ship/playerShip1_red.webp",
   greenPlayerLives: "/images/spaceInvaders/ship/playerLife1_green.webp",
   bluePlayerLives: "/images/spaceInvaders/ship/playerLife1_blue.webp",
   redPlayerLives: "/images/spaceInvaders/ship/playerLife1_red.webp",
-  // laser
+  // Laser
   laserGreen: "/images/spaceInvaders/laser/laserGreen.webp",
   laserBlue: "/images/spaceInvaders/laser/laserBlue.webp",
   laserRed: "/images/spaceInvaders/laser/laserRed.webp",
-  // powerUp
+  // Power Up
   shield: "/images/spaceInvaders/powerUp/shield.webp",
-  // enemy
+  // Enemy
   invader: "/images/spaceInvaders/invader/invader.webp",
   meteorBig: "/images/spaceInvaders/invader/meteorbig.webp",
   meteorMed: "/images/spaceInvaders/invader/meteormed.webp",
   meteorSmall: "/images/spaceInvaders/invader/meteorsmall.webp",
-  // numeral
+  // Numeral
   n0: "/images/spaceInvaders/numeral/numeral0.webp",
   n1: "/images/spaceInvaders/numeral/numeral1.webp",
   n2: "/images/spaceInvaders/numeral/numeral2.webp",
@@ -37,26 +37,28 @@ const imgURL = {
 
 /* Sounds */
 const soundURL = {
-  // sfx
-  laser: "/sounds/spaceInvaders/laser.mp3",
-  laserInvader: "/sounds/spaceInvaders/laserInvader.mp3",
-  destroyInvader: "/sounds/spaceInvaders/destroyInvader.mp3",
-  playerHit: "/sounds/spaceInvaders/playerHit.mp3",
-  destroyGrid: "/sounds/spaceInvaders/destroyGrid.mp3",
-  destroyMeteor: "/sounds/spaceInvaders/destroyMeteor.mp3",
-  destroyMeteor2: "/sounds/spaceInvaders/destroyMeteorSmall.mp3",
-  shieldUp: "/sounds/spaceInvaders/shieldUp.mp3",
-  shieldDown: "/sounds/spaceInvaders/shieldDown.mp3",
-  shieldBlock: "/sounds/spaceInvaders/shieldBlock.mp3",
-  // theme
-  gameOver: "/sounds/spaceInvaders/gameOver.mp3",
+  // Laser
+  laser: "/sounds/spaceInvaders/laser/laser.mp3",
+  laserInvader: "/sounds/spaceInvaders/laser/laserInvader.mp3",
+  // Destroy
+  playerHit: "/sounds/spaceInvaders/destroy/playerHit.mp3",
+  destroyInvader: "/sounds/spaceInvaders/destroy/destroyInvader.mp3",
+  destroyGrid: "/sounds/spaceInvaders/destroy/destroyGrid.mp3",
+  destroyMeteor: "/sounds/spaceInvaders/destroy/destroyMeteor.mp3",
+  destroyMeteor2: "/sounds/spaceInvaders/destroy/destroyMeteorSmall.mp3",
+  // Shield
+  shieldUp: "/sounds/spaceInvaders/shield/shieldUp.mp3",
+  shieldDown: "/sounds/spaceInvaders/shield/shieldDown.mp3",
+  shieldBlock: "/sounds/spaceInvaders/shield/shieldBlock.mp3",
+  // Gameplay
+  gameOver: "/sounds/spaceInvaders/gameplay/gameOver.mp3",
 };
-// theme
+// Theme
 const themeURL = [
-  "/sounds/spaceInvaders/spaceInvaders-theme1.mp3",
-  "/sounds/spaceInvaders/spaceInvaders-theme2.mp3",
-  "/sounds/spaceInvaders/spaceInvaders-theme3.mp3",
-  "/sounds/spaceInvaders/spaceInvaders-theme4.mp3",
+  "/sounds/spaceInvaders/theme/theme1.mp3",
+  "/sounds/spaceInvaders/theme/theme2.mp3",
+  "/sounds/spaceInvaders/theme/theme3.mp3",
+  "/sounds/spaceInvaders/theme/theme4.mp3",
 ];
 
 /* MAIN */
@@ -67,10 +69,12 @@ function SpaceInvaders({ onClose }) {
     width: 1260,
     height: 690,
   };
+
   /* Start Game */
   const [isGameRunning, setIsGameRunning] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const animationIdRef = useRef(null);
+
   /* Player */
   const playerImageRef = useRef(new Image());
   const playerScale = 0.5;
@@ -103,15 +107,18 @@ function SpaceInvaders({ onClose }) {
     height: 20,
     speed: 7,
   };
+
   /* Frame Rate */
   const frameRate = {
     invaderProjectile: 100,
-    invaderGrid: 500, //400
+    invaderGrid: 500,
     meteor: 500,
-    shield: 100, // 800
+    shield: 800,
   };
+
   /* Invader */
   const invaderImageRef = useRef(new Image());
+  const invaderGridsRef = useRef([]);
   const invaderScale = 1;
   const invaderConfig = {
     width: 30 * invaderScale,
@@ -119,14 +126,14 @@ function SpaceInvaders({ onClose }) {
     maxSpeed: 3,
     minSpeed: 2,
   };
-  const invaderGridsRef = useRef([]);
-  /* Invader Projectile */
+  // Invader Projectile
   const invaderProjectilesRef = useRef([]);
   const invaderProjectileConfig = {
     width: 4,
     height: 12,
     speed: 4,
   };
+
   /* Meteor */
   const meteorsRef = useRef([]);
   const meteorConfig = {
@@ -151,6 +158,7 @@ function SpaceInvaders({ onClose }) {
     med: new Image(),
     small: new Image(),
   };
+
   /* PowerUp */
   // Shield
   const shieldImage = new Image();
@@ -161,8 +169,9 @@ function SpaceInvaders({ onClose }) {
   const shieldConfig = {
     width: 144,
     height: 137,
-    time: 5000,
+    time: 8000,
   };
+
   /* Score */
   const [score, setScore] = useState(0);
   const scoreParams = {
@@ -187,7 +196,9 @@ function SpaceInvaders({ onClose }) {
     localStorage.setItem(SCORE_KEY, JSON.stringify(sorted));
     setTopScores(sorted);
   };
+
   /* Menu */
+  // Color Pick
   const [playerColor, setPlayerColor] = useState("greenPlayer");
   const [selectedColor, setSelectedColor] = useState(null);
   const handleColorChange = (color) => {
@@ -199,9 +210,11 @@ function SpaceInvaders({ onClose }) {
     bluePlayer: "border-blue-500",
     redPlayer: "border-red-500",
   };
+  // Discount Code
   const DISCOUNT_CODE = "INVADER5";
   const SCORE_THRESHOLD = 10000;
   const [hasUnlockedDiscount, setHasUnlockedDiscount] = useState(false);
+
   /* Sound */
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [musicVolume, setMusicVolume] = useState(0.4);
@@ -231,6 +244,7 @@ function SpaceInvaders({ onClose }) {
       laser.play().catch((e) => console.warn("Play error:", e));
     }
   };
+
   /* Particles */
   const particlesRef = useRef([]);
   const backgroundParticlesRef = useRef([]);
