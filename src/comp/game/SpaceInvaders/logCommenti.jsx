@@ -14,10 +14,8 @@ const imgURL = {
   laserGreen: "images/spaceInvaders/laser/laserGreen.webp",
   laserBlue: "images/spaceInvaders/laser/laserBlue.webp",
   laserRed: "images/spaceInvaders/laser/laserRed.webp",
-  // shield
-  shield1: "images/spaceInvaders/shield/shield1.webp",
-  shield2: "images/spaceInvaders/shield/shield2.webp",
-  shield3: "images/spaceInvaders/shield/shield3.webp",
+  // powerUp
+  shield: "images/spaceInvaders/powerUp/shield.webp",
   // enemy
   invader: "/images/spaceInvaders/invader/invader.webp",
   meteorBig: "/images/spaceInvaders/invader/meteorbig.webp",
