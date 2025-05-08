@@ -154,4 +154,24 @@
   By **colorsCrimsonTears**
   Downloaded on May 8th, 2025 from [freesound](https://freesound.org/people/colorsCrimsonTears/)
 
-> All assets, images, and sounds used are either in the public domain (CC0) or free to use under their respective licenses. Where possible, authors have been credited.
+> All above assets, images, and sounds used are either in the public domain (CC0) or free to use under their respective licenses. Where possible, authors have been credited.
+
+## Suno AI [suno] (https://suno.com/)
+
+Music Generated with Suno AI
+Some background music tracks in this project were generated using Suno AI under a free (non-commercial) account.
+
+Tracks:
+
+- public -> sounds -> connect4 -> connect4-theme.mp3
+- public -> sounds -> flower -> flower-theme.mp3
+- public -> sounds -> maze -> maze-theme.mp3
+- public -> sounds -> order -> order-theme.mp3
+- public -> sounds -> tris -> tris-theme.mp3
+- public -> sounds -> spaceInvaders -> theme -> theme1.mp3
+- public -> sounds -> spaceInvaders -> theme -> theme2.mp3
+- public -> sounds -> spaceInvaders -> theme -> theme3.mp3
+- public -> sounds -> spaceInvaders -> theme -> theme4.mp3
+
+⚠️ These tracks are for personal, non-commercial use only. Redistribution or commercial use of these audio files is not permitted under the current license.
+If you wish to reuse or adapt these tracks, please refer to Suno AI’s terms of use and generate your own copies via their platform.
