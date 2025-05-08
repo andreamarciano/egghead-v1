@@ -539,6 +539,16 @@ function SpaceInvaders({ onClose }) {
         height: shieldConfig.height,
       };
     };
+    // === ACTIVATE SHIELD ===
+    const activateShield = () => {
+      isShieldActiveRef.current = true;
+      if (shieldTimerRef.current) clearTimeout(shieldTimerRef.current);
+      shieldTimerRef.current = setTimeout(() => {
+        isShieldActiveRef.current = false;
+        // debug - shield end
+        // console.log("shield end");
+      }, shieldConfig.time);
+    };
 
     // === INPUT HANDLING ===
     const keysPressed = new Set(); // track keystrokes
@@ -785,15 +795,7 @@ function SpaceInvaders({ onClose }) {
 
             // debug - collect shield (projectile)
             // console.log("collect shield (projectile)");
-            isShieldActiveRef.current = true;
-
-            if (shieldTimerRef.current) clearTimeout(shieldTimerRef.current);
-
-            shieldTimerRef.current = setTimeout(() => {
-              isShieldActiveRef.current = false;
-              // debug - shield end
-              // console.log("shield end");
-            }, shieldConfig.time);
+            activateShield();
           }
         });
       });
@@ -810,13 +812,7 @@ function SpaceInvaders({ onClose }) {
 
           // debug - collect shield (collision)
           // console.log("collect shield (collision)");
-          isShieldActiveRef.current = true;
-
-          shieldTimerRef.current = setTimeout(() => {
-            isShieldActiveRef.current = false;
-            // debug - shield end
-            // console.log("shield end");
-          }, shieldConfig.time);
+          activateShield();
         }
       });
 

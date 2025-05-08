@@ -529,6 +529,14 @@ function SpaceInvaders({ onClose }) {
         height: shieldConfig.height,
       };
     };
+    // === ACTIVATE SHIELD ===
+    const activateShield = () => {
+      isShieldActiveRef.current = true;
+      if (shieldTimerRef.current) clearTimeout(shieldTimerRef.current);
+      shieldTimerRef.current = setTimeout(() => {
+        isShieldActiveRef.current = false;
+      }, shieldConfig.time);
+    };
 
     // === INPUT HANDLING ===
     const keysPressed = new Set();
@@ -754,13 +762,7 @@ function SpaceInvaders({ onClose }) {
             projectilesRef.current.splice(pIndex, 1);
             shieldPowerUpRef.current.splice(sIndex, 1);
 
-            isShieldActiveRef.current = true;
-
-            if (shieldTimerRef.current) clearTimeout(shieldTimerRef.current);
-
-            shieldTimerRef.current = setTimeout(() => {
-              isShieldActiveRef.current = false;
-            }, shieldConfig.time);
+            activateShield();
           }
         });
       });
@@ -775,13 +777,7 @@ function SpaceInvaders({ onClose }) {
         if (hit) {
           shieldPowerUpRef.current.splice(sIndex, 1);
 
-          isShieldActiveRef.current = true;
-
-          if (shieldTimerRef.current) clearTimeout(shieldTimerRef.current);
-
-          shieldTimerRef.current = setTimeout(() => {
-            isShieldActiveRef.current = false;
-          }, shieldConfig.time);
+          activateShield();
         }
       });
 
