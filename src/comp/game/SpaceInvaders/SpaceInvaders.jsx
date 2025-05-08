@@ -677,7 +677,7 @@ function SpaceInvaders({ onClose }) {
         c.restore();
       });
 
-      // === CHECK COLLISION INVADER PROJECTILE-PLAYER ===
+      // === CHECK COLLISION: INVADER PROJECTILE → PLAYER ===
       invaderProjectilesRef.current.forEach((p, index) => {
         const hit =
           p.x < playerXRef.current + playerConfig.width &&
@@ -726,7 +726,7 @@ function SpaceInvaders({ onClose }) {
         }
       });
 
-      // === CHECK PLAYER PROJECTILE-INVADER COLLISION ===
+      // === CHECK COLLISION: PLAYER PROJECTILE → INVADER ===
       projectilesRef.current.forEach((p, pIndex) => {
         invaderGridsRef.current.forEach((grid) => {
           for (let row = 0; row < grid.rows; row++) {
@@ -774,7 +774,7 @@ function SpaceInvaders({ onClose }) {
         }
       );
 
-      // === CHECK PLAYER PROJECTILE-METEOR COLLISION ===
+      // === CHECK COLLISION: PLAYER PROJECTILE → METEOR ===
       projectilesRef.current.forEach((p, pIndex) => {
         meteorsRef.current.forEach((m, mIndex) => {
           const hit =
@@ -839,7 +839,7 @@ function SpaceInvaders({ onClose }) {
           }
         });
       });
-      // === CHECK METEOR-PLAYER COLLISION ===
+      // === CHECK COLLISION: METEOR → PLAYER ===
       meteorsRef.current.forEach((m, index) => {
         const hit =
           m.x < playerXRef.current + playerConfig.width &&
