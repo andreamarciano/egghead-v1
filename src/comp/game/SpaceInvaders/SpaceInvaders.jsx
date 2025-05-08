@@ -21,6 +21,7 @@ const imgURL = {
   meteorBig: "/images/spaceInvaders/invader/meteorbig.webp",
   meteorMed: "/images/spaceInvaders/invader/meteormed.webp",
   meteorSmall: "/images/spaceInvaders/invader/meteorsmall.webp",
+  follower: "/images/spaceInvaders/invader/follower.webp",
   // Numeral
   n0: "/images/spaceInvaders/numeral/numeral0.webp",
   n1: "/images/spaceInvaders/numeral/numeral1.webp",
