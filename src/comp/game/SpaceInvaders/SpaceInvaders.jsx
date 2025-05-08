@@ -516,19 +516,29 @@ function SpaceInvaders({ onClose }) {
     playerXRef.current = initialPlayerX;
     const playerY = canvas.height - playerConfig.height - 10;
 
-    // === SHIELD HITBOX ===
-    const getShieldHitbox = () => {
-      const shieldX =
-        playerXRef.current + playerConfig.width / 2 - shieldConfig.width / 2;
-      const shieldY =
-        playerY + playerConfig.height / 2 - shieldConfig.height / 2;
+    // === PLAYER HITBOX ===
+    const getPlayerHitbox = () => {
+      // === SHIELD HITBOX ===
+      if (isShieldActiveRef.current) {
+        const x =
+          playerXRef.current + playerConfig.width / 2 - shieldConfig.width / 2;
+        const y = playerY + playerConfig.height / 2 - shieldConfig.height / 2;
+        return {
+          x,
+          y,
+          width: shieldConfig.width,
+          height: shieldConfig.height,
+        };
+      }
+
       return {
-        x: shieldX,
-        y: shieldY,
-        width: shieldConfig.width,
-        height: shieldConfig.height,
+        x: playerXRef.current,
+        y: playerY,
+        width: playerConfig.width,
+        height: playerConfig.height,
       };
     };
+
     // === ACTIVATE SHIELD ===
     const activateShield = () => {
       isShieldActiveRef.current = true;
@@ -783,14 +793,7 @@ function SpaceInvaders({ onClose }) {
 
       // === CHECK COLLISION: INVADER PROJECTILE → PLAYER ===
       invaderProjectilesRef.current.forEach((p, index) => {
-        const hitbox = isShieldActiveRef.current
-          ? getShieldHitbox()
-          : {
-              x: playerXRef.current,
-              y: playerY,
-              width: playerConfig.width,
-              height: playerConfig.height,
-            };
+        const hitbox = getPlayerHitbox();
 
         const hit =
           p.x < hitbox.x + hitbox.width &&
@@ -961,14 +964,7 @@ function SpaceInvaders({ onClose }) {
       });
       // === CHECK COLLISION: METEOR → PLAYER ===
       meteorsRef.current.forEach((m, index) => {
-        const hitbox = isShieldActiveRef.current
-          ? getShieldHitbox()
-          : {
-              x: playerXRef.current,
-              y: playerY,
-              width: playerConfig.width,
-              height: playerConfig.height,
-            };
+        const hitbox = getPlayerHitbox();
 
         const hit =
           m.x < hitbox.x + hitbox.width &&
