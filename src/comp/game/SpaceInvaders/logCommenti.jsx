@@ -41,6 +41,8 @@ const soundURL = {
   // Laser
   laser: "/sounds/spaceInvaders/laser/laser.mp3",
   laserInvader: "/sounds/spaceInvaders/laser/laserInvader.mp3",
+  beamCharge: "/sounds/spaceInvaders/laser/beamCharge.mp3",
+  beamActive: "/sounds/spaceInvaders/laser/beamActive.mp3",
   // Destroy
   playerHit: "/sounds/spaceInvaders/destroy/playerHit.mp3",
   destroyInvader: "/sounds/spaceInvaders/destroy/destroyInvader.mp3",
@@ -868,6 +870,8 @@ function SpaceInvaders({ onClose }) {
           // console.log(
           //   `Follower @ x=${Math.round(follower.x)} | Start CHARGING`
           // );
+
+          playSound(soundURL.beamCharge, 0.5);
         }
 
         // Beam Start (1.5s)
@@ -876,6 +880,8 @@ function SpaceInvaders({ onClose }) {
           follower.isShooting = true;
           // debug - beam active
           // console.log(`Follower @ x=${Math.round(follower.x)} | Beam ACTIVE`);
+
+          playLaserSound(soundURL.beamActive);
         }
 
         // Beam End (2s)
