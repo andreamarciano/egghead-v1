@@ -90,6 +90,13 @@ function SpaceInvaders({ onClose }) {
   const [gameOver, setGameOver] = useState(false);
   const animationIdRef = useRef(null);
 
+  /* Element Spawning Scores */
+  const spawnScore = {
+    meteor: 800,
+    shield: 1000,
+    follower: 1300,
+  };
+
   /* Player */
   const playerImageRef = useRef(new Image());
   const playerScale = 0.5;
@@ -208,6 +215,7 @@ function SpaceInvaders({ onClose }) {
 
   /* Score */
   const [score, setScore] = useState(0);
+  const scoreRef = useRef(score);
   const scoreParams = {
     single: 10,
     grid: 50,
@@ -448,13 +456,14 @@ function SpaceInvaders({ onClose }) {
     }
     previousLivesRef.current = lives;
   }, [lives]);
+
   /* Score Animation */
   useEffect(() => {
-    if (displayedScore === score) return;
+    if (displayedScore === scoreRef.current) return;
 
     const interval = setInterval(() => {
       setDisplayedScore((prev) => {
-        const next = Math.min(prev + 2, score);
+        const next = Math.min(prev + 2, scoreRef.current);
 
         const currentK = Math.floor(prev / 1000);
         const nextK = Math.floor(next / 1000);
@@ -478,7 +487,7 @@ function SpaceInvaders({ onClose }) {
     }, 30);
 
     return () => clearInterval(interval);
-  }, [score, displayedScore]);
+  }, [scoreRef.current, displayedScore]);
 
   /***************************************************************
    *                      useEFFECT: VOLUME                       *
@@ -759,7 +768,7 @@ function SpaceInvaders({ onClose }) {
           );
           playerRotationRef.current = 0.15; // tilt right
         } else {
-          playerRotationRef.current *= 0.9; // smooth return
+          playerRotationRef.current *= 0.95; // smooth return
         }
 
         /* === SHOOT PROJECTILES === */
@@ -1122,10 +1131,11 @@ function SpaceInvaders({ onClose }) {
                     invaderY + invaderConfig.height / 2,
                     invaderParticles
                   );
-
                   playSound(soundURL.destroyInvader, 0.5);
 
-                  setScore((prevScore) => prevScore + scoreParams.single);
+                  const newScore = scoreRef.current + scoreParams.single;
+                  setScore(newScore);
+                  scoreRef.current = newScore;
                   // debug - single invader score
                   // console.log(`+${scoreParams.single} points`);
 
@@ -1149,7 +1159,10 @@ function SpaceInvaders({ onClose }) {
             // );
 
             playSound(soundURL.destroyGrid, 0.5);
-            setScore((prevScore) => prevScore + scoreParams.grid);
+
+            const newScore = scoreRef.current + scoreParams.grid;
+            setScore(newScore);
+            scoreRef.current = newScore;
             // debug - full grid score
             // console.log(`+${scoreParams.grid} points`);
           }
@@ -1184,14 +1197,11 @@ function SpaceInvaders({ onClose }) {
 
               playSound(soundURL.destroyMeteor2, 0.4);
 
-              setScore((prevScore) => {
-                const newScore = prevScore + scoreParams.meteorSmall;
-                // debug - small meteor score
-                // console.log(
-                //   `Small Meteor Hit: +${scoreParams.meteorSmall} (${prevScore} → ${newScore})`
-                // );
-                return newScore;
-              });
+              const newScore = scoreRef.current + scoreParams.meteorSmall;
+              setScore(newScore);
+              scoreRef.current = newScore;
+              // debug - small meteor score
+              // console.log(`Small Meteor Hit: +${scoreParams.meteorSmall} (${scoreRef.current - scoreParams.meteorSmall} → ${scoreRef.current})`);
             } else {
               // downgrade meteor
               const currentType = m.type;
@@ -1200,27 +1210,23 @@ function SpaceInvaders({ onClose }) {
                 // big
                 // debug - meteor downgrade
                 // console.log("BIG Meteor Hit → Becomes MED");
-                setScore((prevScore) => {
-                  const newScore = prevScore + scoreParams.meteorBig;
-                  // debug - big meteor score
-                  // console.log(
-                  //   `Big Meteor Hit: +${scoreParams.meteorBig} (${prevScore} → ${newScore})`
-                  // );
-                  return newScore;
-                });
+                const newScore = scoreRef.current + scoreParams.meteorBig;
+                setScore(newScore);
+                scoreRef.current = newScore;
+                // debug - big meteor score
+                // console.log(`Big Meteor Hit: +${scoreParams.meteorBig} (${scoreRef.current - scoreParams.meteorBig} → ${scoreRef.current})`);
+
                 m.type = "med";
               } else if (m.lives === 1) {
                 // med
                 // debug - meteor downgrade
                 // console.log("MED Meteor Hit → Becomes SMALL");
-                setScore((prevScore) => {
-                  const newScore = prevScore + scoreParams.meteorMed;
-                  // debug - med meteor score
-                  // console.log(
-                  //   `Med Meteor Hit: +${scoreParams.meteorMed} (${prevScore} → ${newScore})`
-                  // );
-                  return newScore;
-                });
+                const newScore = scoreRef.current + scoreParams.meteorMed;
+                setScore(newScore);
+                scoreRef.current = newScore;
+                // debug - med meteor score
+                // console.log(`Med Meteor Hit: +${scoreParams.meteorMed} (${scoreRef.current - scoreParams.meteorMed} → ${scoreRef.current})`);
+
                 m.type = "small";
               }
 
@@ -1373,7 +1379,10 @@ function SpaceInvaders({ onClose }) {
             // remove follower
             if (follower.lives <= 0) {
               followersRef.current.splice(fIndex, 1);
-              setScore((prevScore) => prevScore + scoreParams.follower);
+
+              const newScore = scoreRef.current + scoreParams.follower;
+              setScore(newScore);
+              scoreRef.current = newScore;
             }
 
             projectilesRef.current.splice(pIndex, 1);
@@ -1696,6 +1705,7 @@ function SpaceInvaders({ onClose }) {
 
       /* === FRAME CONTROL: FOLLOWER SPAWN === */
       if (
+        scoreRef.current >= spawnScore.follower &&
         frames % frameRate.follower === 0 &&
         followersRef.current.length < 2
       ) {
@@ -1714,6 +1724,14 @@ function SpaceInvaders({ onClose }) {
           shootParticles: [],
         });
       }
+      // debug - score threshold
+      // else {
+      //   console.log("Spawn condition not met:", {
+      //     score,
+      //     spawnScore: spawnScore.follower,
+      //     frames: frames,
+      //   });
+      // }
 
       /***************************************************************
        *                      SECTION: PARTICLES                     *
@@ -1789,6 +1807,7 @@ function SpaceInvaders({ onClose }) {
       livesRef.current = 3;
 
       setScore(0);
+      scoreRef.current = 0;
       setLives(3);
       setPlayerX(playerXRef.current);
     }
@@ -1909,7 +1928,7 @@ function SpaceInvaders({ onClose }) {
 
       {/* Score */}
       <div className="absolute top-2 left-1 flex">
-        {renderScoreImages(displayedScore)}
+        {renderScoreImages(scoreRef.current)}
       </div>
       {/* Lives */}
       <div

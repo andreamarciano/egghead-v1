@@ -90,6 +90,13 @@ function SpaceInvaders({ onClose }) {
   const [gameOver, setGameOver] = useState(false);
   const animationIdRef = useRef(null);
 
+  /* Element Spawning Scores */
+  const spawnScore = {
+    meteor: 800,
+    shield: 1000,
+    follower: 1300,
+  };
+
   /* Player */
   const playerImageRef = useRef(new Image());
   const playerScale = 0.5;
@@ -208,6 +215,7 @@ function SpaceInvaders({ onClose }) {
 
   /* Score */
   const [score, setScore] = useState(0);
+  const scoreRef = useRef(score);
   const scoreParams = {
     single: 10,
     grid: 50,
@@ -448,13 +456,14 @@ function SpaceInvaders({ onClose }) {
     }
     previousLivesRef.current = lives;
   }, [lives]);
+
   /* Score Animation */
   useEffect(() => {
-    if (displayedScore === score) return;
+    if (displayedScore === scoreRef.current) return;
 
     const interval = setInterval(() => {
       setDisplayedScore((prev) => {
-        const next = Math.min(prev + 2, score);
+        const next = Math.min(prev + 2, scoreRef.current);
 
         const currentK = Math.floor(prev / 1000);
         const nextK = Math.floor(next / 1000);
@@ -475,7 +484,7 @@ function SpaceInvaders({ onClose }) {
     }, 30);
 
     return () => clearInterval(interval);
-  }, [score, displayedScore]);
+  }, [scoreRef.current, displayedScore]);
 
   /***************************************************************
    *                      useEFFECT: VOLUME                       *
@@ -741,7 +750,7 @@ function SpaceInvaders({ onClose }) {
           );
           playerRotationRef.current = 0.15;
         } else {
-          playerRotationRef.current *= 0.9;
+          playerRotationRef.current *= 0.95;
         }
 
         /* === SHOOT PROJECTILES === */
@@ -1048,15 +1057,18 @@ function SpaceInvaders({ onClose }) {
                 // remove invader
                 if (hit) {
                   grid.invaders[row][col] = false;
+
                   createExplosion(
                     invaderX + invaderConfig.width / 2,
                     invaderY + invaderConfig.height / 2,
                     invaderParticles
                   );
-
                   playSound(soundURL.destroyInvader, 0.5);
 
-                  setScore((prevScore) => prevScore + scoreParams.single);
+                  const newScore = scoreRef.current + scoreParams.single;
+                  setScore(newScore);
+                  scoreRef.current = newScore;
+
                   projectilesRef.current.splice(pIndex, 1);
                 }
               }
@@ -1072,7 +1084,10 @@ function SpaceInvaders({ onClose }) {
           );
           if (!stillHasInvaders) {
             playSound(soundURL.destroyGrid, 0.5);
-            setScore((prevScore) => prevScore + scoreParams.grid);
+
+            const newScore = scoreRef.current + scoreParams.grid;
+            setScore(newScore);
+            scoreRef.current = newScore;
           }
           return stillHasInvaders;
         }
@@ -1103,27 +1118,26 @@ function SpaceInvaders({ onClose }) {
 
               playSound(soundURL.destroyMeteor2, 0.4);
 
-              setScore((prevScore) => {
-                const newScore = prevScore + scoreParams.meteorSmall;
-                return newScore;
-              });
+              const newScore = scoreRef.current + scoreParams.meteorSmall;
+              setScore(newScore);
+              scoreRef.current = newScore;
             } else {
               // downgrade meteor
               const currentType = m.type;
 
               if (m.lives === 2) {
                 // big
-                setScore((prevScore) => {
-                  const newScore = prevScore + scoreParams.meteorBig;
-                  return newScore;
-                });
+                const newScore = scoreRef.current + scoreParams.meteorBig;
+                setScore(newScore);
+                scoreRef.current = newScore;
+
                 m.type = "med";
               } else if (m.lives === 1) {
                 // med
-                setScore((prevScore) => {
-                  const newScore = prevScore + scoreParams.meteorMed;
-                  return newScore;
-                });
+                const newScore = scoreRef.current + scoreParams.meteorMed;
+                setScore(newScore);
+                scoreRef.current = newScore;
+
                 m.type = "small";
               }
 
@@ -1269,7 +1283,10 @@ function SpaceInvaders({ onClose }) {
             // remove follower
             if (follower.lives <= 0) {
               followersRef.current.splice(fIndex, 1);
-              setScore((prevScore) => prevScore + scoreParams.follower);
+
+              const newScore = scoreRef.current + scoreParams.follower;
+              setScore(newScore);
+              scoreRef.current = newScore;
             }
 
             projectilesRef.current.splice(pIndex, 1);
@@ -1564,6 +1581,7 @@ function SpaceInvaders({ onClose }) {
 
       /* === FRAME CONTROL: FOLLOWER SPAWN === */
       if (
+        scoreRef.current >= spawnScore.follower &&
         frames % frameRate.follower === 0 &&
         followersRef.current.length < 2
       ) {
@@ -1655,6 +1673,7 @@ function SpaceInvaders({ onClose }) {
       livesRef.current = 3;
 
       setScore(0);
+      scoreRef.current = 0;
       setLives(3);
       setPlayerX(playerXRef.current);
     }
@@ -1755,7 +1774,7 @@ function SpaceInvaders({ onClose }) {
 
       {/* Score */}
       <div className="absolute top-2 left-1 flex">
-        {renderScoreImages(displayedScore)}
+        {renderScoreImages(scoreRef.current)}
       </div>
       {/* Lives */}
       <div
@@ -1785,6 +1804,7 @@ function SpaceInvaders({ onClose }) {
                 </ul>
               </div>
             )}
+            {/* cambia - aggiusta si vede sempre */}
             <p className="text-xl text-blue-600 mb-6 ">Final score: {score}</p>
             {/* Discount Code */}
             {hasUnlockedDiscount && (
