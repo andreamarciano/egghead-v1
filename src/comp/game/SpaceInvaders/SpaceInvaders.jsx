@@ -97,11 +97,12 @@ function SpaceInvaders({ onClose }) {
     follower: 1000,
   };
   const frameRate = {
-    invaderProjectile: 100,
-    invaderGrid: 500,
-    follower: 400,
-    meteor: 500,
-    shield: 800,
+    invaderProjectile: 90,
+    invaderGrid: 480,
+    invaderGridTop: 780,
+    follower: 360,
+    meteor: 300,
+    shield: 900,
   };
 
   /* Player */
@@ -162,7 +163,7 @@ function SpaceInvaders({ onClose }) {
   const followerConfig = {
     width: 50,
     height: 40,
-    lives: 4,
+    lives: 5,
     speed: 2.5,
     shootInterval: 300,
     chargeDuration: 90,
@@ -725,7 +726,8 @@ function SpaceInvaders({ onClose }) {
     spawnInvaderGrid();
     let frames = 1;
     let randomInterval = Math.floor(
-      Math.random() * frameRate.invaderGrid + frameRate.invaderGrid
+      Math.random() * (frameRate.invaderGridTop - frameRate.invaderGrid) +
+        frameRate.invaderGrid
     );
 
     /****************************************************************
@@ -1533,7 +1535,8 @@ function SpaceInvaders({ onClose }) {
         spawnInvaderGrid();
         frames = 0;
         randomInterval = Math.floor(
-          Math.random() * frameRate.invaderGrid + frameRate.invaderGrid
+          Math.random() * (frameRate.invaderGridTop - frameRate.invaderGrid) +
+            frameRate.invaderGrid
         );
       }
 
