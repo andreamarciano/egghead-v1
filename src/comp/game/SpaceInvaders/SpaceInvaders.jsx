@@ -605,6 +605,21 @@ function SpaceInvaders({ onClose }) {
       };
     };
 
+    /* === FOLLOWER BEAM HITBOX === */
+    const getFollowerBeamHitbox = (follower) => {
+      const beamX =
+        follower.x + follower.width / 2 - followerConfig.beamWidth / 2;
+      const beamY = follower.y + follower.height;
+      const beamHeight = canvas.height - beamY;
+
+      return {
+        x: beamX,
+        y: beamY,
+        width: followerConfig.beamWidth,
+        height: beamHeight,
+      };
+    };
+
     /* === ACTIVATE SHIELD === */
     const activateShield = () => {
       isShieldActiveRef.current = true;
@@ -798,6 +813,7 @@ function SpaceInvaders({ onClose }) {
         if (follower.shootTimer === beamEnd) {
           follower.isShooting = false;
           follower.shootTimer = 0;
+          follower.hasHitPlayer = false;
         }
       });
 
@@ -1137,6 +1153,55 @@ function SpaceInvaders({ onClose }) {
         }
       });
 
+      /* === COLLISION DETECTION: FOLLOWER BEAM → PLAYER === */
+      followersRef.current.forEach((follower) => {
+        if (!follower.isShooting) return;
+
+        const beamHitbox = getFollowerBeamHitbox(follower);
+
+        const playerHitbox = getPlayerHitbox();
+
+        const hit =
+          beamHitbox.x < playerHitbox.x + playerHitbox.width &&
+          beamHitbox.x + beamHitbox.width > playerHitbox.x &&
+          beamHitbox.y < playerHitbox.y + playerHitbox.height &&
+          beamHitbox.y + beamHitbox.height > playerHitbox.y;
+
+        if (hit && !follower.hasHitPlayer) {
+          follower.hasHitPlayer = true;
+
+          if (isShieldActiveRef.current) {
+            createExplosion(
+              playerHitbox.x + playerHitbox.width / 2,
+              playerHitbox.y + playerHitbox.height / 2,
+              shieldParticles
+            );
+            playSound(soundURL.shieldBlock, 0.5);
+          } else {
+            flashEffect(playerOpacityRef, { playerActive: isPlayerActiveRef });
+
+            createExplosion(
+              playerHitbox.x + playerHitbox.width / 2,
+              playerHitbox.y + playerHitbox.height / 2,
+              playerParticles
+            );
+
+            playSound(soundURL.playerHit, 0.7);
+
+            const newLives = Math.max(0, livesRef.current - 1);
+            setLives(newLives);
+
+            if (newLives <= 0) {
+              handleGameOver();
+            }
+          }
+
+          if (!follower.isShooting) {
+            follower.hasHitPlayer = false;
+          }
+        }
+      });
+
       /***************************************************************
        *                        SECTION: DRAW                        *
        ***************************************************************/
@@ -1230,26 +1295,30 @@ function SpaceInvaders({ onClose }) {
 
         // === CHARGE Beam ===
         if (follower.isCharging) {
-          const beamX =
-            follower.x + follower.width / 2 - followerConfig.beamWidth / 2;
-          const beamY = follower.y + follower.height;
-          const beamHeight = canvas.height - beamY;
+          const beamHitbox = getFollowerBeamHitbox(follower);
 
           c.fillStyle = "yellow";
           c.globalAlpha = 0.7;
-          c.fillRect(beamX, beamY, followerConfig.beamWidth, beamHeight);
+          c.fillRect(
+            beamHitbox.x,
+            beamHitbox.y,
+            beamHitbox.width,
+            beamHitbox.height
+          );
           c.globalAlpha = 1;
         }
         // === ACTIVE Beam ===
         if (follower.isShooting) {
-          const beamX =
-            follower.x + follower.width / 2 - followerConfig.beamWidth / 2;
-          const beamY = follower.y + follower.height;
-          const beamHeight = canvas.height - beamY;
+          const beamHitbox = getFollowerBeamHitbox(follower);
 
           c.fillStyle = "red";
           c.globalAlpha = 0.7;
-          c.fillRect(beamX, beamY, followerConfig.beamWidth, beamHeight);
+          c.fillRect(
+            beamHitbox.x,
+            beamHitbox.y,
+            beamHitbox.width,
+            beamHitbox.height
+          );
           c.globalAlpha = 1;
         }
       });
@@ -1320,6 +1389,7 @@ function SpaceInvaders({ onClose }) {
           shootTimer: 0,
           isCharging: false,
           isShooting: false,
+          hasHitPlayer: false,
         });
       }
 
@@ -1387,6 +1457,7 @@ function SpaceInvaders({ onClose }) {
       particlesRef.current = [];
       backgroundParticlesRef.current = [];
       shieldPowerUpRef.current = [];
+      followersRef.current = [];
 
       playerXRef.current = canvasRef.current.width / 2 - playerConfig.width / 2;
       playerRotationRef.current = 0;
