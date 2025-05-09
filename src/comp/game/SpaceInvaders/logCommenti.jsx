@@ -224,6 +224,12 @@ function SpaceInvaders({ onClose }) {
     meteorMed: 20,
     meteorSmall: 50,
   };
+  const addScore = (points) => {
+    scoreRef.current += points;
+    setScore(scoreRef.current);
+    // debug - points
+    // console.log(`+${points} points → New score: ${scoreRef.current}`);
+  };
   const [displayedScore, setDisplayedScore] = useState(0);
   const [scoreTextSize, setScoreTextSize] = useState("w-4.5 h-4.5");
   const [topScores, setTopScores] = useState([]);
@@ -1133,11 +1139,7 @@ function SpaceInvaders({ onClose }) {
                   );
                   playSound(soundURL.destroyInvader, 0.5);
 
-                  const newScore = scoreRef.current + scoreParams.single;
-                  setScore(newScore);
-                  scoreRef.current = newScore;
-                  // debug - single invader score
-                  // console.log(`+${scoreParams.single} points`);
+                  addScore(scoreParams.single);
 
                   projectilesRef.current.splice(pIndex, 1); // remove projectile
                 }
@@ -1160,11 +1162,7 @@ function SpaceInvaders({ onClose }) {
 
             playSound(soundURL.destroyGrid, 0.5);
 
-            const newScore = scoreRef.current + scoreParams.grid;
-            setScore(newScore);
-            scoreRef.current = newScore;
-            // debug - full grid score
-            // console.log(`+${scoreParams.grid} points`);
+            addScore(scoreParams.grid);
           }
           return stillHasInvaders;
         }
@@ -1197,11 +1195,7 @@ function SpaceInvaders({ onClose }) {
 
               playSound(soundURL.destroyMeteor2, 0.4);
 
-              const newScore = scoreRef.current + scoreParams.meteorSmall;
-              setScore(newScore);
-              scoreRef.current = newScore;
-              // debug - small meteor score
-              // console.log(`Small Meteor Hit: +${scoreParams.meteorSmall} (${scoreRef.current - scoreParams.meteorSmall} → ${scoreRef.current})`);
+              addScore(scoreParams.meteorSmall);
             } else {
               // downgrade meteor
               const currentType = m.type;
@@ -1210,22 +1204,14 @@ function SpaceInvaders({ onClose }) {
                 // big
                 // debug - meteor downgrade
                 // console.log("BIG Meteor Hit → Becomes MED");
-                const newScore = scoreRef.current + scoreParams.meteorBig;
-                setScore(newScore);
-                scoreRef.current = newScore;
-                // debug - big meteor score
-                // console.log(`Big Meteor Hit: +${scoreParams.meteorBig} (${scoreRef.current - scoreParams.meteorBig} → ${scoreRef.current})`);
+                addScore(scoreParams.meteorBig);
 
                 m.type = "med";
               } else if (m.lives === 1) {
                 // med
                 // debug - meteor downgrade
                 // console.log("MED Meteor Hit → Becomes SMALL");
-                const newScore = scoreRef.current + scoreParams.meteorMed;
-                setScore(newScore);
-                scoreRef.current = newScore;
-                // debug - med meteor score
-                // console.log(`Med Meteor Hit: +${scoreParams.meteorMed} (${scoreRef.current - scoreParams.meteorMed} → ${scoreRef.current})`);
+                addScore(scoreParams.meteorMed);
 
                 m.type = "small";
               }
@@ -1380,9 +1366,7 @@ function SpaceInvaders({ onClose }) {
             if (follower.lives <= 0) {
               followersRef.current.splice(fIndex, 1);
 
-              const newScore = scoreRef.current + scoreParams.follower;
-              setScore(newScore);
-              scoreRef.current = newScore;
+              addScore(scoreParams.follower);
             }
 
             projectilesRef.current.splice(pIndex, 1);
