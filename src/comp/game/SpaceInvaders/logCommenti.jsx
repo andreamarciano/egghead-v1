@@ -1473,12 +1473,24 @@ function SpaceInvaders({ onClose }) {
         c.fillStyle = "#7C3AED";
         c.fillRect(x, y, barWidth * lifeRatio, barHeight);
 
-        // === CHARGE Beam (yellow) ===
+        // === CHARGE Beam ===
         if (follower.isCharging) {
           const beamHitbox = getFollowerBeamHitbox(follower);
 
-          c.fillStyle = "yellow";
-          c.globalAlpha = 0.7;
+          const colorCycle = [
+            "#FFFF00",
+            "#FFC300",
+            "#FF8C00",
+            "#FF4500",
+            "#FF0000",
+          ];
+          const colorIndex = Math.floor((frames / 5) % colorCycle.length);
+          const beamColor = colorCycle[colorIndex];
+
+          const alpha = 0.3 + 0.5 * Math.abs(Math.sin(frames / 3));
+
+          c.fillStyle = beamColor;
+          c.globalAlpha = alpha;
           c.fillRect(
             beamHitbox.x,
             beamHitbox.y,
@@ -1487,6 +1499,7 @@ function SpaceInvaders({ onClose }) {
           );
           c.globalAlpha = 1;
         }
+
         // === ACTIVE Beam (red) ===
         if (follower.isShooting) {
           const beamHitbox = getFollowerBeamHitbox(follower);
