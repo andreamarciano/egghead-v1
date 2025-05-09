@@ -124,6 +124,7 @@ function SpaceInvaders({ onClose }) {
   const frameRate = {
     invaderProjectile: 100,
     invaderGrid: 400,
+    follower: 1000,
     meteor: 500,
     shield: 800,
   };
@@ -145,6 +146,23 @@ function SpaceInvaders({ onClose }) {
     height: 12,
     speed: 4,
   };
+
+  /* Follower */
+  const followerImageRef = useRef(new Image());
+  const followersRef = useRef([]);
+  const followerConfig = {
+    width: 50,
+    height: 40,
+    lives: 2,
+    speed: 2.5,
+    shootInterval: 300, // ~5 s - 60fps
+    chargeDuration: 90, // ~1.5 s
+    beamDuration: 120, // ~2 s
+    beamWidth: 20,
+  };
+  const chargeStart = followerConfig.shootInterval; // 300
+  const beamStart = chargeStart + followerConfig.chargeDuration; // 390
+  const beamEnd = beamStart + followerConfig.beamDuration; // 510
 
   /* Meteor */
   const meteorsRef = useRef([]);
@@ -566,6 +584,7 @@ function SpaceInvaders({ onClose }) {
     meteorImages.small.src = imgURL.meteorSmall;
     shieldImage.src = imgURL.shield;
     shieldImageRef.current.src = imgURL.shield;
+    followerImageRef.current.src = imgURL.follower;
 
     /* === INIT PLAYER === */
     const initialPlayerX = canvas.width / 2 - playerConfig.width / 2;
@@ -719,6 +738,10 @@ function SpaceInvaders({ onClose }) {
       //   console.log("Player inactive – movement and shooting disabled");
       // }
 
+      /***************************************************************
+       *             SECTION: SPAWN ELEMENT & MOVEMENT               *
+       ***************************************************************/
+
       /* === FRAME CONTROL: SPAWN SHIELD === */
       if (frames % frameRate.shield === 0) {
         const x = Math.random() * (canvas.width - 40);
@@ -766,6 +789,54 @@ function SpaceInvaders({ onClose }) {
         if (hitLeft || hitRight) {
           grid.direction *= -1;
           grid.y += 30;
+        }
+      });
+
+      /* === FOLLOWER MOVEMENT === */
+      followersRef.current.forEach((follower) => {
+        const targetX =
+          playerXRef.current + playerConfig.width / 2 - follower.width / 2;
+
+        // movement
+        if (!follower.isCharging && !follower.isShooting) {
+          if (follower.x < targetX) {
+            follower.x = Math.min(follower.x + followerConfig.speed, targetX);
+          } else if (follower.x > targetX) {
+            follower.x = Math.max(follower.x - followerConfig.speed, targetX);
+          }
+        }
+
+        follower.shootTimer++;
+        // debug - movement & beam sequence
+        // console.log(
+        //   `Follower @ x=${Math.round(follower.x)} | shootTimer=${
+        //     follower.shootTimer
+        //   } | charging=${follower.isCharging} | shooting=${follower.isShooting}`
+        // );
+
+        // Charge Start (5s)
+        if (follower.shootTimer === chargeStart) {
+          follower.isCharging = true;
+          // debug - start charging
+          // console.log(
+          //   `Follower @ x=${Math.round(follower.x)} | Start CHARGING`
+          // );
+        }
+
+        // Beam Start (1.5s)
+        if (follower.shootTimer === beamStart) {
+          follower.isCharging = false;
+          follower.isShooting = true;
+          // debug - beam active
+          // console.log(`Follower @ x=${Math.round(follower.x)} | Beam ACTIVE`);
+        }
+
+        // Beam End (2s)
+        if (follower.shootTimer === beamEnd) {
+          follower.isShooting = false;
+          follower.shootTimer = 0;
+          // debug - beam end
+          // console.log(`Follower @ x=${Math.round(follower.x)} | Beam END`);
         }
       });
 
@@ -1267,11 +1338,53 @@ function SpaceInvaders({ onClose }) {
         }
       });
 
+      /* === DRAW FOLLOWER & BEAM === */
+      followersRef.current.forEach((follower) => {
+        if (followerImageRef.current.complete) {
+          c.drawImage(
+            followerImageRef.current,
+            follower.x,
+            follower.y,
+            follower.width,
+            follower.height
+          );
+        } else {
+          // fallback
+          c.fillStyle = "red";
+          c.fillRect(follower.x, follower.y, follower.width, follower.height);
+        }
+
+        // === CHARGE Beam (yellow) ===
+        if (follower.isCharging) {
+          const beamX =
+            follower.x + follower.width / 2 - followerConfig.beamWidth / 2;
+          const beamY = follower.y + follower.height;
+          const beamHeight = canvas.height - beamY;
+
+          c.fillStyle = "yellow";
+          c.globalAlpha = 0.7;
+          c.fillRect(beamX, beamY, followerConfig.beamWidth, beamHeight);
+          c.globalAlpha = 1;
+        }
+        // === ACTIVE Beam (red) ===
+        if (follower.isShooting) {
+          const beamX =
+            follower.x + follower.width / 2 - followerConfig.beamWidth / 2;
+          const beamY = follower.y + follower.height;
+          const beamHeight = canvas.height - beamY;
+
+          c.fillStyle = "red";
+          c.globalAlpha = 0.7;
+          c.fillRect(beamX, beamY, followerConfig.beamWidth, beamHeight);
+          c.globalAlpha = 1;
+        }
+      });
+
       /***************************************************************
        *                   SECTION: FRAME CONTROL                    *
        ***************************************************************/
 
-      /*  === FRAME CONTROL: NEW INVADER GRIDS SPAWN === */
+      /* === FRAME CONTROL: NEW INVADER GRIDS SPAWN === */
       if (frames % randomInterval === 0) {
         spawnInvaderGrid();
         frames = 0;
@@ -1319,6 +1432,24 @@ function SpaceInvaders({ onClose }) {
 
             playLaserSound(soundURL.laserInvader);
           }
+        });
+      }
+
+      /* === FRAME CONTROL: FOLLOWER SPAWN === */
+      if (
+        frames % frameRate.follower === 0 &&
+        followersRef.current.length < 2
+      ) {
+        const x = Math.random() * (canvas.width - followerConfig.width);
+        followersRef.current.push({
+          x,
+          y: 10,
+          width: followerConfig.width,
+          height: followerConfig.height,
+          lives: followerConfig.lives,
+          shootTimer: 0,
+          isCharging: false,
+          isShooting: false,
         });
       }
 
