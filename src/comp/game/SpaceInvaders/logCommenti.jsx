@@ -1334,7 +1334,7 @@ function SpaceInvaders({ onClose }) {
                 ? soundURL.destroyMeteor2
                 : soundURL.destroyMeteor,
               0.6
-            ); // cambia
+            );
 
             // remove follower
             if (follower.lives <= 0) {
