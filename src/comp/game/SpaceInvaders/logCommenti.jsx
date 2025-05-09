@@ -207,6 +207,7 @@ function SpaceInvaders({ onClose }) {
   const scoreParams = {
     single: 10,
     grid: 50,
+    follower: 100,
     meteorBig: 10,
     meteorMed: 20,
     meteorSmall: 50,
@@ -282,6 +283,11 @@ function SpaceInvaders({ onClose }) {
     color: "#BAA0DE",
     opacity: 0.4,
     count: 20,
+  };
+  const followerParticles = {
+    color: "#7049A6",
+    opacity: 0.6,
+    count: 100,
   };
   const playerParticles = {
     color: "white",
@@ -1304,6 +1310,41 @@ function SpaceInvaders({ onClose }) {
             follower.hasHitPlayer = false;
           }
         }
+      });
+
+      /* === COLLISION DETECTION: PLAYER PROJECTILE → FOLLOWER === */
+      projectilesRef.current.forEach((p, pIndex) => {
+        followersRef.current.forEach((follower, fIndex) => {
+          const hit =
+            p.x < follower.x + follower.width &&
+            p.x + p.width > follower.x &&
+            p.y < follower.y + follower.height &&
+            p.y + p.height > follower.y;
+
+          if (hit) {
+            follower.lives -= 1;
+
+            createExplosion(
+              follower.x + follower.width / 2,
+              follower.y + follower.height / 2,
+              followerParticles
+            );
+            playSound(
+              follower.lives > 0
+                ? soundURL.destroyMeteor2
+                : soundURL.destroyMeteor,
+              0.6
+            ); // cambia
+
+            // remove follower
+            if (follower.lives <= 0) {
+              followersRef.current.splice(fIndex, 1);
+              setScore((prevScore) => prevScore + scoreParams.follower);
+            }
+
+            projectilesRef.current.splice(pIndex, 1);
+          }
+        });
       });
 
       /***************************************************************
