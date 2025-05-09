@@ -1763,7 +1763,7 @@ function SpaceInvaders({ onClose }) {
   }, [isGameRunning, playerColor]);
 
   /***************************************************************
-   *                      SECTION: GAMEPLAY                      *
+   *                  START, RESET, GAME OVER                    *
    ***************************************************************/
 
   /* === START & RESET === */
