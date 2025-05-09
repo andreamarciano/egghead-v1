@@ -133,7 +133,7 @@ function SpaceInvaders({ onClose }) {
   const lastShotTimeRef = useRef(0);
   const projectilesRef = useRef([]);
   const projectileConfig = {
-    cooldown: 200,
+    cooldown: 230,
     width: 8,
     height: 20,
     speed: 7,
