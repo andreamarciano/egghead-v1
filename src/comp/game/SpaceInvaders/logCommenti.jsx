@@ -153,7 +153,7 @@ function SpaceInvaders({ onClose }) {
   const followerConfig = {
     width: 50,
     height: 40,
-    lives: 2,
+    lives: 3,
     speed: 2.5,
     shootInterval: 300, // ~5 s - 60fps
     chargeDuration: 90, // ~1.5 s
@@ -1460,6 +1460,18 @@ function SpaceInvaders({ onClose }) {
           c.fillStyle = "red";
           c.fillRect(follower.x, follower.y, follower.width, follower.height);
         }
+
+        // === DRAW FOLLOWER LIFE BAR ===
+        const barPadding = 4;
+        const barWidth = follower.width - barPadding * 2;
+        const barHeight = 5;
+        const x = follower.x + barPadding;
+        const y = follower.y - barHeight - 2;
+        const lifeRatio = follower.lives / followerConfig.lives;
+        c.fillStyle = "black";
+        c.fillRect(x, y, barWidth, barHeight);
+        c.fillStyle = "#7C3AED";
+        c.fillRect(x, y, barWidth * lifeRatio, barHeight);
 
         // === CHARGE Beam (yellow) ===
         if (follower.isCharging) {
