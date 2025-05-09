@@ -90,12 +90,23 @@ function SpaceInvaders({ onClose }) {
   const [gameOver, setGameOver] = useState(false);
   const animationIdRef = useRef(null);
 
-  /* Element Spawning Scores */
+  /* Gameplay */
   const spawnScore = {
-    meteor: 800,
-    shield: 1000,
-    follower: 1300,
+    meteor: 500,
+    shield: 750,
+    follower: 1000,
   };
+  const frameRate = {
+    invaderProjectile: 100, // /60 = ~1.67 secondi
+    invaderGrid: 500, // ~8.33 secondi
+    follower: 400, // ~6.67 secondi
+    meteor: 500, // ~8.33 secondi
+    shield: 800,
+  };
+  // debug - fps (part 1)
+  // let lastTime = performance.now();
+  // let frameCount = 0;
+  // let fps = 0;
 
   /* Player */
   const playerImageRef = useRef(new Image());
@@ -131,15 +142,6 @@ function SpaceInvaders({ onClose }) {
     speed: 7,
   };
 
-  /* Frame Rate */
-  const frameRate = {
-    invaderProjectile: 100,
-    invaderGrid: 400,
-    follower: 1000,
-    meteor: 500,
-    shield: 800,
-  };
-
   /* Invader */
   const invaderImageRef = useRef(new Image());
   const invaderScale = 1;
@@ -164,7 +166,7 @@ function SpaceInvaders({ onClose }) {
   const followerConfig = {
     width: 50,
     height: 40,
-    lives: 3,
+    lives: 4,
     speed: 2.5,
     shootInterval: 300, // ~5 s - 60fps
     chargeDuration: 90, // ~1.5 s
@@ -753,6 +755,15 @@ function SpaceInvaders({ onClose }) {
      *                                                              *
      ****************************************************************/
     const gameLoop = () => {
+      // debug - fps (part 2)
+      // const gameLoop = (currentTime) => {
+      //   frameCount++;
+      //   if (currentTime - lastTime >= 1000) {
+      //     fps = frameCount;
+      //     frameCount = 0;
+      //     lastTime = currentTime;
+      //     console.log("FPS:", fps);
+      //   }
       /***************************************************************
        *                        SECTION: PLAYER                      *
        ***************************************************************/
@@ -809,7 +820,10 @@ function SpaceInvaders({ onClose }) {
        ***************************************************************/
 
       /* === FRAME CONTROL: SPAWN SHIELD === */
-      if (frames % frameRate.shield === 0) {
+      if (
+        scoreRef.current >= spawnScore.shield &&
+        frames % frameRate.shield === 0
+      ) {
         const x = Math.random() * (canvas.width - 40);
         const y = -40;
 
@@ -824,7 +838,10 @@ function SpaceInvaders({ onClose }) {
       }
 
       /* === FRAME CONTROL: METEOR MOVEMENT === */
-      if (frames % frameRate.meteor === 0) {
+      if (
+        scoreRef.current >= spawnScore.meteor &&
+        frames % frameRate.meteor === 0
+      ) {
         const types = ["big", "med", "small"];
         const type = types[Math.floor(Math.random() * types.length)];
 

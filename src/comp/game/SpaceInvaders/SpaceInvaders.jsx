@@ -90,11 +90,18 @@ function SpaceInvaders({ onClose }) {
   const [gameOver, setGameOver] = useState(false);
   const animationIdRef = useRef(null);
 
-  /* Element Spawning Scores */
+  /* Gameplay */
   const spawnScore = {
-    meteor: 800,
-    shield: 1000,
-    follower: 1300,
+    meteor: 500,
+    shield: 750,
+    follower: 1000,
+  };
+  const frameRate = {
+    invaderProjectile: 100,
+    invaderGrid: 500,
+    follower: 400,
+    meteor: 500,
+    shield: 800,
   };
 
   /* Player */
@@ -131,15 +138,6 @@ function SpaceInvaders({ onClose }) {
     speed: 7,
   };
 
-  /* Frame Rate */
-  const frameRate = {
-    invaderProjectile: 100,
-    invaderGrid: 500,
-    follower: 100, // 1000
-    meteor: 500,
-    shield: 800,
-  };
-
   /* Invader */
   const invaderImageRef = useRef(new Image());
   const invaderGridsRef = useRef([]);
@@ -164,7 +162,7 @@ function SpaceInvaders({ onClose }) {
   const followerConfig = {
     width: 50,
     height: 40,
-    lives: 3,
+    lives: 4,
     speed: 2.5,
     shootInterval: 300,
     chargeDuration: 90,
@@ -782,7 +780,10 @@ function SpaceInvaders({ onClose }) {
        ***************************************************************/
 
       /* === FRAME CONTROL: SPAWN SHIELD === */
-      if (frames % frameRate.shield === 0) {
+      if (
+        scoreRef.current >= spawnScore.shield &&
+        frames % frameRate.shield === 0
+      ) {
         const x = Math.random() * (canvas.width - 40);
         const y = -40;
 
@@ -797,7 +798,10 @@ function SpaceInvaders({ onClose }) {
       }
 
       /* === FRAME CONTROL: METEOR MOVEMENT === */
-      if (frames % frameRate.meteor === 0) {
+      if (
+        scoreRef.current >= spawnScore.meteor &&
+        frames % frameRate.meteor === 0
+      ) {
         const types = ["big", "med", "small"];
         const type = types[Math.floor(Math.random() * types.length)];
 
