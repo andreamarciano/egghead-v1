@@ -1563,14 +1563,30 @@ function SpaceInvaders({ onClose }) {
         if (follower.isShooting) {
           // === Shooting Animation ===
           const beamHitbox = getFollowerBeamHitbox(follower);
+          const baseWidth = beamHitbox.width * 2;
+          const tipWidth = beamHitbox.width;
+          const beamHeight = beamHitbox.height;
+          const startX = beamHitbox.x + beamHitbox.width / 2;
+          const startY = beamHitbox.y + 15;
+
+          c.save();
+          c.beginPath();
+          c.moveTo(startX - baseWidth / 2, startY);
+          c.quadraticCurveTo(
+            startX,
+            startY - 40,
+            startX + baseWidth / 2,
+            startY
+          );
+          c.lineTo(startX + tipWidth / 2, startY + beamHeight);
+          c.lineTo(startX - tipWidth / 2, startY + beamHeight);
+          c.closePath();
+
           c.fillStyle = "red";
           c.globalAlpha = 0.7;
-          c.fillRect(
-            beamHitbox.x,
-            beamHitbox.y,
-            beamHitbox.width,
-            beamHitbox.height
-          );
+          c.fill();
+          c.restore();
+
           // === Shooting Particles ===
           if (Math.random() < 0.8) {
             const beamHitbox = getFollowerBeamHitbox(follower);
