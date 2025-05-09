@@ -43,12 +43,14 @@ const soundURL = {
   laserInvader: "/sounds/spaceInvaders/laser/laserInvader.mp3",
   beamCharge: "/sounds/spaceInvaders/laser/beamCharge.mp3",
   beamActive: "/sounds/spaceInvaders/laser/beamActive.mp3",
-  // Destroy
+  // Hit & Destroy
   playerHit: "/sounds/spaceInvaders/destroy/playerHit.mp3",
   destroyInvader: "/sounds/spaceInvaders/destroy/destroyInvader.mp3",
   destroyGrid: "/sounds/spaceInvaders/destroy/destroyGrid.mp3",
   destroyMeteor: "/sounds/spaceInvaders/destroy/destroyMeteor.mp3",
   destroyMeteor2: "/sounds/spaceInvaders/destroy/destroyMeteorSmall.mp3",
+  destroyFollower: "/sounds/spaceInvaders/destroy/destroyFollower.mp3",
+  hitFollower: "/sounds/spaceInvaders/destroy/hitFollower.mp3",
   // Shield
   shieldUp: "/sounds/spaceInvaders/shield/shieldUp.mp3",
   shieldDown: "/sounds/spaceInvaders/shield/shieldDown.mp3",
@@ -871,7 +873,7 @@ function SpaceInvaders({ onClose }) {
           //   `Follower @ x=${Math.round(follower.x)} | Start CHARGING`
           // );
 
-          playSound(soundURL.beamCharge, 0.5);
+          playSound(soundURL.beamCharge, 0.4);
         }
 
         // Beam Start (1.5s)
@@ -881,7 +883,7 @@ function SpaceInvaders({ onClose }) {
           // debug - beam active
           // console.log(`Follower @ x=${Math.round(follower.x)} | Beam ACTIVE`);
 
-          playLaserSound(soundURL.beamActive);
+          playSound(soundURL.beamActive, 0.2);
         }
 
         // Beam End (2s)
@@ -1363,8 +1365,8 @@ function SpaceInvaders({ onClose }) {
             );
             playSound(
               follower.lives > 0
-                ? soundURL.destroyMeteor2
-                : soundURL.destroyMeteor,
+                ? soundURL.hitFollower
+                : soundURL.destroyFollower,
               0.6
             );
 
