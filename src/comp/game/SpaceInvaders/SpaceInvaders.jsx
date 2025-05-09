@@ -316,7 +316,7 @@ function SpaceInvaders({ onClose }) {
     opacity: 0.5,
     count: 100,
   };
-  // Create Particles
+  // Destroy-Hit Particles
   function createExplosion(
     x,
     y,
@@ -341,6 +341,32 @@ function SpaceInvaders({ onClose }) {
         opacity,
       });
     }
+  }
+  // Beam Particles
+  function createFollowerChargeParticle(follower) {
+    const spawnAreaWidth = 100;
+    const spawnX =
+      follower.x + follower.width / 2 + (Math.random() - 0.5) * spawnAreaWidth;
+    const spawnY = follower.y + follower.height + 80 + Math.random() * 40;
+
+    const targetX = follower.x + follower.width / 2;
+    const targetY = follower.y + follower.height;
+
+    const angle = Math.atan2(targetY - spawnY, targetX - spawnX);
+    const speed = 1 + Math.random() * 1;
+
+    follower.particles.push({
+      x: spawnX,
+      y: spawnY,
+      radius: Math.random() * 2 + 1,
+      color: "#FFD700",
+      velocity: {
+        x: Math.cos(angle) * speed + (Math.random() - 0.5) * 0.3,
+        y: Math.sin(angle) * speed + (Math.random() - 0.5) * 0.3,
+      },
+      target: { x: targetX, y: targetY },
+      opacity: 1,
+    });
   }
 
   /***************************************************************
@@ -1348,8 +1374,8 @@ function SpaceInvaders({ onClose }) {
 
         // === CHARGE Beam ===
         if (follower.isCharging) {
+          // === Charge Animation ===
           const beamHitbox = getFollowerBeamHitbox(follower);
-
           const colorCycle = [
             "#FFFF00",
             "#FFC300",
@@ -1359,9 +1385,7 @@ function SpaceInvaders({ onClose }) {
           ];
           const colorIndex = Math.floor((frames / 5) % colorCycle.length);
           const beamColor = colorCycle[colorIndex];
-
           const alpha = 0.3 + 0.5 * Math.abs(Math.sin(frames / 3));
-
           c.fillStyle = beamColor;
           c.globalAlpha = alpha;
           c.fillRect(
@@ -1371,6 +1395,40 @@ function SpaceInvaders({ onClose }) {
             beamHitbox.height
           );
           c.globalAlpha = 1;
+
+          // === Charge Particles ===
+          if (Math.random() < 0.6) {
+            createFollowerChargeParticle(follower);
+          }
+          for (let i = follower.particles.length - 1; i >= 0; i--) {
+            const p = follower.particles[i];
+            p.x += p.velocity.x;
+            p.y += p.velocity.y;
+
+            const dx = p.target.x - p.x;
+            const dy = p.target.y - p.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 10) {
+              p.velocity.x = 0;
+              p.velocity.y = 0;
+              p.opacity -= 0.05;
+            }
+
+            if (p.opacity <= 0) {
+              follower.particles.splice(i, 1);
+              continue;
+            }
+
+            c.globalAlpha = p.opacity;
+            c.fillStyle = p.color;
+            c.beginPath();
+            c.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            c.fill();
+            c.globalAlpha = 1;
+          }
+        }
+        if (!follower.isCharging) {
+          follower.particles = [];
         }
 
         // === ACTIVE Beam ===
@@ -1456,6 +1514,7 @@ function SpaceInvaders({ onClose }) {
           isCharging: false,
           isShooting: false,
           hasHitPlayer: false,
+          particles: [],
         });
       }
 
