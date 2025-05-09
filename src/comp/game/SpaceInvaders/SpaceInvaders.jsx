@@ -342,7 +342,7 @@ function SpaceInvaders({ onClose }) {
       });
     }
   }
-  // Beam Particles
+  // Beam Charging Particles
   function createFollowerChargeParticle(follower) {
     const spawnAreaWidth = 100;
     const spawnX =
@@ -1433,8 +1433,8 @@ function SpaceInvaders({ onClose }) {
 
         // === ACTIVE Beam ===
         if (follower.isShooting) {
+          // === Shooting Animation ===
           const beamHitbox = getFollowerBeamHitbox(follower);
-
           c.fillStyle = "red";
           c.globalAlpha = 0.7;
           c.fillRect(
@@ -1443,7 +1443,48 @@ function SpaceInvaders({ onClose }) {
             beamHitbox.width,
             beamHitbox.height
           );
-          c.globalAlpha = 1;
+
+          // === Shooting Particles ===
+          if (Math.random() < 0.8) {
+            const beamHitbox = getFollowerBeamHitbox(follower);
+            for (let i = 0; i < 2; i++) {
+              const px = beamHitbox.x + Math.random() * beamHitbox.width;
+              const py = beamHitbox.y + Math.random() * beamHitbox.height;
+              follower.shootParticles.push({
+                x: px,
+                y: py,
+                radius: Math.random() * 4 + 3,
+                color: "#FFA500",
+                velocity: {
+                  x: (Math.random() - 0.5) * 0.3,
+                  y: (Math.random() - 0.5) * 0.3,
+                },
+                opacity: 0.9,
+              });
+            }
+          }
+
+          for (let i = follower.shootParticles.length - 1; i >= 0; i--) {
+            const p = follower.shootParticles[i];
+            p.x += p.velocity.x;
+            p.y += p.velocity.y;
+            p.opacity -= 0.03;
+
+            if (p.opacity <= 0) {
+              follower.shootParticles.splice(i, 1);
+              continue;
+            }
+
+            c.globalAlpha = p.opacity;
+            c.fillStyle = p.color;
+            c.beginPath();
+            c.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            c.fill();
+            c.globalAlpha = 1;
+          }
+        }
+        if (!follower.isShooting) {
+          follower.shootParticles = [];
         }
       });
 
@@ -1515,6 +1556,7 @@ function SpaceInvaders({ onClose }) {
           isShooting: false,
           hasHitPlayer: false,
           particles: [],
+          shootParticles: [],
         });
       }
 
