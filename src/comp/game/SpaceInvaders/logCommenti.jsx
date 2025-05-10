@@ -1625,9 +1625,14 @@ function SpaceInvaders({ onClose }) {
             "#FF4500",
             "#FF0000",
           ];
-          const colorIndex = Math.floor((frames / 5) % colorCycle.length);
+          const elapsed = performance.now();
+          const colorCycleSpeed = 100;
+          const alphaCycleSpeed = 300;
+          const colorIndex =
+            Math.floor(elapsed / colorCycleSpeed) % colorCycle.length;
           const beamColor = colorCycle[colorIndex];
-          const alpha = 0.3 + 0.5 * Math.abs(Math.sin(frames / 3));
+          const alpha =
+            0.3 + 0.5 * Math.abs(Math.sin(elapsed / alphaCycleSpeed));
           c.fillStyle = beamColor;
           c.globalAlpha = alpha;
           c.fillRect(
@@ -1747,12 +1752,6 @@ function SpaceInvaders({ onClose }) {
       });
 
       /***************************************************************
-       *                   SECTION: FRAME CONTROL                    *
-       ***************************************************************/
-
-      frames++;
-
-      /***************************************************************
        *                      SECTION: PARTICLES                     *
        ***************************************************************/
 
@@ -1781,16 +1780,9 @@ function SpaceInvaders({ onClose }) {
       animationIdRef.current = requestAnimationFrame(gameLoop);
     };
 
-    /****************************************************************
-     *                                                              *
-     *                        </ GAME LOOP >                        *
-     *                                                              *
-     ****************************************************************/
+    animationIdRef.current = requestAnimationFrame(gameLoop); // next frame
 
-    // === NEXT FRAME ===
-    animationIdRef.current = requestAnimationFrame(gameLoop);
-
-    // === CLEANUP ===
+    // === CLEAN UP ===
     return () => {
       clearInterval(shieldSpawnInterval);
       clearTimeout(invaderGridTimeout);
