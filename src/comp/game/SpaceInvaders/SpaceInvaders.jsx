@@ -897,13 +897,13 @@ function SpaceInvaders({ onClose }) {
        ***************************************************************/
       if (isPlayerActiveRef.current) {
         /* === PLAYER MOVEMENT === */
-        if (keysPressed.has("ArrowLeft")) {
+        if (keysPressed.has("ArrowLeft") || keysPressed.has("a")) {
           playerXRef.current = Math.max(
             playerXRef.current - playerConfig.speed,
             0
           );
           playerRotationRef.current = -0.15;
-        } else if (keysPressed.has("ArrowRight")) {
+        } else if (keysPressed.has("ArrowRight") || keysPressed.has("d")) {
           playerXRef.current = Math.min(
             playerXRef.current + playerConfig.speed,
             canvas.width - playerConfig.width
