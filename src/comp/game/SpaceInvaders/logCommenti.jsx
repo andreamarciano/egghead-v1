@@ -806,7 +806,9 @@ function SpaceInvaders({ onClose }) {
         const types = ["big", "med", "small"];
         const type = types[Math.floor(Math.random() * types.length)];
 
-        const x = Math.random() * (canvas.width - meteorConfig.size[type]);
+        const x = Math.floor(
+          Math.random() * (canvas.width - meteorConfig.size[type])
+        );
         const y = -meteorConfig.size[type];
 
         meteorsRef.current.push({
@@ -823,7 +825,7 @@ function SpaceInvaders({ onClose }) {
         });
 
         // debug - spawn
-        // console.log(`[METEOR] spawned a ${type} at x: ${Math.floor(x)}`);
+        // console.log(`[METEOR] spawned a ${type} at x: ${x}`);
       }
     }, spawnTime.meteor);
 
