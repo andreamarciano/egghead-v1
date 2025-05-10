@@ -1493,50 +1493,55 @@ function SpaceInvaders({ onClose }) {
        ***************************************************************/
 
       /* === DRAW PLAYER === */
-      c.save();
-      // flash & player lose
-      c.globalAlpha = isPlayerActiveRef.current ? playerOpacityRef.current : 0;
-      // rotation
-      c.translate(
-        playerXRef.current + playerConfig.width / 2,
-        playerY + playerConfig.height / 2
-      );
-      c.rotate(playerRotationRef.current);
-      c.translate(
-        -playerXRef.current - playerConfig.width / 2,
-        -playerY - playerConfig.height / 2
-      );
-      if (playerImageRef.current.complete) {
-        c.drawImage(
-          playerImageRef.current,
-          playerXRef.current,
-          playerY,
-          playerConfig.width,
-          playerConfig.height
+      const drawPlayer = () => {
+        c.save();
+        // flash & player lose
+        c.globalAlpha = isPlayerActiveRef.current
+          ? playerOpacityRef.current
+          : 0;
+        // rotation
+        c.translate(
+          playerXRef.current + playerConfig.width / 2,
+          playerY + playerConfig.height / 2
         );
-      } else {
-        // fallback
-        c.fillStyle = "green";
-        c.fillRect(
-          playerXRef.current,
-          playerY,
-          playerConfig.width,
-          playerConfig.height
+        c.rotate(playerRotationRef.current);
+        c.translate(
+          -playerXRef.current - playerConfig.width / 2,
+          -playerY - playerConfig.height / 2
         );
-      }
-      // debug - player hitbox
-      // c.fillStyle = "rgba(255, 0, 0, 0.2)";
-      // c.fillRect(playerXRef.current, playerY, playerConfig.width, playerConfig.height);
+        if (playerImageRef.current.complete) {
+          c.drawImage(
+            playerImageRef.current,
+            playerXRef.current,
+            playerY,
+            playerConfig.width,
+            playerConfig.height
+          );
+        } else {
+          // fallback
+          c.fillStyle = "green";
+          c.fillRect(
+            playerXRef.current,
+            playerY,
+            playerConfig.width,
+            playerConfig.height
+          );
+        }
+        // debug - player hitbox
+        // c.fillStyle = "rgba(255, 0, 0, 0.2)";
+        // c.fillRect(playerXRef.current, playerY, playerConfig.width, playerConfig.height);
 
-      // debug - log position & rotation
-      // console.log({
-      //   x: playerXRef.current,
-      //   y: playerY,
-      //   width: playerConfig.width,
-      //   height: playerConfig.height,
-      //   rotation: playerRotationRef.current.toFixed(2),
-      // });
-      c.restore();
+        // debug - log position & rotation
+        // console.log({
+        //   x: playerXRef.current,
+        //   y: playerY,
+        //   width: playerConfig.width,
+        //   height: playerConfig.height,
+        //   rotation: playerRotationRef.current.toFixed(2),
+        // });
+        c.restore();
+      };
+      drawPlayer();
 
       /* === DRAW SHIELD ON PLAYER === */
       if (isShieldActiveRef.current && shieldImageRef.current.complete) {

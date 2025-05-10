@@ -1399,35 +1399,40 @@ function SpaceInvaders({ onClose }) {
        ***************************************************************/
 
       /* === DRAW PLAYER === */
-      c.save();
-      c.globalAlpha = isPlayerActiveRef.current ? playerOpacityRef.current : 0;
-      c.translate(
-        playerXRef.current + playerConfig.width / 2,
-        playerY + playerConfig.height / 2
-      );
-      c.rotate(playerRotationRef.current);
-      c.translate(
-        -playerXRef.current - playerConfig.width / 2,
-        -playerY - playerConfig.height / 2
-      );
-      if (playerImageRef.current.complete) {
-        c.drawImage(
-          playerImageRef.current,
-          playerXRef.current,
-          playerY,
-          playerConfig.width,
-          playerConfig.height
+      const drawPlayer = () => {
+        c.save();
+        c.globalAlpha = isPlayerActiveRef.current
+          ? playerOpacityRef.current
+          : 0;
+        c.translate(
+          playerXRef.current + playerConfig.width / 2,
+          playerY + playerConfig.height / 2
         );
-      } else {
-        c.fillStyle = "green";
-        c.fillRect(
-          playerXRef.current,
-          playerY,
-          playerConfig.width,
-          playerConfig.height
+        c.rotate(playerRotationRef.current);
+        c.translate(
+          -playerXRef.current - playerConfig.width / 2,
+          -playerY - playerConfig.height / 2
         );
-      }
-      c.restore();
+        if (playerImageRef.current.complete) {
+          c.drawImage(
+            playerImageRef.current,
+            playerXRef.current,
+            playerY,
+            playerConfig.width,
+            playerConfig.height
+          );
+        } else {
+          c.fillStyle = "green";
+          c.fillRect(
+            playerXRef.current,
+            playerY,
+            playerConfig.width,
+            playerConfig.height
+          );
+        }
+        c.restore();
+      };
+      drawPlayer();
 
       /* === DRAW SHIELD ON PLAYER === */
       if (isShieldActiveRef.current && shieldImageRef.current.complete) {
