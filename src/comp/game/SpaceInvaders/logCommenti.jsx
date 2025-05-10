@@ -101,23 +101,27 @@ function SpaceInvaders({ onClose }) {
     meteorSmall: 50,
   };
   const spawnScore = {
+    // power up
+    shield: 1000,
+    // enemy
     meteor: 500,
-    shield: 750,
-    follower: 1000,
+    follower: 750,
   };
   const frameRate = {
     invaderProjectile: 90, // frame/60 = ~1.5 s
     invaderGrid: 480, // ~8 s
     invaderGridTop: 780, // ~13 s
-    follower: 360, // ~6 s
   };
   // debug - fps (part 1)
   // let lastTime = performance.now();
   // let frameCount = 0;
   // let fps = 0;
   const spawnTime = {
+    // power up
     shield: 15000,
+    // enemy
     meteor: 6000,
+    follower: 6500,
   };
 
   /* Player */
@@ -223,7 +227,7 @@ function SpaceInvaders({ onClose }) {
   const shieldConfig = {
     width: 144,
     height: 137,
-    time: 8000,
+    time: 5000,
     xmin: 100,
     xmax: 1100,
   };
@@ -741,9 +745,40 @@ function SpaceInvaders({ onClose }) {
         });
 
         // debug - spawn
-        console.log(`[METEOR] spawned a ${type} at x: ${Math.floor(x)}`);
+        // console.log(`[METEOR] spawned a ${type} at x: ${Math.floor(x)}`);
       }
     }, spawnTime.meteor);
+
+    /* === SPAWN: FOLLOWER === */
+    const followerSpawnInterval = setInterval(() => {
+      if (
+        scoreRef.current >= spawnScore.follower &&
+        followersRef.current.length < 2
+      ) {
+        const x = Math.random() * (canvas.width - followerConfig.width);
+
+        followersRef.current.push({
+          x,
+          y: 10,
+          width: followerConfig.width,
+          height: followerConfig.height,
+          lives: followerConfig.lives,
+          shootTimer: 0,
+          isCharging: false,
+          isShooting: false,
+          hasHitPlayer: false,
+          particles: [],
+          shootParticles: [],
+        });
+
+        // debug - spawn
+        // console.log(`[FOLLOWER] Spawned at x: ${Math.floor(x)}`);
+      }
+    }, spawnTime.follower);
+
+    /***************************************************************
+     *                      SECTION: FUNCTIONS                     *
+     ***************************************************************/
 
     /* === ACTIVATE SHIELD === */
     const activateShield = () => {
@@ -1741,36 +1776,6 @@ function SpaceInvaders({ onClose }) {
         });
       }
 
-      /* === FRAME CONTROL: FOLLOWER SPAWN === */
-      if (
-        scoreRef.current >= spawnScore.follower &&
-        frames % frameRate.follower === 0 &&
-        followersRef.current.length < 2
-      ) {
-        const x = Math.random() * (canvas.width - followerConfig.width);
-        followersRef.current.push({
-          x,
-          y: 10,
-          width: followerConfig.width,
-          height: followerConfig.height,
-          lives: followerConfig.lives,
-          shootTimer: 0,
-          isCharging: false,
-          isShooting: false,
-          hasHitPlayer: false,
-          particles: [],
-          shootParticles: [],
-        });
-      }
-      // debug - score threshold
-      // else {
-      //   console.log("Spawn condition not met:", {
-      //     score,
-      //     spawnScore: spawnScore.follower,
-      //     frames: frames,
-      //   });
-      // }
-
       /***************************************************************
        *                      SECTION: PARTICLES                     *
        ***************************************************************/
@@ -1813,6 +1818,7 @@ function SpaceInvaders({ onClose }) {
     return () => {
       clearInterval(shieldSpawnInterval);
       clearInterval(meteorSpawnInterval);
+      clearInterval(followerSpawnInterval);
 
       removeEventListener("keydown", handleKeyDown);
       removeEventListener("keyup", handleKeyUp);
