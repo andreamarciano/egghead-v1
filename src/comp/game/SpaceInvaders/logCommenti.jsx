@@ -943,6 +943,8 @@ function SpaceInvaders({ onClose }) {
       //   debug - player active
       //   console.log("Player inactive – movement and shooting disabled");
       // }
+      // State Update for Drawing
+      setPlayerX(playerXRef.current);
 
       /***************************************************************
        *             SECTION: SPAWN ELEMENT & MOVEMENT               *
@@ -1013,9 +1015,6 @@ function SpaceInvaders({ onClose }) {
           follower.hasHitPlayer = false;
         }
       });
-
-      // === STATE UPDATES FOR DRAWING ===
-      setPlayerX(playerXRef.current);
 
       // === LOSE CONDITION ===
       const hasLost = invaderGridsRef.current.some(
