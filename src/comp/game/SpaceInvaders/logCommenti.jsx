@@ -107,19 +107,12 @@ function SpaceInvaders({ onClose }) {
     meteor: 500,
     follower: 750,
   };
-  const frameRate = {
-    invaderProjectile: 90, // frame/60 = ~1.5 s
-    invaderGrid: 480, // ~8 s
-    invaderGridTop: 780, // ~13 s
-  };
-  // debug - fps (part 1)
-  // let lastTime = performance.now();
-  // let frameCount = 0;
-  // let fps = 0;
   const spawnTime = {
     // power up
     shield: 15000,
     // enemy
+    invaderMin: 7500,
+    invaderMax: 13000,
     invaderProjectile: 1500,
     meteor: 6000,
     follower: 6500,
@@ -697,7 +690,7 @@ function SpaceInvaders({ onClose }) {
     };
 
     /***************************************************************
-     *                   SECTION: SPAWN ELEMENT                    *
+     *                   SECTION: SPAWN POWER UP                   *
      ***************************************************************/
 
     /* === SPAWN: SHIELD === */
@@ -722,6 +715,58 @@ function SpaceInvaders({ onClose }) {
         });
       }
     }, spawnTime.shield);
+
+    /***************************************************************
+     *                    SECTION: SPAWN ENEMY                     *
+     ***************************************************************/
+
+    /* === SPAWN: 1st INVADER GRID === */
+    const spawnInvaderGrid = () => {
+      const cols = Math.floor(Math.random() * 10 + 5);
+      const rows = Math.floor(Math.random() * 5 + 2);
+      const gridWidth = cols * invaderConfig.width;
+      const gridHeight = rows * invaderConfig.height;
+
+      const x = 0;
+      const y = 0;
+
+      const sizeFactor = cols * rows;
+      const minSize = 5 * 2;
+      const maxSize = 15 * 7;
+      const speed =
+        invaderConfig.maxSpeed -
+        ((sizeFactor - minSize) / (maxSize - minSize)) *
+          (invaderConfig.maxSpeed - invaderConfig.minSpeed);
+
+      invaderGridsRef.current.push({
+        x,
+        y,
+        direction: 1,
+        width: gridWidth,
+        height: gridHeight,
+        cols,
+        rows,
+        speed,
+        invaders: Array.from({ length: rows }, () => Array(cols).fill(true)),
+      });
+    };
+    spawnInvaderGrid();
+    /* === SPAWN: NEXT INVADER GRIDS === */
+    let invaderGridTimeout;
+    const scheduleInvaderGrid = () => {
+      const interval = Math.floor(
+        Math.random() * (spawnTime.invaderMax - spawnTime.invaderMin) +
+          spawnTime.invaderMin
+      );
+
+      invaderGridTimeout = setTimeout(() => {
+        if (!isGameRunning) return;
+
+        spawnInvaderGrid();
+        scheduleInvaderGrid();
+      }, interval);
+    };
+    scheduleInvaderGrid();
 
     /* === SPAWN: INVADER PROJECTILE === */
     const invaderShootInterval = setInterval(() => {
@@ -842,62 +887,12 @@ function SpaceInvaders({ onClose }) {
     addEventListener("keydown", handleKeyDown);
     addEventListener("keyup", handleKeyUp);
 
-    /* === INVADER GRID SPAWNING === */
-    const spawnInvaderGrid = () => {
-      const cols = Math.floor(Math.random() * 10 + 5); // 5-15
-      const rows = Math.floor(Math.random() * 5 + 2); // 2-7
-      const gridWidth = cols * invaderConfig.width;
-      const gridHeight = rows * invaderConfig.height;
-
-      const x = 0;
-      const y = 0;
-
-      const sizeFactor = cols * rows;
-      const minSize = 5 * 2; // 10
-      const maxSize = 15 * 7; // 105
-      const speed =
-        invaderConfig.maxSpeed -
-        ((sizeFactor - minSize) / (maxSize - minSize)) *
-          (invaderConfig.maxSpeed - invaderConfig.minSpeed);
-
-      // debug - invader grid speed
-      // console.log(`New group: ${cols}x${rows}, speed: ${speed.toFixed(2)}`);
-
-      invaderGridsRef.current.push({
-        x,
-        y,
-        direction: 1,
-        width: gridWidth,
-        height: gridHeight,
-        cols,
-        rows,
-        speed,
-        invaders: Array.from({ length: rows }, () => Array(cols).fill(true)),
-      });
-    };
-    // === FRAME CONTROL: INVADER GRID SPAWN ===
-    spawnInvaderGrid(); // first spawn
-    let frames = 1;
-    let randomInterval = Math.floor(
-      Math.random() * (frameRate.invaderGridTop - frameRate.invaderGrid) +
-        frameRate.invaderGrid
-    );
-
     /****************************************************************
      *                                                              *
      *                         < GAME LOOP >                        *
      *                                                              *
      ****************************************************************/
     const gameLoop = () => {
-      // debug - fps (part 2)
-      // const gameLoop = (currentTime) => {
-      //   frameCount++;
-      //   if (currentTime - lastTime >= 1000) {
-      //     fps = frameCount;
-      //     frameCount = 0;
-      //     lastTime = currentTime;
-      //     console.log("FPS:", fps);
-      //   }
       /***************************************************************
        *                        SECTION: PLAYER                      *
        ***************************************************************/
@@ -1756,20 +1751,6 @@ function SpaceInvaders({ onClose }) {
        *                   SECTION: FRAME CONTROL                    *
        ***************************************************************/
 
-      /* === FRAME CONTROL: NEW INVADER GRIDS SPAWN === */
-      if (frames % randomInterval === 0) {
-        spawnInvaderGrid();
-        frames = 0;
-        randomInterval = Math.floor(
-          Math.random() * (frameRate.invaderGridTop - frameRate.invaderGrid) +
-            frameRate.invaderGrid
-        );
-        // debug - new grid spawn time
-        // console.log(
-        //   `[TIMER RESET] New grid: ${(randomInterval / 60).toFixed(2)} s`
-        // );
-      }
-
       frames++;
 
       /***************************************************************
@@ -1813,6 +1794,7 @@ function SpaceInvaders({ onClose }) {
     // === CLEANUP ===
     return () => {
       clearInterval(shieldSpawnInterval);
+      clearTimeout(invaderGridTimeout);
       clearInterval(invaderShootInterval);
       clearInterval(meteorSpawnInterval);
       clearInterval(followerSpawnInterval);

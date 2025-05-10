@@ -107,15 +107,12 @@ function SpaceInvaders({ onClose }) {
     meteor: 500,
     follower: 750,
   };
-  const frameRate = {
-    invaderProjectile: 90,
-    invaderGrid: 480,
-    invaderGridTop: 780,
-  };
   const spawnTime = {
     // power up
     shield: 15000,
     // enemy
+    invaderMin: 7500,
+    invaderMax: 13000,
     invaderProjectile: 1500,
     meteor: 6000,
     follower: 6500,
@@ -681,7 +678,7 @@ function SpaceInvaders({ onClose }) {
     };
 
     /***************************************************************
-     *                   SECTION: SPAWN ELEMENT                    *
+     *                   SECTION: SPAWN POWER UP                   *
      ***************************************************************/
 
     /* === SPAWN: SHIELD === */
@@ -703,6 +700,58 @@ function SpaceInvaders({ onClose }) {
         });
       }
     }, spawnTime.shield);
+
+    /***************************************************************
+     *                    SECTION: SPAWN ENEMY                     *
+     ***************************************************************/
+
+    /* === SPAWN: 1st INVADER GRID === */
+    const spawnInvaderGrid = () => {
+      const cols = Math.floor(Math.random() * 10 + 5);
+      const rows = Math.floor(Math.random() * 5 + 2);
+      const gridWidth = cols * invaderConfig.width;
+      const gridHeight = rows * invaderConfig.height;
+
+      const x = 0;
+      const y = 0;
+
+      const sizeFactor = cols * rows;
+      const minSize = 5 * 2;
+      const maxSize = 15 * 7;
+      const speed =
+        invaderConfig.maxSpeed -
+        ((sizeFactor - minSize) / (maxSize - minSize)) *
+          (invaderConfig.maxSpeed - invaderConfig.minSpeed);
+
+      invaderGridsRef.current.push({
+        x,
+        y,
+        direction: 1,
+        width: gridWidth,
+        height: gridHeight,
+        cols,
+        rows,
+        speed,
+        invaders: Array.from({ length: rows }, () => Array(cols).fill(true)),
+      });
+    };
+    spawnInvaderGrid();
+    /* === SPAWN: NEXT INVADER GRIDS === */
+    let invaderGridTimeout;
+    const scheduleInvaderGrid = () => {
+      const interval = Math.floor(
+        Math.random() * (spawnTime.invaderMax - spawnTime.invaderMin) +
+          spawnTime.invaderMin
+      );
+
+      invaderGridTimeout = setTimeout(() => {
+        if (!isGameRunning) return;
+
+        spawnInvaderGrid();
+        scheduleInvaderGrid();
+      }, interval);
+    };
+    scheduleInvaderGrid();
 
     /* === SPAWN: INVADER PROJECTILE === */
     const invaderShootInterval = setInterval(() => {
@@ -814,44 +863,6 @@ function SpaceInvaders({ onClose }) {
     };
     addEventListener("keydown", handleKeyDown);
     addEventListener("keyup", handleKeyUp);
-
-    /* === INVADER GRID SPAWNING === */
-    const spawnInvaderGrid = () => {
-      const cols = Math.floor(Math.random() * 10 + 5);
-      const rows = Math.floor(Math.random() * 5 + 2);
-      const gridWidth = cols * invaderConfig.width;
-      const gridHeight = rows * invaderConfig.height;
-
-      const x = 0;
-      const y = 0;
-
-      const sizeFactor = cols * rows;
-      const minSize = 5 * 2;
-      const maxSize = 15 * 7;
-      const speed =
-        invaderConfig.maxSpeed -
-        ((sizeFactor - minSize) / (maxSize - minSize)) *
-          (invaderConfig.maxSpeed - invaderConfig.minSpeed);
-
-      invaderGridsRef.current.push({
-        x,
-        y,
-        direction: 1,
-        width: gridWidth,
-        height: gridHeight,
-        cols,
-        rows,
-        speed,
-        invaders: Array.from({ length: rows }, () => Array(cols).fill(true)),
-      });
-    };
-    // === FRAME CONTROL: INVADER GRID SPAWN ===
-    spawnInvaderGrid();
-    let frames = 1;
-    let randomInterval = Math.floor(
-      Math.random() * (frameRate.invaderGridTop - frameRate.invaderGrid) +
-        frameRate.invaderGrid
-    );
 
     /****************************************************************
      *                                                              *
@@ -1622,16 +1633,6 @@ function SpaceInvaders({ onClose }) {
        *                   SECTION: FRAME CONTROL                    *
        ***************************************************************/
 
-      /* === FRAME CONTROL: NEW INVADER GRIDS SPAWN === */
-      if (frames % randomInterval === 0) {
-        spawnInvaderGrid();
-        frames = 0;
-        randomInterval = Math.floor(
-          Math.random() * (frameRate.invaderGridTop - frameRate.invaderGrid) +
-            frameRate.invaderGrid
-        );
-      }
-
       frames++;
 
       /***************************************************************
@@ -1660,7 +1661,7 @@ function SpaceInvaders({ onClose }) {
         c.restore();
       });
 
-      animationIdRef.current = requestAnimationFrame(gameLoop); // cambia fuori?
+      animationIdRef.current = requestAnimationFrame(gameLoop);
     };
 
     /****************************************************************
@@ -1675,6 +1676,7 @@ function SpaceInvaders({ onClose }) {
     // === CLEANUP ===
     return () => {
       clearInterval(shieldSpawnInterval);
+      clearTimeout(invaderGridTimeout);
       clearInterval(invaderShootInterval);
       clearInterval(meteorSpawnInterval);
       clearInterval(followerSpawnInterval);
