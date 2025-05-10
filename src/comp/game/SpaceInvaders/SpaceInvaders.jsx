@@ -88,12 +88,21 @@ function SpaceInvaders({ onClose }) {
   /* Start Game */
   const [isGameRunning, setIsGameRunning] = useState(false);
   const [gameOver, setGameOver] = useState(false);
+  const isGameEndingRef = useRef(false);
   const animationIdRef = useRef(null);
 
   /* Gameplay */
+  const scoreParams = {
+    single: 10,
+    grid: 50,
+    follower: 100,
+    meteorBig: 10,
+    meteorMed: 20,
+    meteorSmall: 50,
+  };
   const spawnScore = {
     meteor: 500,
-    shield: 750,
+    shield: 200, //750 - cambia
     follower: 1000,
   };
   const frameRate = {
@@ -102,7 +111,7 @@ function SpaceInvaders({ onClose }) {
     invaderGridTop: 780,
     follower: 360,
     meteor: 300,
-    shield: 900,
+    shield: 100, // 660 - cambia
   };
 
   /* Player */
@@ -210,19 +219,13 @@ function SpaceInvaders({ onClose }) {
     width: 144,
     height: 137,
     time: 8000,
+    xmin: 100,
+    xmax: 1100,
   };
 
   /* Score */
   const [score, setScore] = useState(0);
   const scoreRef = useRef(score);
-  const scoreParams = {
-    single: 10,
-    grid: 50,
-    follower: 100,
-    meteorBig: 10,
-    meteorMed: 20,
-    meteorSmall: 50,
-  };
   const addScore = (points) => {
     scoreRef.current += points;
     setScore(scoreRef.current);
@@ -786,8 +789,13 @@ function SpaceInvaders({ onClose }) {
         scoreRef.current >= spawnScore.shield &&
         frames % frameRate.shield === 0
       ) {
-        const x = Math.random() * (canvas.width - 40);
+        const x = Math.floor(
+          Math.random() * (shieldConfig.xmax - shieldConfig.xmin) +
+            shieldConfig.xmin
+        );
         const y = -40;
+
+        console.log(`posizione shield ${x}`); // cambia
 
         shieldPowerUpRef.current.push({
           x,
@@ -991,64 +999,6 @@ function SpaceInvaders({ onClose }) {
         });
       });
 
-      /* === COLLISION DETECTION: SHIELD → PLAYER === */
-      shieldPowerUpRef.current.forEach((powerUp, sIndex) => {
-        const hit =
-          powerUp.x < playerXRef.current + playerConfig.width &&
-          powerUp.x + powerUp.width > playerXRef.current &&
-          powerUp.y < playerY + playerConfig.height &&
-          powerUp.y + powerUp.height > playerY;
-
-        if (hit) {
-          shieldPowerUpRef.current.splice(sIndex, 1);
-
-          activateShield();
-        }
-      });
-
-      /* === COLLISION DETECTION: INVADER PROJECTILE → PLAYER === */
-      invaderProjectilesRef.current.forEach((p, index) => {
-        const hitbox = getPlayerHitbox();
-
-        const hit =
-          p.x < hitbox.x + hitbox.width &&
-          p.x + p.width > hitbox.x &&
-          p.y < hitbox.y + hitbox.height &&
-          p.y + p.height > hitbox.y;
-
-        if (hit) {
-          // === COLLISION DETECTION: INVADER PROJECTILE → SHIELD ===
-          if (isShieldActiveRef.current) {
-            invaderProjectilesRef.current.splice(index, 1);
-
-            createExplosion(p.x, p.y, shieldParticles);
-            playSound(soundURL.shieldBlock, 0.5);
-
-            return;
-          }
-
-          flashEffect(playerOpacityRef, {
-            playerActive: isPlayerActiveRef,
-          });
-
-          playSound(soundURL.playerHit, 0.7);
-          createExplosion(
-            playerXRef.current + playerConfig.width / 2,
-            playerY + playerConfig.height / 2,
-            playerParticles
-          );
-          invaderProjectilesRef.current.splice(index, 1);
-
-          const newLives = Math.max(0, livesRef.current - 1);
-          setLives(newLives);
-
-          // === LOSE CONDITION ===
-          if (newLives <= 0) {
-            handleGameOver();
-          }
-        }
-      });
-
       /* === COLLISION DETECTION: PLAYER PROJECTILE → INVADER === */
       projectilesRef.current.forEach((p, pIndex) => {
         invaderGridsRef.current.forEach((grid) => {
@@ -1157,10 +1107,108 @@ function SpaceInvaders({ onClose }) {
         });
       });
 
+      /* === COLLISION DETECTION: PLAYER PROJECTILE → FOLLOWER === */
+      projectilesRef.current.forEach((p, pIndex) => {
+        followersRef.current.forEach((follower, fIndex) => {
+          const hit =
+            p.x < follower.x + follower.width &&
+            p.x + p.width > follower.x &&
+            p.y < follower.y + follower.height &&
+            p.y + p.height > follower.y;
+
+          if (hit) {
+            follower.lives -= 1;
+
+            createExplosion(
+              follower.x + follower.width / 2,
+              follower.y + follower.height / 2,
+              followerParticles
+            );
+            playSound(
+              follower.lives > 0
+                ? soundURL.hitFollower
+                : soundURL.destroyFollower,
+              0.6
+            );
+
+            // remove follower
+            if (follower.lives <= 0) {
+              followersRef.current.splice(fIndex, 1);
+
+              addScore(scoreParams.follower);
+            }
+
+            projectilesRef.current.splice(pIndex, 1);
+          }
+        });
+      });
+
+      /* === COLLISION DETECTION: SHIELD → PLAYER === */
+      shieldPowerUpRef.current.forEach((powerUp, sIndex) => {
+        if (isGameEndingRef.current) return;
+
+        const hit =
+          powerUp.x < playerXRef.current + playerConfig.width &&
+          powerUp.x + powerUp.width > playerXRef.current &&
+          powerUp.y < playerY + playerConfig.height &&
+          powerUp.y + powerUp.height > playerY;
+
+        if (hit) {
+          shieldPowerUpRef.current.splice(sIndex, 1);
+
+          activateShield();
+        }
+      });
+
+      /* === COLLISION DETECTION: INVADER PROJECTILE → PLAYER === */
+      invaderProjectilesRef.current.forEach((p, index) => {
+        if (isGameEndingRef.current) return;
+
+        const hitbox = getPlayerHitbox();
+        const hit =
+          p.x < hitbox.x + hitbox.width &&
+          p.x + p.width > hitbox.x &&
+          p.y < hitbox.y + hitbox.height &&
+          p.y + p.height > hitbox.y;
+
+        if (hit) {
+          // === COLLISION DETECTION: INVADER PROJECTILE → SHIELD ===
+          if (isShieldActiveRef.current) {
+            invaderProjectilesRef.current.splice(index, 1);
+
+            createExplosion(p.x, p.y, shieldParticles);
+            playSound(soundURL.shieldBlock, 0.5);
+
+            return;
+          }
+
+          flashEffect(playerOpacityRef, {
+            playerActive: isPlayerActiveRef,
+          });
+
+          playSound(soundURL.playerHit, 0.7);
+          createExplosion(
+            playerXRef.current + playerConfig.width / 2,
+            playerY + playerConfig.height / 2,
+            playerParticles
+          );
+          invaderProjectilesRef.current.splice(index, 1);
+
+          const newLives = Math.max(0, livesRef.current - 1);
+          setLives(newLives);
+
+          // === LOSE CONDITION ===
+          if (newLives <= 0) {
+            handleGameOver();
+          }
+        }
+      });
+
       /* === COLLISION DETECTION: METEOR → PLAYER === */
       meteorsRef.current.forEach((m, index) => {
-        const hitbox = getPlayerHitbox();
+        if (isGameEndingRef.current) return;
 
+        const hitbox = getPlayerHitbox();
         const hit =
           m.x < hitbox.x + hitbox.width &&
           m.x + m.width > hitbox.x &&
@@ -1209,6 +1257,7 @@ function SpaceInvaders({ onClose }) {
 
       /* === COLLISION DETECTION: FOLLOWER BEAM → PLAYER === */
       followersRef.current.forEach((follower) => {
+        if (isGameEndingRef.current) return;
         if (!follower.isShooting) return;
 
         const beamHitbox = getFollowerBeamHitbox(follower);
@@ -1254,42 +1303,6 @@ function SpaceInvaders({ onClose }) {
             follower.hasHitPlayer = false;
           }
         }
-      });
-
-      /* === COLLISION DETECTION: PLAYER PROJECTILE → FOLLOWER === */
-      projectilesRef.current.forEach((p, pIndex) => {
-        followersRef.current.forEach((follower, fIndex) => {
-          const hit =
-            p.x < follower.x + follower.width &&
-            p.x + p.width > follower.x &&
-            p.y < follower.y + follower.height &&
-            p.y + p.height > follower.y;
-
-          if (hit) {
-            follower.lives -= 1;
-
-            createExplosion(
-              follower.x + follower.width / 2,
-              follower.y + follower.height / 2,
-              followerParticles
-            );
-            playSound(
-              follower.lives > 0
-                ? soundURL.hitFollower
-                : soundURL.destroyFollower,
-              0.6
-            );
-
-            // remove follower
-            if (follower.lives <= 0) {
-              followersRef.current.splice(fIndex, 1);
-
-              addScore(scoreParams.follower);
-            }
-
-            projectilesRef.current.splice(pIndex, 1);
-          }
-        });
       });
 
       /***************************************************************
@@ -1675,6 +1688,7 @@ function SpaceInvaders({ onClose }) {
       scoreRef.current = 0;
       setLives(3);
       setPlayerX(playerXRef.current);
+      isGameEndingRef.current = false;
     }
 
     setGameOver(false);
@@ -1683,6 +1697,9 @@ function SpaceInvaders({ onClose }) {
 
   /* === GAME OVER === */
   const handleGameOver = () => {
+    if (isGameEndingRef.current) return;
+    isGameEndingRef.current = true;
+
     isPlayerActiveRef.current = false;
     playSound(soundURL.gameOver);
 
@@ -1690,7 +1707,8 @@ function SpaceInvaders({ onClose }) {
       cancelAnimationFrame(animationIdRef.current);
       setGameOver(true);
       setIsGameRunning(false);
-    }, 1500);
+      isGameEndingRef.current = false;
+    }, 2000);
   };
 
   return (
