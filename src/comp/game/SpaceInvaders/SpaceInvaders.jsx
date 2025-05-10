@@ -1803,8 +1803,13 @@ function SpaceInvaders({ onClose }) {
                 </ul>
               </div>
             )}
-            {/* cambia - aggiusta si vede sempre */}
-            <p className="text-xl text-blue-600 mb-6 ">Final score: {score}</p>
+            {/* Final Score */}
+            {topScores.length > 0 && score > 0 && (
+              <p className="text-xl text-blue-600 mb-6 ">
+                Final score: {score}
+              </p>
+            )}
+
             {/* Discount Code */}
             {hasUnlockedDiscount && (
               <div className="mb-6 text-green-400 text-lg font-semibold text-center bg-green-900 bg-opacity-40 p-4 rounded">
