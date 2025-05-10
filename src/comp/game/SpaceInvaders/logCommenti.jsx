@@ -214,7 +214,6 @@ function SpaceInvaders({ onClose }) {
 
   /* PowerUp */
   // Shield
-  const shieldImage = new Image();
   const shieldImageRef = useRef(new Image());
   const shieldPowerUpRef = useRef([]);
   const isShieldActiveRef = useRef(false);
@@ -639,7 +638,6 @@ function SpaceInvaders({ onClose }) {
     meteorImages.big.src = imgURL.meteorBig;
     meteorImages.med.src = imgURL.meteorMed;
     meteorImages.small.src = imgURL.meteorSmall;
-    shieldImage.src = imgURL.shield;
     shieldImageRef.current.src = imgURL.shield;
     followerImageRef.current.src = imgURL.follower;
 
@@ -843,7 +841,7 @@ function SpaceInvaders({ onClose }) {
           width: 40,
           height: 40,
           speed: 2,
-          image: shieldImage,
+          image: shieldImageRef.current,
         });
       }
 
@@ -1036,10 +1034,17 @@ function SpaceInvaders({ onClose }) {
         .map((p) => ({ ...p, y: p.y + p.speed }))
         .filter((p) => p.y < canvas.height);
       shieldPowerUpRef.current.forEach((p) => {
-        c.drawImage(p.image, p.x, p.y, p.width, p.height);
-        // debug - hitbox shield
-        // c.fillStyle = "rgba(0, 0, 255, 0.2)";
-        // c.fillRect(p.x, p.y, p.width, p.height);
+        if (p.image && p.image.complete) {
+          c.drawImage(p.image, p.x, p.y, p.width, p.height);
+          // debug - hitbox shield
+          // c.fillStyle = "rgba(0, 0, 255, 0.2)";
+          // c.fillRect(p.x, p.y, p.width, p.height);
+        } else {
+          // fallback
+          c.fillStyle = "white";
+          c.fillRect(p.x, p.y, p.width, p.height);
+          console.warn("[SHIELD] image not ready");
+        }
       });
 
       /***************************************************************
