@@ -111,12 +111,14 @@ function SpaceInvaders({ onClose }) {
     invaderGridTop: 780, // ~13 s
     follower: 360, // ~6 s
     meteor: 300, // ~5 s
-    shield: 900, // ~15 s
   };
   // debug - fps (part 1)
   // let lastTime = performance.now();
   // let frameCount = 0;
   // let fps = 0;
+  const spawnTime = {
+    shield: 15000,
+  };
 
   /* Player */
   const playerImageRef = useRef(new Image());
@@ -647,6 +649,10 @@ function SpaceInvaders({ onClose }) {
     playerXRef.current = initialPlayerX;
     const playerY = canvas.height - playerConfig.height - 10;
 
+    /***************************************************************
+     *                      SECTION: HITBOX                        *
+     ***************************************************************/
+
     /* === PLAYER HITBOX === */
     const getPlayerHitbox = () => {
       // === SHIELD HITBOX ===
@@ -684,6 +690,33 @@ function SpaceInvaders({ onClose }) {
         height: beamHeight,
       };
     };
+
+    /***************************************************************
+     *                   SECTION: SPAWN ELEMENT                    *
+     ***************************************************************/
+
+    /* === SPAWN SHIELD === */
+    const shieldSpawnInterval = setInterval(() => {
+      if (scoreRef.current >= spawnScore.shield) {
+        const x = Math.floor(
+          Math.random() * (shieldConfig.xmax - shieldConfig.xmin) +
+            shieldConfig.xmin
+        );
+        const y = -40;
+
+        // debug - shield x
+        // console.log(`[SHIELD] spawn - x: ${x}`);
+
+        shieldPowerUpRef.current.push({
+          x,
+          y,
+          width: 40,
+          height: 40,
+          speed: 2,
+          image: shieldImageRef.current,
+        });
+      }
+    }, spawnTime.shield);
 
     /* === ACTIVATE SHIELD === */
     const activateShield = () => {
@@ -821,29 +854,6 @@ function SpaceInvaders({ onClose }) {
       /***************************************************************
        *             SECTION: SPAWN ELEMENT & MOVEMENT               *
        ***************************************************************/
-
-      /* === FRAME CONTROL: SPAWN SHIELD === */
-      if (
-        scoreRef.current >= spawnScore.shield &&
-        frames % frameRate.shield === 0
-      ) {
-        const x = Math.floor(
-          Math.random() * (shieldConfig.xmax - shieldConfig.xmin) +
-            shieldConfig.xmin
-        );
-        // debug - shield x spawn
-        // console.log(`shield: ${x}`);
-        const y = -40;
-
-        shieldPowerUpRef.current.push({
-          x,
-          y,
-          width: 40,
-          height: 40,
-          speed: 2,
-          image: shieldImageRef.current,
-        });
-      }
 
       /* === FRAME CONTROL: METEOR MOVEMENT === */
       if (
@@ -1799,6 +1809,7 @@ function SpaceInvaders({ onClose }) {
 
     // === CLEANUP ===
     return () => {
+      clearInterval(shieldSpawnInterval);
       document.body.style.overflow = "";
       removeEventListener("keydown", handleKeyDown);
       removeEventListener("keyup", handleKeyUp);
