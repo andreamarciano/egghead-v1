@@ -110,7 +110,6 @@ function SpaceInvaders({ onClose }) {
     invaderGrid: 480, // ~8 s
     invaderGridTop: 780, // ~13 s
     follower: 360, // ~6 s
-    meteor: 300, // ~5 s
   };
   // debug - fps (part 1)
   // let lastTime = performance.now();
@@ -118,6 +117,7 @@ function SpaceInvaders({ onClose }) {
   // let fps = 0;
   const spawnTime = {
     shield: 15000,
+    meteor: 6000,
   };
 
   /* Player */
@@ -695,7 +695,7 @@ function SpaceInvaders({ onClose }) {
      *                   SECTION: SPAWN ELEMENT                    *
      ***************************************************************/
 
-    /* === SPAWN SHIELD === */
+    /* === SPAWN: SHIELD === */
     const shieldSpawnInterval = setInterval(() => {
       if (scoreRef.current >= spawnScore.shield) {
         const x = Math.floor(
@@ -704,8 +704,8 @@ function SpaceInvaders({ onClose }) {
         );
         const y = -40;
 
-        // debug - shield x
-        // console.log(`[SHIELD] spawn - x: ${x}`);
+        // debug - spawn
+        // console.log(`[SHIELD] spawn at x: ${x}`);
 
         shieldPowerUpRef.current.push({
           x,
@@ -717,6 +717,33 @@ function SpaceInvaders({ onClose }) {
         });
       }
     }, spawnTime.shield);
+
+    /* === SPAWN: METEOR === */
+    const meteorSpawnInterval = setInterval(() => {
+      if (scoreRef.current >= spawnScore.meteor) {
+        const types = ["big", "med", "small"];
+        const type = types[Math.floor(Math.random() * types.length)];
+
+        const x = Math.random() * (canvas.width - meteorConfig.size[type]);
+        const y = -meteorConfig.size[type];
+
+        meteorsRef.current.push({
+          x,
+          y,
+          type,
+          width: meteorConfig.size[type],
+          height: meteorConfig.size[type],
+          speed: meteorConfig.speed[type],
+          lives: meteorConfig.lives[type],
+          image: meteorImages[type],
+          rotation: Math.random() * Math.PI,
+          rotationSpeed: Math.random() * 0.02 + 0.01,
+        });
+
+        // debug - spawn
+        console.log(`[METEOR] spawned a ${type} at x: ${Math.floor(x)}`);
+      }
+    }, spawnTime.meteor);
 
     /* === ACTIVATE SHIELD === */
     const activateShield = () => {
@@ -854,31 +881,6 @@ function SpaceInvaders({ onClose }) {
       /***************************************************************
        *             SECTION: SPAWN ELEMENT & MOVEMENT               *
        ***************************************************************/
-
-      /* === FRAME CONTROL: METEOR MOVEMENT === */
-      if (
-        scoreRef.current >= spawnScore.meteor &&
-        frames % frameRate.meteor === 0
-      ) {
-        const types = ["big", "med", "small"];
-        const type = types[Math.floor(Math.random() * types.length)];
-
-        const x = Math.random() * (canvas.width - meteorConfig.size[type]);
-        const y = -meteorConfig.size[type];
-
-        meteorsRef.current.push({
-          x,
-          y,
-          type,
-          width: meteorConfig.size[type],
-          height: meteorConfig.size[type],
-          speed: meteorConfig.speed[type],
-          lives: meteorConfig.lives[type],
-          image: meteorImages[type],
-          rotation: Math.random() * Math.PI,
-          rotationSpeed: Math.random() * 0.02 + 0.01,
-        });
-      }
 
       /* === INVADER GRIDS MOVEMENT === */
       invaderGridsRef.current.forEach((grid) => {
@@ -1810,10 +1812,13 @@ function SpaceInvaders({ onClose }) {
     // === CLEANUP ===
     return () => {
       clearInterval(shieldSpawnInterval);
-      document.body.style.overflow = "";
+      clearInterval(meteorSpawnInterval);
+
       removeEventListener("keydown", handleKeyDown);
       removeEventListener("keyup", handleKeyUp);
       cancelAnimationFrame(animationIdRef.current);
+
+      document.body.style.overflow = "";
     };
   }, [isGameRunning, playerColor]);
 
