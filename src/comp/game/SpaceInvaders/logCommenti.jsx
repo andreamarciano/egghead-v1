@@ -120,6 +120,7 @@ function SpaceInvaders({ onClose }) {
     // power up
     shield: 15000,
     // enemy
+    invaderProjectile: 1500,
     meteor: 6000,
     follower: 6500,
   };
@@ -721,6 +722,41 @@ function SpaceInvaders({ onClose }) {
         });
       }
     }, spawnTime.shield);
+
+    /* === SPAWN: INVADER PROJECTILE === */
+    const invaderShootInterval = setInterval(() => {
+      invaderGridsRef.current.forEach((grid) => {
+        const aliveInvaders = [];
+        for (let row = 0; row < grid.rows; row++) {
+          for (let col = 0; col < grid.cols; col++) {
+            if (grid.invaders[row][col]) {
+              aliveInvaders.push({ row, col });
+            }
+          }
+        }
+
+        if (aliveInvaders.length > 0) {
+          const { row, col } =
+            aliveInvaders[Math.floor(Math.random() * aliveInvaders.length)];
+          const x =
+            grid.x +
+            col * invaderConfig.width +
+            invaderConfig.width / 2 -
+            invaderProjectileConfig.width / 2;
+          const y = grid.y + row * invaderConfig.height + invaderConfig.height;
+
+          invaderProjectilesRef.current.push({
+            x,
+            y,
+            width: invaderProjectileConfig.width,
+            height: invaderProjectileConfig.height,
+            speed: invaderProjectileConfig.speed,
+          });
+
+          playLaserSound(soundURL.laserInvader);
+        }
+      });
+    }, spawnTime.invaderProjectile);
 
     /* === SPAWN: METEOR === */
     const meteorSpawnInterval = setInterval(() => {
@@ -1736,46 +1772,6 @@ function SpaceInvaders({ onClose }) {
 
       frames++;
 
-      /* === FRAME CONTROL: INVADER SHOOTING === */
-      if (frames % frameRate.invaderProjectile === 0) {
-        invaderGridsRef.current.forEach((grid) => {
-          // alive invaders inside a grid
-          const aliveInvaders = [];
-          for (let row = 0; row < grid.rows; row++) {
-            for (let col = 0; col < grid.cols; col++) {
-              if (grid.invaders[row][col]) {
-                aliveInvaders.push({ row, col });
-              }
-            }
-          }
-
-          if (aliveInvaders.length > 0) {
-            const { row, col } =
-              aliveInvaders[Math.floor(Math.random() * aliveInvaders.length)];
-            const x =
-              grid.x +
-              col * invaderConfig.width +
-              invaderConfig.width / 2 -
-              invaderProjectileConfig.width / 2;
-            const y =
-              grid.y + row * invaderConfig.height + invaderConfig.height;
-
-            // debug - invader shoot
-            // console.log(`Invader at [${row}, ${col}] fired a shot`);
-
-            invaderProjectilesRef.current.push({
-              x,
-              y,
-              width: invaderProjectileConfig.width,
-              height: invaderProjectileConfig.height,
-              speed: invaderProjectileConfig.speed,
-            });
-
-            playLaserSound(soundURL.laserInvader);
-          }
-        });
-      }
-
       /***************************************************************
        *                      SECTION: PARTICLES                     *
        ***************************************************************/
@@ -1817,6 +1813,7 @@ function SpaceInvaders({ onClose }) {
     // === CLEANUP ===
     return () => {
       clearInterval(shieldSpawnInterval);
+      clearInterval(invaderShootInterval);
       clearInterval(meteorSpawnInterval);
       clearInterval(followerSpawnInterval);
 
