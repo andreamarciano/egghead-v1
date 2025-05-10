@@ -1066,6 +1066,28 @@ function SpaceInvaders({ onClose }) {
         }
       });
 
+      /* === UPDATE: PARTICLES  === */
+      particlesRef.current = particlesRef.current
+        .map((p) => {
+          return {
+            ...p,
+            x: p.x + p.velocity.x,
+            y: p.y + p.velocity.y,
+            opacity: p.opacity - 0.02,
+          };
+        })
+        .filter((p) => p.opacity > 0);
+      particlesRef.current.forEach((p) => {
+        c.save();
+        c.globalAlpha = p.opacity;
+        c.beginPath();
+        c.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        c.fillStyle = p.color;
+        c.fill();
+        c.closePath();
+        c.restore();
+      });
+
       /***************************************************************
        *                SECTION: COLLISION DETECTION                 *
        ***************************************************************/
@@ -1638,32 +1660,7 @@ function SpaceInvaders({ onClose }) {
         }
       });
 
-      /***************************************************************
-       *                      SECTION: PARTICLES                     *
-       ***************************************************************/
-
-      /* === UPDATE: PARTICLES  === */
-      particlesRef.current = particlesRef.current
-        .map((p) => {
-          return {
-            ...p,
-            x: p.x + p.velocity.x,
-            y: p.y + p.velocity.y,
-            opacity: p.opacity - 0.02,
-          };
-        })
-        .filter((p) => p.opacity > 0);
-      particlesRef.current.forEach((p) => {
-        c.save();
-        c.globalAlpha = p.opacity;
-        c.beginPath();
-        c.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        c.fillStyle = p.color;
-        c.fill();
-        c.closePath();
-        c.restore();
-      });
-
+      /* GAME LOOP END */
       animationIdRef.current = requestAnimationFrame(gameLoop);
     };
 
