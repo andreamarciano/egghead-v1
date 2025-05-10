@@ -222,8 +222,6 @@ function SpaceInvaders({ onClose }) {
     width: 144,
     height: 137,
     time: 5000,
-    xmin: 100,
-    xmax: 1100,
   };
 
   /* Score */
@@ -685,10 +683,8 @@ function SpaceInvaders({ onClose }) {
     const shieldSpawnInterval = setInterval(() => {
       if (scoreRef.current >= spawnScore.shield) {
         const x = Math.floor(
-          Math.random() * (shieldConfig.xmax - shieldConfig.xmin) +
-            shieldConfig.xmin
+          Math.random() * (canvas.width - shieldConfig.width)
         );
-        const y = -40;
 
         shieldPowerUpRef.current.push({
           x,
