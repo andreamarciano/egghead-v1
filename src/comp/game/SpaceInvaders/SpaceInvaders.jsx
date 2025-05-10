@@ -969,7 +969,7 @@ function SpaceInvaders({ onClose }) {
         }
       });
 
-      // === LOSE CONDITION ===
+      // === LOSE CONDITION 2 ===
       const hasLost = invaderGridsRef.current.some(
         (grid) => grid.y + grid.height >= canvas.height + 10
       );
@@ -978,27 +978,8 @@ function SpaceInvaders({ onClose }) {
         return;
       }
 
-      // === CLEAR CANVAS ===
+      /* === CLEAR CANVAS === */
       c.clearRect(0, 0, canvas.width, canvas.height);
-
-      /* === BACKGROUND ANIMATION DRAW === */
-      backgroundParticlesRef.current.forEach((p) => {
-        p.y += p.speedY;
-
-        if (p.y - p.radius > canvas.height) {
-          p.x = Math.random() * canvas.width;
-          p.y = -p.radius;
-        }
-
-        c.save();
-        c.globalAlpha = p.opacity;
-        c.beginPath();
-        c.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        c.fillStyle = p.color;
-        c.fill();
-        c.closePath();
-        c.restore();
-      });
 
       /***************************************************************
        *                   SECTION: UPDATE POSITION                  *
@@ -1420,7 +1401,7 @@ function SpaceInvaders({ onClose }) {
        *                        SECTION: DRAW                        *
        ***************************************************************/
 
-      /* === DRAW PLAYER === */
+      /* === DRAW: PLAYER === */
       const drawPlayer = () => {
         c.save();
         c.globalAlpha = isPlayerActiveRef.current
@@ -1456,7 +1437,7 @@ function SpaceInvaders({ onClose }) {
       };
       drawPlayer();
 
-      /* === DRAW SHIELD ON PLAYER === */
+      /* === DRAW: SHIELD ON PLAYER === */
       if (isShieldActiveRef.current && shieldImageRef.current.complete) {
         const shieldX =
           playerXRef.current + playerConfig.width / 2 - shieldConfig.width / 2;
@@ -1472,7 +1453,7 @@ function SpaceInvaders({ onClose }) {
         );
       }
 
-      /* === DRAW INVADER GRIDS === */
+      /* === DRAW: INVADER GRIDS === */
       invaderGridsRef.current.forEach((grid) => {
         for (let row = 0; row < grid.rows; row++) {
           for (let col = 0; col < grid.cols; col++) {
@@ -1497,7 +1478,7 @@ function SpaceInvaders({ onClose }) {
         }
       });
 
-      /* === DRAW FOLLOWER & BEAM === */
+      /* === DRAW: FOLLOWER & BEAM === */
       followersRef.current.forEach((follower) => {
         if (followerImageRef.current.complete) {
           c.drawImage(
@@ -1658,6 +1639,25 @@ function SpaceInvaders({ onClose }) {
         if (!follower.isShooting) {
           follower.shootParticles = [];
         }
+      });
+
+      /* === DRAW: BACKGROUND ANIMATION === */
+      backgroundParticlesRef.current.forEach((p) => {
+        p.y += p.speedY;
+
+        if (p.y - p.radius > canvas.height) {
+          p.x = Math.random() * canvas.width;
+          p.y = -p.radius;
+        }
+
+        c.save();
+        c.globalAlpha = p.opacity;
+        c.beginPath();
+        c.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        c.fillStyle = p.color;
+        c.fill();
+        c.closePath();
+        c.restore();
       });
 
       /* GAME LOOP END */
