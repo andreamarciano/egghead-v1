@@ -93,12 +93,14 @@ function SpaceInvaders({ onClose }) {
 
   /* Gameplay */
   const scoreParams = {
-    single: 10,
+    single: 100, // cambia - 10
     grid: 50,
     follower: 100,
     meteorBig: 10,
     meteorMed: 20,
     meteorSmall: 50,
+    // boss
+    boss: 5000,
   };
   const spawnScore = {
     // power up
@@ -106,6 +108,8 @@ function SpaceInvaders({ onClose }) {
     // enemy
     meteor: 500,
     follower: 750,
+    // boss
+    boss: 2000,
   };
   const spawnTime = {
     // power up
@@ -151,6 +155,9 @@ function SpaceInvaders({ onClose }) {
     height: 20,
     speed: 7,
   };
+
+  /* Boss */
+  const bossActiveRef = useRef(false);
 
   /* Invader */
   const invaderImageRef = useRef(new Image());
@@ -490,11 +497,11 @@ function SpaceInvaders({ onClose }) {
 
   /* Score Animation */
   useEffect(() => {
-    if (displayedScore === scoreRef.current) return;
+    if (displayedScore === score) return;
 
     const interval = setInterval(() => {
       setDisplayedScore((prev) => {
-        const next = Math.min(prev + 2, scoreRef.current);
+        const next = Math.min(prev + 10, score); // cambia - 2
 
         const currentK = Math.floor(prev / 1000);
         const nextK = Math.floor(next / 1000);
@@ -515,7 +522,7 @@ function SpaceInvaders({ onClose }) {
     }, 30);
 
     return () => clearInterval(interval);
-  }, [scoreRef.current, displayedScore]);
+  }, [score, displayedScore]);
 
   /***************************************************************
    *                      useEFFECT: VOLUME                       *
@@ -601,6 +608,21 @@ function SpaceInvaders({ onClose }) {
    *                                                              *
    *                                                              *
    ****************************************************************/
+
+  /* === SPAWN: BOSS === */
+  useEffect(() => {
+    if (scoreRef.current >= spawnScore.boss && !bossActiveRef.current) {
+      bossActiveRef.current = true;
+      console.log("boss spawned - meteor, follower deactivated");
+    }
+
+    if (bossActiveRef.current) {
+      followersRef.current.forEach((f) => {
+        f.retreating = true;
+      });
+      console.log("follower retreating");
+    }
+  }, [score]);
 
   /* === SYNCHRO === */
   useEffect(() => {
@@ -709,6 +731,7 @@ function SpaceInvaders({ onClose }) {
         const x = Math.floor(
           Math.random() * (canvas.width - shieldConfig.width)
         );
+        const y = -40;
 
         shieldPowerUpRef.current.push({
           x,
@@ -810,7 +833,7 @@ function SpaceInvaders({ onClose }) {
 
     /* === SPAWN: METEOR === */
     const meteorSpawnInterval = setInterval(() => {
-      if (scoreRef.current >= spawnScore.meteor) {
+      if (!bossActiveRef.current && scoreRef.current >= spawnScore.meteor) {
         const types = ["big", "med", "small"];
         const type = types[Math.floor(Math.random() * types.length)];
 
@@ -837,6 +860,7 @@ function SpaceInvaders({ onClose }) {
     /* === SPAWN: FOLLOWER === */
     const followerSpawnInterval = setInterval(() => {
       if (
+        !bossActiveRef.current &&
         scoreRef.current >= spawnScore.follower &&
         followersRef.current.length < 2
       ) {
@@ -854,6 +878,8 @@ function SpaceInvaders({ onClose }) {
           hasHitPlayer: false,
           particles: [],
           shootParticles: [],
+          retreating: false,
+          retreatDirection: Math.random() < 0.5 ? "left" : "right",
         });
       }
     }, spawnTime.follower);
@@ -954,6 +980,28 @@ function SpaceInvaders({ onClose }) {
 
       /* === FOLLOWER MOVEMENT === */
       followersRef.current.forEach((follower) => {
+        // === BOSS - RETREAT ===
+        if (follower.retreating) {
+          follower.y -= 1.2;
+          if (follower.retreatDirection === "left") {
+            follower.x -= 1;
+          } else {
+            follower.x += 1;
+          }
+
+          // remove
+          if (
+            follower.y + follower.height < 0 ||
+            follower.x + follower.width < 0 ||
+            follower.x > canvas.width
+          ) {
+            const index = followersRef.current.indexOf(follower);
+            if (index !== -1) followersRef.current.splice(index, 1);
+          }
+
+          return;
+        }
+
         const targetX =
           playerXRef.current + playerConfig.width / 2 - follower.width / 2;
 
@@ -1728,6 +1776,8 @@ function SpaceInvaders({ onClose }) {
       lastShotTimeRef.current = 0;
       livesRef.current = 3;
 
+      bossActiveRef.current = false;
+
       setScore(0);
       scoreRef.current = 0;
       setLives(3);
@@ -1904,7 +1954,7 @@ function SpaceInvaders({ onClose }) {
 
       {/* Score */}
       <div className="absolute top-2 left-1 flex">
-        {renderScoreImages(scoreRef.current)}
+        {renderScoreImages(displayedScore)}
       </div>
       {/* Lives */}
       <div
