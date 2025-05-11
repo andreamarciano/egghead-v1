@@ -167,6 +167,7 @@ function SpaceInvaders({ onClose }) {
     height: 30 * invaderScale,
     maxSpeed: 3,
     minSpeed: 2,
+    retreadSpeed: 3,
   };
   const invaderGridsRef = useRef([]);
   // Invader Projectile
@@ -621,15 +622,22 @@ function SpaceInvaders({ onClose }) {
     if (scoreRef.current >= spawnScore.boss && !bossActiveRef.current) {
       bossActiveRef.current = true;
       // debug - summon boss
-      console.log("boss spawned - meteor, follower deactivated");
+      // console.log("boss spawned - meteor, follower, invader deactivated");
     }
 
+    // === ENEMY RETREAT ===
     if (bossActiveRef.current) {
       followersRef.current.forEach((f) => {
         f.retreating = true;
       });
       // debug - follower retreat
-      console.log("follower retreating");
+      // console.log("follower retreating");
+
+      invaderGridsRef.current.forEach((grid) => {
+        grid.retreating = true;
+      });
+      // debug - invader grids retreat
+      // console.log("invader grids retreating");
     }
   }, [score]);
 
@@ -793,19 +801,22 @@ function SpaceInvaders({ onClose }) {
         rows,
         speed,
         invaders: Array.from({ length: rows }, () => Array(cols).fill(true)),
+        retreating: false,
       });
     };
     spawnInvaderGrid();
     /* === SPAWN: NEXT INVADER GRIDS === */
     let invaderGridTimeout;
     const scheduleInvaderGrid = () => {
+      if (bossActiveRef.current) return;
+
       const interval = Math.floor(
         Math.random() * (spawnTime.invaderMax - spawnTime.invaderMin) +
           spawnTime.invaderMin
       );
 
       invaderGridTimeout = setTimeout(() => {
-        if (!isGameRunning) return;
+        if (!isGameRunning || bossActiveRef.current) return;
 
         spawnInvaderGrid();
         scheduleInvaderGrid();
@@ -815,37 +826,40 @@ function SpaceInvaders({ onClose }) {
 
     /* === SPAWN: INVADER PROJECTILE === */
     const invaderShootInterval = setInterval(() => {
-      invaderGridsRef.current.forEach((grid) => {
-        const aliveInvaders = [];
-        for (let row = 0; row < grid.rows; row++) {
-          for (let col = 0; col < grid.cols; col++) {
-            if (grid.invaders[row][col]) {
-              aliveInvaders.push({ row, col });
+      if (!bossActiveRef.current) {
+        invaderGridsRef.current.forEach((grid) => {
+          const aliveInvaders = [];
+          for (let row = 0; row < grid.rows; row++) {
+            for (let col = 0; col < grid.cols; col++) {
+              if (grid.invaders[row][col]) {
+                aliveInvaders.push({ row, col });
+              }
             }
           }
-        }
 
-        if (aliveInvaders.length > 0) {
-          const { row, col } =
-            aliveInvaders[Math.floor(Math.random() * aliveInvaders.length)];
-          const x =
-            grid.x +
-            col * invaderConfig.width +
-            invaderConfig.width / 2 -
-            invaderProjectileConfig.width / 2;
-          const y = grid.y + row * invaderConfig.height + invaderConfig.height;
+          if (aliveInvaders.length > 0) {
+            const { row, col } =
+              aliveInvaders[Math.floor(Math.random() * aliveInvaders.length)];
+            const x =
+              grid.x +
+              col * invaderConfig.width +
+              invaderConfig.width / 2 -
+              invaderProjectileConfig.width / 2;
+            const y =
+              grid.y + row * invaderConfig.height + invaderConfig.height;
 
-          invaderProjectilesRef.current.push({
-            x,
-            y,
-            width: invaderProjectileConfig.width,
-            height: invaderProjectileConfig.height,
-            speed: invaderProjectileConfig.speed,
-          });
+            invaderProjectilesRef.current.push({
+              x,
+              y,
+              width: invaderProjectileConfig.width,
+              height: invaderProjectileConfig.height,
+              speed: invaderProjectileConfig.speed,
+            });
 
-          playLaserSound(soundURL.laserInvader);
-        }
-      });
+            playLaserSound(soundURL.laserInvader);
+          }
+        });
+      }
     }, spawnTime.invaderProjectile);
 
     /* === SPAWN: METEOR === */
@@ -1002,14 +1016,25 @@ function SpaceInvaders({ onClose }) {
 
       /* === INVADER GRIDS MOVEMENT === */
       invaderGridsRef.current.forEach((grid) => {
-        grid.x += grid.speed * grid.direction;
+        // === BOSS - RETREAT ===
+        if (grid.retreating) {
+          if (grid.x + grid.width < canvas.width) {
+            grid.x += grid.speed * grid.direction * invaderConfig.retreadSpeed;
+          } else {
+            invaderGridsRef.current = invaderGridsRef.current.filter(
+              (g) => g !== grid
+            );
+          }
+        } else {
+          grid.x += grid.speed * grid.direction;
 
-        const hitLeft = grid.x <= 0;
-        const hitRight = grid.x + grid.width >= canvas.width;
+          const hitLeft = grid.x <= 0;
+          const hitRight = grid.x + grid.width >= canvas.width;
 
-        if (hitLeft || hitRight) {
-          grid.direction *= -1;
-          grid.y += 30;
+          if (hitLeft || hitRight) {
+            grid.direction *= -1;
+            grid.y += 30;
+          }
         }
       });
 
