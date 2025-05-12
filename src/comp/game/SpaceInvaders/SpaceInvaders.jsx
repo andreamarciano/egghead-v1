@@ -134,6 +134,8 @@ function SpaceInvaders({ onClose }) {
     width: 99 * playerScale,
     height: 75 * playerScale,
     speed: 5,
+    rotation: 0.15,
+    rotationBack: 0.95,
   };
   const playerOpacityRef = useRef(1);
   const playerRotationRef = useRef(0);
@@ -240,6 +242,9 @@ function SpaceInvaders({ onClose }) {
     width: 144,
     height: 137,
     time: 5000,
+    bubbleWidth: 40,
+    bubbleHeight: 40,
+    bubbleSpeed: 2,
   };
 
   /* Score */
@@ -780,20 +785,20 @@ function SpaceInvaders({ onClose }) {
      *                   SECTION: SPAWN POWER UP                   *
      ***************************************************************/
 
-    /* === SPAWN: SHIELD === */
+    /* === SPAWN: SHIELD BUBBLE === */
     const shieldSpawnInterval = setInterval(() => {
       if (scoreRef.current >= spawnScore.shield) {
         const x = Math.floor(
           Math.random() * (canvas.width - shieldConfig.width)
         );
-        const y = -40;
+        const y = -shieldConfig.bubbleHeight;
 
         shieldPowerUpRef.current.push({
           x,
           y,
-          width: 40,
-          height: 40,
-          speed: 2,
+          width: shieldConfig.bubbleWidth,
+          height: shieldConfig.bubbleHeight,
+          speed: shieldConfig.bubbleSpeed,
           image: shieldImageRef.current,
         });
       }
@@ -989,15 +994,15 @@ function SpaceInvaders({ onClose }) {
             playerXRef.current - playerConfig.speed,
             0
           );
-          playerRotationRef.current = -0.15;
+          playerRotationRef.current = -playerConfig.rotation;
         } else if (keysPressed.has("ArrowRight") || keysPressed.has("d")) {
           playerXRef.current = Math.min(
             playerXRef.current + playerConfig.speed,
             canvas.width - playerConfig.width
           );
-          playerRotationRef.current = 0.15;
+          playerRotationRef.current = playerConfig.rotation;
         } else {
-          playerRotationRef.current *= 0.95;
+          playerRotationRef.current *= playerConfig.rotationBack;
         }
 
         /* === SHOOT PROJECTILES === */
