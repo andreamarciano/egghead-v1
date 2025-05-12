@@ -95,6 +95,7 @@ function SpaceInvaders({ onClose }) {
   const [gameOver, setGameOver] = useState(false);
   const isGameEndingRef = useRef(false);
   const animationIdRef = useRef(null);
+  const isPlayerInvincible = useRef(false);
 
   /* Gameplay */
   const scoreParams = {
@@ -1447,7 +1448,7 @@ function SpaceInvaders({ onClose }) {
 
       /* === COLLISION DETECTION: SHIELD → PLAYER === */
       shieldPowerUpRef.current.forEach((powerUp, sIndex) => {
-        if (isGameEndingRef.current) return;
+        if (isGameEndingRef.current || isPlayerInvincible.current) return;
 
         const hit =
           powerUp.x < playerXRef.current + playerConfig.width &&
@@ -1466,7 +1467,7 @@ function SpaceInvaders({ onClose }) {
 
       /* === COLLISION DETECTION: INVADER PROJECTILE → PLAYER === */
       invaderProjectilesRef.current.forEach((p, index) => {
-        if (isGameEndingRef.current) return;
+        if (isGameEndingRef.current || isPlayerInvincible.current) return;
 
         const hitbox = getPlayerHitbox();
         const hit =
@@ -1518,7 +1519,7 @@ function SpaceInvaders({ onClose }) {
 
       /* === COLLISION DETECTION: METEOR → PLAYER === */
       meteorsRef.current.forEach((m, index) => {
-        if (isGameEndingRef.current) return;
+        if (isGameEndingRef.current || isPlayerInvincible.current) return;
 
         const hitbox = getPlayerHitbox();
         const hit =
@@ -1575,7 +1576,7 @@ function SpaceInvaders({ onClose }) {
 
       /* === COLLISION DETECTION: FOLLOWER BEAM → PLAYER === */
       followersRef.current.forEach((follower) => {
-        if (isGameEndingRef.current) return;
+        if (isGameEndingRef.current || isPlayerInvincible.current) return;
         if (!follower.isShooting) return;
 
         const beamHitbox = getFollowerBeamHitbox(follower);
@@ -1722,10 +1723,12 @@ function SpaceInvaders({ onClose }) {
         };
         isPlayerActiveRef.current = false;
       }
+
       /* === DRAW: BOSS === */
       if (bossRef.current) {
         // === ANIMATION: ENTERING ===
         if (bossRef.current.entering) {
+          isPlayerInvincible.current = true;
           isBoostingRef.current = true;
 
           // play boss music
@@ -1747,7 +1750,9 @@ function SpaceInvaders({ onClose }) {
               bossRef.current.y = -50;
               bossRef.current.entering = false;
               bossRef.current.entrancePhase = null;
+
               isPlayerActiveRef.current = true;
+              isPlayerInvincible.current = false;
             }
           }
         }
@@ -2030,7 +2035,9 @@ function SpaceInvaders({ onClose }) {
       scoreRef.current = 0;
       setLives(3);
       setPlayerX(playerXRef.current);
+
       isGameEndingRef.current = false;
+      isPlayerInvincible.current = false;
     }
 
     setGameOver(false);
