@@ -22,6 +22,8 @@ const imgURL = {
   meteorMed: "/images/spaceInvaders/invader/meteormed.webp",
   meteorSmall: "/images/spaceInvaders/invader/meteorsmall.webp",
   follower: "/images/spaceInvaders/invader/follower.webp",
+  // Boss
+  boss: "/images/spaceInvaders/invader/boss.png",
   // Numeral
   n0: "/images/spaceInvaders/numeral/numeral0.webp",
   n1: "/images/spaceInvaders/numeral/numeral1.webp",
@@ -51,6 +53,9 @@ const soundURL = {
   destroyMeteor2: "/sounds/spaceInvaders/destroy/destroyMeteorSmall.mp3",
   destroyFollower: "/sounds/spaceInvaders/destroy/destroyFollower.mp3",
   hitFollower: "/sounds/spaceInvaders/destroy/hitFollower.mp3",
+  // Boss
+  bossEnter: "/sounds/spaceInvaders/boss/bossEnter.mp3",
+  bossDescending: "/sounds/spaceInvaders/boss/bossDescending.mp3",
   // Shield
   shieldUp: "/sounds/spaceInvaders/shield/shieldUp.mp3",
   shieldDown: "/sounds/spaceInvaders/shield/shieldDown.mp3",
@@ -109,7 +114,7 @@ function SpaceInvaders({ onClose }) {
     meteor: 500,
     follower: 750,
     // boss
-    boss: 2000,
+    boss: 10000, // 10k
   };
   const spawnTime = {
     // power up
@@ -157,14 +162,19 @@ function SpaceInvaders({ onClose }) {
   };
 
   /* Boss */
+  const bossImageRef = useRef(new Image());
   const bossActiveRef = useRef(false);
+  const bossRef = useRef(null);
+  const bossConfig = {
+    width: 1000,
+    height: 250,
+  };
 
   /* Invader */
   const invaderImageRef = useRef(new Image());
-  const invaderScale = 1;
   const invaderConfig = {
-    width: 30 * invaderScale,
-    height: 30 * invaderScale,
+    width: 30,
+    height: 30,
     maxSpeed: 3,
     minSpeed: 2,
     retreadSpeed: 3,
@@ -310,6 +320,8 @@ function SpaceInvaders({ onClose }) {
   const sfxVolumeRef = useRef(sfxVolume);
   const laserVolumeRef = useRef(laserVolume);
   const audioEnabledRef = useRef(audioEnabled);
+  const bossMusic = useRef(null);
+  const bossMusicPlayedRef = useRef(false);
   // play sfx
   const playSound = (url, volumeMultiplier = 1) => {
     if (audioEnabledRef.current && url) {
@@ -328,10 +340,40 @@ function SpaceInvaders({ onClose }) {
       laser.play().catch((e) => console.warn("Play error:", e));
     }
   };
+  // play boss music
+  const playBossMusic = () => {
+    if (!audioEnabledRef.current) return;
+
+    gameBgMusic.current?.pause(); // stop background
+
+    bossMusic.current = new Audio(soundURL.bossEnter);
+    bossMusic.current.volume = musicVolume;
+    bossMusic.current.loop = false;
+    bossMusic.current.play().catch((e) => console.warn("Boss music error:", e));
+
+    // resume background
+    bossMusic.current.onended = () => {
+      if (!gameOver && isGameRunning && audioEnabledRef.current) {
+        gameBgMusic.current
+          ?.play()
+          .catch((e) => console.warn("Resume error:", e));
+      }
+    };
+  };
 
   /* Particles */
   const particlesRef = useRef([]);
   const backgroundParticlesRef = useRef([]);
+  const backgroundParticles = {
+    radius: 2,
+    speed: 0.3,
+    opacity: 0.5,
+    color: "white",
+  };
+  const isBoostingRef = useRef(false);
+  const backgroundBossParticles = {
+    speed: 10,
+  };
   const invaderParticles = {
     color: "#BAA0DE",
     opacity: 0.4,
@@ -673,10 +715,14 @@ function SpaceInvaders({ onClose }) {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          radius: Math.random() * 2,
-          speedY: 0.3,
-          opacity: 0.5 + Math.random() * 0.5,
-          color: "white",
+          radius: Math.random() * backgroundParticles.radius,
+          speedY: isBoostingRef.current
+            ? backgroundBossParticles.speed
+            : backgroundParticles.speed,
+          opacity:
+            backgroundParticles.opacity +
+            Math.random() * backgroundParticles.opacity,
+          color: backgroundParticles.color,
         });
       }
       backgroundParticlesRef.current = particles;
@@ -684,16 +730,21 @@ function SpaceInvaders({ onClose }) {
     spawnBackgroundParticles();
 
     /* === LOAD IMAGES === */
+    // player
     playerImageRef.current.src = imgURL[playerColor];
-    invaderImageRef.current.src = imgURL.invader;
     projectileImages.greenPlayer.src = imgURL.laserGreen;
     projectileImages.bluePlayer.src = imgURL.laserBlue;
     projectileImages.redPlayer.src = imgURL.laserRed;
+    // power up
+    shieldImageRef.current.src = imgURL.shield;
+    // enemy
+    invaderImageRef.current.src = imgURL.invader;
     meteorImages.big.src = imgURL.meteorBig;
     meteorImages.med.src = imgURL.meteorMed;
     meteorImages.small.src = imgURL.meteorSmall;
-    shieldImageRef.current.src = imgURL.shield;
     followerImageRef.current.src = imgURL.follower;
+    // boss
+    bossImageRef.current.src = imgURL.boss;
 
     /* === INIT PLAYER === */
     const initialPlayerX = canvas.width / 2 - playerConfig.width / 2;
@@ -1228,26 +1279,6 @@ function SpaceInvaders({ onClose }) {
        *                SECTION: COLLISION DETECTION                 *
        ***************************************************************/
 
-      /* === COLLISION DETECTION: PLAYER PROJECTILE → SHIELD === */
-      projectilesRef.current.forEach((proj, pIndex) => {
-        shieldPowerUpRef.current.forEach((powerUp, sIndex) => {
-          const hit =
-            proj.x < powerUp.x + powerUp.width &&
-            proj.x + proj.width > powerUp.x &&
-            proj.y < powerUp.y + powerUp.height &&
-            proj.y + proj.height > powerUp.y;
-
-          if (hit) {
-            projectilesRef.current.splice(pIndex, 1);
-            shieldPowerUpRef.current.splice(sIndex, 1);
-
-            // debug - collect shield (projectile)
-            // console.log("collect shield (projectile)");
-            activateShield();
-          }
-        });
-      });
-
       /* === COLLISION DETECTION: PLAYER PROJECTILE → INVADER === */
       projectilesRef.current.forEach((p, pIndex) => {
         invaderGridsRef.current.forEach((grid) => {
@@ -1666,6 +1697,65 @@ function SpaceInvaders({ onClose }) {
         // c.restore();
       }
 
+      /* === SPAWN: BOSS === */
+      if (
+        bossActiveRef.current &&
+        !bossRef.current &&
+        scoreRef.current >= spawnScore.boss
+      ) {
+        // debug - boss spawn
+        // console.log("Spawning boss");
+
+        bossRef.current = {
+          x: canvas.width / 2 - bossConfig.width / 2,
+          y: -bossConfig.height,
+          width: bossConfig.width,
+          height: bossConfig.height,
+          lives: 100,
+          entering: true,
+          entrancePhase: "descending",
+        };
+        isPlayerActiveRef.current = false;
+      }
+      /* === DRAW: BOSS === */
+      if (bossRef.current) {
+        // === ANIMATION: ENTERING ===
+        if (bossRef.current.entering) {
+          isBoostingRef.current = true;
+
+          // play boss music
+          if (!bossMusicPlayedRef.current) {
+            bossMusicPlayedRef.current = true;
+            playBossMusic();
+          }
+
+          if (bossRef.current.entrancePhase === "descending") {
+            bossRef.current.y += 0.3; // descending speed
+            if (bossRef.current.y >= 0) {
+              bossRef.current.entrancePhase = "rising";
+              playSound(soundURL.bossDescending, 1);
+            }
+          } else if (bossRef.current.entrancePhase === "rising") {
+            isBoostingRef.current = false;
+            bossRef.current.y -= 0.5; // rising speed
+            if (bossRef.current.y <= -50) {
+              bossRef.current.y = -50;
+              bossRef.current.entering = false;
+              bossRef.current.entrancePhase = null;
+              isPlayerActiveRef.current = true;
+            }
+          }
+        }
+
+        const b = bossRef.current;
+        if (bossImageRef.current.complete) {
+          c.drawImage(bossImageRef.current, b.x, b.y, b.width, b.height);
+        } else {
+          c.fillStyle = "red";
+          c.fillRect(b.x, b.y, b.width, b.height);
+        }
+      }
+
       /* === DRAW: INVADER GRIDS === */
       invaderGridsRef.current.forEach((grid) => {
         for (let row = 0; row < grid.rows; row++) {
@@ -1858,6 +1948,11 @@ function SpaceInvaders({ onClose }) {
 
       /* === DRAW: BACKGROUND ANIMATION === */
       backgroundParticlesRef.current.forEach((p) => {
+        // boosted
+        p.speedY = isBoostingRef.current
+          ? backgroundBossParticles.speed
+          : backgroundParticles.speed;
+
         p.y += p.speedY;
 
         if (p.y - p.radius > canvas.height) {
@@ -1924,6 +2019,7 @@ function SpaceInvaders({ onClose }) {
       livesRef.current = 3;
 
       bossActiveRef.current = false;
+      bossMusicPlayedRef.current = false;
 
       setScore(0);
       scoreRef.current = 0;

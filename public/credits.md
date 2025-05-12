@@ -162,6 +162,14 @@
   By **freesound_community**
   Downloaded on May 8th, 2025 from [pixabay](https://pixabay.com/users/freesound_community-46691455/)
 
+- **Boss Intro 01**
+  By **ADnova**
+  Downloaded on May 12th, 2025 from [freesound](https://freesound.org/people/ADnova/)
+
+- **Steam engine**
+  By **SamsterBirdies**
+  Downloaded on May 12th, 2025 from [freesound](https://freesound.org/people/SamsterBirdies/)
+
 > All above assets, images, and sounds used are either in the public domain (CC0) or free to use under their respective licenses. Where possible, authors have been credited.
 
 ## Suno AI [suno] (https://suno.com/)
