@@ -147,8 +147,8 @@ function SpaceInvaders({ onClose }) {
   const isPlayerActiveRef = useRef(true);
   const playerTransitionRef = useRef(null);
   // Lives
-  const [lives, setLives] = useState(3);
-  const livesRef = useRef(3);
+  const [lives, setLives] = useState(5);
+  const livesRef = useRef(5);
   const [animateLifeLoss, setAnimateLifeLoss] = useState(false);
   const previousLivesRef = useRef(lives);
 
@@ -174,6 +174,41 @@ function SpaceInvaders({ onClose }) {
   const bossConfig = {
     width: 1000,
     height: 250,
+  };
+  // Boss Projectiles
+  const bossProjectilesSmallRef = useRef([]);
+  const bossProjectilesMediumRef = useRef([]);
+  const bossProjectilesLargeRef = useRef([]);
+  const bossProjectileConfig = {
+    small: {
+      width: 4,
+      height: 12,
+      speed: 3,
+      damage: 1,
+      color: "yellow",
+      type: "small",
+    },
+    medium: {
+      width: 6,
+      height: 16,
+      speed: 2.5,
+      damage: 2,
+      color: "green",
+      type: "medium",
+    },
+    large: {
+      width: 10,
+      height: 20,
+      speed: 2,
+      damage: 3,
+      color: "red",
+      type: "large",
+    },
+  };
+  const bossGunOffsets = {
+    small: [157, 387, 607, 837],
+    medium: [272, 722],
+    large: [495],
   };
 
   /* Invader */
@@ -1730,75 +1765,6 @@ function SpaceInvaders({ onClose }) {
         // c.restore();
       }
 
-      /* === SPAWN: BOSS === */
-      if (
-        bossActiveRef.current &&
-        !bossRef.current &&
-        scoreRef.current >= spawnScore.boss
-      ) {
-        // debug - boss spawn
-        // console.log("Spawning boss");
-
-        bossRef.current = {
-          x: canvas.width / 2 - bossConfig.width / 2,
-          y: -bossConfig.height,
-          width: bossConfig.width,
-          height: bossConfig.height,
-          lives: 100,
-          entering: true,
-          entrancePhase: "descending",
-        };
-        isPlayerActiveRef.current = false;
-        isPlayerFrozenRef.current = true;
-      }
-
-      /* === DRAW: BOSS === */
-      if (bossRef.current) {
-        // === ANIMATION: ENTERING ===
-        if (bossRef.current.entering) {
-          isPlayerInvincible.current = true;
-          isBoostingRef.current = true;
-
-          // play boss music
-          if (!bossMusicPlayedRef.current) {
-            bossMusicPlayedRef.current = true;
-            playBossMusic();
-          }
-
-          if (bossRef.current.entrancePhase === "descending") {
-            playerTransitionRef.current = "exitScene";
-
-            bossRef.current.y += 0.3; // descending speed
-            if (bossRef.current.y >= 0) {
-              bossRef.current.entrancePhase = "rising";
-              playSound(soundURL.bossDescending, 1);
-            }
-          } else if (bossRef.current.entrancePhase === "rising") {
-            playerTransitionRef.current = "reenterScene";
-
-            isBoostingRef.current = false;
-            bossRef.current.y -= 0.5; // rising speed
-            if (bossRef.current.y <= -50) {
-              bossRef.current.y = -50;
-              bossRef.current.entering = false;
-              bossRef.current.entrancePhase = null;
-
-              isPlayerActiveRef.current = true;
-              isPlayerInvincible.current = false;
-              isPlayerFrozenRef.current = false;
-            }
-          }
-        }
-
-        const b = bossRef.current;
-        if (bossImageRef.current.complete) {
-          c.drawImage(bossImageRef.current, b.x, b.y, b.width, b.height);
-        } else {
-          c.fillStyle = "red";
-          c.fillRect(b.x, b.y, b.width, b.height);
-        }
-      }
-
       /* === DRAW: INVADER GRIDS === */
       invaderGridsRef.current.forEach((grid) => {
         for (let row = 0; row < grid.rows; row++) {
@@ -2013,6 +1979,182 @@ function SpaceInvaders({ onClose }) {
         c.restore();
       });
 
+      /***************************************************************
+       *                        SECTION: BOSS                        *
+       ***************************************************************/
+
+      /* === SPAWN: BOSS === */
+      if (
+        bossActiveRef.current &&
+        !bossRef.current &&
+        scoreRef.current >= spawnScore.boss
+      ) {
+        // debug - boss spawn
+        // console.log("Spawning boss");
+
+        bossRef.current = {
+          x: canvas.width / 2 - bossConfig.width / 2,
+          y: -bossConfig.height,
+          width: bossConfig.width,
+          height: bossConfig.height,
+          lives: 100,
+          entering: true,
+          entrancePhase: "descending",
+        };
+        isPlayerActiveRef.current = false;
+        isPlayerFrozenRef.current = true;
+      }
+
+      /* === DRAW: BOSS === */
+      if (bossRef.current) {
+        // === ANIMATION: ENTERING ===
+        if (bossRef.current.entering) {
+          isPlayerInvincible.current = true;
+          isBoostingRef.current = true;
+
+          // play boss music
+          if (!bossMusicPlayedRef.current) {
+            bossMusicPlayedRef.current = true;
+            playBossMusic();
+          }
+
+          if (bossRef.current.entrancePhase === "descending") {
+            playerTransitionRef.current = "exitScene";
+
+            bossRef.current.y += 0.3; // descending speed
+            if (bossRef.current.y >= 0) {
+              bossRef.current.entrancePhase = "rising";
+              playSound(soundURL.bossDescending, 1);
+            }
+          } else if (bossRef.current.entrancePhase === "rising") {
+            playerTransitionRef.current = "reenterScene";
+
+            isBoostingRef.current = false;
+            bossRef.current.y -= 0.5; // rising speed
+            if (bossRef.current.y <= -50) {
+              bossRef.current.y = -50;
+              bossRef.current.entering = false;
+              bossRef.current.entrancePhase = null;
+
+              isPlayerActiveRef.current = true;
+              isPlayerInvincible.current = false;
+              isPlayerFrozenRef.current = false;
+            }
+          }
+        }
+
+        const b = bossRef.current;
+        if (bossImageRef.current.complete) {
+          c.drawImage(bossImageRef.current, b.x, b.y, b.width, b.height);
+        } else {
+          c.fillStyle = "red";
+          c.fillRect(b.x, b.y, b.width, b.height);
+        }
+      }
+
+      /* === DRAW: BOSS PROJECTILES === */
+      if (bossRef.current && !bossRef.current.entering) {
+        const b = bossRef.current;
+
+        // Small
+        bossGunOffsets.small.forEach((offsetX) => {
+          if (Math.random() < 0.03) {
+            bossProjectilesSmallRef.current.push({
+              x: b.x + offsetX,
+              y: b.y + bossConfig.height - 1,
+              ...bossProjectileConfig.small,
+            });
+            playLaserSound(soundURL.laserInvader);
+          }
+        });
+
+        // Medium
+        bossGunOffsets.medium.forEach((offsetX) => {
+          if (Math.random() < 0.02) {
+            bossProjectilesMediumRef.current.push({
+              x: b.x + offsetX,
+              y: b.y + bossConfig.height - 1,
+              ...bossProjectileConfig.medium,
+            });
+          }
+        });
+
+        // Large
+        bossGunOffsets.large.forEach((offsetX) => {
+          if (Math.random() < 0.01) {
+            bossProjectilesLargeRef.current.push({
+              x: b.x + offsetX,
+              y: b.y + bossConfig.height - 1,
+              ...bossProjectileConfig.large,
+            });
+          }
+        });
+      }
+
+      /* === UPDATE: BOSS PROJECTILES === */
+      const drawBossProjectiles = (projectiles, config) => {
+        projectiles.forEach((p) => {
+          p.y += p.speed;
+          c.fillStyle = config.color;
+          c.fillRect(p.x, p.y, config.width, config.height);
+        });
+      };
+
+      [
+        bossProjectilesSmallRef,
+        bossProjectilesMediumRef,
+        bossProjectilesLargeRef,
+      ].forEach((ref, i) => {
+        const type = ["small", "medium", "large"][i];
+        const config = bossProjectileConfig[type];
+
+        ref.current = ref.current.filter((p) => p.y < canvas.height);
+        drawBossProjectiles(ref.current, config);
+      });
+
+      /* === COLLISION DETECTION: BOSS PROJECTILES → PLAYER === */
+      const bossProjectileRefs = [
+        bossProjectilesSmallRef,
+        bossProjectilesMediumRef,
+        bossProjectilesLargeRef,
+      ];
+
+      bossProjectileRefs.forEach((ref) => {
+        ref.current.forEach((p, index) => {
+          if (isGameEndingRef.current || isPlayerInvincible.current) return;
+
+          const hitbox = getPlayerHitbox();
+          const hit =
+            p.x < hitbox.x + hitbox.width &&
+            p.x + p.width > hitbox.x &&
+            p.y < hitbox.y + hitbox.height &&
+            p.y + p.height > hitbox.y;
+
+          if (hit) {
+            ref.current.splice(index, 1);
+
+            if (isShieldActiveRef.current) {
+              createExplosion(p.x, p.y, shieldParticles);
+              playSound(soundURL.shieldBlock, 0.5);
+              return;
+            }
+
+            flashEffect(playerOpacityRef, { playerActive: isPlayerActiveRef });
+            playSound(soundURL.playerHit, 0.7);
+            createExplosion(
+              playerXRef.current + playerConfig.width / 2,
+              playerYRef.current + playerConfig.height / 2,
+              playerParticles
+            );
+
+            const newLives = Math.max(0, livesRef.current - (p.damage || 1));
+            setLives(newLives);
+
+            if (newLives <= 0) handleGameOver();
+          }
+        });
+      });
+
       /* GAME LOOP END */
       animationIdRef.current = requestAnimationFrame(gameLoop);
     };
@@ -2047,6 +2189,7 @@ function SpaceInvaders({ onClose }) {
     setCurrentTheme(randomTheme);
 
     if (gameOver) {
+      // clear canvas
       invaderGridsRef.current = [];
       meteorsRef.current = [];
       projectilesRef.current = [];
@@ -2055,20 +2198,30 @@ function SpaceInvaders({ onClose }) {
       backgroundParticlesRef.current = [];
       shieldPowerUpRef.current = [];
       followersRef.current = [];
+      bossProjectilesSmallRef.current = [];
+      bossProjectilesMediumRef.current = [];
+      bossProjectilesLargeRef.current = [];
 
+      // reset player
       playerXRef.current = canvasRef.current.width / 2 - playerConfig.width / 2;
       playerRotationRef.current = 0;
       lastShotTimeRef.current = 0;
-      livesRef.current = 3;
 
+      // boss
       bossActiveRef.current = false;
       bossMusicPlayedRef.current = false;
+      bossRef.current = null;
 
-      setScore(0);
+      // score
       scoreRef.current = 0;
-      setLives(3);
+      setScore(0);
+
+      // lives
+      livesRef.current = 5;
+      setLives(5);
       setPlayerX(playerXRef.current);
 
+      // deactivate/activate player
       isGameEndingRef.current = false;
       isPlayerInvincible.current = false;
       isPlayerFrozenRef.current = false;
