@@ -143,7 +143,9 @@ function SpaceInvaders({ onClose }) {
   const playerRotationRef = useRef(0);
   const [playerX, setPlayerX] = useState(0);
   const playerXRef = useRef(playerX);
+  const playerYRef = useRef(null);
   const isPlayerActiveRef = useRef(true);
+  const playerTransitionRef = useRef(null);
   // Lives
   const [lives, setLives] = useState(3);
   const livesRef = useRef(3);
@@ -200,7 +202,7 @@ function SpaceInvaders({ onClose }) {
     height: 40,
     lives: 5,
     speed: 2.5,
-    shootInterval: 300,
+    shootInterval: 240,
     chargeDuration: 90,
     beamDuration: 120,
     beamWidth: 20,
@@ -736,10 +738,14 @@ function SpaceInvaders({ onClose }) {
     bossImageRef.current.src = imgURL.boss;
 
     /* === INIT PLAYER === */
-    const initialPlayerX = canvas.width / 2 - playerConfig.width / 2;
-    setPlayerX(initialPlayerX);
-    playerXRef.current = initialPlayerX;
-    const playerY = canvas.height - playerConfig.height - 10;
+    const resetPlayerPosition = () => {
+      const initialX = canvas.width / 2 - playerConfig.width / 2;
+      setPlayerX(initialX);
+      playerXRef.current = initialX;
+      playerRotationRef.current = 0;
+    };
+    playerYRef.current = canvas.height - playerConfig.height - 10;
+    resetPlayerPosition();
 
     /***************************************************************
      *                      SECTION: HITBOX                        *
@@ -751,7 +757,10 @@ function SpaceInvaders({ onClose }) {
       if (isShieldActiveRef.current) {
         const x =
           playerXRef.current + playerConfig.width / 2 - shieldConfig.width / 2;
-        const y = playerY + playerConfig.height / 2 - shieldConfig.height / 2;
+        const y =
+          playerYRef.current +
+          playerConfig.height / 2 -
+          shieldConfig.height / 2;
         return {
           x,
           y,
@@ -762,7 +771,7 @@ function SpaceInvaders({ onClose }) {
 
       return {
         x: playerXRef.current,
-        y: playerY,
+        y: playerYRef.current,
         width: playerConfig.width,
         height: playerConfig.height,
       };
@@ -1373,8 +1382,8 @@ function SpaceInvaders({ onClose }) {
         const hit =
           powerUp.x < playerXRef.current + playerConfig.width &&
           powerUp.x + powerUp.width > playerXRef.current &&
-          powerUp.y < playerY + playerConfig.height &&
-          powerUp.y + powerUp.height > playerY;
+          powerUp.y < playerYRef.current + playerConfig.height &&
+          powerUp.y + powerUp.height > playerYRef.current;
 
         if (hit) {
           shieldPowerUpRef.current.splice(sIndex, 1);
@@ -1412,7 +1421,7 @@ function SpaceInvaders({ onClose }) {
           playSound(soundURL.playerHit, 0.7);
           createExplosion(
             playerXRef.current + playerConfig.width / 2,
-            playerY + playerConfig.height / 2,
+            playerYRef.current + playerConfig.height / 2,
             playerParticles
           );
           invaderProjectilesRef.current.splice(index, 1);
@@ -1463,7 +1472,7 @@ function SpaceInvaders({ onClose }) {
 
           createExplosion(
             playerXRef.current + playerConfig.width / 2,
-            playerY + playerConfig.height / 2,
+            playerYRef.current + playerConfig.height / 2,
             playerParticles
           );
 
@@ -1533,6 +1542,20 @@ function SpaceInvaders({ onClose }) {
        ***************************************************************/
 
       /* === DRAW: PLAYER === */
+      if (playerTransitionRef.current === "exitScene") {
+        playerYRef.current += 0.5;
+        if (playerYRef.current >= canvas.height + 50) {
+          playerTransitionRef.current = null;
+          playerYRef.current = canvas.height + 100;
+          playerRotationRef.current = 0;
+        }
+      } else if (playerTransitionRef.current === "reenterScene") {
+        playerYRef.current -= 3;
+        if (playerYRef.current <= canvas.height - playerConfig.height - 10) {
+          playerYRef.current = canvas.height - playerConfig.height - 10;
+          playerTransitionRef.current = null;
+        }
+      }
       const drawPlayer = () => {
         c.save();
         c.globalAlpha =
@@ -1541,18 +1564,18 @@ function SpaceInvaders({ onClose }) {
             : 0;
         c.translate(
           playerXRef.current + playerConfig.width / 2,
-          playerY + playerConfig.height / 2
+          playerYRef.current + playerConfig.height / 2
         );
         c.rotate(playerRotationRef.current);
         c.translate(
           -playerXRef.current - playerConfig.width / 2,
-          -playerY - playerConfig.height / 2
+          -playerYRef.current - playerConfig.height / 2
         );
         if (playerImageRef.current.complete) {
           c.drawImage(
             playerImageRef.current,
             playerXRef.current,
-            playerY,
+            playerYRef.current,
             playerConfig.width,
             playerConfig.height
           );
@@ -1560,7 +1583,7 @@ function SpaceInvaders({ onClose }) {
           c.fillStyle = "green";
           c.fillRect(
             playerXRef.current,
-            playerY,
+            playerYRef.current,
             playerConfig.width,
             playerConfig.height
           );
@@ -1574,7 +1597,9 @@ function SpaceInvaders({ onClose }) {
         const shieldX =
           playerXRef.current + playerConfig.width / 2 - shieldConfig.width / 2;
         const shieldY =
-          playerY + playerConfig.height / 2 - shieldConfig.height / 2;
+          playerYRef.current +
+          playerConfig.height / 2 -
+          shieldConfig.height / 2;
 
         c.drawImage(
           shieldImageRef.current,
@@ -1618,12 +1643,16 @@ function SpaceInvaders({ onClose }) {
           }
 
           if (bossRef.current.entrancePhase === "descending") {
+            playerTransitionRef.current = "exitScene";
+
             bossRef.current.y += 0.3; // descending speed
             if (bossRef.current.y >= 0) {
               bossRef.current.entrancePhase = "rising";
               playSound(soundURL.bossDescending, 1);
             }
           } else if (bossRef.current.entrancePhase === "rising") {
+            playerTransitionRef.current = "reenterScene";
+
             isBoostingRef.current = false;
             bossRef.current.y -= 0.5; // rising speed
             if (bossRef.current.y <= -50) {
