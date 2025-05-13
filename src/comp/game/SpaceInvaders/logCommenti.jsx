@@ -221,12 +221,13 @@ function SpaceInvaders({ onClose }) {
     large: [495],
   };
   // Phase 2 - Boss Lasers
+  const bossBeamsRef = useRef([]);
   const bossLaserConfig = {
     small: {
       x: [75, 355, 645, 915],
       y: [113, 113, 113, 113],
       type: "small",
-      shootInterval: 2000,
+      shootInterval: 5000,
       chargeDuration: 1000,
       beamDuration: 2000,
       beamWidth: 12,
@@ -237,7 +238,7 @@ function SpaceInvaders({ onClose }) {
       x: [215, 779],
       y: [122, 122],
       type: "medium",
-      shootInterval: 3000,
+      shootInterval: 7000,
       chargeDuration: 1500,
       beamDuration: 2500,
       beamWidth: 20,
@@ -248,7 +249,7 @@ function SpaceInvaders({ onClose }) {
       x: [499],
       y: [130],
       type: "large",
-      shootInterval: 4000,
+      shootInterval: 9000,
       chargeDuration: 2000,
       beamDuration: 3000,
       beamWidth: 28,
@@ -275,17 +276,51 @@ function SpaceInvaders({ onClose }) {
       handleBossPhaseChange(newPhase);
     }
   };
+  const beamIntervalsRef = useRef([]);
   const handleBossPhaseChange = (phase) => {
     switch (phase) {
       case 1:
         enablePhase1(true);
         enablePhase2(false);
         enablePhase3(false);
+        bossBeamsRef.current = [];
+        beamIntervalsRef.current.forEach(clearInterval);
+        beamIntervalsRef.current = [];
         break;
       case 2:
         enablePhase1(false);
         enablePhase2(true);
         enablePhase3(false);
+
+        const configs = [
+          bossLaserConfig.small,
+          bossLaserConfig.medium,
+          bossLaserConfig.large,
+        ];
+        configs.forEach((config) => {
+          config.x.forEach((x, i) => {
+            const y = config.y[i];
+            const interval = setInterval(() => {
+              const now = performance.now();
+              bossBeamsRef.current.push({
+                x,
+                y,
+                width: config.beamWidth,
+                damage: config.beamDamage,
+                color: config.beamColor,
+                type: config.type,
+                isCharging: true,
+                isShooting: false,
+                createdAt: now,
+                chargeEnd: now + config.chargeDuration,
+                shootEnd: now + config.chargeDuration + config.beamDuration,
+              });
+            }, config.shootInterval);
+
+            beamIntervalsRef.current.push(interval);
+          });
+        });
+
         break;
       case 3:
         enablePhase1(true);
@@ -2220,6 +2255,66 @@ function SpaceInvaders({ onClose }) {
       ) {
         // debug - phase 2
         // console.log("phase 2 - laser");
+        bossBeamsRef.current = bossBeamsRef.current.filter((beam) => {
+          const now = performance.now();
+
+          if (beam.isCharging && now >= beam.chargeEnd) {
+            beam.isCharging = false;
+            beam.isShooting = true;
+          }
+
+          if (beam.isShooting && now >= beam.shootEnd) {
+            return false;
+          }
+
+          const hitbox = getBossBeamHitbox(beam);
+
+          // === RENDER ===
+          if (beam.isCharging) {
+            const colorCycle = [
+              "#FFFF00",
+              "#FFC300",
+              "#FF8C00",
+              "#FF4500",
+              "#FF0000",
+            ];
+            const colorIndex = Math.floor(now / 100) % colorCycle.length;
+            const alpha = 0.3 + 0.5 * Math.abs(Math.sin(now / 300));
+
+            c.fillStyle = colorCycle[colorIndex];
+            c.globalAlpha = alpha;
+            c.fillRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+            c.globalAlpha = 1;
+          }
+
+          if (beam.isShooting) {
+            const baseWidth = hitbox.width * 2;
+            const tipWidth = hitbox.width;
+            const beamHeight = hitbox.height;
+            const startX = hitbox.x + hitbox.width / 2;
+            const startY = hitbox.y + 15;
+
+            c.save();
+            c.beginPath();
+            c.moveTo(startX - baseWidth / 2, startY);
+            c.quadraticCurveTo(
+              startX,
+              startY - 40,
+              startX + baseWidth / 2,
+              startY
+            );
+            c.lineTo(startX + tipWidth / 2, startY + beamHeight);
+            c.lineTo(startX - tipWidth / 2, startY + beamHeight);
+            c.closePath();
+
+            c.fillStyle = beam.color;
+            c.globalAlpha = 0.7;
+            c.fill();
+            c.restore();
+          }
+
+          return true;
+        });
       }
       // === PHASE 3 ===
       if (
@@ -2289,7 +2384,7 @@ function SpaceInvaders({ onClose }) {
 
       // === COLLISION DETECTION: BOSS LASERS → PLAYER ===
       if (bossRef.current && isPhase2EnabledRef.current) {
-        bossRef.current.laserBeams.forEach((beam) => {
+        bossBeamsRef.current.forEach((beam) => {
           if (
             !beam.isShooting ||
             isGameEndingRef.current ||
@@ -2321,8 +2416,7 @@ function SpaceInvaders({ onClose }) {
 
             handlePlayerHit();
 
-            const beamDamage = bossLaserConfig[beam.type].beamDamage;
-
+            const beamDamage = beam.damage;
             const newLives = Math.max(0, livesRef.current - beamDamage);
             setLives(newLives);
 
@@ -2400,23 +2494,28 @@ function SpaceInvaders({ onClose }) {
     setCurrentTheme(randomTheme);
 
     if (gameOver) {
-      // clear canvas
-      invaderGridsRef.current = [];
-      meteorsRef.current = [];
-      projectilesRef.current = [];
-      invaderProjectilesRef.current = [];
-      particlesRef.current = [];
-      backgroundParticlesRef.current = [];
-      shieldPowerUpRef.current = [];
-      followersRef.current = [];
-      bossProjectilesSmallRef.current = [];
-      bossProjectilesMediumRef.current = [];
-      bossProjectilesLargeRef.current = [];
-
       // reset player
       playerXRef.current = canvasRef.current.width / 2 - playerConfig.width / 2;
       playerRotationRef.current = 0;
       lastShotTimeRef.current = 0;
+      livesRef.current = 5;
+      setLives(5);
+      setPlayerX(playerXRef.current);
+      isGameEndingRef.current = false;
+      isPlayerInvincible.current = false;
+      isPlayerFrozenRef.current = false;
+
+      // clear canvas
+      projectilesRef.current = [];
+      particlesRef.current = [];
+      backgroundParticlesRef.current = [];
+      shieldPowerUpRef.current = [];
+
+      // reset enemy
+      invaderGridsRef.current = [];
+      meteorsRef.current = [];
+      invaderProjectilesRef.current = [];
+      followersRef.current = [];
 
       // boss
       bossActiveRef.current = false;
@@ -2425,20 +2524,18 @@ function SpaceInvaders({ onClose }) {
       isPhase1EnabledRef.current = true;
       isPhase2EnabledRef.current = false;
       isPhase3EnabledRef.current = false;
+      bossProjectilesSmallRef.current = [];
+      bossProjectilesMediumRef.current = [];
+      bossProjectilesLargeRef.current = [];
+      bossBeamsRef.current = [];
+      beamIntervalsRef.current.forEach((id) => {
+        clearInterval(id);
+      });
+      beamIntervalsRef.current = [];
 
       // score
       scoreRef.current = 0;
       setScore(0);
-
-      // lives
-      livesRef.current = 5;
-      setLives(5);
-      setPlayerX(playerXRef.current);
-
-      // deactivate/activate player
-      isGameEndingRef.current = false;
-      isPlayerInvincible.current = false;
-      isPlayerFrozenRef.current = false;
     }
 
     setGameOver(false);
