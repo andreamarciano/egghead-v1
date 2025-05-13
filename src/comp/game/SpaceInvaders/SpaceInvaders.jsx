@@ -2002,6 +2002,7 @@ function SpaceInvaders({ onClose }) {
       }
 
       /* === DRAW: BOSS PROJECTILES === */
+      // === PHASE 1 ===
       if (
         bossRef.current &&
         !bossRef.current.entering &&
@@ -2042,6 +2043,20 @@ function SpaceInvaders({ onClose }) {
             });
           }
         });
+      }
+      // === PHASE 2 ===
+      if (
+        bossRef.current &&
+        !bossRef.current.entering &&
+        isPhase2EnabledRef.current
+      ) {
+      }
+      // === PHASE 3 ===
+      if (
+        bossRef.current &&
+        !bossRef.current.entering &&
+        isPhase3EnabledRef.current
+      ) {
       }
 
       /* === UPDATE: BOSS PROJECTILES === */

@@ -2128,11 +2128,15 @@ function SpaceInvaders({ onClose }) {
       }
 
       /* === DRAW: BOSS PROJECTILES === */
+      // === PHASE 1 ===
       if (
         bossRef.current &&
         !bossRef.current.entering &&
         isPhase1EnabledRef.current
       ) {
+        // debug - phase 1
+        // console.log("phase 1 - bullet");
+
         const b = bossRef.current;
 
         // Small
@@ -2168,6 +2172,24 @@ function SpaceInvaders({ onClose }) {
             });
           }
         });
+      }
+      // === PHASE 2 ===
+      if (
+        bossRef.current &&
+        !bossRef.current.entering &&
+        isPhase2EnabledRef.current
+      ) {
+        // debug - phase 2
+        // console.log("phase 2 - laser");
+      }
+      // === PHASE 3 ===
+      if (
+        bossRef.current &&
+        !bossRef.current.entering &&
+        isPhase3EnabledRef.current
+      ) {
+        // debug - phase 3
+        // console.log("phase 3 - extra");
       }
 
       /* === UPDATE: BOSS PROJECTILES === */
