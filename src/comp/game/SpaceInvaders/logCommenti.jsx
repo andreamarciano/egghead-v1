@@ -2287,6 +2287,50 @@ function SpaceInvaders({ onClose }) {
         });
       });
 
+      // === COLLISION DETECTION: BOSS LASERS → PLAYER ===
+      if (bossRef.current && isPhase2EnabledRef.current) {
+        bossRef.current.laserBeams.forEach((beam) => {
+          if (
+            !beam.isShooting ||
+            isGameEndingRef.current ||
+            isPlayerInvincible.current
+          )
+            return;
+
+          const beamHitbox = getBossBeamHitbox(beam);
+          const playerHitbox = getPlayerHitbox();
+
+          const hit =
+            beamHitbox.x < playerHitbox.x + playerHitbox.width &&
+            beamHitbox.x + beamHitbox.width > playerHitbox.x &&
+            beamHitbox.y < playerHitbox.y + playerHitbox.height &&
+            beamHitbox.y + beamHitbox.height > playerHitbox.y;
+
+          if (hit && !beam.hasHitPlayer) {
+            beam.hasHitPlayer = true;
+
+            if (isShieldActiveRef.current) {
+              createExplosion(
+                playerXRef.current,
+                playerYRef.current,
+                shieldParticles
+              );
+              playSound(soundURL.shieldBlock, 0.5);
+              return;
+            }
+
+            handlePlayerHit();
+
+            const beamDamage = bossLaserConfig[beam.type].beamDamage;
+
+            const newLives = Math.max(0, livesRef.current - beamDamage);
+            setLives(newLives);
+
+            if (newLives <= 0) handleGameOver();
+          }
+        });
+      }
+
       /* === COLLISION DETECTION: PLAYER PROJECTILE → BOSS === */
       if (bossRef.current && !bossRef.current.entering) {
         const b = bossRef.current;
