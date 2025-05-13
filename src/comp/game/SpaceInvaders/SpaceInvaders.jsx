@@ -2196,6 +2196,9 @@ function SpaceInvaders({ onClose }) {
       bossActiveRef.current = false;
       bossMusicPlayedRef.current = false;
       bossRef.current = null;
+      isPhase1EnabledRef.current = true;
+      isPhase2EnabledRef.current = false;
+      isPhase3EnabledRef.current = false;
 
       // score
       scoreRef.current = 0;
