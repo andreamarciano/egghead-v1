@@ -174,6 +174,7 @@ function SpaceInvaders({ onClose }) {
   const bossConfig = {
     width: 1000,
     height: 250,
+    lives: 1000,
   };
   // Boss Projectiles
   const bossProjectilesSmallRef = useRef([]);
@@ -210,6 +211,50 @@ function SpaceInvaders({ onClose }) {
     medium: [272, 722],
     large: [495],
   };
+  // Boss Phase
+  const updateBossPhase = () => {
+    const b = bossRef.current;
+    if (!b || b.entering) return;
+
+    let newPhase;
+    if (b.lives <= 400) {
+      newPhase = 3;
+    } else if (b.lives <= 700) {
+      newPhase = 2;
+    } else {
+      newPhase = 1;
+    }
+
+    if (b.phase !== newPhase) {
+      b.phase = newPhase;
+      handleBossPhaseChange(newPhase);
+    }
+  };
+  const handleBossPhaseChange = (phase) => {
+    switch (phase) {
+      case 1:
+        enablePhase1(true);
+        enablePhase2(false);
+        enablePhase3(false);
+        break;
+      case 2:
+        enablePhase1(false);
+        enablePhase2(true);
+        enablePhase3(false);
+        break;
+      case 3:
+        enablePhase1(true);
+        enablePhase2(true);
+        enablePhase3(true);
+        break;
+    }
+  };
+  const isPhase1EnabledRef = useRef(true);
+  const isPhase2EnabledRef = useRef(false);
+  const isPhase3EnabledRef = useRef(false);
+  const enablePhase1 = (value) => (isPhase1EnabledRef.current = value);
+  const enablePhase2 = (value) => (isPhase2EnabledRef.current = value);
+  const enablePhase3 = (value) => (isPhase3EnabledRef.current = value);
 
   /* Invader */
   const invaderImageRef = useRef(new Image());
@@ -1997,9 +2042,10 @@ function SpaceInvaders({ onClose }) {
           y: -bossConfig.height,
           width: bossConfig.width,
           height: bossConfig.height,
-          lives: 100,
+          lives: bossConfig.lives,
           entering: true,
           entrancePhase: "descending",
+          phase: 1,
         };
         isPlayerActiveRef.current = false;
         isPlayerFrozenRef.current = true;
@@ -2043,17 +2089,50 @@ function SpaceInvaders({ onClose }) {
           }
         }
 
+        // === DRAW BOSS IMAGE ===
         const b = bossRef.current;
         if (bossImageRef.current.complete) {
           c.drawImage(bossImageRef.current, b.x, b.y, b.width, b.height);
         } else {
+          // fallback
           c.fillStyle = "red";
           c.fillRect(b.x, b.y, b.width, b.height);
+        }
+
+        // === DRAW BOSS LIFE BAR ===
+        if (bossRef.current && !bossRef.current.entering) {
+          const lifeRatio = Math.max(bossRef.current.lives / 1000, 0);
+
+          const barHeight = 7;
+          const barWidth = canvas.width / 2;
+          const x = (canvas.width - barWidth) / 2;
+          const y = 1;
+
+          c.fillStyle = "rgba(0, 0, 0, 0.2)";
+          c.fillRect(x, y, barWidth, barHeight);
+
+          if (bossRef.current.lives > 600) {
+            c.fillStyle = "rgba(34, 211, 238, 0.4)";
+          } else if (bossRef.current.lives > 300) {
+            c.fillStyle = "rgba(250, 204, 21, 0.6)";
+          } else {
+            c.fillStyle = "rgba(239, 68, 68, 0.8)";
+          }
+
+          c.fillRect(x, y, barWidth * lifeRatio, barHeight);
+
+          c.strokeStyle = "rgba(255, 255, 255, 0.4)";
+          c.lineWidth = 2;
+          c.strokeRect(x, y, barWidth, barHeight);
         }
       }
 
       /* === DRAW: BOSS PROJECTILES === */
-      if (bossRef.current && !bossRef.current.entering) {
+      if (
+        bossRef.current &&
+        !bossRef.current.entering &&
+        isPhase1EnabledRef.current
+      ) {
         const b = bossRef.current;
 
         // Small
@@ -2118,7 +2197,6 @@ function SpaceInvaders({ onClose }) {
         bossProjectilesMediumRef,
         bossProjectilesLargeRef,
       ];
-
       bossProjectileRefs.forEach((ref) => {
         ref.current.forEach((p, index) => {
           if (isGameEndingRef.current || isPlayerInvincible.current) return;
@@ -2154,6 +2232,41 @@ function SpaceInvaders({ onClose }) {
           }
         });
       });
+
+      /* === COLLISION DETECTION: PLAYER PROJECTILE → BOSS === */
+      if (bossRef.current && !bossRef.current.entering) {
+        const b = bossRef.current;
+
+        const hitbox = {
+          x: b.x,
+          y: b.y + b.height - 10,
+          width: b.width,
+          height: 10,
+        };
+
+        // debug - boss hitbox
+        // c.fillStyle = "rgba(255, 0, 0, 0.3)";
+        // c.fillRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+
+        projectilesRef.current.forEach((p, pIndex) => {
+          const hit =
+            p.x < hitbox.x + hitbox.width &&
+            p.x + p.width > hitbox.x &&
+            p.y < hitbox.y + hitbox.height &&
+            p.y + p.height > hitbox.y;
+
+          if (hit) {
+            b.lives -= 10; // cambia - 1
+
+            createExplosion(p.x + p.width / 2, p.y, playerParticles);
+            playSound(soundURL.hitFollower, 0.6);
+
+            projectilesRef.current.splice(pIndex, 1);
+          }
+        });
+
+        updateBossPhase();
+      }
 
       /* GAME LOOP END */
       animationIdRef.current = requestAnimationFrame(gameLoop);
