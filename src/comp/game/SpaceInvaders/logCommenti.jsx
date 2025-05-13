@@ -96,6 +96,7 @@ function SpaceInvaders({ onClose }) {
   const isGameEndingRef = useRef(false);
   const animationIdRef = useRef(null);
   const isPlayerInvincible = useRef(false);
+  const isPlayerFrozenRef = useRef(false);
 
   /* Gameplay */
   const scoreParams = {
@@ -378,7 +379,7 @@ function SpaceInvaders({ onClose }) {
   };
   const isBoostingRef = useRef(false);
   const backgroundBossParticles = {
-    speed: 10,
+    speed: 15,
   };
   const invaderParticles = {
     color: "#BAA0DE",
@@ -1633,9 +1634,10 @@ function SpaceInvaders({ onClose }) {
       const drawPlayer = () => {
         c.save();
         // flash & player lose
-        c.globalAlpha = isPlayerActiveRef.current
-          ? playerOpacityRef.current
-          : 0;
+        c.globalAlpha =
+          isPlayerActiveRef.current || isPlayerFrozenRef.current
+            ? playerOpacityRef.current
+            : 0;
         // rotation
         c.translate(
           playerXRef.current + playerConfig.width / 2,
@@ -1722,6 +1724,7 @@ function SpaceInvaders({ onClose }) {
           entrancePhase: "descending",
         };
         isPlayerActiveRef.current = false;
+        isPlayerFrozenRef.current = true;
       }
 
       /* === DRAW: BOSS === */
@@ -1753,6 +1756,7 @@ function SpaceInvaders({ onClose }) {
 
               isPlayerActiveRef.current = true;
               isPlayerInvincible.current = false;
+              isPlayerFrozenRef.current = false;
             }
           }
         }
@@ -2038,6 +2042,7 @@ function SpaceInvaders({ onClose }) {
 
       isGameEndingRef.current = false;
       isPlayerInvincible.current = false;
+      isPlayerFrozenRef.current = false;
     }
 
     setGameOver(false);
