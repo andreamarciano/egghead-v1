@@ -317,6 +317,7 @@ function SpaceInvaders({ onClose }) {
     width: 4,
     height: 12,
     speed: 4,
+    damage: 1,
   };
 
   /* Follower */
@@ -331,6 +332,7 @@ function SpaceInvaders({ onClose }) {
     chargeDuration: 90,
     beamDuration: 120,
     beamWidth: 20,
+    damage: 1,
   };
   const chargeStart = followerConfig.shootInterval;
   const beamStart = chargeStart + followerConfig.chargeDuration;
@@ -1556,7 +1558,10 @@ function SpaceInvaders({ onClose }) {
           }
 
           handlePlayerHit();
-          const newLives = Math.max(0, livesRef.current - 1);
+          const newLives = Math.max(
+            0,
+            livesRef.current - invaderProjectileConfig.damage
+          );
           setLives(newLives);
 
           invaderProjectilesRef.current.splice(index, 1);
@@ -1635,7 +1640,10 @@ function SpaceInvaders({ onClose }) {
             playSound(soundURL.shieldBlock, 0.5);
           } else {
             handlePlayerHit();
-            const newLives = Math.max(0, livesRef.current - 1);
+            const newLives = Math.max(
+              0,
+              livesRef.current - followerConfig.damage
+            );
             setLives(newLives);
 
             if (newLives <= 0) {
