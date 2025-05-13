@@ -151,6 +151,15 @@ function SpaceInvaders({ onClose }) {
   const livesRef = useRef(10); // cambia - 5
   const [animateLifeLoss, setAnimateLifeLoss] = useState(false);
   const previousLivesRef = useRef(lives);
+  const handlePlayerHit = () => {
+    flashEffect(playerOpacityRef, { playerActive: isPlayerActiveRef });
+    playSound(soundURL.playerHit, 0.7);
+    createExplosion(
+      playerXRef.current + playerConfig.width / 2,
+      playerYRef.current + playerConfig.height / 2,
+      playerParticles
+    );
+  };
 
   /* Projectile */
   const projectileImages = {
@@ -176,7 +185,7 @@ function SpaceInvaders({ onClose }) {
     height: 250,
     lives: 1000,
   };
-  // Boss Projectiles
+  // Phase 1 - Boss Projectiles
   const bossProjectilesSmallRef = useRef([]);
   const bossProjectilesMediumRef = useRef([]);
   const bossProjectilesLargeRef = useRef([]);
@@ -210,6 +219,42 @@ function SpaceInvaders({ onClose }) {
     small: [157, 387, 607, 837],
     medium: [272, 722],
     large: [495],
+  };
+  // Phase 2 - Boss Lasers
+  const bossLaserConfig = {
+    small: {
+      x: [75, 355, 645, 915],
+      y: [113, 113, 113, 113],
+      type: "small",
+      shootInterval: 120,
+      chargeDuration: 60,
+      beamDuration: 120,
+      beamWidth: 12,
+      beamDamage: 1,
+      beamColor: "#00FFFF",
+    },
+    medium: {
+      x: [215, 779],
+      y: [122, 122],
+      type: "medium",
+      shootInterval: 180,
+      chargeDuration: 90,
+      beamDuration: 150,
+      beamWidth: 20,
+      beamDamage: 2,
+      beamColor: "#00FF00",
+    },
+    large: {
+      x: [499],
+      y: [130],
+      type: "large",
+      shootInterval: 240,
+      chargeDuration: 120,
+      beamDuration: 180,
+      beamWidth: 28,
+      beamDamage: 3,
+      beamColor: "#FF0000",
+    },
   };
   // Boss Phase
   const updateBossPhase = () => {
@@ -872,6 +917,22 @@ function SpaceInvaders({ onClose }) {
       };
     };
 
+    /* === BOSS BEAM HITBOX === */
+    const getBossBeamHitbox = (beam) => {
+      // funziona ?
+      const beamWidth = bossLaserConfig[beam.type].beamWidth;
+      const beamX = bossRef.current.x + beam.x - beamWidth / 2;
+      const beamY = bossRef.current.y + beam.y;
+      const beamHeight = canvas.height - beamY;
+
+      return {
+        x: beamX,
+        y: beamY,
+        width: beamWidth,
+        height: beamHeight,
+      };
+    };
+
     /***************************************************************
      *                   SECTION: SPAWN POWER UP                   *
      ***************************************************************/
@@ -1494,20 +1555,11 @@ function SpaceInvaders({ onClose }) {
             return;
           }
 
-          flashEffect(playerOpacityRef, {
-            playerActive: isPlayerActiveRef,
-          });
-
-          playSound(soundURL.playerHit, 0.7);
-          createExplosion(
-            playerXRef.current + playerConfig.width / 2,
-            playerYRef.current + playerConfig.height / 2,
-            playerParticles
-          );
-          invaderProjectilesRef.current.splice(index, 1);
-
+          handlePlayerHit();
           const newLives = Math.max(0, livesRef.current - 1);
           setLives(newLives);
+
+          invaderProjectilesRef.current.splice(index, 1);
 
           // === LOSE CONDITION ===
           if (newLives <= 0) {
@@ -1542,23 +1594,12 @@ function SpaceInvaders({ onClose }) {
             return;
           }
 
-          meteorsRef.current.splice(index, 1);
-
-          flashEffect(playerOpacityRef, {
-            playerActive: isPlayerActiveRef,
-          });
-
-          playSound(soundURL.playerHit, 0.7);
-
-          createExplosion(
-            playerXRef.current + playerConfig.width / 2,
-            playerYRef.current + playerConfig.height / 2,
-            playerParticles
-          );
-
+          handlePlayerHit();
           const damage = m.type === "big" ? 2 : 1;
           const newLives = Math.max(0, livesRef.current - damage);
           setLives(newLives);
+
+          meteorsRef.current.splice(index, 1);
 
           // === LOSE CONDITION ===
           if (newLives <= 0) {
@@ -1593,16 +1634,7 @@ function SpaceInvaders({ onClose }) {
             );
             playSound(soundURL.shieldBlock, 0.5);
           } else {
-            flashEffect(playerOpacityRef, { playerActive: isPlayerActiveRef });
-
-            createExplosion(
-              playerHitbox.x + playerHitbox.width / 2,
-              playerHitbox.y + playerHitbox.height / 2,
-              playerParticles
-            );
-
-            playSound(soundURL.playerHit, 0.7);
-
+            handlePlayerHit();
             const newLives = Math.max(0, livesRef.current - 1);
             setLives(newLives);
 
@@ -2106,13 +2138,7 @@ function SpaceInvaders({ onClose }) {
               return;
             }
 
-            flashEffect(playerOpacityRef, { playerActive: isPlayerActiveRef });
-            playSound(soundURL.playerHit, 0.7);
-            createExplosion(
-              playerXRef.current + playerConfig.width / 2,
-              playerYRef.current + playerConfig.height / 2,
-              playerParticles
-            );
+            handlePlayerHit();
 
             const newLives = Math.max(0, livesRef.current - (p.damage || 1));
             setLives(newLives);
