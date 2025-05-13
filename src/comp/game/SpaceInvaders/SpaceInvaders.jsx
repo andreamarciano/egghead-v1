@@ -848,21 +848,24 @@ function SpaceInvaders({ onClose }) {
     spawnBackgroundParticles();
 
     /* === LOAD IMAGES === */
-    // player
-    playerImageRef.current.src = imgURL[playerColor];
-    projectileImages.greenPlayer.src = imgURL.laserGreen;
-    projectileImages.bluePlayer.src = imgURL.laserBlue;
-    projectileImages.redPlayer.src = imgURL.laserRed;
-    // power up
-    shieldImageRef.current.src = imgURL.shield;
-    // enemy
-    invaderImageRef.current.src = imgURL.invader;
-    meteorImages.big.src = imgURL.meteorBig;
-    meteorImages.med.src = imgURL.meteorMed;
-    meteorImages.small.src = imgURL.meteorSmall;
-    followerImageRef.current.src = imgURL.follower;
-    // boss
-    bossImageRef.current.src = imgURL.boss;
+    const loadImages = () => {
+      // player
+      playerImageRef.current.src = imgURL[playerColor];
+      projectileImages.greenPlayer.src = imgURL.laserGreen;
+      projectileImages.bluePlayer.src = imgURL.laserBlue;
+      projectileImages.redPlayer.src = imgURL.laserRed;
+      // power up
+      shieldImageRef.current.src = imgURL.shield;
+      // enemy
+      invaderImageRef.current.src = imgURL.invader;
+      meteorImages.big.src = imgURL.meteorBig;
+      meteorImages.med.src = imgURL.meteorMed;
+      meteorImages.small.src = imgURL.meteorSmall;
+      followerImageRef.current.src = imgURL.follower;
+      // boss
+      bossImageRef.current.src = imgURL.boss;
+    };
+    loadImages();
 
     /* === INIT PLAYER === */
     const resetPlayerPosition = () => {
