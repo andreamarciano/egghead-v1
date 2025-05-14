@@ -381,6 +381,11 @@ function SpaceInvaders({ onClose }) {
       med: 3,
       small: 4,
     },
+    retreatSpeed: {
+      big: 5,
+      med: 6,
+      small: 7,
+    },
     lives: {
       big: 3,
       med: 2,
@@ -842,6 +847,10 @@ function SpaceInvaders({ onClose }) {
       invaderGridsRef.current.forEach((grid) => {
         grid.retreating = true;
       });
+
+      meteorsRef.current.forEach((m) => {
+        m.retreating = true;
+      });
     }
   }, [score]);
 
@@ -1114,6 +1123,8 @@ function SpaceInvaders({ onClose }) {
           image: meteorImages[type],
           rotation: Math.random() * Math.PI,
           rotationSpeed: Math.random() * 0.02 + 0.01,
+          retreating: false,
+          retreatSpeed: meteorConfig.retreatSpeed[type],
         });
       }
     }, spawnTime.meteor);
@@ -1357,9 +1368,19 @@ function SpaceInvaders({ onClose }) {
       });
 
       /* === UPDATE POSITION: METEOR === */
-      meteorsRef.current = meteorsRef.current
-        .map((m) => ({ ...m, y: m.y + m.speed }))
-        .filter((m) => m.y < canvas.height);
+      meteorsRef.current = meteorsRef.current.filter((m) => {
+        // === BOSS - RETREAT ===
+        if (m.retreating) {
+          m.y += m.retreatSpeed;
+
+          // remove meteor
+          return m.y < canvas.height;
+        } else {
+          m.y += m.speed;
+
+          return m.y < canvas.height;
+        }
+      });
       meteorsRef.current.forEach((m) => {
         m.rotation += m.rotationSpeed;
 
