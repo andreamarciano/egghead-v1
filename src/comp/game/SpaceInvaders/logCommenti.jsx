@@ -2252,9 +2252,9 @@ function SpaceInvaders({ onClose }) {
           c.fillStyle = "rgba(0, 0, 0, 0.2)";
           c.fillRect(x, y, barWidth, barHeight);
 
-          if (bossRef.current.lives > 600) {
+          if (bossRef.current.lives > 700) {
             c.fillStyle = "rgba(34, 211, 238, 0.4)";
-          } else if (bossRef.current.lives > 300) {
+          } else if (bossRef.current.lives > 400) {
             c.fillStyle = "rgba(250, 204, 21, 0.6)";
           } else {
             c.fillStyle = "rgba(239, 68, 68, 0.8)";
