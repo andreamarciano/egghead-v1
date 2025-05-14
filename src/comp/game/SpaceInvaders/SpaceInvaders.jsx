@@ -2397,6 +2397,10 @@ function SpaceInvaders({ onClose }) {
       projectilesRef.current = [];
       particlesRef.current = [];
       backgroundParticlesRef.current = [];
+
+      // power up
+      isShieldActiveRef.current = false;
+      shieldStartTimeRef.current = null;
       shieldPowerUpRef.current = [];
 
       // reset enemy
