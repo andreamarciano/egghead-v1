@@ -179,6 +179,7 @@ function SpaceInvaders({ onClose }) {
 
   /* Boss */
   const bossImageRef = useRef(new Image());
+  const bossImage2Ref = useRef(new Image());
   const bossActiveRef = useRef(false);
   const bossRef = useRef(null);
   const bossConfig = {
@@ -279,6 +280,9 @@ function SpaceInvaders({ onClose }) {
   };
   const beamIntervalsRef = useRef([]);
   const handleBossPhaseChange = (phase) => {
+    const b = bossRef.current;
+    if (!b) return;
+
     switch (phase) {
       case 1:
         enablePhase1(true);
@@ -293,7 +297,11 @@ function SpaceInvaders({ onClose }) {
         enablePhase2(true);
         enablePhase3(false);
 
-        bossImageRef.current.src = imgURL.boss2;
+        if (b) {
+          b.entering = true;
+          b.entrancePhase = "rising";
+          b.hasChangedImage = false;
+        }
 
         const configs = [
           bossLaserConfig.small,
@@ -916,6 +924,7 @@ function SpaceInvaders({ onClose }) {
       followerImageRef.current.src = imgURL.follower;
       // boss
       bossImageRef.current.src = imgURL.boss1;
+      bossImage2Ref.current.src = imgURL.boss2;
     };
     loadImages();
 
@@ -2026,6 +2035,7 @@ function SpaceInvaders({ onClose }) {
           entering: true,
           entrancePhase: "descending",
           phase: 1,
+          hasChangedImage: false,
         };
         isPlayerActiveRef.current = false;
         isPlayerFrozenRef.current = true;
@@ -2035,36 +2045,71 @@ function SpaceInvaders({ onClose }) {
       if (bossRef.current) {
         // === ANIMATION: ENTERING ===
         if (bossRef.current.entering) {
+          const b = bossRef.current;
+
           isPlayerInvincible.current = true;
           isBoostingRef.current = true;
 
-          // play boss music
-          if (!bossMusicPlayedRef.current) {
-            bossMusicPlayedRef.current = true;
-            playBossMusic();
-          }
-
-          if (bossRef.current.entrancePhase === "descending") {
-            playerTransitionRef.current = "exitScene";
-
-            bossRef.current.y += 0.3; // descending speed
-            if (bossRef.current.y >= 0) {
-              bossRef.current.entrancePhase = "rising";
-              playSound(soundURL.bossDescending, 1);
+          if (b.phase === 1) {
+            // play boss entrance music
+            if (!bossMusicPlayedRef.current) {
+              bossMusicPlayedRef.current = true;
+              playBossMusic();
             }
-          } else if (bossRef.current.entrancePhase === "rising") {
-            playerTransitionRef.current = "reenterScene";
 
-            isBoostingRef.current = false;
-            bossRef.current.y -= 0.5; // rising speed
-            if (bossRef.current.y <= -50) {
-              bossRef.current.y = -50;
-              bossRef.current.entering = false;
-              bossRef.current.entrancePhase = null;
+            // DESCENDING → RISING
+            if (b.entrancePhase === "descending") {
+              playerTransitionRef.current = "exitScene";
+              b.y += 0.3; // descending speed
 
-              isPlayerActiveRef.current = true;
-              isPlayerInvincible.current = false;
-              isPlayerFrozenRef.current = false;
+              if (b.y >= 0) {
+                b.entrancePhase = "rising";
+                playSound(soundURL.bossDescending, 1);
+              }
+            } else if (b.entrancePhase === "rising") {
+              playerTransitionRef.current = "reenterScene";
+              isBoostingRef.current = false;
+              b.y -= 0.5; // rising speed
+
+              if (b.y <= -40) {
+                b.y = -40;
+                b.entering = false;
+                b.entrancePhase = null;
+
+                isPlayerActiveRef.current = true;
+                isPlayerInvincible.current = false;
+                isPlayerFrozenRef.current = false;
+              }
+            }
+          } else if (b.phase === 2) {
+            // RISING → IMAGE SWAP → DESCENDING
+            if (b.entrancePhase === "rising") {
+              b.y -= 1.2; // rising speed
+
+              if (b.y <= -b.height) {
+                b.y = -b.height;
+
+                if (!b.hasChangedImage) {
+                  bossImageRef.current = bossImage2Ref.current;
+                  b.hasChangedImage = true;
+                }
+
+                b.entrancePhase = "descending";
+              }
+            } else if (b.entrancePhase === "descending") {
+              isBoostingRef.current = false;
+              b.y += 1; // descending speed
+
+              if (b.y >= -40) {
+                b.y = -40;
+                playSound(soundURL.bossDescending, 1);
+                b.entering = false;
+                b.entrancePhase = null;
+
+                isPlayerActiveRef.current = true;
+                isPlayerInvincible.current = false;
+                isPlayerFrozenRef.current = false;
+              }
             }
           }
         }
