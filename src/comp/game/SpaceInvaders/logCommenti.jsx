@@ -1414,9 +1414,19 @@ function SpaceInvaders({ onClose }) {
       });
 
       /* === UPDATE POSITION: METEOR === */
-      meteorsRef.current = meteorsRef.current
-        .map((m) => ({ ...m, y: m.y + m.speed }))
-        .filter((m) => m.y < canvas.height);
+      meteorsRef.current = meteorsRef.current.filter((m) => {
+        // === BOSS - RETREAT ===
+        if (m.retreating) {
+          m.y += m.retreatSpeed;
+
+          // remove meteor
+          return m.y < canvas.height;
+        } else {
+          m.y += m.speed;
+
+          return m.y < canvas.height;
+        }
+      });
       meteorsRef.current.forEach((m) => {
         m.rotation += m.rotationSpeed;
 
@@ -1435,9 +1445,10 @@ function SpaceInvaders({ onClose }) {
       });
 
       /* === UPDATE POSITION: SHIELD === */
-      shieldPowerUpRef.current = shieldPowerUpRef.current
-        .map((p) => ({ ...p, y: p.y + p.speed }))
-        .filter((p) => p.y < canvas.height);
+      shieldPowerUpRef.current = shieldPowerUpRef.current.filter((p) => {
+        p.y += p.speed;
+        return p.y < canvas.height;
+      });
       shieldPowerUpRef.current.forEach((p) => {
         if (p.image && p.image.complete) {
           c.drawImage(p.image, p.x, p.y, p.width, p.height);

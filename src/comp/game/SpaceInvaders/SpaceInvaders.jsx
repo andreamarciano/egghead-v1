@@ -1391,9 +1391,10 @@ function SpaceInvaders({ onClose }) {
       });
 
       /* === UPDATE POSITION: SHIELD === */
-      shieldPowerUpRef.current = shieldPowerUpRef.current
-        .map((p) => ({ ...p, y: p.y + p.speed }))
-        .filter((p) => p.y < canvas.height);
+      shieldPowerUpRef.current = shieldPowerUpRef.current.filter((p) => {
+        p.y += p.speed;
+        return p.y < canvas.height;
+      });
       shieldPowerUpRef.current.forEach((p) => {
         if (p.image && p.image.complete) {
           c.drawImage(p.image, p.x, p.y, p.width, p.height);
