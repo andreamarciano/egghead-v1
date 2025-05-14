@@ -1407,16 +1407,12 @@ function SpaceInvaders({ onClose }) {
       });
 
       /* === UPDATE: PARTICLES  === */
-      particlesRef.current = particlesRef.current
-        .map((p) => {
-          return {
-            ...p,
-            x: p.x + p.velocity.x,
-            y: p.y + p.velocity.y,
-            opacity: p.opacity - 0.02,
-          };
-        })
-        .filter((p) => p.opacity > 0);
+      particlesRef.current = particlesRef.current.filter((p) => {
+        p.x += p.velocity.x;
+        p.y += p.velocity.y;
+        p.opacity -= 0.02;
+        return p.opacity > 0;
+      });
       particlesRef.current.forEach((p) => {
         c.save();
         c.globalAlpha = p.opacity;
