@@ -1001,7 +1001,7 @@ function SpaceInvaders({ onClose }) {
 
     /* === SPAWN: SHIELD BUBBLE === */
     const shieldSpawnInterval = setInterval(() => {
-      if (scoreRef.current >= spawnScore.shield) {
+      if (!bossRef.current?.entering && scoreRef.current >= spawnScore.shield) {
         const x = Math.floor(
           Math.random() * (canvas.width - shieldConfig.width)
         );
