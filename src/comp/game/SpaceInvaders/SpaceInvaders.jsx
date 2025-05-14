@@ -409,6 +409,7 @@ function SpaceInvaders({ onClose }) {
   const shieldPowerUpRef = useRef([]);
   const isShieldActiveRef = useRef(false);
   const shieldTimerRef = useRef(null);
+  const shieldStartTimeRef = useRef(null);
   const shieldConfig = {
     width: 144,
     height: 137,
@@ -1163,6 +1164,7 @@ function SpaceInvaders({ onClose }) {
     /* === ACTIVATE SHIELD === */
     const activateShield = () => {
       isShieldActiveRef.current = true;
+      shieldStartTimeRef.current = performance.now();
 
       playSound(soundURL.shieldUp, 0.4);
 
@@ -1760,6 +1762,17 @@ function SpaceInvaders({ onClose }) {
 
       /* === DRAW: SHIELD ON PLAYER === */
       if (isShieldActiveRef.current && shieldImageRef.current.complete) {
+        const now = performance.now();
+        const elapsed = now - shieldStartTimeRef.current;
+        const remaining = shieldConfig.time - elapsed;
+
+        // flash animation
+        let opacity = 1;
+        if (remaining <= 2000) {
+          const flashSpeed = 200;
+          opacity = Math.sin((now / flashSpeed) * Math.PI) * 0.5 + 0.5;
+        }
+
         const shieldX =
           playerXRef.current + playerConfig.width / 2 - shieldConfig.width / 2;
         const shieldY =
@@ -1767,6 +1780,8 @@ function SpaceInvaders({ onClose }) {
           playerConfig.height / 2 -
           shieldConfig.height / 2;
 
+        c.save();
+        c.globalAlpha = opacity;
         c.drawImage(
           shieldImageRef.current,
           shieldX,
@@ -1774,6 +1789,7 @@ function SpaceInvaders({ onClose }) {
           shieldConfig.width,
           shieldConfig.height
         );
+        c.restore();
       }
 
       /* === DRAW: INVADER GRIDS === */
