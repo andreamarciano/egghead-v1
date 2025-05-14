@@ -57,6 +57,7 @@ const soundURL = {
   // Boss
   bossEnter: "/sounds/spaceInvaders/boss/bossEnter.mp3",
   bossDescending: "/sounds/spaceInvaders/boss/bossDescending.mp3",
+  bossDescending2: "/sounds/spaceInvaders/boss/bossDescending2.mp3",
   // Shield
   shieldUp: "/sounds/spaceInvaders/shield/shieldUp.mp3",
   shieldDown: "/sounds/spaceInvaders/shield/shieldDown.mp3",
@@ -2088,6 +2089,7 @@ function SpaceInvaders({ onClose }) {
 
               if (b.y <= -b.height) {
                 b.y = -b.height;
+                playSound(soundURL.bossDescending2, 1);
 
                 if (!b.hasChangedImage) {
                   bossImageRef.current = bossImage2Ref.current;
@@ -2102,7 +2104,6 @@ function SpaceInvaders({ onClose }) {
 
               if (b.y >= -40) {
                 b.y = -40;
-                playSound(soundURL.bossDescending, 1);
                 b.entering = false;
                 b.entrancePhase = null;
 
