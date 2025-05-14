@@ -23,7 +23,8 @@ const imgURL = {
   meteorSmall: "/images/spaceInvaders/invader/meteorsmall.webp",
   follower: "/images/spaceInvaders/invader/follower.webp",
   // Boss
-  boss: "/images/spaceInvaders/invader/boss.png",
+  boss1: "/images/spaceInvaders/invader/bossPhase1.png",
+  boss2: "/images/spaceInvaders/invader/bossPhase2.png",
   // Numeral
   n0: "/images/spaceInvaders/numeral/numeral0.webp",
   n1: "/images/spaceInvaders/numeral/numeral1.webp",
@@ -291,6 +292,8 @@ function SpaceInvaders({ onClose }) {
         enablePhase1(false);
         enablePhase2(true);
         enablePhase3(false);
+
+        bossImageRef.current.src = imgURL.boss2;
 
         const configs = [
           bossLaserConfig.small,
@@ -921,7 +924,7 @@ function SpaceInvaders({ onClose }) {
       meteorImages.small.src = imgURL.meteorSmall;
       followerImageRef.current.src = imgURL.follower;
       // boss
-      bossImageRef.current.src = imgURL.boss;
+      bossImageRef.current.src = imgURL.boss1;
     };
     loadImages();
 
