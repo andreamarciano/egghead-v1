@@ -412,6 +412,10 @@ function SpaceInvaders({ onClose }) {
     bubbleHeight: 40,
     bubbleSpeed: 2,
   };
+  const handleShieldBlock = (x, y) => {
+    createExplosion(x, y, shieldParticles);
+    playSound(soundURL.shieldBlock, 0.5);
+  };
 
   /* Score */
   const [score, setScore] = useState(0);
@@ -1588,8 +1592,7 @@ function SpaceInvaders({ onClose }) {
           if (isShieldActiveRef.current) {
             invaderProjectilesRef.current.splice(index, 1);
 
-            createExplosion(p.x, p.y, shieldParticles);
-            playSound(soundURL.shieldBlock, 0.5);
+            handleShieldBlock(p.x, p.y);
 
             return;
           }
@@ -1626,12 +1629,7 @@ function SpaceInvaders({ onClose }) {
           if (isShieldActiveRef.current) {
             meteorsRef.current.splice(index, 1);
 
-            playSound(soundURL.shieldBlock, 0.5);
-            createExplosion(
-              m.x + m.width / 2,
-              m.y + m.height / 2,
-              shieldParticles
-            );
+            handleShieldBlock(m.x + m.width / 2, m.y + m.height / 2);
 
             return;
           }
@@ -1669,12 +1667,10 @@ function SpaceInvaders({ onClose }) {
           follower.hasHitPlayer = true;
 
           if (isShieldActiveRef.current) {
-            createExplosion(
+            handleShieldBlock(
               playerHitbox.x + playerHitbox.width / 2,
-              playerHitbox.y + playerHitbox.height / 2,
-              shieldParticles
+              playerHitbox.y + playerHitbox.height / 2 - 50
             );
-            playSound(soundURL.shieldBlock, 0.5);
           } else {
             handlePlayerHit();
             const newLives = Math.max(
@@ -2238,8 +2234,7 @@ function SpaceInvaders({ onClose }) {
             ref.current.splice(index, 1);
 
             if (isShieldActiveRef.current) {
-              createExplosion(p.x, p.y, shieldParticles);
-              playSound(soundURL.shieldBlock, 0.5);
+              handleShieldBlock(p.x, p.y);
               return;
             }
 
@@ -2276,12 +2271,7 @@ function SpaceInvaders({ onClose }) {
             beam.hasHitPlayer = true;
 
             if (isShieldActiveRef.current) {
-              createExplosion(
-                playerXRef.current,
-                playerYRef.current,
-                shieldParticles
-              );
-              playSound(soundURL.shieldBlock, 0.5);
+              handleShieldBlock(playerXRef.current, playerYRef.current - 50);
               return;
             }
 
