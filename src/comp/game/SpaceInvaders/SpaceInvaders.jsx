@@ -720,7 +720,7 @@ function SpaceInvaders({ onClose }) {
 
   /* Score Animation */
   useEffect(() => {
-    if (displayedScore === score) return;
+    if (displayedScore === score || displayedScore > score) return;
 
     const interval = setInterval(() => {
       setDisplayedScore((prev) => {
@@ -2408,6 +2408,7 @@ function SpaceInvaders({ onClose }) {
       // score
       scoreRef.current = 0;
       setScore(0);
+      setDisplayedScore(0);
     }
 
     setGameOver(false);
