@@ -1381,20 +1381,19 @@ function SpaceInvaders({ onClose }) {
        ***************************************************************/
 
       /* === UPDATE POSITION: PLAYER PROJECTILES === */
-      projectilesRef.current = projectilesRef.current
-        .map((p) => {
-          const updated = { ...p, y: p.y - p.speed };
-          // debug - projectile position
-          //   console.log("projectile updated:", updated);
-          return updated;
-        })
-        .filter((p) => {
-          const isVisible = p.y + p.height > 0;
-          // debug - projectile removed
-          //   if (!isVisible)
-          //     console.log("projectile removed:", p);
-          return isVisible;
-        });
+      projectilesRef.current = projectilesRef.current.filter((p) => {
+        p.y -= p.speed;
+
+        // debug - projectile position
+        // console.log("projectile updated:", p);
+
+        const isVisible = p.y + p.height > 0;
+
+        // debug - projectile removed
+        // if (!isVisible) console.log("projectile removed:", p);
+
+        return isVisible;
+      });
       projectilesRef.current.forEach((p) => {
         const img = projectileImages[p.color];
         if (img.complete) {

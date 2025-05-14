@@ -1339,15 +1339,10 @@ function SpaceInvaders({ onClose }) {
        ***************************************************************/
 
       /* === UPDATE POSITION: PLAYER PROJECTILES === */
-      projectilesRef.current = projectilesRef.current
-        .map((p) => {
-          const updated = { ...p, y: p.y - p.speed };
-          return updated;
-        })
-        .filter((p) => {
-          const isVisible = p.y + p.height > 0;
-          return isVisible;
-        });
+      projectilesRef.current = projectilesRef.current.filter((p) => {
+        p.y -= p.speed;
+        return p.y + p.height > 0;
+      });
       projectilesRef.current.forEach((p) => {
         const img = projectileImages[p.color];
         if (img.complete) {
