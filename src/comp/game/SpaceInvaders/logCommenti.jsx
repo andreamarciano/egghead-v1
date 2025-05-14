@@ -1402,12 +1402,12 @@ function SpaceInvaders({ onClose }) {
       });
 
       /* === UPDATE POSITION: INVADER PROJECTILES === */
-      invaderProjectilesRef.current = invaderProjectilesRef.current
-        .map((p) => ({
-          ...p,
-          y: p.y + p.speed,
-        }))
-        .filter((p) => p.y < canvas.height);
+      invaderProjectilesRef.current = invaderProjectilesRef.current.filter(
+        (p) => {
+          p.y += p.speed;
+          return p.y < canvas.height;
+        }
+      );
       invaderProjectilesRef.current.forEach((p) => {
         c.fillStyle = "white";
         c.fillRect(p.x, p.y, p.width, p.height);
