@@ -404,6 +404,11 @@ function SpaceInvaders({ onClose }) {
       med: 3,
       small: 4,
     },
+    speed2: {
+      big: 3.5,
+      med: 4.5,
+      small: 5.5,
+    },
     retreatSpeed: {
       big: 5,
       med: 6,
@@ -440,6 +445,7 @@ function SpaceInvaders({ onClose }) {
     bubbleWidth: 40,
     bubbleHeight: 40,
     bubbleSpeed: 2,
+    bubbleSpeed2: 3.5,
   };
   const handleShieldBlock = (x, y) => {
     createExplosion(x, y, shieldParticles);
@@ -552,6 +558,7 @@ function SpaceInvaders({ onClose }) {
     intro.volume = musicVolume;
     intro.loop = false;
     bossMusic.current = intro;
+
     intro.play().catch((e) => console.warn("Boss music error:", e));
 
     intro.onended = () => {
@@ -562,6 +569,7 @@ function SpaceInvaders({ onClose }) {
       battleTrack.volume = musicVolume;
       battleTrack.loop = true;
       bossMusic.current = battleTrack;
+
       battleTrack.play().catch((e) => console.warn("Boss battle error:", e));
     };
   };
@@ -856,6 +864,25 @@ function SpaceInvaders({ onClose }) {
       gameBgMusic.current?.pause();
     }
   }, [isGameRunning, gameOver, audioEnabled]);
+  // Global Music
+  useEffect(() => {
+    if (!audioEnabled) {
+      gameBgMusic.current?.pause();
+      bossMusic.current?.pause();
+    } else {
+      if (!gameOver && isGameRunning) {
+        if (bossActiveRef.current) {
+          bossMusic.current
+            ?.play()
+            .catch((e) => console.warn("Boss music resume error:", e));
+        } else {
+          gameBgMusic.current
+            ?.play()
+            .catch((e) => console.warn("BG music resume error:", e));
+        }
+      }
+    }
+  }, [audioEnabled, isGameRunning, gameOver]);
 
   /***************************************************************
    *                      useEFFECT: SCORE                       *
@@ -1072,7 +1099,9 @@ function SpaceInvaders({ onClose }) {
           y,
           width: shieldConfig.bubbleWidth,
           height: shieldConfig.bubbleHeight,
-          speed: shieldConfig.bubbleSpeed,
+          speed: bossDefeatedRef.current
+            ? shieldConfig.bubbleSpeed2
+            : shieldConfig.bubbleSpeed,
           image: shieldImageRef.current,
         });
       }
@@ -1188,7 +1217,9 @@ function SpaceInvaders({ onClose }) {
           type,
           width: meteorConfig.size[type],
           height: meteorConfig.size[type],
-          speed: meteorConfig.speed[type],
+          speed: bossDefeatedRef.current
+            ? meteorConfig.speed2[type]
+            : meteorConfig.speed[type],
           lives: meteorConfig.lives[type],
           image: meteorImages[type],
           rotation: Math.random() * Math.PI,
@@ -2589,6 +2620,11 @@ function SpaceInvaders({ onClose }) {
   const handleGameOver = () => {
     if (isGameEndingRef.current) return;
     isGameEndingRef.current = true;
+
+    gameBgMusic.current?.pause();
+    bossMusic.current?.pause();
+    gameBgMusic.current = null;
+    bossMusic.current = null;
 
     isPlayerActiveRef.current = false;
     playSound(soundURL.gameOver);
