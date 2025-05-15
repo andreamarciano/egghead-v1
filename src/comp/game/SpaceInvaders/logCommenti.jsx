@@ -2253,10 +2253,11 @@ function SpaceInvaders({ onClose }) {
         if (bossRef.current.entering) {
           const b = bossRef.current;
 
-          isPlayerInvincible.current = true;
           isBoostingRef.current = true;
 
           if (b.phase === 1) {
+            isPlayerInvincible.current = true;
+
             // play boss entrance music
             if (!bossMusicPlayedRef.current) {
               bossMusicPlayedRef.current = true;
@@ -2319,6 +2320,8 @@ function SpaceInvaders({ onClose }) {
             }
           } else if (b.entrancePhase === "retreat") {
             // === BOSS DEFEATED ===
+
+            isPlayerInvincible.current = true;
             b.y -= 1; // rising speed
 
             if (b.y + b.height < 0) {
