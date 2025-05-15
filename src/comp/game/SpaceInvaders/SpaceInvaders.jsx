@@ -72,6 +72,12 @@ const themeURL = [
   "/sounds/spaceInvaders/theme/theme3.mp3",
   "/sounds/spaceInvaders/theme/theme4.mp3",
 ];
+const theme2URL = [
+  "/sounds/tris/tris-theme.mp3",
+  "/sounds/connect4/connect4-theme.mp3",
+  "/sounds/flower/flower-theme.mp3",
+  "/sounds/order/order-theme.mp3",
+];
 const battleURL = [
   "/sounds/spaceInvaders/boss/bossBattle1.mp3",
   "/sounds/spaceInvaders/boss/bossBattle2.mp3",
@@ -559,25 +565,29 @@ function SpaceInvaders({ onClose }) {
       battleTrack.play().catch((e) => console.warn("Boss battle error:", e));
     };
   };
-  // resume bg music
+  // bg music part2
   const resumeBackgroundMusic = () => {
+    // stop boss music
     if (bossMusic.current) {
       bossMusic.current.pause();
-      bossMusic.current.volume = 0;
       bossMusic.current = null;
     }
 
-    if (
-      !gameOver &&
-      isGameRunning &&
-      audioEnabledRef.current &&
-      gameBgMusic.current
-    ) {
-      //audioEnabledRef.current && gameBgMusic.current
-      // cambia - controlla condizioni
-      gameBgMusic.current
-        ?.play()
-        .catch((e) => console.warn("Resume error:", e));
+    if (!gameOver && isGameRunning && audioEnabledRef.current) {
+      const randomIndex = Math.floor(Math.random() * theme2URL.length);
+      const newTheme = theme2URL[randomIndex];
+
+      if (gameBgMusic.current) {
+        gameBgMusic.current.pause();
+        gameBgMusic.current = null;
+      }
+
+      const next = new Audio(newTheme);
+      next.loop = true;
+      next.volume = musicVolume;
+      gameBgMusic.current = next;
+
+      next.play().catch((e) => console.warn("Autoplay error (part 2):", e));
     }
   };
 
@@ -831,6 +841,10 @@ function SpaceInvaders({ onClose }) {
   useEffect(() => {
     if (bossActiveRef.current) {
       gameBgMusic.current?.pause();
+      return;
+    }
+
+    if (bossDefeatedRef.current) {
       return;
     }
 
