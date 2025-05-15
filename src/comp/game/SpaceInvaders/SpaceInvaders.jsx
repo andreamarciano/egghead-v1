@@ -555,7 +555,7 @@ function SpaceInvaders({ onClose }) {
     gameBgMusic.current?.pause(); // stop background
 
     const intro = new Audio(soundURL.bossEnter);
-    intro.volume = musicVolume;
+    intro.volume = musicVolume * 0.4;
     intro.loop = false;
     bossMusic.current = intro;
 
@@ -2156,7 +2156,7 @@ function SpaceInvaders({ onClose }) {
 
               if (b.y >= 0) {
                 b.entrancePhase = "rising";
-                playSound(soundURL.bossDescending, 1);
+                playSound(soundURL.bossDescending, 0.5);
               }
             } else if (b.entrancePhase === "rising") {
               playerTransitionRef.current = "reenterScene";
@@ -2180,7 +2180,7 @@ function SpaceInvaders({ onClose }) {
 
               if (b.y <= -b.height) {
                 b.y = -b.height;
-                playSound(soundURL.bossDescending2, 1);
+                playSound(soundURL.bossDescending2, 0.5);
 
                 if (!b.hasChangedImage) {
                   bossImageRef.current = bossImage2Ref.current;
