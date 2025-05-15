@@ -72,6 +72,10 @@ const themeURL = [
   "/sounds/spaceInvaders/theme/theme3.mp3",
   "/sounds/spaceInvaders/theme/theme4.mp3",
 ];
+const battleURL = [
+  "/sounds/spaceInvaders/boss/bossBattle1.mp3",
+  "/sounds/spaceInvaders/boss/bossBattle2.mp3",
+];
 
 /******************************************************************************
  *                                                                            *
@@ -149,8 +153,8 @@ function SpaceInvaders({ onClose }) {
   const isPlayerActiveRef = useRef(true);
   const playerTransitionRef = useRef(null);
   // Lives
-  const [lives, setLives] = useState(10); // cambia - 5
-  const livesRef = useRef(10); // cambia - 5
+  const [lives, setLives] = useState(5);
+  const livesRef = useRef(5);
   const [animateLifeLoss, setAnimateLifeLoss] = useState(false);
   const previousLivesRef = useRef(lives);
   const handlePlayerHit = () => {
@@ -183,6 +187,7 @@ function SpaceInvaders({ onClose }) {
   const bossImage2Ref = useRef(new Image());
   const bossActiveRef = useRef(false);
   const bossRef = useRef(null);
+  const bossDefeatedRef = useRef(false);
   const bossConfig = {
     width: 1000,
     height: 250,
@@ -537,19 +542,43 @@ function SpaceInvaders({ onClose }) {
 
     gameBgMusic.current?.pause(); // stop background
 
-    bossMusic.current = new Audio(soundURL.bossEnter);
-    bossMusic.current.volume = musicVolume;
-    bossMusic.current.loop = false;
-    bossMusic.current.play().catch((e) => console.warn("Boss music error:", e));
+    const intro = new Audio(soundURL.bossEnter);
+    intro.volume = musicVolume;
+    intro.loop = false;
+    bossMusic.current = intro;
+    intro.play().catch((e) => console.warn("Boss music error:", e));
 
-    // resume background
-    bossMusic.current.onended = () => {
-      if (!gameOver && isGameRunning && audioEnabledRef.current) {
-        gameBgMusic.current
-          ?.play()
-          .catch((e) => console.warn("Resume error:", e));
-      }
+    intro.onended = () => {
+      if (!audioEnabledRef.current || gameOver) return;
+
+      const randomIndex = Math.floor(Math.random() * battleURL.length);
+      const battleTrack = new Audio(battleURL[randomIndex]);
+      battleTrack.volume = musicVolume;
+      battleTrack.loop = true;
+      bossMusic.current = battleTrack;
+      battleTrack.play().catch((e) => console.warn("Boss battle error:", e));
     };
+  };
+  // resume bg music
+  const resumeBackgroundMusic = () => {
+    if (bossMusic.current) {
+      bossMusic.current.pause();
+      bossMusic.current.volume = 0;
+      bossMusic.current = null;
+    }
+
+    if (
+      !gameOver &&
+      isGameRunning &&
+      audioEnabledRef.current &&
+      gameBgMusic.current
+    ) {
+      //audioEnabledRef.current && gameBgMusic.current
+      // cambia - controlla condizioni
+      gameBgMusic.current
+        ?.play()
+        .catch((e) => console.warn("Resume error:", e));
+    }
   };
 
   /* Particles */
@@ -775,6 +804,9 @@ function SpaceInvaders({ onClose }) {
     if (gameBgMusic.current) {
       gameBgMusic.current.volume = musicVolume;
     }
+    if (bossMusic.current) {
+      bossMusic.current.volume = musicVolume;
+    }
   }, [musicVolume]);
   // Background Music
   useEffect(() => {
@@ -798,6 +830,11 @@ function SpaceInvaders({ onClose }) {
   }, [currentTheme]);
   // Play/Pause Background Music
   useEffect(() => {
+    if (bossActiveRef.current) {
+      gameBgMusic.current?.pause();
+      return;
+    }
+
     if (isGameRunning && !gameOver && audioEnabled) {
       gameBgMusic.current?.play().catch((e) => {
         console.warn("Autoplay error:", e);
@@ -847,7 +884,11 @@ function SpaceInvaders({ onClose }) {
 
   /* === SPAWN: BOSS === */
   useEffect(() => {
-    if (scoreRef.current >= spawnScore.boss && !bossActiveRef.current) {
+    if (
+      scoreRef.current >= spawnScore.boss &&
+      !bossActiveRef.current &&
+      !bossDefeatedRef.current
+    ) {
       bossActiveRef.current = true;
     }
 
@@ -2037,6 +2078,7 @@ function SpaceInvaders({ onClose }) {
           entrancePhase: "descending",
           phase: 1,
           hasChangedImage: false,
+          retreating: false,
         };
         isPlayerActiveRef.current = false;
         isPlayerFrozenRef.current = true;
@@ -2112,16 +2154,37 @@ function SpaceInvaders({ onClose }) {
                 isPlayerFrozenRef.current = false;
               }
             }
+          } else if (b.entrancePhase === "retreat") {
+            // === BOSS DEFEATED ===
+            b.y -= 1; // rising speed
+
+            if (b.y + b.height < 0) {
+              bossRef.current = null;
+              bossActiveRef.current = false;
+              bossDefeatedRef.current = true;
+              isBoostingRef.current = false;
+
+              isPlayerActiveRef.current = true;
+              isPlayerFrozenRef.current = false;
+              isPlayerInvincible.current = false;
+              playerTransitionRef.current = null;
+
+              bossBeamsRef.current = [];
+              bossMusicPlayedRef.current = false;
+            }
           }
         }
 
         // === DRAW BOSS IMAGE ===
-        const b = bossRef.current;
-        if (bossImageRef.current.complete) {
-          c.drawImage(bossImageRef.current, b.x, b.y, b.width, b.height);
-        } else {
-          c.fillStyle = "red";
-          c.fillRect(b.x, b.y, b.width, b.height);
+        if (bossRef.current) {
+          const b = bossRef.current;
+
+          if (bossImageRef.current.complete) {
+            c.drawImage(bossImageRef?.current, b.x, b.y, b.width, b.height);
+          } else {
+            c.fillStyle = "red";
+            c.fillRect(b.x, b.y, b.width, b.height);
+          }
         }
 
         // === DRAW BOSS LIFE BAR ===
@@ -2215,7 +2278,6 @@ function SpaceInvaders({ onClose }) {
 
           const hitbox = getBossBeamHitbox(beam);
 
-          // === RENDER ===
           if (beam.isCharging) {
             const colorCycle = [
               "#FFFF00",
@@ -2326,7 +2388,7 @@ function SpaceInvaders({ onClose }) {
         });
       });
 
-      // === COLLISION DETECTION: BOSS LASERS → PLAYER ===
+      /* === COLLISION DETECTION: BOSS LASERS → PLAYER === */
       if (bossRef.current && isPhase2EnabledRef.current) {
         bossBeamsRef.current.forEach((beam) => {
           if (
@@ -2387,7 +2449,7 @@ function SpaceInvaders({ onClose }) {
             p.y + p.height > hitbox.y;
 
           if (hit) {
-            b.lives -= 10; // cambia - 1
+            b.lives -= 90; // cambia - 1
 
             createExplosion(p.x + p.width / 2, p.y, playerParticles);
             playSound(soundURL.hitFollower, 0.6);
@@ -2397,6 +2459,22 @@ function SpaceInvaders({ onClose }) {
         });
 
         updateBossPhase();
+
+        // === BOSS DEFEATED CONDITION ===
+        if (b.lives <= 0 && !b.retreating) {
+          b.retreating = true;
+          b.entering = true;
+          b.entrancePhase = "retreat";
+          isPlayerFrozenRef.current = true;
+
+          enablePhase1(false);
+          enablePhase2(false);
+          enablePhase3(false);
+          beamIntervalsRef.current.forEach(clearInterval);
+          beamIntervalsRef.current = [];
+
+          resumeBackgroundMusic();
+        }
       }
 
       /* GAME LOOP END */
@@ -2446,6 +2524,7 @@ function SpaceInvaders({ onClose }) {
       projectilesRef.current = [];
       particlesRef.current = [];
       backgroundParticlesRef.current = [];
+      isBoostingRef.current = false;
 
       // power up
       isShieldActiveRef.current = false;
@@ -2473,6 +2552,11 @@ function SpaceInvaders({ onClose }) {
         clearInterval(id);
       });
       beamIntervalsRef.current = [];
+      bossDefeatedRef.current = false;
+      bossImageRef.current = new Image();
+      bossImageRef.current.src = imgURL.boss1;
+      bossImage2Ref.current = new Image();
+      bossImage2Ref.current.src = imgURL.boss2;
 
       // score
       scoreRef.current = 0;
