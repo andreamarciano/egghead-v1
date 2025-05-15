@@ -646,6 +646,13 @@ function SpaceInvaders({ onClose }) {
     },
     small: { color: "#FFDB26", opacity: 0.4, count: 15 },
   };
+  const bossParticles = {
+    color: "#2B3345",
+    opacity: 0.9,
+    count: 100,
+    radiusRange: [2, 6],
+    velocityRange: [2, 6],
+  };
   const shieldParticles = {
     color: "#B5B0A8",
     opacity: 0.5,
@@ -2502,7 +2509,7 @@ function SpaceInvaders({ onClose }) {
           if (hit) {
             b.lives -= 90; // cambia - 1
 
-            createExplosion(p.x + p.width / 2, p.y, playerParticles);
+            createExplosion(p.x + p.width / 2, p.y, bossParticles);
             playSound(soundURL.hitFollower, 0.6);
 
             projectilesRef.current.splice(pIndex, 1);
