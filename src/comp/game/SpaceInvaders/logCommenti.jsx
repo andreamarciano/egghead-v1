@@ -582,13 +582,12 @@ function SpaceInvaders({ onClose }) {
   const backgroundParticles = {
     radius: 2,
     speed: 0.3,
+    speedBoss: 15,
+    speed2: 1.8,
     opacity: 0.5,
     color: "white",
   };
   const isBoostingRef = useRef(false);
-  const backgroundBossParticles = {
-    speed: 15,
-  };
   const invaderParticles = {
     color: "#BAA0DE",
     opacity: 0.4,
@@ -944,7 +943,9 @@ function SpaceInvaders({ onClose }) {
           y: Math.random() * canvas.height,
           radius: Math.random() * backgroundParticles.radius,
           speedY: isBoostingRef.current
-            ? backgroundBossParticles.speed
+            ? backgroundParticles.speedBoss
+            : bossDefeatedRef.current
+            ? backgroundParticles.speed2
             : backgroundParticles.speed,
           opacity:
             backgroundParticles.opacity +
@@ -2148,7 +2149,9 @@ function SpaceInvaders({ onClose }) {
       backgroundParticlesRef.current.forEach((p) => {
         // boosted
         p.speedY = isBoostingRef.current
-          ? backgroundBossParticles.speed
+          ? backgroundParticles.speedBoss
+          : bossDefeatedRef.current
+          ? backgroundParticles.speed2
           : backgroundParticles.speed;
 
         p.y += p.speedY;
