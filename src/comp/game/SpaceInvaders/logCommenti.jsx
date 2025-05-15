@@ -101,8 +101,6 @@ function SpaceInvaders({ onClose }) {
   const [gameOver, setGameOver] = useState(false);
   const isGameEndingRef = useRef(false);
   const animationIdRef = useRef(null);
-  const isPlayerInvincible = useRef(false);
-  const isPlayerFrozenRef = useRef(false);
 
   /* Gameplay */
   const scoreParams = {
@@ -151,6 +149,8 @@ function SpaceInvaders({ onClose }) {
   const playerXRef = useRef(playerX);
   const playerYRef = useRef(null);
   const isPlayerActiveRef = useRef(true);
+  const isPlayerInvincible = useRef(false);
+  const isPlayerFrozenRef = useRef(false);
   const playerTransitionRef = useRef(null);
   // Lives
   const [lives, setLives] = useState(5);
