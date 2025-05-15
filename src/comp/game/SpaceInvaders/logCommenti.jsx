@@ -199,6 +199,10 @@ function SpaceInvaders({ onClose }) {
     height: 250,
     lives: 1000,
   };
+  const handleBossHit = (x, y) => {
+    createExplosion(x, y, bossParticles);
+    playSound(soundURL.hitFollower, 0.6);
+  };
   // Phase 1 - Boss Projectiles
   const bossProjectilesSmallRef = useRef([]);
   const bossProjectilesMediumRef = useRef([]);
@@ -2630,8 +2634,7 @@ function SpaceInvaders({ onClose }) {
           if (hit) {
             b.lives -= 1;
 
-            createExplosion(p.x + p.width / 2, p.y, bossParticles);
-            playSound(soundURL.hitFollower, 0.6);
+            handleBossHit(p.x + p.width / 2, p.y);
 
             projectilesRef.current.splice(pIndex, 1);
           }
