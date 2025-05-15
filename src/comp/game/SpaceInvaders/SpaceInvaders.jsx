@@ -365,6 +365,30 @@ function SpaceInvaders({ onClose }) {
   const enablePhase1 = (value) => (isPhase1EnabledRef.current = value);
   const enablePhase2 = (value) => (isPhase2EnabledRef.current = value);
   const enablePhase3 = (value) => (isPhase3EnabledRef.current = value);
+  // Boss Weak Points
+  const activeWeakPointsRef = useRef([]);
+  const bossWeakPoints = [
+    { x: 100, y: 189, width: 29, height: -8 },
+    { x: 190, y: 189, width: 49, height: -8 },
+    { x: 310, y: 189, width: 49, height: -8 },
+    { x: 420, y: 189, width: 39, height: -8 },
+    { x: 540, y: 189, width: 39, height: -8 },
+    { x: 640, y: 189, width: 49, height: -8 },
+    { x: 760, y: 189, width: 49, height: -8 },
+    { x: 870, y: 189, width: 29, height: -8 },
+  ];
+  const pickRandomWeakPoints = () => {
+    const available = [...bossWeakPoints];
+    const selected = [];
+
+    while (selected.length < 3 && available.length > 0) {
+      const index = Math.floor(Math.random() * available.length);
+      selected.push(available[index]);
+      available.splice(index, 1);
+    }
+
+    activeWeakPointsRef.current = selected;
+  };
 
   /* Invader */
   const invaderImageRef = useRef(new Image());
@@ -1271,6 +1295,17 @@ function SpaceInvaders({ onClose }) {
       }
     }, spawnTime.follower);
 
+    /* === SPAWN: BOSS WEAK POINTS === */
+    const bossWeakPointsSpawn = setInterval(() => {
+      if (
+        bossRef.current &&
+        !bossRef.current.retreating &&
+        !bossRef.current.entering
+      ) {
+        pickRandomWeakPoints();
+      }
+    }, 5000);
+
     /***************************************************************
      *                      SECTION: FUNCTIONS                     *
      ***************************************************************/
@@ -2142,6 +2177,9 @@ function SpaceInvaders({ onClose }) {
           hasChangedImage: false,
           retreating: false,
         };
+
+        pickRandomWeakPoints();
+
         isPlayerActiveRef.current = false;
         isPlayerFrozenRef.current = true;
       }
@@ -2250,6 +2288,17 @@ function SpaceInvaders({ onClose }) {
             c.fillStyle = "red";
             c.fillRect(b.x, b.y, b.width, b.height);
           }
+        }
+
+        // === DRAW BOSS WEAK POINTS ===
+        if (bossRef.current && !bossRef.current.entering) {
+          const bossX = bossRef.current.x;
+          const bossY = bossRef.current.y;
+
+          activeWeakPointsRef.current.forEach((wp) => {
+            c.fillStyle = "rgba(0, 0, 255, 0.4)";
+            c.fillRect(bossX + wp.x, bossY + wp.y, wp.width, wp.height);
+          });
         }
 
         // === DRAW BOSS LIFE BAR ===
@@ -2499,23 +2548,33 @@ function SpaceInvaders({ onClose }) {
           height: 10,
         };
 
-        // debug - boss hitbox
-        c.fillStyle = "rgba(255, 0, 0, 0.3)";
-        c.fillRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
-
         projectilesRef.current.forEach((p, pIndex) => {
-          const hit =
-            p.x < hitbox.x + hitbox.width &&
-            p.x + p.width > hitbox.x &&
-            p.y < hitbox.y + hitbox.height &&
-            p.y + p.height > hitbox.y;
+          const bossX = b.x;
+          const bossY = b.y;
 
-          if (hit) {
+          const hitIndex = activeWeakPointsRef.current.findIndex((wp) => {
+            return (
+              p.x < bossX + wp.x + wp.width &&
+              p.x + p.width > bossX + wp.x &&
+              p.y < bossY + wp.y + wp.height &&
+              p.y + p.height > bossY + wp.y
+            );
+          });
+
+          if (hitIndex !== -1) {
             b.lives -= 90; // cambia - 1
-
             handleBossHit(p.x + p.width / 2, p.y);
-
             projectilesRef.current.splice(pIndex, 1);
+
+            // replace weak point
+            const remaining = bossWeakPoints.filter(
+              (pt) => !activeWeakPointsRef.current.includes(pt)
+            );
+            if (remaining.length > 0) {
+              const replacement =
+                remaining[Math.floor(Math.random() * remaining.length)];
+              activeWeakPointsRef.current[hitIndex] = replacement;
+            }
           }
         });
 
@@ -2551,6 +2610,7 @@ function SpaceInvaders({ onClose }) {
       clearInterval(invaderShootInterval);
       clearInterval(meteorSpawnInterval);
       clearInterval(followerSpawnInterval);
+      clearInterval(bossWeakPointsSpawn);
 
       removeEventListener("keydown", handleKeyDown);
       removeEventListener("keyup", handleKeyUp);
