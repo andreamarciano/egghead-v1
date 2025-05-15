@@ -247,6 +247,7 @@ function SpaceInvaders({ onClose }) {
       beamWidth: 12,
       beamDamage: 1,
       beamColor: "#00FFFF",
+      chargeColors: ["#ADFFFF", "#6BD6FF", "#3FAEFF", "#007BFF", "#004B8F"],
     },
     medium: {
       x: [215, 779],
@@ -258,6 +259,7 @@ function SpaceInvaders({ onClose }) {
       beamWidth: 20,
       beamDamage: 2,
       beamColor: "#00FF00",
+      chargeColors: ["#D4FFB2", "#A8FF7A", "#7DFF4A", "#4CDB29", "#1E7A11"],
     },
     large: {
       x: [499],
@@ -266,9 +268,10 @@ function SpaceInvaders({ onClose }) {
       shootInterval: 9000,
       chargeDuration: 2000,
       beamDuration: 3000,
-      beamWidth: 28,
+      beamWidth: 40,
       beamDamage: 3,
       beamColor: "#FF0000",
+      chargeColors: ["#FFFF00", "#FFC300", "#FF8C00", "#FF4500", "#FF0000"],
     },
   };
   // Boss Phase
@@ -2330,13 +2333,10 @@ function SpaceInvaders({ onClose }) {
           const hitbox = getBossBeamHitbox(beam);
 
           if (beam.isCharging) {
-            const colorCycle = [
-              "#FFFF00",
-              "#FFC300",
-              "#FF8C00",
-              "#FF4500",
-              "#FF0000",
-            ];
+            const config = bossLaserConfig[beam.type];
+            const colorCycle =
+              config?.chargeColors || bossLaserConfig.large.chargeColors;
+
             const colorIndex = Math.floor(now / 100) % colorCycle.length;
             const alpha = 0.3 + 0.5 * Math.abs(Math.sin(now / 300));
 
