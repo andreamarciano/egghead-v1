@@ -183,9 +183,10 @@ function SpaceInvaders({ onClose }) {
   };
   // Ship Upgrade
   const shipUpgradeRef = useRef(null);
+  const scaleShipBubble = 0.5;
   const shipBubbleConfig = {
-    width: 40,
-    height: 40,
+    width: 112 * scaleShipBubble,
+    height: 75 * scaleShipBubble,
     speed: 2,
   };
   useEffect(() => {
