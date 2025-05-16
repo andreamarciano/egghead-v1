@@ -5,11 +5,17 @@ import "./SpaceInvaders.css";
 const imgURL = {
   // Player
   greenPlayer: "/images/spaceInvaders/ship/playerShip1_green.webp",
+  greenPlayer2: "/images/spaceInvaders/ship/playerShip2_green.webp",
   bluePlayer: "/images/spaceInvaders/ship/playerShip1_blue.webp",
+  bluePlayer2: "/images/spaceInvaders/ship/playerShip2_blue.webp",
   redPlayer: "/images/spaceInvaders/ship/playerShip1_red.webp",
+  redPlayer2: "/images/spaceInvaders/ship/playerShip2_red.webp",
   greenPlayerLives: "/images/spaceInvaders/ship/playerLife1_green.webp",
+  greenPlayerLives2: "/images/spaceInvaders/ship/playerLife2_green.webp",
   bluePlayerLives: "/images/spaceInvaders/ship/playerLife1_blue.webp",
+  bluePlayerLives2: "/images/spaceInvaders/ship/playerLife2_blue.webp",
   redPlayerLives: "/images/spaceInvaders/ship/playerLife1_red.webp",
+  redPlayerLives2: "/images/spaceInvaders/ship/playerLife2_red.webp",
   // Laser
   laserGreen: "/images/spaceInvaders/laser/laserGreen.webp",
   laserBlue: "/images/spaceInvaders/laser/laserBlue.webp",
@@ -22,6 +28,7 @@ const imgURL = {
   meteorMed: "/images/spaceInvaders/invader/meteormed.webp",
   meteorSmall: "/images/spaceInvaders/invader/meteorsmall.webp",
   follower: "/images/spaceInvaders/invader/follower.webp",
+  follower2: "/images/spaceInvaders/invader/follower2.webp",
   // Boss
   boss1: "/images/spaceInvaders/invader/bossPhase1.png",
   boss2: "/images/spaceInvaders/invader/bossPhase2.png",
