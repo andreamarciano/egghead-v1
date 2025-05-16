@@ -83,11 +83,13 @@ const themeURL = [
 ];
 const theme2URL = [
   "/sounds/spaceInvaders/theme/part2theme1.mp3",
-  "/sounds/order/order-theme.mp3",
+  "/sounds/spaceInvaders/theme/part2theme2.mp3",
+  "/sounds/spaceInvaders/theme/part2theme3.mp3",
 ];
 const battleURL = [
   "/sounds/spaceInvaders/boss/bossBattle1.mp3",
   "/sounds/spaceInvaders/boss/bossBattle2.mp3",
+  "/sounds/spaceInvaders/boss/bossBattle3.mp3",
 ];
 
 /******************************************************************************
