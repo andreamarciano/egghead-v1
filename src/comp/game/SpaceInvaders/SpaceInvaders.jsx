@@ -65,10 +65,12 @@ const soundURL = {
   bossEnter: "/sounds/spaceInvaders/boss/bossEnter.mp3",
   bossDescending: "/sounds/spaceInvaders/boss/bossDescending.mp3",
   bossDescending2: "/sounds/spaceInvaders/boss/bossDescending2.mp3",
-  // Shield
-  shieldUp: "/sounds/spaceInvaders/shield/shieldUp.mp3",
-  shieldDown: "/sounds/spaceInvaders/shield/shieldDown.mp3",
-  shieldBlock: "/sounds/spaceInvaders/shield/shieldBlock.mp3",
+  bossDefeated: "/sounds/spaceInvaders/boss/bossDefeated.mp3",
+  // Power Up
+  shieldUp: "/sounds/spaceInvaders/powerUp/shieldUp.mp3",
+  shieldDown: "/sounds/spaceInvaders/powerUp/shieldDown.mp3",
+  shieldBlock: "/sounds/spaceInvaders/powerUp/shieldBlock.mp3",
+  shipUpgrade: "/sounds/spaceInvaders/powerUp/shipUpgrade.mp3",
   // Gameplay
   gameOver: "/sounds/spaceInvaders/gameplay/gameOver.mp3",
 };
@@ -80,9 +82,7 @@ const themeURL = [
   "/sounds/spaceInvaders/theme/theme4.mp3",
 ];
 const theme2URL = [
-  "/sounds/tris/tris-theme.mp3",
-  "/sounds/connect4/connect4-theme.mp3",
-  "/sounds/flower/flower-theme.mp3",
+  "/sounds/spaceInvaders/theme/part2theme1.mp3",
   "/sounds/order/order-theme.mp3",
 ];
 const battleURL = [
@@ -179,6 +179,20 @@ function SpaceInvaders({ onClose }) {
       playerParticles
     );
   };
+  // Ship Upgrade
+  const shipUpgradeRef = useRef(null);
+  const shipBubbleConfig = {
+    width: 40,
+    height: 40,
+    speed: 2,
+  };
+  useEffect(() => {
+    // pre-load
+    ["greenPlayer2", "bluePlayer2", "redPlayer2"].forEach((key) => {
+      const img = new Image();
+      img.src = imgURL[key];
+    });
+  }, []);
 
   /* Projectile */
   const projectileImages = {
@@ -803,7 +817,9 @@ function SpaceInvaders({ onClose }) {
   /* Lives UI */
   const renderLives = (lives) => {
     const livesStr = lives.toString().padStart(1, "0");
-    const lifeIconKey = `${playerColor}Lives`;
+    const lifeIconKey = bossDefeatedRef.current
+      ? `${playerColor}Lives2`
+      : `${playerColor}Lives`;
 
     return (
       <div className="flex items-center bg-black/60 px-2 py-1 rounded">
@@ -2295,6 +2311,21 @@ function SpaceInvaders({ onClose }) {
 
               bossBeamsRef.current = [];
               bossMusicPlayedRef.current = false;
+
+              // === DRAW: SHIP BUBBLE ===
+              const upgradeX = playerXRef.current + playerConfig.width / 2 - 20;
+              const upgradeY = -60;
+              const upgradeImage = new Image();
+              upgradeImage.src = imgURL[`${playerColor}2`];
+              shipUpgradeRef.current = {
+                x: upgradeX,
+                y: upgradeY,
+                width: shipBubbleConfig.width,
+                height: shipBubbleConfig.height,
+                speed: shipBubbleConfig.speed,
+                stopY: playerYRef.current - 10,
+                image: upgradeImage,
+              };
             }
           }
         }
@@ -2347,6 +2378,33 @@ function SpaceInvaders({ onClose }) {
           c.strokeStyle = "rgba(255, 255, 255, 0.4)";
           c.lineWidth = 2;
           c.strokeRect(x, y, barWidth, barHeight);
+        }
+      }
+
+      /* === SPAWN: SHIP BUBBLE === */
+      if (shipUpgradeRef.current) {
+        const u = shipUpgradeRef.current;
+
+        if (u.y < u.stopY) {
+          u.y += u.speed;
+        }
+
+        c.drawImage(u.image, u.x, u.y, u.width, u.height);
+
+        // COLLISION DETECTION: SHIP BUBBLE → PLAYER
+        const hit =
+          u.x < playerXRef.current + playerConfig.width &&
+          u.x + u.width > playerXRef.current &&
+          u.y < playerYRef.current + playerConfig.height &&
+          u.y + u.height > playerYRef.current;
+
+        if (hit) {
+          shipUpgradeRef.current = null;
+
+          playerImageRef.current = new Image();
+          playerImageRef.current.src = imgURL[`${playerColor}2`];
+
+          playSound(soundURL.shipUpgrade);
         }
       }
 
@@ -2583,7 +2641,7 @@ function SpaceInvaders({ onClose }) {
           });
 
           if (hitIndex !== -1) {
-            b.lives -= 90; // cambia - 1
+            b.lives -= 400; // cambia - 1
             handleBossHit(p.x + p.width / 2, p.y);
             projectilesRef.current.splice(pIndex, 1);
 
@@ -2620,6 +2678,7 @@ function SpaceInvaders({ onClose }) {
           beamIntervalsRef.current.forEach(clearInterval);
           beamIntervalsRef.current = [];
 
+          playSound(soundURL.bossDefeated);
           resumeBackgroundMusic();
         }
       }
