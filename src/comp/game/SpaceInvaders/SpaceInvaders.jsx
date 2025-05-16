@@ -53,6 +53,7 @@ const soundURL = {
   laserInvader: "/sounds/spaceInvaders/laser/laserInvader.mp3",
   beamCharge: "/sounds/spaceInvaders/laser/beamCharge.mp3",
   beamActive: "/sounds/spaceInvaders/laser/beamActive.mp3",
+  beamActive2: "/sounds/spaceInvaders/laser/beamActiveShort.mp3",
   // Hit & Destroy
   playerHit: "/sounds/spaceInvaders/destroy/playerHit.mp3",
   destroyInvader: "/sounds/spaceInvaders/destroy/destroyInvader.mp3",
@@ -88,7 +89,6 @@ const theme2URL = [
 ];
 const battleURL = [
   "/sounds/spaceInvaders/boss/bossBattle1.mp3",
-  "/sounds/spaceInvaders/boss/bossBattle2.mp3",
   "/sounds/spaceInvaders/boss/bossBattle3.mp3",
 ];
 
@@ -610,10 +610,10 @@ function SpaceInvaders({ onClose }) {
     }
   };
   // play sfx - laser volume
-  const playLaserSound = (url) => {
+  const playLaserSound = (url, volumeMultiplier = 1) => {
     if (audioEnabledRef.current && url) {
       const laser = new Audio(url);
-      laser.volume = laserVolumeRef.current;
+      laser.volume = laserVolumeRef.current * volumeMultiplier;
       laser.currentTime = 0;
       laser.play().catch((e) => console.warn("Play error:", e));
     }
@@ -2473,12 +2473,24 @@ function SpaceInvaders({ onClose }) {
         !bossRef.current.entering &&
         isPhase2EnabledRef.current
       ) {
-        bossBeamsRef.current = bossBeamsRef.current.filter((beam) => {
-          const now = performance.now();
+        const now = performance.now();
+        const playedShootSound = {
+          small: false,
+          medium: false,
+          large: false,
+        };
+        const volumeMapActive = { small: 0.3, medium: 0.4, large: 0.5 };
 
+        bossBeamsRef.current = bossBeamsRef.current.filter((beam) => {
+          // === BEAM ACTIVE ===
           if (beam.isCharging && now >= beam.chargeEnd) {
             beam.isCharging = false;
             beam.isShooting = true;
+
+            if (!playedShootSound[beam.type]) {
+              playedShootSound[beam.type] = true;
+              playSound(soundURL.beamActive2, volumeMapActive[beam.type]);
+            }
           }
 
           if (beam.isShooting && now >= beam.shootEnd) {
@@ -2487,6 +2499,7 @@ function SpaceInvaders({ onClose }) {
 
           const hitbox = getBossBeamHitbox(beam);
 
+          // === BEAM CHARGE ===
           if (beam.isCharging) {
             const config = bossLaserConfig[beam.type];
             const colorCycle =
@@ -2501,6 +2514,7 @@ function SpaceInvaders({ onClose }) {
             c.globalAlpha = 1;
           }
 
+          // === BEAM RENDER ===
           if (beam.isShooting) {
             const baseWidth = hitbox.width * 2;
             const tipWidth = hitbox.width;
