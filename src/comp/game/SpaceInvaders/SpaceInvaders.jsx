@@ -155,6 +155,7 @@ function SpaceInvaders({ onClose }) {
     width: 99 * playerScale,
     height: 75 * playerScale,
     speed: 5,
+    speed2: 5.4,
     rotation: 0.15,
     rotationBack: 0.95,
   };
@@ -210,6 +211,7 @@ function SpaceInvaders({ onClose }) {
     width: 8,
     height: 20,
     speed: 7,
+    speed2: 7.3,
   };
 
   /* Boss */
@@ -1386,15 +1388,15 @@ function SpaceInvaders({ onClose }) {
        ***************************************************************/
       if (isPlayerActiveRef.current) {
         /* === PLAYER MOVEMENT === */
+        const playerSpeed = bossDefeatedRef.current
+          ? playerConfig.speed2
+          : playerConfig.speed;
         if (keysPressed.has("ArrowLeft") || keysPressed.has("a")) {
-          playerXRef.current = Math.max(
-            playerXRef.current - playerConfig.speed,
-            0
-          );
+          playerXRef.current = Math.max(playerXRef.current - playerSpeed, 0);
           playerRotationRef.current = -playerConfig.rotation;
         } else if (keysPressed.has("ArrowRight") || keysPressed.has("d")) {
           playerXRef.current = Math.min(
-            playerXRef.current + playerConfig.speed,
+            playerXRef.current + playerSpeed,
             canvas.width - playerConfig.width
           );
           playerRotationRef.current = playerConfig.rotation;
@@ -1404,6 +1406,9 @@ function SpaceInvaders({ onClose }) {
 
         /* === SHOOT PROJECTILES === */
         const now = Date.now();
+        const projectileSpeed = bossDefeatedRef.current
+          ? projectileConfig.speed2
+          : projectileConfig.speed;
         if (keysPressed.has(" ")) {
           if (now - lastShotTimeRef.current > projectileConfig.cooldown) {
             const newProjectile = {
@@ -1411,7 +1416,7 @@ function SpaceInvaders({ onClose }) {
               y: canvas.height - playerConfig.height - 10,
               width: projectileConfig.width,
               height: projectileConfig.height,
-              speed: projectileConfig.speed,
+              speed: projectileSpeed,
               color: playerColor,
             };
             projectilesRef.current.push(newProjectile);
@@ -2644,7 +2649,7 @@ function SpaceInvaders({ onClose }) {
           });
 
           if (hitIndex !== -1) {
-            b.lives -= 400; // cambia - 1
+            b.lives -= 500; // cambia - 1
             handleBossHit(p.x + p.width / 2, p.y);
             projectilesRef.current.splice(pIndex, 1);
 
