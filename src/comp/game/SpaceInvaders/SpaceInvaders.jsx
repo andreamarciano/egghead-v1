@@ -457,15 +457,14 @@ function SpaceInvaders({ onClose }) {
     height: 40,
     lives: 5,
     speed: 2.5,
+    speed2: 3,
     shootInterval: 240,
+    shootInterval2: 150,
     chargeDuration: 90,
     beamDuration: 120,
     beamWidth: 20,
     damage: 1,
   };
-  const chargeStart = followerConfig.shootInterval;
-  const beamStart = chargeStart + followerConfig.chargeDuration;
-  const beamEnd = beamStart + followerConfig.beamDuration;
 
   /* Meteor */
   const meteorsRef = useRef([]);
@@ -1459,6 +1458,12 @@ function SpaceInvaders({ onClose }) {
 
       /* === FOLLOWER MOVEMENT === */
       followersRef.current.forEach((follower) => {
+        const chargeStart = bossDefeatedRef.current
+          ? followerConfig.shootInterval2
+          : followerConfig.shootInterval;
+        const beamStart = chargeStart + followerConfig.chargeDuration;
+        const beamEnd = beamStart + followerConfig.beamDuration;
+
         // === BOSS - RETREAT ===
         if (follower.retreating) {
           follower.y -= 1.2;
@@ -1483,13 +1488,16 @@ function SpaceInvaders({ onClose }) {
 
         const targetX =
           playerXRef.current + playerConfig.width / 2 - follower.width / 2;
+        const followerSpeed = bossDefeatedRef.current
+          ? followerConfig.speed2
+          : followerConfig.speed;
 
         // movement
         if (!follower.isCharging && !follower.isShooting) {
           if (follower.x < targetX) {
-            follower.x = Math.min(follower.x + followerConfig.speed, targetX);
+            follower.x = Math.min(follower.x + followerSpeed, targetX);
           } else if (follower.x > targetX) {
-            follower.x = Math.max(follower.x - followerConfig.speed, targetX);
+            follower.x = Math.max(follower.x - followerSpeed, targetX);
           }
         }
 
