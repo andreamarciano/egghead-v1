@@ -367,23 +367,37 @@ function SpaceInvaders({ onClose }) {
   const enablePhase3 = (value) => (isPhase3EnabledRef.current = value);
   // Boss Weak Points
   const activeWeakPointsRef = useRef([]);
-  const bossWeakPoints = [
-    { x: 100, y: 189, width: 29, height: -8 },
-    { x: 190, y: 189, width: 49, height: -8 },
-    { x: 310, y: 189, width: 49, height: -8 },
-    { x: 420, y: 189, width: 39, height: -8 },
-    { x: 540, y: 189, width: 39, height: -8 },
-    { x: 640, y: 189, width: 49, height: -8 },
-    { x: 760, y: 189, width: 49, height: -8 },
-    { x: 870, y: 189, width: 29, height: -8 },
+  const NUM_WEAK_POINTS = 4;
+  const bossWeakSpaces = [
+    { x: 100, y: 184, width: 29, height: 6 },
+    { x: 190, y: 184, width: 49, height: 6 },
+    { x: 310, y: 184, width: 49, height: 6 },
+    { x: 420, y: 184, width: 39, height: 6 },
+    { x: 540, y: 184, width: 39, height: 6 },
+    { x: 640, y: 184, width: 49, height: 6 },
+    { x: 760, y: 184, width: 49, height: 6 },
+    { x: 870, y: 184, width: 29, height: 6 },
   ];
+  const generateWeakPointInside = (space) => {
+    const weakWidth = 18;
+    const maxX = space.width - weakWidth;
+    const offsetX = Math.floor(Math.random() * (maxX + 1));
+    return {
+      x: space.x + offsetX,
+      y: space.y,
+      width: weakWidth,
+      height: space.height,
+      originSpace: space,
+    };
+  };
   const pickRandomWeakPoints = () => {
-    const available = [...bossWeakPoints];
+    const available = [...bossWeakSpaces];
     const selected = [];
 
-    while (selected.length < 3 && available.length > 0) {
+    while (selected.length < NUM_WEAK_POINTS && available.length > 0) {
       const index = Math.floor(Math.random() * available.length);
-      selected.push(available[index]);
+      const space = available[index];
+      selected.push(generateWeakPointInside(space));
       available.splice(index, 1);
     }
 
@@ -2567,13 +2581,19 @@ function SpaceInvaders({ onClose }) {
             projectilesRef.current.splice(pIndex, 1);
 
             // replace weak point
-            const remaining = bossWeakPoints.filter(
-              (pt) => !activeWeakPointsRef.current.includes(pt)
+            const usedSpaces = activeWeakPointsRef.current.map(
+              (p) => p.originSpace
             );
-            if (remaining.length > 0) {
-              const replacement =
-                remaining[Math.floor(Math.random() * remaining.length)];
-              activeWeakPointsRef.current[hitIndex] = replacement;
+            const remainingSpaces = bossWeakSpaces.filter(
+              (s) => !usedSpaces.includes(s)
+            );
+            if (remainingSpaces.length > 0) {
+              const newSpace =
+                remainingSpaces[
+                  Math.floor(Math.random() * remainingSpaces.length)
+                ];
+              const newPoint = generateWeakPointInside(newSpace);
+              activeWeakPointsRef.current[hitIndex] = newPoint;
             }
           }
         });
