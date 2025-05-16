@@ -88,6 +88,22 @@
   By **B_Sean**  
   Downloaded on April 16th, 2025 from [FreeSound](https://freesound.org/people/B_Sean/)
 
+- **warm climb up**
+  By **SamuelFJohanns**
+  Downloaded on May 16th, 2025 from [pixabay](https://pixabay.com/users/samuelfjohanns-1207793/)
+
+- **Game Music Loop 18**
+  By **XtremeFreddy**
+  Downloaded on May 16th, 2025 from [pixabay](https://pixabay.com/users/xtremefreddy-32332307/)
+
+- **Battle Music**
+  By **XtremeFreddy**
+  Downloaded on May 16th, 2025 from [pixabay](https://pixabay.com/users/xtremefreddy-32332307/)
+
+- **Distorted Worlds**
+  By **XtremeFreddy**
+  Downloaded on May 16th, 2025 from [pixabay](https://pixabay.com/users/xtremefreddy-32332307/)
+
 ### Game SFX Sounds:
 
 - **Sad, Downwards Jingle (Tremolo Version)**  
@@ -174,6 +190,14 @@
   By **SamsterBirdies**
   Downloaded on May 12th, 2025 from [freesound](https://freesound.org/people/SamsterBirdies/)
 
+- **Level Up Sound**
+  By **DRAGON_STUDIO**
+  Downloaded on May 16th, 2025 from [pixabay](https://pixabay.com/users/dragon_studio-38165424/)
+
+- **retro_gaming FX I**
+  By **freesound_community**
+  Downloaded on May 16th, 2025 from [pixabay](https://pixabay.com/users/freesound_community-46691455/)
+
 > All above assets, images, and sounds used are either in the public domain (CC0) or free to use under their respective licenses. Where possible, authors have been credited.
 
 ## Suno AI [suno] (https://suno.com/)
@@ -192,8 +216,12 @@ Tracks:
 - public -> sounds -> spaceInvaders -> theme -> theme2.mp3
 - public -> sounds -> spaceInvaders -> theme -> theme3.mp3
 - public -> sounds -> spaceInvaders -> theme -> theme4.mp3
+- public -> sounds -> spaceInvaders -> theme -> part2theme1.mp3
+- public -> sounds -> spaceInvaders -> theme -> part2theme2.mp3
+- public -> sounds -> spaceInvaders -> theme -> part2theme3.mp3
 - public -> sounds -> spaceInvaders -> theme -> bossBattle1.mp3
 - public -> sounds -> spaceInvaders -> theme -> bossBattle2.mp3
+- public -> sounds -> spaceInvaders -> theme -> bossBattle3.mp3
 
 ⚠️ These tracks are for personal, non-commercial use only. Redistribution or commercial use of these audio files is not permitted under the current license.
 If you wish to reuse or adapt these tracks, please refer to Suno AI’s terms of use and generate your own copies via their platform.
