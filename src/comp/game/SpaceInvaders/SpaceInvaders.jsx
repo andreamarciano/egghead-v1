@@ -2681,7 +2681,9 @@ function SpaceInvaders({ onClose }) {
           beamIntervalsRef.current = [];
 
           playSound(soundURL.bossDefeated);
-          resumeBackgroundMusic();
+          setTimeout(() => {
+            resumeBackgroundMusic();
+          }, 4000);
         }
       }
 
