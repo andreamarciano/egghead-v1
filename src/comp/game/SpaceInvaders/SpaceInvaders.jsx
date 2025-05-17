@@ -2172,19 +2172,66 @@ function SpaceInvaders({ onClose }) {
           const startX = beamHitbox.x + beamHitbox.width / 2;
           const startY = beamHitbox.y + 15;
 
-          c.save();
-          c.beginPath();
-          c.moveTo(startX - baseWidth / 2, startY);
-          c.quadraticCurveTo(
-            startX,
-            startY - 40,
-            startX + baseWidth / 2,
-            startY
-          );
-          c.lineTo(startX + tipWidth / 2, startY + beamHeight);
-          c.lineTo(startX - tipWidth / 2, startY + beamHeight);
-          c.closePath();
+          const tipHeight = 40;
+          const waveBeamHeight = beamHeight - tipHeight;
+          const waveCount = 10;
+          const waveHeight = 8;
+          const waveLength = waveBeamHeight / waveCount;
 
+          c.save();
+          if (bossDefeatedRef.current) {
+            const phase = Date.now() / 100;
+            // === WAVE BEAM ===
+            c.beginPath();
+            c.moveTo(startX - baseWidth / 2, startY);
+            c.quadraticCurveTo(
+              startX,
+              startY - 40,
+              startX + baseWidth / 2,
+              startY
+            );
+
+            let currentY = startY;
+            let currentX = startX + baseWidth / 2;
+            for (let i = 0; i < waveCount; i++) {
+              const controlX = currentX + Math.sin(phase + i) * waveHeight;
+              const controlY = currentY + waveLength / 2;
+              const endY = currentY + waveLength;
+              c.quadraticCurveTo(controlX, controlY, currentX, endY);
+              currentY = endY;
+            }
+
+            c.lineTo(startX + tipWidth / 2, currentY + tipHeight);
+            c.lineTo(startX - tipWidth / 2, currentY + tipHeight);
+
+            for (let i = waveCount - 1; i >= 0; i--) {
+              const controlX =
+                startX - baseWidth / 2 + Math.sin(phase + i) * waveHeight;
+              const controlY = currentY - waveLength / 2;
+              const endY = currentY - waveLength;
+              c.quadraticCurveTo(
+                controlX,
+                controlY,
+                startX - baseWidth / 2,
+                endY
+              );
+              currentY = endY;
+            }
+            c.closePath();
+          } else {
+            // === RECTANGULAR BEAM ===
+            c.beginPath();
+            c.moveTo(startX - baseWidth / 2, startY);
+            c.quadraticCurveTo(
+              startX,
+              startY - 40,
+              startX + baseWidth / 2,
+              startY
+            );
+            c.lineTo(startX + tipWidth / 2, startY + beamHeight);
+            c.lineTo(startX - tipWidth / 2, startY + beamHeight);
+            c.closePath();
+          }
           c.fillStyle = bossDefeatedRef.current ? fb.color2 : fb.color;
           c.globalAlpha = 0.7;
           c.fill();
@@ -2209,7 +2256,6 @@ function SpaceInvaders({ onClose }) {
               });
             }
           }
-
           for (let i = follower.shootParticles.length - 1; i >= 0; i--) {
             const p = follower.shootParticles[i];
             p.x += p.velocity.x;
