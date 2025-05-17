@@ -490,6 +490,11 @@ function SpaceInvaders({ onClose }) {
         opacity: 0.9,
       },
     },
+    hitParticles: {
+      color: "#7049A6",
+      opacity: 0.6,
+      count: 100,
+    },
   };
 
   /* Meteor */
@@ -711,11 +716,6 @@ function SpaceInvaders({ onClose }) {
     color: "#BAA0DE",
     opacity: 0.4,
     count: 20,
-  };
-  const followerParticles = {
-    color: "#7049A6",
-    opacity: 0.6,
-    count: 100,
   };
   const playerParticles = {
     color: "white",
@@ -1782,6 +1782,8 @@ function SpaceInvaders({ onClose }) {
       /* === COLLISION DETECTION: PLAYER PROJECTILE → FOLLOWER === */
       projectilesRef.current.forEach((p, pIndex) => {
         followersRef.current.forEach((follower, fIndex) => {
+          const fh = followerConfig.hitParticles;
+
           const hit =
             p.x < follower.x + follower.width &&
             p.x + p.width > follower.x &&
@@ -1794,7 +1796,7 @@ function SpaceInvaders({ onClose }) {
             createExplosion(
               follower.x + follower.width / 2,
               follower.y + follower.height / 2,
-              followerParticles
+              fh
             );
             playSound(
               follower.lives > 0
