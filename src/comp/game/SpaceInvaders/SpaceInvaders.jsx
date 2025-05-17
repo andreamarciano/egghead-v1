@@ -1284,7 +1284,7 @@ function SpaceInvaders({ onClose }) {
     const invaderShootInterval = setInterval(() => {
       const { stats: inv, projectile: pr } = invaderConfig;
 
-      if (!bossActiveRef.current) {
+      if (!bossActiveRef.current && !bossDefeatedRef.current) {
         invaderGridsRef.current.forEach((grid) => {
           const aliveInvaders = [];
           for (let row = 0; row < grid.rows; row++) {
