@@ -475,6 +475,10 @@ function SpaceInvaders({ onClose }) {
     damage2: 2,
     colorCycle: ["#FFFF00", "#FFC300", "#FF8C00", "#FF4500", "#FF0000"],
     colorCycle2: ["#87F5FB", "#A3D5FF", "#C3B1E1", "#B07BE0", "#B388EB"],
+    // beam charge particles
+    particlesColor: "#FFD700",
+    particlesColor2: "#C084FC",
+    opacity: 1,
   };
 
   /* Meteor */
@@ -779,13 +783,15 @@ function SpaceInvaders({ onClose }) {
       x: spawnX,
       y: spawnY,
       radius: Math.random() * 2 + 1,
-      color: "#FFD700",
+      color: bossDefeatedRef.current
+        ? followerConfig.particlesColor2
+        : followerConfig.particlesColor,
       velocity: {
         x: Math.cos(angle) * speed + (Math.random() - 0.5) * 0.3,
         y: Math.sin(angle) * speed + (Math.random() - 0.5) * 0.3,
       },
       target: { x: targetX, y: targetY },
-      opacity: 1,
+      opacity: followerConfig.opacity,
     });
   }
 
