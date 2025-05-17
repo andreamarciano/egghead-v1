@@ -451,19 +451,28 @@ function SpaceInvaders({ onClose }) {
 
   /* Follower */
   const followerImageRef = useRef(new Image());
+  const followerImage2Ref = useRef(new Image());
   const followersRef = useRef([]);
   const followerConfig = {
     width: 50,
     height: 40,
     lives: 5,
     speed: 2.5,
-    speed2: 3,
+    speed2: 3.5,
+    // beam
     shootInterval: 240, // ~4 s - 60fps
-    shootInterval2: 150, // ~ 2.5 s
+    shootInterval2: 120, // ~ 2 s
     chargeDuration: 90, // ~1.5 s
     beamDuration: 120, // ~2 s
+    beamDuration2: 90,
     beamWidth: 20,
+    beamWidth2: 30,
+    beamColor: "red",
+    beamColor2: "#B388EB",
     damage: 1,
+    damage2: 2,
+    colorCycle: ["#FFFF00", "#FFC300", "#FF8C00", "#FF4500", "#FF0000"],
+    colorCycle2: ["#87F5FB", "#A3D5FF", "#C3B1E1", "#B07BE0", "#B388EB"],
   };
 
   /* Meteor */
@@ -1094,6 +1103,7 @@ function SpaceInvaders({ onClose }) {
       meteorImages.med.src = imgURL.meteorMed;
       meteorImages.small.src = imgURL.meteorSmall;
       followerImageRef.current.src = imgURL.follower;
+      followerImage2Ref.current.src = imgURL.follower2;
       // boss
       bossImageRef.current.src = imgURL.boss1;
       bossImage2Ref.current.src = imgURL.boss2;
@@ -1142,15 +1152,17 @@ function SpaceInvaders({ onClose }) {
 
     /* === FOLLOWER BEAM HITBOX === */
     const getFollowerBeamHitbox = (follower) => {
-      const beamX =
-        follower.x + follower.width / 2 - followerConfig.beamWidth / 2;
+      const beamWidth = bossDefeatedRef.current
+        ? followerConfig.beamWidth2
+        : followerConfig.beamWidth;
+      const beamX = follower.x + follower.width / 2 - beamWidth / 2;
       const beamY = follower.y + follower.height;
       const beamHeight = canvas.height - beamY;
 
       return {
         x: beamX,
         y: beamY,
-        width: followerConfig.beamWidth,
+        width: beamWidth,
         height: beamHeight,
       };
     };
@@ -1490,7 +1502,10 @@ function SpaceInvaders({ onClose }) {
           ? followerConfig.shootInterval2
           : followerConfig.shootInterval;
         const beamStart = chargeStart + followerConfig.chargeDuration;
-        const beamEnd = beamStart + followerConfig.beamDuration;
+        const beamDuration = bossDefeatedRef.current
+          ? followerConfig.beamDuration2
+          : followerConfig.beamDuration;
+        const beamEnd = beamStart + beamDuration;
 
         // === BOSS - RETREAT ===
         if (follower.retreating) {
@@ -1977,10 +1992,10 @@ function SpaceInvaders({ onClose }) {
             );
           } else {
             handlePlayerHit();
-            const newLives = Math.max(
-              0,
-              livesRef.current - followerConfig.damage
-            );
+            const damage = bossDefeatedRef.current
+              ? followerConfig.damage2
+              : followerConfig.damage;
+            const newLives = Math.max(0, livesRef.current - damage);
             setLives(newLives);
 
             if (newLives <= 0) {
@@ -2133,7 +2148,9 @@ function SpaceInvaders({ onClose }) {
       followersRef.current.forEach((follower) => {
         if (followerImageRef.current.complete) {
           c.drawImage(
-            followerImageRef.current,
+            bossDefeatedRef.current
+              ? followerImage2Ref.current
+              : followerImageRef.current,
             follower.x,
             follower.y,
             follower.width,
@@ -2161,13 +2178,9 @@ function SpaceInvaders({ onClose }) {
         if (follower.isCharging) {
           // === Charge Animation ===
           const beamHitbox = getFollowerBeamHitbox(follower);
-          const colorCycle = [
-            "#FFFF00",
-            "#FFC300",
-            "#FF8C00",
-            "#FF4500",
-            "#FF0000",
-          ];
+          const colorCycle = bossDefeatedRef.current
+            ? followerConfig.colorCycle2
+            : followerConfig.colorCycle;
           const elapsed = performance.now();
           const colorCycleSpeed = 100;
           const alphaCycleSpeed = 300;
@@ -2245,7 +2258,9 @@ function SpaceInvaders({ onClose }) {
           c.lineTo(startX - tipWidth / 2, startY + beamHeight);
           c.closePath();
 
-          c.fillStyle = "red";
+          c.fillStyle = bossDefeatedRef.current
+            ? followerConfig.beamColor2
+            : followerConfig.beamColor;
           c.globalAlpha = 0.7;
           c.fill();
           c.restore();
@@ -2952,7 +2967,10 @@ function SpaceInvaders({ onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-80 z-50">
+    <div
+      className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-80 z-50"
+      onContextMenu={(e) => e.preventDefault()}
+    >
       {/* Canvas */}
       <div className="relative flex flex-col items-center">
         <canvas
