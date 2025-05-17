@@ -121,33 +121,22 @@ function SpaceInvaders({ onClose }) {
 
   /* Gameplay */
   const scoreParams = {
-    single: 10,
-    grid: 50,
-    follower: 100,
     meteorBig: 10,
     meteorMed: 20,
     meteorSmall: 50,
-    // boss
     boss: 5000,
   };
   const spawnScore = {
-    // power up
     shield: 1000,
-    // enemy
     meteor: 500,
-    follower: 750,
-    // boss
     boss: 10000, // 10k
   };
   const spawnTime = {
-    // power up
     shield: 15000,
-    // enemy
     invaderMin: 7500,
     invaderMax: 13000,
     invaderProjectile: 1500,
     meteor: 3000,
-    follower: 6500,
   };
 
   /* Player */
@@ -457,6 +446,10 @@ function SpaceInvaders({ onClose }) {
       opacity: 0.4,
       count: 20,
     },
+    score: {
+      single: 10,
+      grid: 50,
+    },
   };
 
   /* Enemy */
@@ -480,6 +473,7 @@ function SpaceInvaders({ onClose }) {
       lives: 5,
       speed: 2.5,
       speed2: 3.5,
+      score: 100,
     },
     beam: {
       shootInterval: 240,
@@ -512,6 +506,10 @@ function SpaceInvaders({ onClose }) {
       color: "#7049A6",
       opacity: 0.6,
       count: 100,
+    },
+    spawn: {
+      score: 750,
+      time: 6500,
     },
   };
 
@@ -1389,7 +1387,7 @@ function SpaceInvaders({ onClose }) {
     const followerSpawnInterval = setInterval(() => {
       if (
         !bossActiveRef.current &&
-        scoreRef.current >= spawnScore.follower &&
+        scoreRef.current >= followerConfig.spawn.score &&
         followersRef.current.length < 2
       ) {
         const fs = followerConfig.stats;
@@ -1415,7 +1413,7 @@ function SpaceInvaders({ onClose }) {
         // debug - spawn
         // console.log(`[FOLLOWER] Spawned at x: ${Math.floor(x)}`);
       }
-    }, spawnTime.follower);
+    }, followerConfig.spawn.time);
 
     /* === SPAWN: BOSS WEAK POINTS === */
     const bossWeakPointsSpawn = setInterval(() => {
@@ -1768,7 +1766,7 @@ function SpaceInvaders({ onClose }) {
       /* === COLLISION DETECTION: PLAYER PROJECTILE → INVADER === */
       projectilesRef.current.forEach((p, pIndex) => {
         invaderGridsRef.current.forEach((grid) => {
-          const { stats: inv, hitParticles: pa } = invaderConfig;
+          const { stats: inv, hitParticles: pa, score: score } = invaderConfig;
 
           for (let row = 0; row < grid.rows; row++) {
             for (let col = 0; col < grid.cols; col++) {
@@ -1798,7 +1796,7 @@ function SpaceInvaders({ onClose }) {
                     particles: pa,
                     sound: soundURL.destroyInvader,
                     volume: 0.5,
-                    score: scoreParams.single,
+                    score: score.single,
                   });
 
                   projectilesRef.current.splice(pIndex, 1); // remove projectile
@@ -1822,7 +1820,7 @@ function SpaceInvaders({ onClose }) {
 
             playSound(soundURL.destroyGrid, 0.5);
 
-            addScore(scoreParams.grid);
+            addScore(invaderConfig.score.grid);
           }
           return stillHasInvaders;
         }
@@ -1897,7 +1895,7 @@ function SpaceInvaders({ onClose }) {
       /* === COLLISION DETECTION: PLAYER PROJECTILE → FOLLOWER === */
       projectilesRef.current.forEach((p, pIndex) => {
         followersRef.current.forEach((follower, fIndex) => {
-          const fh = followerConfig.hitParticles;
+          const { hitParticles: fh, stats: fs } = followerConfig;
 
           const hit =
             p.x < follower.x + follower.width &&
@@ -1927,7 +1925,7 @@ function SpaceInvaders({ onClose }) {
                 particles: fh,
                 sound: soundURL.destroyFollower,
                 volume: 0.6,
-                score: scoreParams.follower,
+                score: fs.score,
               });
 
               followersRef.current.splice(fIndex, 1);
