@@ -457,9 +457,13 @@ function SpaceInvaders({ onClose }) {
     },
   };
 
-  const destroyEnemy = ({ x, y, particles, sound, volume = 1, score }) => {
+  /* Enemy */
+  const hitEnemy = ({ x, y, particles, sound, volume = 1 }) => {
     createExplosion(x, y, particles);
     playSound(sound, volume);
+  };
+  const destroyEnemy = ({ x, y, particles, sound, volume = 1, score }) => {
+    hitEnemy({ x, y, particles, sound, volume });
     addScore(score);
   };
 
@@ -1713,7 +1717,7 @@ function SpaceInvaders({ onClose }) {
                   p.y < invaderY + inv.height &&
                   p.y + p.height > invaderY;
 
-                // remove invader
+                // === HIT: INVADER ===
                 if (hit) {
                   grid.invaders[row][col] = false;
 
@@ -1817,26 +1821,32 @@ function SpaceInvaders({ onClose }) {
             p.y < follower.y + follower.height &&
             p.y + p.height > follower.y;
 
+          // === HIT: FOLLOWER ===
           if (hit) {
             follower.lives -= 1;
 
-            createExplosion(
-              follower.x + follower.width / 2,
-              follower.y + follower.height / 2,
-              fh
-            );
-            playSound(
-              follower.lives > 0
-                ? soundURL.hitFollower
-                : soundURL.destroyFollower,
-              0.6
-            );
+            const centerX = follower.x + follower.width / 2;
+            const centerY = follower.y + follower.height / 2;
 
-            // remove follower
-            if (follower.lives <= 0) {
+            if (follower.lives > 0) {
+              hitEnemy({
+                x: centerX,
+                y: centerY,
+                particles: fh,
+                sound: soundURL.hitFollower,
+                volume: 0.6,
+              });
+            } else {
+              destroyEnemy({
+                x: centerX,
+                y: centerY,
+                particles: fh,
+                sound: soundURL.destroyFollower,
+                volume: 0.6,
+                score: scoreParams.follower,
+              });
+
               followersRef.current.splice(fIndex, 1);
-
-              addScore(scoreParams.follower);
             }
 
             projectilesRef.current.splice(pIndex, 1);
