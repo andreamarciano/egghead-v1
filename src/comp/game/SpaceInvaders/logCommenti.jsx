@@ -436,21 +436,27 @@ function SpaceInvaders({ onClose }) {
 
   /* Invader */
   const invaderImageRef = useRef(new Image());
-  const invaderConfig = {
-    width: 30,
-    height: 30,
-    maxSpeed: 3,
-    minSpeed: 2,
-    retreadSpeed: 3,
-  };
   const invaderGridsRef = useRef([]);
-  // Invader Projectile
   const invaderProjectilesRef = useRef([]);
-  const invaderProjectileConfig = {
-    width: 4,
-    height: 12,
-    speed: 4,
-    damage: 1,
+  const invaderConfig = {
+    stats: {
+      width: 30,
+      height: 30,
+      maxSpeed: 3,
+      minSpeed: 2,
+      retreadSpeed: 3,
+    },
+    projectile: {
+      width: 4,
+      height: 12,
+      speed: 4,
+      damage: 1,
+    },
+    hitParticles: {
+      color: "#BAA0DE",
+      opacity: 0.4,
+      count: 20,
+    },
   };
 
   /* Follower */
@@ -711,11 +717,6 @@ function SpaceInvaders({ onClose }) {
     color: "white",
   };
   const isBoostingRef = useRef(false);
-  const invaderParticles = {
-    color: "#BAA0DE",
-    opacity: 0.4,
-    count: 20,
-  };
   const playerParticles = {
     color: "white",
     opacity: 1,
@@ -1236,10 +1237,12 @@ function SpaceInvaders({ onClose }) {
 
     /* === SPAWN: 1st INVADER GRID === */
     const spawnInvaderGrid = () => {
+      const inv = invaderConfig.stats;
+
       const cols = Math.floor(Math.random() * 10 + 5);
       const rows = Math.floor(Math.random() * 5 + 2);
-      const gridWidth = cols * invaderConfig.width;
-      const gridHeight = rows * invaderConfig.height;
+      const gridWidth = cols * inv.width;
+      const gridHeight = rows * inv.height;
 
       const x = 0;
       const y = 0;
@@ -1248,9 +1251,9 @@ function SpaceInvaders({ onClose }) {
       const minSize = 5 * 2;
       const maxSize = 15 * 7;
       const speed =
-        invaderConfig.maxSpeed -
+        inv.maxSpeed -
         ((sizeFactor - minSize) / (maxSize - minSize)) *
-          (invaderConfig.maxSpeed - invaderConfig.minSpeed);
+          (inv.maxSpeed - inv.minSpeed);
 
       invaderGridsRef.current.push({
         x,
@@ -1287,6 +1290,8 @@ function SpaceInvaders({ onClose }) {
 
     /* === SPAWN: INVADER PROJECTILE === */
     const invaderShootInterval = setInterval(() => {
+      const { stats: inv, projectile: pr } = invaderConfig;
+
       if (!bossActiveRef.current) {
         invaderGridsRef.current.forEach((grid) => {
           const aliveInvaders = [];
@@ -1301,20 +1306,15 @@ function SpaceInvaders({ onClose }) {
           if (aliveInvaders.length > 0) {
             const { row, col } =
               aliveInvaders[Math.floor(Math.random() * aliveInvaders.length)];
-            const x =
-              grid.x +
-              col * invaderConfig.width +
-              invaderConfig.width / 2 -
-              invaderProjectileConfig.width / 2;
-            const y =
-              grid.y + row * invaderConfig.height + invaderConfig.height;
+            const x = grid.x + col * inv.width + inv.width / 2 - pr.width / 2;
+            const y = grid.y + row * inv.height + inv.height;
 
             invaderProjectilesRef.current.push({
               x,
               y,
-              width: invaderProjectileConfig.width,
-              height: invaderProjectileConfig.height,
-              speed: invaderProjectileConfig.speed,
+              width: pr.width,
+              height: pr.height,
+              speed: pr.speed,
             });
 
             playLaserSound(soundURL.laserInvader);
@@ -1500,10 +1500,12 @@ function SpaceInvaders({ onClose }) {
 
       /* === INVADER GRIDS MOVEMENT === */
       invaderGridsRef.current.forEach((grid) => {
+        const inv = invaderConfig.stats;
+
         // === BOSS - RETREAT ===
         if (grid.retreating) {
           if (grid.x + grid.width < canvas.width) {
-            grid.x += grid.speed * grid.direction * invaderConfig.retreadSpeed;
+            grid.x += grid.speed * grid.direction * inv.retreadSpeed;
           } else {
             invaderGridsRef.current = invaderGridsRef.current.filter(
               (g) => g !== grid
@@ -1735,18 +1737,20 @@ function SpaceInvaders({ onClose }) {
       /* === COLLISION DETECTION: PLAYER PROJECTILE → INVADER === */
       projectilesRef.current.forEach((p, pIndex) => {
         invaderGridsRef.current.forEach((grid) => {
+          const { stats: inv, hitParticles: pa } = invaderConfig;
+
           for (let row = 0; row < grid.rows; row++) {
             for (let col = 0; col < grid.cols; col++) {
               if (grid.invaders[row][col]) {
                 // invader position
-                const invaderX = grid.x + col * invaderConfig.width;
-                const invaderY = grid.y + row * invaderConfig.height;
+                const invaderX = grid.x + col * inv.width;
+                const invaderY = grid.y + row * inv.height;
 
                 // check collision
                 const hit =
-                  p.x < invaderX + invaderConfig.width &&
+                  p.x < invaderX + inv.width &&
                   p.x + p.width > invaderX &&
-                  p.y < invaderY + invaderConfig.height &&
+                  p.y < invaderY + inv.height &&
                   p.y + p.height > invaderY;
                 // remove invader
                 if (hit) {
@@ -1758,9 +1762,9 @@ function SpaceInvaders({ onClose }) {
 
                   // particles
                   createExplosion(
-                    invaderX + invaderConfig.width / 2,
-                    invaderY + invaderConfig.height / 2,
-                    invaderParticles
+                    invaderX + inv.width / 2,
+                    invaderY + inv.height / 2,
+                    pa
                   );
                   playSound(soundURL.destroyInvader, 0.5);
 
@@ -1922,6 +1926,8 @@ function SpaceInvaders({ onClose }) {
       invaderProjectilesRef.current.forEach((p, index) => {
         if (isGameEndingRef.current || isPlayerInvincible.current) return;
 
+        const pr = invaderConfig.projectile;
+
         const hitbox = getPlayerHitbox(playerWidth);
         const hit =
           p.x < hitbox.x + hitbox.width &&
@@ -1945,10 +1951,7 @@ function SpaceInvaders({ onClose }) {
           // console.log("Player hit!");
 
           handlePlayerHit(playerWidth);
-          const newLives = Math.max(
-            0,
-            livesRef.current - invaderProjectileConfig.damage
-          ); // lose life
+          const newLives = Math.max(0, livesRef.current - pr.damage); // lose life
           setLives(newLives);
 
           invaderProjectilesRef.current.splice(index, 1); // remove projectile
@@ -2155,24 +2158,20 @@ function SpaceInvaders({ onClose }) {
 
       /* === DRAW: INVADER GRIDS === */
       invaderGridsRef.current.forEach((grid) => {
+        const inv = invaderConfig.stats;
+
         for (let row = 0; row < grid.rows; row++) {
           for (let col = 0; col < grid.cols; col++) {
             if (!grid.invaders[row][col]) continue;
 
-            const x = grid.x + col * invaderConfig.width;
-            const y = grid.y + row * invaderConfig.height;
+            const x = grid.x + col * inv.width;
+            const y = grid.y + row * inv.height;
 
             if (invaderImageRef.current.complete) {
-              c.drawImage(
-                invaderImageRef.current,
-                x,
-                y,
-                invaderConfig.width,
-                invaderConfig.height
-              );
+              c.drawImage(invaderImageRef.current, x, y, inv.width, inv.height);
             } else {
               c.fillStyle = "white";
-              c.fillRect(x, y, invaderConfig.width, invaderConfig.height);
+              c.fillRect(x, y, inv.width, inv.height);
             }
           }
         }
