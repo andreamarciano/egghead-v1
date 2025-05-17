@@ -891,20 +891,27 @@ function SpaceInvaders({ onClose }) {
   }, [lives]);
 
   /* Score Animation */
+  function getStep(delta) {
+    if (delta <= 0) return 0;
+
+    const maxPercent = 0.05;
+    const minPercent = 0.02;
+
+    const deltaLog = Math.log10(delta);
+    let percent = maxPercent - (deltaLog / 4) * (maxPercent - minPercent);
+    percent = Math.min(maxPercent, Math.max(minPercent, percent));
+
+    const step = Math.max(2, Math.floor(delta * percent));
+
+    return step;
+  }
   useEffect(() => {
     if (displayedScore === score || displayedScore > score) return;
 
     const interval = setInterval(() => {
       setDisplayedScore((prev) => {
         const delta = score - prev;
-        let step;
-        if (delta >= 5000) step = 200;
-        else if (delta >= 2000) step = 100;
-        else if (delta >= 1000) step = 50;
-        else if (delta >= 500) step = 25;
-        else if (delta >= 200) step = 10;
-        else if (delta >= 50) step = 5;
-        else step = 2;
+        const step = getStep(delta);
 
         const next = Math.min(prev + step, score);
         // debug - score animation
