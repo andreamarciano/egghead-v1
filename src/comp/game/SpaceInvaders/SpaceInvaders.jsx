@@ -156,6 +156,7 @@ function SpaceInvaders({ onClose }) {
       speed2: 7.3,
     },
   };
+  const playerStats = playerConfig.stats;
   const projectileImages = {
     greenPlayer: new Image(),
     bluePlayer: new Image(),
@@ -178,13 +179,11 @@ function SpaceInvaders({ onClose }) {
   const [animateLifeLoss, setAnimateLifeLoss] = useState(false);
   const previousLivesRef = useRef(lives);
   const handlePlayerHit = (playerWidth) => {
-    const ps = playerConfig.stats;
-
     flashEffect(playerOpacityRef, { playerActive: isPlayerActiveRef });
     playSound(soundURL.playerHit, 0.7);
     createExplosion(
       playerXRef.current + playerWidth / 2,
-      playerYRef.current + ps.height / 2,
+      playerYRef.current + playerStats.height / 2,
       playerParticles
     );
   };
@@ -1166,12 +1165,11 @@ function SpaceInvaders({ onClose }) {
 
     /* === PLAYER HITBOX === */
     const getPlayerHitbox = (playerWidth) => {
-      const ps = playerConfig.stats;
-
       // === SHIELD HITBOX ===
       if (isShieldActiveRef.current) {
         const x = playerXRef.current + playerWidth / 2 - shieldConfig.width / 2;
-        const y = playerYRef.current + ps.height / 2 - shieldConfig.height / 2;
+        const y =
+          playerYRef.current + playerStats.height / 2 - shieldConfig.height / 2;
         return {
           x,
           y,
@@ -1184,7 +1182,7 @@ function SpaceInvaders({ onClose }) {
         x: playerXRef.current,
         y: playerYRef.current,
         width: playerWidth,
-        height: ps.height,
+        height: playerStats.height,
       };
     };
 
