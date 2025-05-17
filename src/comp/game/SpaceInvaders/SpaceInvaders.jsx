@@ -135,7 +135,7 @@ function SpaceInvaders({ onClose }) {
     meteor: 500,
     follower: 750,
     // boss
-    boss: 1000, // 10k
+    boss: 1000, // cambia - 10k
   };
   const spawnTime = {
     // power up
@@ -897,7 +897,17 @@ function SpaceInvaders({ onClose }) {
 
     const interval = setInterval(() => {
       setDisplayedScore((prev) => {
-        const next = Math.min(prev + 10, score); // cambia - 2
+        const delta = score - prev;
+        let step;
+        if (delta >= 5000) step = 200;
+        else if (delta >= 2000) step = 100;
+        else if (delta >= 1000) step = 50;
+        else if (delta >= 500) step = 25;
+        else if (delta >= 200) step = 10;
+        else if (delta >= 50) step = 5;
+        else step = 2;
+
+        const next = Math.min(prev + step, score);
 
         const currentK = Math.floor(prev / 1000);
         const nextK = Math.floor(next / 1000);
