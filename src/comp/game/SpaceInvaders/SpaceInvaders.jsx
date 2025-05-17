@@ -139,14 +139,30 @@ function SpaceInvaders({ onClose }) {
   const playerPart2Ref = useRef(false);
   const playerScale = 0.5;
   const playerConfig = {
-    width: 99 * playerScale,
-    width2: 112 * playerScale,
-    height: 75 * playerScale,
-    speed: 5,
-    speed2: 5.4,
-    rotation: 0.15,
-    rotationBack: 0.95,
+    stats: {
+      width: 99 * playerScale,
+      width2: 112 * playerScale,
+      height: 75 * playerScale,
+      speed: 5,
+      speed2: 5.4,
+      rotation: 0.15,
+      rotationBack: 0.95,
+    },
+    projectile: {
+      cooldown: 230,
+      width: 8,
+      height: 20,
+      speed: 7,
+      speed2: 7.3,
+    },
   };
+  const projectileImages = {
+    greenPlayer: new Image(),
+    bluePlayer: new Image(),
+    redPlayer: new Image(),
+  };
+  const lastShotTimeRef = useRef(0);
+  const projectilesRef = useRef([]);
   const playerOpacityRef = useRef(1);
   const playerRotationRef = useRef(0);
   const [playerX, setPlayerX] = useState(0);
@@ -162,11 +178,13 @@ function SpaceInvaders({ onClose }) {
   const [animateLifeLoss, setAnimateLifeLoss] = useState(false);
   const previousLivesRef = useRef(lives);
   const handlePlayerHit = (playerWidth) => {
+    const ps = playerConfig.stats;
+
     flashEffect(playerOpacityRef, { playerActive: isPlayerActiveRef });
     playSound(soundURL.playerHit, 0.7);
     createExplosion(
       playerXRef.current + playerWidth / 2,
-      playerYRef.current + playerConfig.height / 2,
+      playerYRef.current + ps.height / 2,
       playerParticles
     );
   };
@@ -185,22 +203,6 @@ function SpaceInvaders({ onClose }) {
       img.src = imgURL[key];
     });
   }, []);
-
-  /* Projectile */
-  const projectileImages = {
-    greenPlayer: new Image(),
-    bluePlayer: new Image(),
-    redPlayer: new Image(),
-  };
-  const lastShotTimeRef = useRef(0);
-  const projectilesRef = useRef([]);
-  const projectileConfig = {
-    cooldown: 230,
-    width: 8,
-    height: 20,
-    speed: 7,
-    speed2: 7.3,
-  };
 
   /* Boss */
   const bossImageRef = useRef(new Image());
@@ -1148,12 +1150,14 @@ function SpaceInvaders({ onClose }) {
 
     /* === INIT PLAYER === */
     const resetPlayerPosition = () => {
-      const initialX = canvas.width / 2 - playerConfig.width / 2;
+      const ps = playerConfig.stats;
+
+      const initialX = canvas.width / 2 - ps.width / 2;
       setPlayerX(initialX);
       playerXRef.current = initialX;
       playerRotationRef.current = 0;
     };
-    playerYRef.current = canvas.height - playerConfig.height - 10;
+    playerYRef.current = canvas.height - playerConfig.stats.height - 10;
     resetPlayerPosition();
 
     /***************************************************************
@@ -1162,13 +1166,12 @@ function SpaceInvaders({ onClose }) {
 
     /* === PLAYER HITBOX === */
     const getPlayerHitbox = (playerWidth) => {
+      const ps = playerConfig.stats;
+
       // === SHIELD HITBOX ===
       if (isShieldActiveRef.current) {
         const x = playerXRef.current + playerWidth / 2 - shieldConfig.width / 2;
-        const y =
-          playerYRef.current +
-          playerConfig.height / 2 -
-          shieldConfig.height / 2;
+        const y = playerYRef.current + ps.height / 2 - shieldConfig.height / 2;
         return {
           x,
           y,
@@ -1181,7 +1184,7 @@ function SpaceInvaders({ onClose }) {
         x: playerXRef.current,
         y: playerYRef.current,
         width: playerWidth,
-        height: playerConfig.height,
+        height: ps.height,
       };
     };
 
@@ -1442,39 +1445,39 @@ function SpaceInvaders({ onClose }) {
        *                        SECTION: PLAYER                      *
        ***************************************************************/
       const playerWidth = playerPart2Ref.current
-        ? playerConfig.width2
-        : playerConfig.width;
+        ? playerConfig.stats.width2
+        : playerConfig.stats.width;
 
       if (isPlayerActiveRef.current) {
+        const { stats: ps, projectile: pr } = playerConfig;
+
         /* === PLAYER MOVEMENT === */
-        const playerSpeed = playerPart2Ref.current
-          ? playerConfig.speed2
-          : playerConfig.speed;
+        const playerSpeed = playerPart2Ref.current ? ps.speed2 : ps.speed;
+
         if (keysPressed.has("ArrowLeft") || keysPressed.has("a")) {
           playerXRef.current = Math.max(playerXRef.current - playerSpeed, 0);
-          playerRotationRef.current = -playerConfig.rotation;
+          playerRotationRef.current = -ps.rotation;
         } else if (keysPressed.has("ArrowRight") || keysPressed.has("d")) {
           playerXRef.current = Math.min(
             playerXRef.current + playerSpeed,
             canvas.width - playerWidth
           );
-          playerRotationRef.current = playerConfig.rotation;
+          playerRotationRef.current = ps.rotation;
         } else {
-          playerRotationRef.current *= playerConfig.rotationBack;
+          playerRotationRef.current *= ps.rotationBack;
         }
 
         /* === SHOOT PROJECTILES === */
         const now = Date.now();
-        const projectileSpeed = playerPart2Ref.current
-          ? projectileConfig.speed2
-          : projectileConfig.speed;
+        const projectileSpeed = playerPart2Ref.current ? pr.speed2 : pr.speed;
+
         if (keysPressed.has(" ")) {
-          if (now - lastShotTimeRef.current > projectileConfig.cooldown) {
+          if (now - lastShotTimeRef.current > pr.cooldown) {
             const newProjectile = {
               x: playerXRef.current + playerWidth / 2 - 4,
-              y: canvas.height - playerConfig.height - 10,
-              width: projectileConfig.width,
-              height: projectileConfig.height,
+              y: canvas.height - ps.height - 10,
+              width: pr.width,
+              height: pr.height,
               speed: projectileSpeed,
               color: playerColor,
             };
@@ -1860,10 +1863,12 @@ function SpaceInvaders({ onClose }) {
       shieldPowerUpRef.current.forEach((powerUp, sIndex) => {
         if (isGameEndingRef.current || isPlayerInvincible.current) return;
 
+        const ps = playerConfig.stats;
+
         const hit =
           powerUp.x < playerXRef.current + playerWidth &&
           powerUp.x + powerUp.width > playerXRef.current &&
-          powerUp.y < playerYRef.current + playerConfig.height &&
+          powerUp.y < playerYRef.current + ps.height &&
           powerUp.y + powerUp.height > playerYRef.current;
 
         if (hit) {
@@ -2000,12 +2005,17 @@ function SpaceInvaders({ onClose }) {
         }
       } else if (playerTransitionRef.current === "reenterScene") {
         playerYRef.current -= 3;
-        if (playerYRef.current <= canvas.height - playerConfig.height - 10) {
-          playerYRef.current = canvas.height - playerConfig.height - 10;
+        if (
+          playerYRef.current <=
+          canvas.height - playerConfig.stats.height - 10
+        ) {
+          playerYRef.current = canvas.height - playerConfig.stats.height - 10;
           playerTransitionRef.current = null;
         }
       }
       const drawPlayer = () => {
+        const ps = playerConfig.stats;
+
         c.save();
         c.globalAlpha =
           isPlayerActiveRef.current || isPlayerFrozenRef.current
@@ -2013,12 +2023,12 @@ function SpaceInvaders({ onClose }) {
             : 0;
         c.translate(
           playerXRef.current + playerWidth / 2,
-          playerYRef.current + playerConfig.height / 2
+          playerYRef.current + ps.height / 2
         );
         c.rotate(playerRotationRef.current);
         c.translate(
           -playerXRef.current - playerWidth / 2,
-          -playerYRef.current - playerConfig.height / 2
+          -playerYRef.current - ps.height / 2
         );
         if (playerImageRef.current.complete) {
           c.drawImage(
@@ -2026,7 +2036,7 @@ function SpaceInvaders({ onClose }) {
             playerXRef.current,
             playerYRef.current,
             playerWidth,
-            playerConfig.height
+            ps.height
           );
         } else {
           c.fillStyle = "green";
@@ -2034,7 +2044,7 @@ function SpaceInvaders({ onClose }) {
             playerXRef.current,
             playerYRef.current,
             playerWidth,
-            playerConfig.height
+            ps.height
           );
         }
         c.restore();
@@ -2043,6 +2053,8 @@ function SpaceInvaders({ onClose }) {
 
       /* === DRAW: SHIELD ON PLAYER === */
       if (isShieldActiveRef.current && shieldImageRef.current.complete) {
+        const ps = playerConfig.stats;
+
         const now = performance.now();
         const elapsed = now - shieldStartTimeRef.current;
         const remaining = shieldConfig.time - elapsed;
@@ -2057,9 +2069,7 @@ function SpaceInvaders({ onClose }) {
         const shieldX =
           playerXRef.current + playerWidth / 2 - shieldConfig.width / 2;
         const shieldY =
-          playerYRef.current +
-          playerConfig.height / 2 -
-          shieldConfig.height / 2;
+          playerYRef.current + ps.height / 2 - shieldConfig.height / 2;
 
         c.save();
         c.globalAlpha = opacity;
@@ -2529,6 +2539,8 @@ function SpaceInvaders({ onClose }) {
 
       /* === SPAWN: SHIP BUBBLE === */
       if (shipUpgradeRef.current) {
+        const ps = playerConfig.stats;
+
         const u = shipUpgradeRef.current;
 
         if (u.y < u.stopY) {
@@ -2541,7 +2553,7 @@ function SpaceInvaders({ onClose }) {
         const hit =
           u.x < playerXRef.current + playerWidth &&
           u.x + u.width > playerXRef.current &&
-          u.y < playerYRef.current + playerConfig.height &&
+          u.y < playerYRef.current + ps.height &&
           u.y + u.height > playerYRef.current;
 
         if (hit) {
@@ -2875,12 +2887,14 @@ function SpaceInvaders({ onClose }) {
 
   /* === START & RESET === */
   const handleGameStart = () => {
+    const ps = playerConfig.stats;
+
     const randomTheme = themeURL[Math.floor(Math.random() * themeURL.length)];
     setCurrentTheme(randomTheme);
 
     if (gameOver) {
       // reset player
-      playerXRef.current = canvasRef.current.width / 2 - playerConfig.width / 2;
+      playerXRef.current = canvasRef.current.width / 2 - ps.width / 2;
       playerRotationRef.current = 0;
       lastShotTimeRef.current = 0;
       livesRef.current = 5;
