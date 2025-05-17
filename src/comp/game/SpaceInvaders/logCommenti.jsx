@@ -459,6 +459,12 @@ function SpaceInvaders({ onClose }) {
     },
   };
 
+  const destroyEnemy = ({ x, y, particles, sound, volume = 1, score }) => {
+    createExplosion(x, y, particles);
+    playSound(sound, volume);
+    addScore(score);
+  };
+
   /* Follower */
   const followerImageRef = useRef(new Image());
   const followerImage2Ref = useRef(new Image());
@@ -1760,15 +1766,14 @@ function SpaceInvaders({ onClose }) {
                   //   `Invader Hit: grid @ (${grid.x}, ${grid.y}) - cell [${row}][${col}]`
                   // );
 
-                  // particles
-                  createExplosion(
-                    invaderX + inv.width / 2,
-                    invaderY + inv.height / 2,
-                    pa
-                  );
-                  playSound(soundURL.destroyInvader, 0.5);
-
-                  addScore(scoreParams.single);
+                  destroyEnemy({
+                    x: invaderX + inv.width / 2,
+                    y: invaderY + inv.height / 2,
+                    particles: pa,
+                    sound: soundURL.destroyInvader,
+                    volume: 0.5,
+                    score: scoreParams.single,
+                  });
 
                   projectilesRef.current.splice(pIndex, 1); // remove projectile
                 }
