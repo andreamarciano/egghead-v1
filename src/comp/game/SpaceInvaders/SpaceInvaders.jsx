@@ -131,9 +131,6 @@ function SpaceInvaders({ onClose }) {
   };
   const spawnTime = {
     shield: 15000,
-    invaderMin: 7500,
-    invaderMax: 13000,
-    invaderProjectile: 1500,
     meteor: 3000,
   };
 
@@ -432,6 +429,8 @@ function SpaceInvaders({ onClose }) {
       maxSpeed: 3,
       minSpeed: 2,
       retreadSpeed: 3,
+      single: 100, // cambia - 10
+      grid: 50,
     },
     projectile: {
       width: 4,
@@ -444,9 +443,10 @@ function SpaceInvaders({ onClose }) {
       opacity: 0.4,
       count: 20,
     },
-    score: {
-      single: 100, // cambia - 10
-      grid: 50,
+    spawn: {
+      min: 7500,
+      max: 13000,
+      projectile: 1500,
     },
   };
 
@@ -1285,10 +1285,9 @@ function SpaceInvaders({ onClose }) {
     const scheduleInvaderGrid = () => {
       if (bossActiveRef.current) return;
 
-      const interval = Math.floor(
-        Math.random() * (spawnTime.invaderMax - spawnTime.invaderMin) +
-          spawnTime.invaderMin
-      );
+      const ft = invaderConfig.spawn;
+
+      const interval = Math.floor(Math.random() * (ft.max - ft.min) + ft.min);
 
       invaderGridTimeout = setTimeout(() => {
         if (!isGameRunning || bossActiveRef.current) return;
@@ -1332,7 +1331,7 @@ function SpaceInvaders({ onClose }) {
           }
         });
       }
-    }, spawnTime.invaderProjectile);
+    }, invaderConfig.spawn.projectile);
 
     /* === SPAWN: METEOR === */
     const meteorSpawnInterval = setInterval(() => {
@@ -1701,7 +1700,7 @@ function SpaceInvaders({ onClose }) {
       /* === COLLISION DETECTION: PLAYER PROJECTILE → INVADER === */
       projectilesRef.current.forEach((p, pIndex) => {
         invaderGridsRef.current.forEach((grid) => {
-          const { stats: inv, hitParticles: pa, score: score } = invaderConfig;
+          const { stats: inv, hitParticles: pa } = invaderConfig;
 
           for (let row = 0; row < grid.rows; row++) {
             for (let col = 0; col < grid.cols; col++) {
@@ -1725,7 +1724,7 @@ function SpaceInvaders({ onClose }) {
                     particles: pa,
                     sound: soundURL.destroyInvader,
                     volume: 0.5,
-                    score: score.single,
+                    score: inv.single,
                   });
 
                   projectilesRef.current.splice(pIndex, 1);
@@ -1745,7 +1744,7 @@ function SpaceInvaders({ onClose }) {
             // cambia - destroy?
             playSound(soundURL.destroyGrid, 0.5);
 
-            addScore(invaderConfig.score.grid);
+            addScore(invaderConfig.stats.grid);
           }
           return stillHasInvaders;
         }
