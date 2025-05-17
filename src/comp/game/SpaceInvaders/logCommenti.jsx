@@ -146,7 +146,7 @@ function SpaceInvaders({ onClose }) {
     invaderMin: 7500,
     invaderMax: 13000,
     invaderProjectile: 1500,
-    meteor: 6000,
+    meteor: 3000,
     follower: 6500,
   };
 
@@ -1837,27 +1837,30 @@ function SpaceInvaders({ onClose }) {
             p.y > m.y &&
             p.y < m.y + m.height;
 
+          // === HIT: METEOR ===
           if (hit) {
             m.lives -= 1;
             projectilesRef.current.splice(pIndex, 1);
 
+            const centerX = m.x + m.width / 2;
+            const centerY = m.y + m.height / 2;
+
             if (m.lives <= 0) {
-              // remove meteor - small
+              // DESTROY METEOR - Small
               // debug - destroy meteor
               // console.log(`${m.type.toUpperCase()} Meteor destroyed`);
+              destroyEnemy({
+                x: centerX,
+                y: centerY,
+                particles: meteorParticles[m.type],
+                sound: soundURL.destroyMeteor2,
+                volume: 0.4,
+                score: scoreParams.meteorSmall,
+              });
+
               meteorsRef.current.splice(mIndex, 1);
-
-              createExplosion(
-                m.x + m.width / 2,
-                m.y + m.height / 2,
-                meteorParticles[m.type]
-              );
-
-              playSound(soundURL.destroyMeteor2, 0.4);
-
-              addScore(scoreParams.meteorSmall);
             } else {
-              // downgrade meteor
+              // HIT METEOR - Downgrade Type
               const currentType = m.type;
 
               if (m.lives === 2) {
@@ -1865,14 +1868,12 @@ function SpaceInvaders({ onClose }) {
                 // debug - meteor downgrade
                 // console.log("BIG Meteor Hit → Becomes MED");
                 addScore(scoreParams.meteorBig);
-
                 m.type = "med";
               } else if (m.lives === 1) {
                 // med
                 // debug - meteor downgrade
                 // console.log("MED Meteor Hit → Becomes SMALL");
                 addScore(scoreParams.meteorMed);
-
                 m.type = "small";
               }
 
@@ -1881,12 +1882,13 @@ function SpaceInvaders({ onClose }) {
               m.image = meteorImages[m.type];
               m.speed = meteorConfig.speed[m.type];
 
-              createExplosion(
-                m.x + m.width / 2,
-                m.y + m.height / 2,
-                meteorParticles[currentType]
-              );
-              playSound(soundURL.destroyMeteor, 0.4);
+              hitEnemy({
+                x: centerX,
+                y: centerY,
+                particles: meteorParticles[currentType],
+                sound: soundURL.destroyMeteor,
+                volume: 0.4,
+              });
             }
           }
         });
