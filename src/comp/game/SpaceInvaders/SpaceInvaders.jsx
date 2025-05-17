@@ -456,33 +456,40 @@ function SpaceInvaders({ onClose }) {
   const followerImage2Ref = useRef(new Image());
   const followersRef = useRef([]);
   const followerConfig = {
-    width: 50,
-    height: 40,
-    lives: 5,
-    speed: 2.5,
-    speed2: 3.5,
-    // beam
-    shootInterval: 240,
-    shootInterval2: 120,
-    chargeDuration: 90,
-    beamDuration: 120,
-    beamDuration2: 90,
-    beamWidth: 20,
-    beamWidth2: 30,
-    beamColor: "red",
-    beamColor2: "#B388EB",
-    damage: 1,
-    damage2: 2,
-    colorCycle: ["#FFFF00", "#FFC300", "#FF8C00", "#FF4500", "#FF0000"],
-    colorCycle2: ["#87F5FB", "#A3D5FF", "#C3B1E1", "#B07BE0", "#B388EB"],
-    // charge particles
-    particlesChargeColor: "#FFD700",
-    particlesChargeColor2: "#C084FC",
-    particlesChargeOpacity: 1,
-    // active particles
-    particlesActiveColor: "#FFA500",
-    particlesActiveColor2: "#B071F0",
-    particlesActiveOpacity: 0.9,
+    stats: {
+      width: 50,
+      height: 40,
+      lives: 5,
+      speed: 2.5,
+      speed2: 3.5,
+    },
+    beam: {
+      shootInterval: 240,
+      shootInterval2: 120,
+      chargeDuration: 90,
+      duration: 120,
+      duration2: 90,
+      width: 20,
+      width2: 30,
+      color: "red",
+      color2: "#B388EB",
+      damage: 1,
+      damage2: 2,
+      colorCycle: ["#FFFF00", "#FFC300", "#FF8C00", "#FF4500", "#FF0000"],
+      colorCycle2: ["#87F5FB", "#A3D5FF", "#C3B1E1", "#B07BE0", "#B388EB"],
+    },
+    beamParticles: {
+      charge: {
+        color: "#FFD700",
+        color2: "#C084FC",
+        opacity: 1,
+      },
+      active: {
+        color: "#FFA500",
+        color2: "#B071F0",
+        opacity: 0.9,
+      },
+    },
   };
 
   /* Meteor */
@@ -772,6 +779,8 @@ function SpaceInvaders({ onClose }) {
   }
   // Beam Charging Particles
   function createFollowerChargeParticle(follower) {
+    const fp = followerConfig.beamParticles.charge;
+
     const spawnAreaWidth = 100;
     const spawnX =
       follower.x + follower.width / 2 + (Math.random() - 0.5) * spawnAreaWidth;
@@ -787,15 +796,13 @@ function SpaceInvaders({ onClose }) {
       x: spawnX,
       y: spawnY,
       radius: Math.random() * 2 + 1,
-      color: bossDefeatedRef.current
-        ? followerConfig.particlesChargeColor2
-        : followerConfig.particlesChargeColor,
+      color: bossDefeatedRef.current ? fp.color2 : fp.color,
       velocity: {
         x: Math.cos(angle) * speed + (Math.random() - 0.5) * 0.3,
         y: Math.sin(angle) * speed + (Math.random() - 0.5) * 0.3,
       },
       target: { x: targetX, y: targetY },
-      opacity: followerConfig.particlesChargeOpacity,
+      opacity: fp.opacity,
     });
   }
 
@@ -1154,9 +1161,9 @@ function SpaceInvaders({ onClose }) {
 
     /* === FOLLOWER BEAM HITBOX === */
     const getFollowerBeamHitbox = (follower) => {
-      const beamWidth = bossDefeatedRef.current
-        ? followerConfig.beamWidth2
-        : followerConfig.beamWidth;
+      const fb = followerConfig.beam;
+
+      const beamWidth = bossDefeatedRef.current ? fb.width2 : fb.width;
       const beamX = follower.x + follower.width / 2 - beamWidth / 2;
       const beamY = follower.y + follower.height;
       const beamHeight = canvas.height - beamY;
@@ -1339,14 +1346,16 @@ function SpaceInvaders({ onClose }) {
         scoreRef.current >= spawnScore.follower &&
         followersRef.current.length < 2
       ) {
-        const x = Math.random() * (canvas.width - followerConfig.width);
+        const fs = followerConfig.stats;
+
+        const x = Math.random() * (canvas.width - fs.width);
 
         followersRef.current.push({
           x,
           y: 10,
-          width: followerConfig.width,
-          height: followerConfig.height,
-          lives: followerConfig.lives,
+          width: fs.width,
+          height: fs.height,
+          lives: fs.lives,
           shootTimer: 0,
           isCharging: false,
           isShooting: false,
@@ -1485,13 +1494,15 @@ function SpaceInvaders({ onClose }) {
 
       /* === FOLLOWER MOVEMENT === */
       followersRef.current.forEach((follower) => {
+        const { stats: fs, beam: fb } = followerConfig;
+
         const chargeStart = bossDefeatedRef.current
-          ? followerConfig.shootInterval2
-          : followerConfig.shootInterval;
-        const beamStart = chargeStart + followerConfig.chargeDuration;
+          ? fb.shootInterval2
+          : fb.shootInterval;
+        const beamStart = chargeStart + fb.chargeDuration;
         const beamDuration = bossDefeatedRef.current
-          ? followerConfig.beamDuration2
-          : followerConfig.beamDuration;
+          ? fb.duration2
+          : fb.duration;
         const beamEnd = beamStart + beamDuration;
 
         // === BOSS - RETREAT ===
@@ -1518,9 +1529,7 @@ function SpaceInvaders({ onClose }) {
 
         const targetX =
           playerXRef.current + playerWidth / 2 - follower.width / 2;
-        const followerSpeed = bossDefeatedRef.current
-          ? followerConfig.speed2
-          : followerConfig.speed;
+        const followerSpeed = bossDefeatedRef.current ? fs.speed2 : fs.speed;
 
         // movement
         if (!follower.isCharging && !follower.isShooting) {
@@ -1904,6 +1913,8 @@ function SpaceInvaders({ onClose }) {
         if (isGameEndingRef.current || isPlayerInvincible.current) return;
         if (!follower.isShooting) return;
 
+        const fb = followerConfig.beam;
+
         const beamHitbox = getFollowerBeamHitbox(follower);
 
         const playerHitbox = getPlayerHitbox(playerWidth);
@@ -1924,9 +1935,7 @@ function SpaceInvaders({ onClose }) {
             );
           } else {
             handlePlayerHit(playerWidth);
-            const damage = bossDefeatedRef.current
-              ? followerConfig.damage2
-              : followerConfig.damage;
+            const damage = bossDefeatedRef.current ? fb.damage2 : fb.damage;
             const newLives = Math.max(0, livesRef.current - damage);
             setLives(newLives);
 
@@ -2070,25 +2079,34 @@ function SpaceInvaders({ onClose }) {
           c.fillRect(follower.x, follower.y, follower.width, follower.height);
         }
 
+        const {
+          stats: fs,
+          beam: fb,
+          beamParticles: { active: fp },
+        } = followerConfig;
+
         // === DRAW FOLLOWER LIFE BAR ===
-        const barPadding = 4;
-        const barWidth = follower.width - barPadding * 2;
-        const barHeight = 5;
-        const x = follower.x + barPadding;
-        const y = follower.y - barHeight - 2;
-        const lifeRatio = follower.lives / followerConfig.lives;
-        c.fillStyle = "black";
-        c.fillRect(x, y, barWidth, barHeight);
-        c.fillStyle = "#7C3AED";
-        c.fillRect(x, y, barWidth * lifeRatio, barHeight);
+        const drawFollowerLifeBar = () => {
+          const barPadding = 4;
+          const barWidth = follower.width - barPadding * 2;
+          const barHeight = 5;
+          const x = follower.x + barPadding;
+          const y = follower.y - barHeight - 2;
+          const lifeRatio = follower.lives / fs.lives;
+          c.fillStyle = "black";
+          c.fillRect(x, y, barWidth, barHeight);
+          c.fillStyle = "#7C3AED";
+          c.fillRect(x, y, barWidth * lifeRatio, barHeight);
+        };
+        drawFollowerLifeBar();
 
         // === CHARGE Beam ===
         if (follower.isCharging) {
           // === Charge Animation ===
           const beamHitbox = getFollowerBeamHitbox(follower);
           const colorCycle = bossDefeatedRef.current
-            ? followerConfig.colorCycle2
-            : followerConfig.colorCycle;
+            ? fb.colorCycle2
+            : fb.colorCycle;
           const elapsed = performance.now();
           const colorCycleSpeed = 100;
           const alphaCycleSpeed = 300;
@@ -2165,9 +2183,7 @@ function SpaceInvaders({ onClose }) {
           c.lineTo(startX - tipWidth / 2, startY + beamHeight);
           c.closePath();
 
-          c.fillStyle = bossDefeatedRef.current
-            ? followerConfig.beamColor2
-            : followerConfig.beamColor;
+          c.fillStyle = bossDefeatedRef.current ? fb.color2 : fb.color;
           c.globalAlpha = 0.7;
           c.fill();
           c.restore();
@@ -2182,14 +2198,12 @@ function SpaceInvaders({ onClose }) {
                 x: px,
                 y: py,
                 radius: Math.random() * 4 + 3,
-                color: bossDefeatedRef.current
-                  ? followerConfig.particlesActiveColor2
-                  : followerConfig.particlesActiveColor,
+                color: bossDefeatedRef.current ? fp.color2 : fp.color,
                 velocity: {
                   x: (Math.random() - 0.5) * 0.3,
                   y: (Math.random() - 0.5) * 0.3,
                 },
-                opacity: followerConfig.particlesActiveOpacity,
+                opacity: fp.opacity,
               });
             }
           }
