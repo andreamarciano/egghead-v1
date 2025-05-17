@@ -2352,6 +2352,8 @@ function SpaceInvaders({ onClose }) {
               bossBeamsRef.current = [];
               bossMusicPlayedRef.current = false;
 
+              addScore(scoreParams.boss);
+
               // === DRAW: SHIP BUBBLE ===
               const upgradeX = playerXRef.current + playerWidth / 2 - 20;
               const upgradeY = -60;
