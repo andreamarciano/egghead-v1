@@ -1169,7 +1169,7 @@ function SpaceInvaders({ onClose }) {
       playerXRef.current = initialX;
       playerRotationRef.current = 0;
     };
-    playerYRef.current = canvas.height - playerConfig.stats.height - 10;
+    playerYRef.current = canvas.height - playerStats.height - 10;
     resetPlayerPosition();
 
     /***************************************************************
@@ -1465,11 +1465,11 @@ function SpaceInvaders({ onClose }) {
        *                        SECTION: PLAYER                      *
        ***************************************************************/
       const playerWidth = playerPart2Ref.current
-        ? playerConfig.stats.width2
-        : playerConfig.stats.width;
+        ? playerStats.width2
+        : playerStats.width;
 
       if (isPlayerActiveRef.current) {
-        const { projectile: pr } = playerConfig;
+        const playerProj = playerConfig.projectile;
 
         // debug - player active
         // console.log("Player active – movement and shooting enabled");
@@ -1494,15 +1494,17 @@ function SpaceInvaders({ onClose }) {
 
         /* === SHOOT PROJECTILES === */
         const now = Date.now();
-        const projectileSpeed = playerPart2Ref.current ? pr.speed2 : pr.speed;
+        const projectileSpeed = playerPart2Ref.current
+          ? playerProj.speed2
+          : playerProj.speed;
 
         if (keysPressed.has(" ")) {
-          if (now - lastShotTimeRef.current > pr.cooldown) {
+          if (now - lastShotTimeRef.current > playerProj.cooldown) {
             const newProjectile = {
               x: playerXRef.current + playerWidth / 2 - 4,
               y: canvas.height - playerStats.height - 10,
-              width: pr.width,
-              height: pr.height,
+              width: playerProj.width,
+              height: playerProj.height,
               speed: projectileSpeed,
               color: playerColor,
             };
@@ -2098,11 +2100,8 @@ function SpaceInvaders({ onClose }) {
         }
       } else if (playerTransitionRef.current === "reenterScene") {
         playerYRef.current -= 3;
-        if (
-          playerYRef.current <=
-          canvas.height - playerConfig.stats.height - 10
-        ) {
-          playerYRef.current = canvas.height - playerConfig.stats.height - 10;
+        if (playerYRef.current <= canvas.height - playerStats.height - 10) {
+          playerYRef.current = canvas.height - playerStats.height - 10;
           playerTransitionRef.current = null;
         }
       }
