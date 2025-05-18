@@ -1409,7 +1409,6 @@ function SpaceInvaders({ onClose }) {
             row.some((inv) => inv)
           );
           if (!stillHasInvaders) {
-            // cambia - destroy?
             playSound(soundURL.destroyGrid, 0.5);
 
             addScore(invaderConfig.stats.grid);
