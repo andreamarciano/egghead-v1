@@ -11,10 +11,12 @@ import playerConfig from "./player/config";
 /* Power Up */
 import shieldConfig from "./powerUp/shield/config";
 
-/* Enemies */
+/* === Enemies === */
 import invaderConfig from "./enemy/invader/config";
 import meteorConfig from "./enemy/meteor/config";
+// Follower
 import followerConfig from "./enemy/follower/config";
+import { setupFollowerSpawn } from "./enemy/follower/spawn";
 import { followerChargeParticles } from "./enemy/follower/utils";
 
 /* Boss */
@@ -1037,36 +1039,13 @@ function SpaceInvaders({ onClose }) {
     }, meteorConfig.spawn.time);
 
     /* === SPAWN: FOLLOWER === */
-    const followerSpawnInterval = setInterval(() => {
-      if (
-        !bossActiveRef.current &&
-        scoreRef.current >= followerConfig.spawn.score &&
-        followersRef.current.length < 2
-      ) {
-        const fs = followerConfig.stats;
-
-        const x = Math.random() * (canvas.width - fs.width);
-
-        followersRef.current.push({
-          x,
-          y: 10,
-          width: fs.width,
-          height: fs.height,
-          lives: fs.lives,
-          shootTimer: 0,
-          isCharging: false,
-          isShooting: false,
-          hasHitPlayer: false,
-          particles: [],
-          shootParticles: [],
-          retreating: false,
-          retreatDirection: Math.random() < 0.5 ? "left" : "right",
-        });
-
-        // debug - spawn
-        // console.log(`[FOLLOWER] Spawned at x: ${Math.floor(x)}`);
-      }
-    }, followerConfig.spawn.time);
+    const followerSpawnInterval = setupFollowerSpawn(
+      followerConfig,
+      followersRef,
+      canvas,
+      bossActiveRef,
+      scoreRef
+    );
 
     /* === SPAWN: BOSS WEAK POINTS === */
     const bossWeakPointsSpawn = setInterval(() => {
