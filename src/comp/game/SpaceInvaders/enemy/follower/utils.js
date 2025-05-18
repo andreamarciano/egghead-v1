@@ -29,3 +29,24 @@ export function followerChargeParticles(
     opacity: fp.opacity,
   });
 }
+
+export function getFollowerBeamHitbox({
+  follower,
+  followerConfig,
+  bossDefeatedRef,
+  canvas,
+}) {
+  const fb = followerConfig.beam;
+
+  const beamWidth = bossDefeatedRef.current ? fb.width2 : fb.width;
+  const beamX = follower.x + follower.width / 2 - beamWidth / 2;
+  const beamY = follower.y + follower.height;
+  const beamHeight = canvas.height - beamY;
+
+  return {
+    x: beamX,
+    y: beamY,
+    width: beamWidth,
+    height: beamHeight,
+  };
+}
