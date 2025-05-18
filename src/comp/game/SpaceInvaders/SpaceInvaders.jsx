@@ -1,96 +1,16 @@
 import { useState, useEffect, useRef } from "react";
 import "./SpaceInvaders.css";
 
-/* Images */
-const imgURL = {
-  // Player
-  greenPlayer: "/images/spaceInvaders/ship/playerShip1_green.webp",
-  greenPlayer2: "/images/spaceInvaders/ship/playerShip2_green.webp",
-  bluePlayer: "/images/spaceInvaders/ship/playerShip1_blue.webp",
-  bluePlayer2: "/images/spaceInvaders/ship/playerShip2_blue.webp",
-  redPlayer: "/images/spaceInvaders/ship/playerShip1_red.webp",
-  redPlayer2: "/images/spaceInvaders/ship/playerShip2_red.webp",
-  greenPlayerLives: "/images/spaceInvaders/ship/playerLife1_green.webp",
-  greenPlayerLives2: "/images/spaceInvaders/ship/playerLife2_green.webp",
-  bluePlayerLives: "/images/spaceInvaders/ship/playerLife1_blue.webp",
-  bluePlayerLives2: "/images/spaceInvaders/ship/playerLife2_blue.webp",
-  redPlayerLives: "/images/spaceInvaders/ship/playerLife1_red.webp",
-  redPlayerLives2: "/images/spaceInvaders/ship/playerLife2_red.webp",
-  // Laser
-  laserGreen: "/images/spaceInvaders/laser/laserGreen.webp",
-  laserBlue: "/images/spaceInvaders/laser/laserBlue.webp",
-  laserRed: "/images/spaceInvaders/laser/laserRed.webp",
-  // Power Up
-  shield: "/images/spaceInvaders/powerUp/shield.webp",
-  // Enemy
-  invader: "/images/spaceInvaders/invader/invader.webp",
-  meteorBig: "/images/spaceInvaders/invader/meteorbig.webp",
-  meteorMed: "/images/spaceInvaders/invader/meteormed.webp",
-  meteorSmall: "/images/spaceInvaders/invader/meteorsmall.webp",
-  follower: "/images/spaceInvaders/invader/follower.webp",
-  follower2: "/images/spaceInvaders/invader/follower2.webp",
-  // Boss
-  boss1: "/images/spaceInvaders/invader/bossPhase1.png",
-  boss2: "/images/spaceInvaders/invader/bossPhase2.png",
-  // Numeral
-  n0: "/images/spaceInvaders/numeral/numeral0.webp",
-  n1: "/images/spaceInvaders/numeral/numeral1.webp",
-  n2: "/images/spaceInvaders/numeral/numeral2.webp",
-  n3: "/images/spaceInvaders/numeral/numeral3.webp",
-  n4: "/images/spaceInvaders/numeral/numeral4.webp",
-  n5: "/images/spaceInvaders/numeral/numeral5.webp",
-  n6: "/images/spaceInvaders/numeral/numeral6.webp",
-  n7: "/images/spaceInvaders/numeral/numeral7.webp",
-  n8: "/images/spaceInvaders/numeral/numeral8.webp",
-  n9: "/images/spaceInvaders/numeral/numeral9.webp",
-  nX: "/images/spaceInvaders/numeral/numeralX.webp",
-};
+/* Assets */
+import imgURL from "./assets/imgURL";
+import { soundURL, themeURL, theme2URL, battleURL } from "./assets/soundURL";
 
-/* Sounds */
-const soundURL = {
-  // Laser
-  laser: "/sounds/spaceInvaders/laser/laser.mp3",
-  laserInvader: "/sounds/spaceInvaders/laser/laserInvader.mp3",
-  beamCharge: "/sounds/spaceInvaders/laser/beamCharge.mp3",
-  beamActive: "/sounds/spaceInvaders/laser/beamActive.mp3",
-  beamActive2: "/sounds/spaceInvaders/laser/beamActiveShort.mp3",
-  // Hit & Destroy
-  playerHit: "/sounds/spaceInvaders/destroy/playerHit.mp3",
-  destroyInvader: "/sounds/spaceInvaders/destroy/destroyInvader.mp3",
-  destroyGrid: "/sounds/spaceInvaders/destroy/destroyGrid.mp3",
-  destroyMeteor: "/sounds/spaceInvaders/destroy/destroyMeteor.mp3",
-  destroyMeteor2: "/sounds/spaceInvaders/destroy/destroyMeteorSmall.mp3",
-  destroyFollower: "/sounds/spaceInvaders/destroy/destroyFollower.mp3",
-  hitFollower: "/sounds/spaceInvaders/destroy/hitFollower.mp3",
-  // Boss
-  bossEnter: "/sounds/spaceInvaders/boss/bossEnter.mp3",
-  bossDescending: "/sounds/spaceInvaders/boss/bossDescending.mp3",
-  bossDescending2: "/sounds/spaceInvaders/boss/bossDescending2.mp3",
-  bossDefeated: "/sounds/spaceInvaders/boss/bossDefeated.mp3",
-  // Power Up
-  shieldUp: "/sounds/spaceInvaders/powerUp/shieldUp.mp3",
-  shieldDown: "/sounds/spaceInvaders/powerUp/shieldDown.mp3",
-  shieldBlock: "/sounds/spaceInvaders/powerUp/shieldBlock.mp3",
-  shipUpgrade: "/sounds/spaceInvaders/powerUp/shipUpgrade.mp3",
-  // Gameplay
-  gameOver: "/sounds/spaceInvaders/gameplay/gameOver.mp3",
-};
-// Theme
-const themeURL = [
-  "/sounds/spaceInvaders/theme/theme1.mp3",
-  "/sounds/spaceInvaders/theme/theme2.mp3",
-  "/sounds/spaceInvaders/theme/theme3.mp3",
-  "/sounds/spaceInvaders/theme/theme4.mp3",
-];
-const theme2URL = [
-  "/sounds/spaceInvaders/theme/part2theme1.mp3",
-  "/sounds/spaceInvaders/theme/part2theme2.mp3",
-  "/sounds/spaceInvaders/theme/part2theme3.mp3",
-];
-const battleURL = [
-  "/sounds/spaceInvaders/boss/bossBattle1.mp3",
-  "/sounds/spaceInvaders/boss/bossBattle3.mp3",
-];
+/* Player */
+import playerConfig from "./player/config";
+
+/* Enemies */
+import invaderConfig from "./enemy/invader/config";
+import followerConfig from "./enemy/follower/config";
 
 /******************************************************************************
  *                                                                            *
@@ -135,38 +55,7 @@ function SpaceInvaders({ onClose }) {
   /* Player */
   const playerImageRef = useRef(new Image());
   const playerPart2Ref = useRef(false);
-  const playerScale = 0.5;
-  const playerConfig = {
-    stats: {
-      width: 99 * playerScale,
-      width2: 112 * playerScale,
-      height: 75 * playerScale,
-      speed: 5,
-      speed2: 5.4,
-      rotation: 0.15,
-      rotationBack: 0.95,
-    },
-    projectile: {
-      cooldown: 230,
-      width: 8,
-      height: 20,
-      speed: 7,
-      speed2: 7.3,
-    },
-    hitParticles: {
-      color: "white",
-      opacity: 1,
-      count: 25,
-    },
-  };
   const playerStats = playerConfig.stats;
-  const projectileImages = {
-    greenPlayer: new Image(),
-    bluePlayer: new Image(),
-    redPlayer: new Image(),
-  };
-  const lastShotTimeRef = useRef(0);
-  const projectilesRef = useRef([]);
   const playerOpacityRef = useRef(1);
   const playerRotationRef = useRef(0);
   const [playerX, setPlayerX] = useState(0);
@@ -176,6 +65,14 @@ function SpaceInvaders({ onClose }) {
   const isPlayerInvincible = useRef(false);
   const isPlayerFrozenRef = useRef(false);
   const playerTransitionRef = useRef(null);
+  // Projectile
+  const projectileImages = {
+    greenPlayer: new Image(),
+    bluePlayer: new Image(),
+    redPlayer: new Image(),
+  };
+  const lastShotTimeRef = useRef(0);
+  const projectilesRef = useRef([]);
   // Lives
   const [lives, setLives] = useState(5);
   const livesRef = useRef(5);
@@ -426,33 +323,6 @@ function SpaceInvaders({ onClose }) {
   const invaderImageRef = useRef(new Image());
   const invaderGridsRef = useRef([]);
   const invaderProjectilesRef = useRef([]);
-  const invaderConfig = {
-    stats: {
-      width: 30,
-      height: 30,
-      maxSpeed: 3,
-      minSpeed: 2,
-      retreadSpeed: 3,
-      single: 100, // cambia - 10
-      grid: 50,
-    },
-    projectile: {
-      width: 4,
-      height: 12,
-      speed: 4,
-      damage: 1,
-    },
-    hitParticles: {
-      color: "#BAA0DE",
-      opacity: 0.4,
-      count: 20,
-    },
-    spawn: {
-      min: 7500,
-      max: 13000,
-      projectile: 1500,
-    },
-  };
 
   /* Enemy */
   const hitEnemy = ({ x, y, particles, sound, volume = 1 }) => {
@@ -468,52 +338,6 @@ function SpaceInvaders({ onClose }) {
   const followerImageRef = useRef(new Image());
   const followerImage2Ref = useRef(new Image());
   const followersRef = useRef([]);
-  const followerConfig = {
-    stats: {
-      width: 50,
-      height: 40,
-      lives: 5,
-      speed: 2.5,
-      speed2: 3.5,
-      score: 100,
-    },
-    beam: {
-      shootInterval: 240,
-      shootInterval2: 120,
-      chargeDuration: 90,
-      duration: 120,
-      duration2: 90,
-      width: 20,
-      width2: 30,
-      color: "red",
-      color2: "#B388EB",
-      damage: 1,
-      damage2: 2,
-      colorCycle: ["#FFFF00", "#FFC300", "#FF8C00", "#FF4500", "#FF0000"],
-      colorCycle2: ["#87F5FB", "#A3D5FF", "#C3B1E1", "#B07BE0", "#B388EB"],
-    },
-    beamParticles: {
-      charge: {
-        color: "#FFD700",
-        color2: "#C084FC",
-        opacity: 1,
-      },
-      active: {
-        color: "#FFA500",
-        color2: "#B071F0",
-        opacity: 0.9,
-      },
-    },
-    hitParticles: {
-      color: "#7049A6",
-      opacity: 0.6,
-      count: 100,
-    },
-    spawn: {
-      score: 750,
-      time: 6500,
-    },
-  };
 
   /* Meteor */
   const meteorsRef = useRef([]);
