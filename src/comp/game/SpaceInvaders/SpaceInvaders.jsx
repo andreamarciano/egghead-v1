@@ -293,30 +293,6 @@ function SpaceInvaders({ onClose }) {
   };
 
   /* Menu */
-  // Show Controls
-  const [showControls, setShowControls] = useState(false);
-  const Key = ({
-    label,
-    highlight = false,
-    wide = false,
-    halfHeight = false,
-    tinyText = false,
-  }) => {
-    const base = "text-sm text-center border rounded bg-gray-200";
-    const highlightStyle = highlight
-      ? "bg-yellow-300 border-yellow-500 text-black font-bold"
-      : "text-gray-700";
-    const size = wide ? "w-27 h-6" : halfHeight ? "w-6 h-3" : "w-6 h-6";
-    const textSize = tinyText ? "text-[11px]" : "text-xs";
-
-    return (
-      <div
-        className={`${base} ${highlightStyle} ${size} ${textSize} flex items-center justify-center`}
-      >
-        {label}
-      </div>
-    );
-  };
   // Color Pick
   const [playerColor, setPlayerColor] = useState("greenPlayer");
   const [selectedColor, setSelectedColor] = useState(null);
