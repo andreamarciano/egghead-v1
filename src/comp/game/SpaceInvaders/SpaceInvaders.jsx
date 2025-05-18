@@ -19,6 +19,7 @@ import { flashEffect } from "./player/utils";
 /* Power Up */
 import shieldConfig from "./powerUp/shield/config";
 import shipBubbleConfig from "./powerUp/ship/config";
+import { collisionShieldHitPlayer } from "./powerUp/shield/collision";
 
 /* === Enemies === */
 import invaderConfig from "./enemy/invader/config";
@@ -1124,21 +1125,16 @@ function SpaceInvaders({ onClose }) {
        ***************************************************************/
 
       /* === COLLISION DETECTION: SHIELD → PLAYER === */
-      shieldPowerUpRef.current.forEach((powerUp, sIndex) => {
-        if (isGameEndingRef.current || isPlayerInvincible.current) return;
-
-        const hit =
-          powerUp.x < playerXRef.current + playerWidth &&
-          powerUp.x + powerUp.width > playerXRef.current &&
-          powerUp.y < playerYRef.current + playerStats.height &&
-          powerUp.y + powerUp.height > playerYRef.current;
-
-        if (hit) {
-          shieldPowerUpRef.current.splice(sIndex, 1);
-
-          activateShield();
-        }
-      });
+      collisionShieldHitPlayer(
+        shieldPowerUpRef,
+        isGameEndingRef,
+        isPlayerInvincible,
+        playerXRef,
+        playerYRef,
+        playerStats,
+        playerWidth,
+        activateShield
+      );
 
       /* === COLLISION DETECTION: INVADER PROJECTILE → PLAYER === */
       collisionInvaderHitPlayer({
