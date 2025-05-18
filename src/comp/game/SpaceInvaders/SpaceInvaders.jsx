@@ -18,6 +18,7 @@ import { flashEffect } from "./player/utils";
 
 /* Power Up */
 import shieldConfig from "./powerUp/shield/config";
+import shipBubbleConfig from "./powerUp/ship/config";
 
 /* === Enemies === */
 import invaderConfig from "./enemy/invader/config";
@@ -85,11 +86,6 @@ function SpaceInvaders({ onClose }) {
   };
   // Ship Upgrade
   const shipUpgradeRef = useRef(null);
-  const shipBubbleConfig = {
-    width: 112 * 0.5,
-    height: 75 * 0.5,
-    speed: 2,
-  };
   useEffect(() => {
     ["greenPlayer2", "bluePlayer2", "redPlayer2"].forEach((key) => {
       const img = new Image();
