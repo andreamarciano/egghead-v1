@@ -1164,9 +1164,7 @@ function SpaceInvaders({ onClose }) {
 
     /* === INIT PLAYER === */
     const resetPlayerPosition = () => {
-      const ps = playerConfig.stats;
-
-      const initialX = canvas.width / 2 - ps.width / 2;
+      const initialX = canvas.width / 2 - playerStats.width / 2;
       setPlayerX(initialX);
       playerXRef.current = initialX;
       playerRotationRef.current = 0;
@@ -1183,7 +1181,8 @@ function SpaceInvaders({ onClose }) {
       // === SHIELD HITBOX ===
       if (isShieldActiveRef.current) {
         const x = playerXRef.current + playerWidth / 2 - shieldConfig.width / 2;
-        const y = playerYRef.current + playerStats.height / 2 - shieldConfig.height / 2;
+        const y =
+          playerYRef.current + playerStats.height / 2 - shieldConfig.height / 2;
         return {
           x,
           y,
@@ -1470,25 +1469,27 @@ function SpaceInvaders({ onClose }) {
         : playerConfig.stats.width;
 
       if (isPlayerActiveRef.current) {
-        const { stats: ps, projectile: pr } = playerConfig;
+        const { projectile: pr } = playerConfig;
 
         // debug - player active
         // console.log("Player active – movement and shooting enabled");
 
         /* === PLAYER MOVEMENT === */
-        const playerSpeed = playerPart2Ref.current ? ps.speed2 : ps.speed;
+        const playerSpeed = playerPart2Ref.current
+          ? playerStats.speed2
+          : playerStats.speed;
 
         if (keysPressed.has("ArrowLeft") || keysPressed.has("a")) {
           playerXRef.current = Math.max(playerXRef.current - playerSpeed, 0);
-          playerRotationRef.current = -ps.rotation; // tilt left
+          playerRotationRef.current = -playerStats.rotation; // tilt left
         } else if (keysPressed.has("ArrowRight") || keysPressed.has("d")) {
           playerXRef.current = Math.min(
             playerXRef.current + playerSpeed,
             canvas.width - playerWidth
           );
-          playerRotationRef.current = ps.rotation; // tilt right
+          playerRotationRef.current = playerStats.rotation; // tilt right
         } else {
-          playerRotationRef.current *= ps.rotationBack; // smooth return
+          playerRotationRef.current *= playerStats.rotationBack; // smooth return
         }
 
         /* === SHOOT PROJECTILES === */
@@ -1499,7 +1500,7 @@ function SpaceInvaders({ onClose }) {
           if (now - lastShotTimeRef.current > pr.cooldown) {
             const newProjectile = {
               x: playerXRef.current + playerWidth / 2 - 4,
-              y: canvas.height - ps.height - 10,
+              y: canvas.height - playerStats.height - 10,
               width: pr.width,
               height: pr.height,
               speed: projectileSpeed,
@@ -1943,12 +1944,10 @@ function SpaceInvaders({ onClose }) {
       shieldPowerUpRef.current.forEach((powerUp, sIndex) => {
         if (isGameEndingRef.current || isPlayerInvincible.current) return;
 
-        const ps = playerConfig.stats;
-
         const hit =
           powerUp.x < playerXRef.current + playerWidth &&
           powerUp.x + powerUp.width > playerXRef.current &&
-          powerUp.y < playerYRef.current + ps.height &&
+          powerUp.y < playerYRef.current + playerStats.height &&
           powerUp.y + powerUp.height > playerYRef.current;
 
         if (hit) {
@@ -2108,8 +2107,6 @@ function SpaceInvaders({ onClose }) {
         }
       }
       const drawPlayer = () => {
-        const ps = playerConfig.stats;
-
         c.save();
         // flash & player lose
         c.globalAlpha =
@@ -2119,12 +2116,12 @@ function SpaceInvaders({ onClose }) {
         // rotation
         c.translate(
           playerXRef.current + playerWidth / 2,
-          playerYRef.current + ps.height / 2
+          playerYRef.current + playerStats.height / 2
         );
         c.rotate(playerRotationRef.current);
         c.translate(
           -playerXRef.current - playerWidth / 2,
-          -playerYRef.current - ps.height / 2
+          -playerYRef.current - playerStats.height / 2
         );
         if (playerImageRef.current.complete) {
           c.drawImage(
@@ -2132,7 +2129,7 @@ function SpaceInvaders({ onClose }) {
             playerXRef.current,
             playerYRef.current,
             playerWidth,
-            ps.height
+            playerStats.height
           );
         } else {
           // fallback
@@ -2141,19 +2138,19 @@ function SpaceInvaders({ onClose }) {
             playerXRef.current,
             playerYRef.current,
             playerWidth,
-            ps.height
+            playerStats.height
           );
         }
         // debug - player hitbox
         // c.fillStyle = "rgba(255, 0, 0, 0.2)";
-        // c.fillRect(playerXRef.current, playerYRef.current, playerWidth, ps.height);
+        // c.fillRect(playerXRef.current, playerYRef.current, playerWidth, playerStats.height);
 
         // debug - log position & rotation
         // console.log({
         //   x: playerXRef.current,
         //   y: playerYRef.current,
         //   width: playerWidth,
-        //   height: ps.height,
+        //   height: playerStats.height,
         //   rotation: playerRotationRef.current.toFixed(2),
         // });
         c.restore();
@@ -2162,8 +2159,6 @@ function SpaceInvaders({ onClose }) {
 
       /* === DRAW: SHIELD ON PLAYER === */
       if (isShieldActiveRef.current && shieldImageRef.current.complete) {
-        const ps = playerConfig.stats;
-
         const now = performance.now();
         const elapsed = now - shieldStartTimeRef.current;
         const remaining = shieldConfig.time - elapsed;
@@ -2178,7 +2173,7 @@ function SpaceInvaders({ onClose }) {
         const shieldX =
           playerXRef.current + playerWidth / 2 - shieldConfig.width / 2;
         const shieldY =
-          playerYRef.current + ps.height / 2 - shieldConfig.height / 2;
+          playerYRef.current + playerStats.height / 2 - shieldConfig.height / 2;
 
         c.save();
         c.globalAlpha = opacity;
@@ -2675,8 +2670,6 @@ function SpaceInvaders({ onClose }) {
 
       /* === SPAWN: SHIP BUBBLE === */
       if (shipUpgradeRef.current) {
-        const ps = playerConfig.stats;
-
         const u = shipUpgradeRef.current;
 
         if (u.y < u.stopY) {
@@ -2689,7 +2682,7 @@ function SpaceInvaders({ onClose }) {
         const hit =
           u.x < playerXRef.current + playerWidth &&
           u.x + u.width > playerXRef.current &&
-          u.y < playerYRef.current + ps.height &&
+          u.y < playerYRef.current + playerStats.height &&
           u.y + u.height > playerYRef.current;
 
         if (hit) {
@@ -3029,8 +3022,6 @@ function SpaceInvaders({ onClose }) {
 
   /* === START & RESET === */
   const handleGameStart = () => {
-    const ps = playerConfig.stats;
-
     const randomTheme = themeURL[Math.floor(Math.random() * themeURL.length)];
     // debug - current theme
     // console.log("Playing theme:", randomTheme);
@@ -3038,7 +3029,7 @@ function SpaceInvaders({ onClose }) {
 
     if (gameOver) {
       // reset player
-      playerXRef.current = canvasRef.current.width / 2 - ps.width / 2;
+      playerXRef.current = canvasRef.current.width / 2 - playerStats.width / 2;
       playerRotationRef.current = 0;
       lastShotTimeRef.current = 0;
       livesRef.current = 5;
