@@ -32,7 +32,7 @@ import {
   updateInvaderGrids,
   checkInvaderLoseCondition,
 } from "./enemy/invader/logic";
-import { handleCollisionPlayerHitInvader } from "./enemy/invader/logic";
+import { handleCollisionPlayerHitInvader } from "./enemy/invader/collision";
 // Meteor
 import meteorConfig from "./enemy/meteor/config";
 import { setupMeteorSpawn } from "./enemy/meteor/spawn";
