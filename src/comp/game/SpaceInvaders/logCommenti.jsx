@@ -13,6 +13,7 @@ import shieldConfig from "./powerUp/shield/config";
 
 /* Enemies */
 import invaderConfig from "./enemy/invader/config";
+import meteorConfig from "./enemy/meteor/config";
 import followerConfig from "./enemy/follower/config";
 
 /******************************************************************************
@@ -44,17 +45,10 @@ function SpaceInvaders({ onClose }) {
 
   /* Gameplay */
   const scoreParams = {
-    meteorBig: 10,
-    meteorMed: 20,
-    meteorSmall: 50,
     boss: 5000,
   };
   const spawnScore = {
-    meteor: 500,
     boss: 10000, // 10k
-  };
-  const spawnTime = {
-    meteor: 3000,
   };
 
   /* Player */
@@ -346,28 +340,6 @@ function SpaceInvaders({ onClose }) {
 
   /* Meteor */
   const meteorsRef = useRef([]);
-  const meteorConfig = {
-    speed: {
-      big: 2,
-      med: 3,
-      small: 4,
-    },
-    speed2: {
-      big: 3.5,
-      med: 4.5,
-      small: 5.5,
-    },
-    lives: {
-      big: 3,
-      med: 2,
-      small: 1,
-    },
-    size: {
-      big: 96,
-      med: 43,
-      small: 28,
-    },
-  };
   const meteorImages = {
     big: new Image(),
     med: new Image(),
@@ -548,23 +520,6 @@ function SpaceInvaders({ onClose }) {
     color: "white",
   };
   const isBoostingRef = useRef(false);
-  const meteorParticles = {
-    big: {
-      color: "#FFA726",
-      opacity: 0.6,
-      count: 500,
-      radiusRange: [2, 6],
-      velocityRange: [2, 6],
-    },
-    med: {
-      color: "#FFCC26",
-      opacity: 0.5,
-      count: 250,
-      radiusRange: [1.5, 4],
-      velocityRange: [1.5, 4],
-    },
-    small: { color: "#FFDB26", opacity: 0.4, count: 15 },
-  };
   const bossParticles = {
     color: "#2B3345",
     opacity: 0.9,
@@ -1167,7 +1122,10 @@ function SpaceInvaders({ onClose }) {
 
     /* === SPAWN: METEOR === */
     const meteorSpawnInterval = setInterval(() => {
-      if (!bossActiveRef.current && scoreRef.current >= spawnScore.meteor) {
+      if (
+        !bossActiveRef.current &&
+        scoreRef.current >= meteorConfig.spawn.score
+      ) {
         const types = ["big", "med", "small"];
         const type = types[Math.floor(Math.random() * types.length)];
 
@@ -1194,7 +1152,7 @@ function SpaceInvaders({ onClose }) {
         // debug - spawn
         // console.log(`[METEOR] spawned a ${type} at x: ${x}`);
       }
-    }, spawnTime.meteor);
+    }, meteorConfig.spawn.time);
 
     /* === SPAWN: FOLLOWER === */
     const followerSpawnInterval = setInterval(() => {
@@ -1667,10 +1625,10 @@ function SpaceInvaders({ onClose }) {
               destroyEnemy({
                 x: centerX,
                 y: centerY,
-                particles: meteorParticles[m.type],
+                particles: meteorConfig.hitParticles[m.type],
                 sound: soundURL.destroyMeteor2,
                 volume: 0.4,
-                score: scoreParams.meteorSmall,
+                score: meteorConfig.score.small,
               });
 
               meteorsRef.current.splice(mIndex, 1);
@@ -1682,13 +1640,13 @@ function SpaceInvaders({ onClose }) {
                 // big
                 // debug - meteor downgrade
                 // console.log("BIG Meteor Hit → Becomes MED");
-                addScore(scoreParams.meteorBig);
+                addScore(meteorConfig.score.big);
                 m.type = "med";
               } else if (m.lives === 1) {
                 // med
                 // debug - meteor downgrade
                 // console.log("MED Meteor Hit → Becomes SMALL");
-                addScore(scoreParams.meteorMed);
+                addScore(meteorConfig.score.med);
                 m.type = "small";
               }
 
@@ -1700,7 +1658,7 @@ function SpaceInvaders({ onClose }) {
               hitEnemy({
                 x: centerX,
                 y: centerY,
-                particles: meteorParticles[currentType],
+                particles: meteorConfig.hitParticles[currentType],
                 sound: soundURL.destroyMeteor,
                 volume: 0.4,
               });
