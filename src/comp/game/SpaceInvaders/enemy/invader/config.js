@@ -5,7 +5,7 @@ const invaderConfig = {
     maxSpeed: 3,
     minSpeed: 2,
     retreadSpeed: 3,
-    single: 100, // cambia - 10
+    single: 1, // cambia - 10
     grid: 50,
   },
   projectile: {

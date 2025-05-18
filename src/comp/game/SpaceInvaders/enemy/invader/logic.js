@@ -1,13 +1,8 @@
-// invader/logic.js cambiaaaaa
-export function updateInvaderGrids(
-  invaderGridsRef,
-  canvas,
-  invaderConfig,
-  bossActiveRef
-) {
-  const inv = invaderConfig.stats;
-
+export function updateInvaderGrids(invaderGridsRef, canvas, invaderConfig) {
   invaderGridsRef.current.forEach((grid) => {
+    const inv = invaderConfig.stats;
+
+    // === BOSS - RETREAT ===
     if (grid.retreating) {
       if (grid.x + grid.width < canvas.width) {
         grid.x += grid.speed * grid.direction * inv.retreadSpeed;

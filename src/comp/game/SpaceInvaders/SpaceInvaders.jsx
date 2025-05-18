@@ -28,7 +28,10 @@ import {
   spawnInvaderProjectile,
 } from "./enemy/invader/spawn";
 import { drawInvaderGrids } from "./enemy/invader/draw";
-import { checkInvaderLoseCondition } from "./enemy/invader/logic";
+import {
+  updateInvaderGrids,
+  checkInvaderLoseCondition,
+} from "./enemy/invader/logic";
 // Meteor
 import meteorConfig from "./enemy/meteor/config";
 import { setupMeteorSpawn } from "./enemy/meteor/spawn";
@@ -957,30 +960,7 @@ function SpaceInvaders({ onClose }) {
        ***************************************************************/
 
       /* === INVADER GRIDS MOVEMENT === */
-      invaderGridsRef.current.forEach((grid) => {
-        const inv = invaderConfig.stats;
-
-        // === BOSS - RETREAT ===
-        if (grid.retreating) {
-          if (grid.x + grid.width < canvas.width) {
-            grid.x += grid.speed * grid.direction * inv.retreadSpeed;
-          } else {
-            invaderGridsRef.current = invaderGridsRef.current.filter(
-              (g) => g !== grid
-            );
-          }
-        } else {
-          grid.x += grid.speed * grid.direction;
-
-          const hitLeft = grid.x <= 0;
-          const hitRight = grid.x + grid.width >= canvas.width;
-
-          if (hitLeft || hitRight) {
-            grid.direction *= -1;
-            grid.y += 30;
-          }
-        }
-      });
+      updateInvaderGrids(invaderGridsRef, canvas, invaderConfig);
 
       /* === FOLLOWER MOVEMENT === */
       updateFollower({
