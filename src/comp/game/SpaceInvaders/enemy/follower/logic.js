@@ -18,7 +18,7 @@ export function updateFollower({
     const beamDuration = bossDefeatedRef.current ? fb.duration2 : fb.duration;
     const beamEnd = beamStart + beamDuration;
 
-    // === BOSS - RETREAT ===
+    // === BOSS-RETREAT ===
     if (follower.retreating) {
       follower.y -= 1.2;
       if (follower.retreatDirection === "left") {
@@ -27,7 +27,7 @@ export function updateFollower({
         follower.x += 1;
       }
 
-      // remove
+      // Retreat
       if (
         follower.y + follower.height < 0 ||
         follower.x + follower.width < 0 ||
@@ -40,10 +40,11 @@ export function updateFollower({
       return;
     }
 
+    // === MOVEMENT ===
     const targetX = playerX + playerWidth / 2 - follower.width / 2;
     const followerSpeed = bossDefeatedRef.current ? fs.speed2 : fs.speed;
 
-    // movement
+    // Follow Player
     if (!follower.isCharging && !follower.isShooting) {
       if (follower.x < targetX) {
         follower.x = Math.min(follower.x + followerSpeed, targetX);
@@ -52,6 +53,7 @@ export function updateFollower({
       }
     }
 
+    // === BEAM SEQUENCE ===
     follower.shootTimer++;
 
     // Charge Start
