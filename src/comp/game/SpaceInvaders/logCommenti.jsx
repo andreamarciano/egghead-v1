@@ -15,6 +15,7 @@ import shieldConfig from "./powerUp/shield/config";
 import invaderConfig from "./enemy/invader/config";
 import meteorConfig from "./enemy/meteor/config";
 import followerConfig from "./enemy/follower/config";
+import { followerChargeParticles } from "./enemy/follower/utils";
 
 /* Boss */
 import bossConfig from "./enemy/boss/config";
@@ -461,34 +462,6 @@ function SpaceInvaders({ onClose }) {
         opacity,
       });
     }
-  }
-  // Beam Charging Particles
-  function createFollowerChargeParticle(follower) {
-    const fp = followerConfig.beamParticles.charge;
-
-    const spawnAreaWidth = 100;
-    const spawnX =
-      follower.x + follower.width / 2 + (Math.random() - 0.5) * spawnAreaWidth;
-    const spawnY = follower.y + follower.height + 80 + Math.random() * 40;
-
-    const targetX = follower.x + follower.width / 2;
-    const targetY = follower.y + follower.height;
-
-    const angle = Math.atan2(targetY - spawnY, targetX - spawnX);
-    const speed = 1 + Math.random() * 1;
-
-    follower.particles.push({
-      x: spawnX,
-      y: spawnY,
-      radius: Math.random() * 2 + 1,
-      color: bossDefeatedRef.current ? fp.color2 : fp.color,
-      velocity: {
-        x: Math.cos(angle) * speed + (Math.random() - 0.5) * 0.3,
-        y: Math.sin(angle) * speed + (Math.random() - 0.5) * 0.3,
-      },
-      target: { x: targetX, y: targetY },
-      opacity: fp.opacity,
-    });
   }
 
   /***************************************************************
@@ -1962,7 +1935,7 @@ function SpaceInvaders({ onClose }) {
 
           // === Charge Particles ===
           if (Math.random() < 0.6) {
-            createFollowerChargeParticle(follower);
+            followerChargeParticles(follower, bossDefeatedRef, followerConfig);
           }
           for (let i = follower.particles.length - 1; i >= 0; i--) {
             const p = follower.particles[i];
