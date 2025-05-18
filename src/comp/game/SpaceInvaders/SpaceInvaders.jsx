@@ -10,7 +10,7 @@ import ControlsPopup from "./UI/ControlsPopup";
 import AudioSettings from "./UI/AudioSettings";
 
 /* Utils */
-import { createExplosion } from "./utils/explosion";
+import { createExplosion } from "./utils/createExplosion";
 
 /* Player */
 import playerConfig from "./player/config";
