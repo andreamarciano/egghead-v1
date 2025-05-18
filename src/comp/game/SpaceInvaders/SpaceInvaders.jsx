@@ -19,6 +19,7 @@ import { flashEffect } from "./player/utils";
 /* Power Up */
 import shieldConfig from "./powerUp/shield/config";
 import shipBubbleConfig from "./powerUp/ship/config";
+import { spawnShieldBubble } from "./powerUp/shield/spawn";
 import { collisionShieldHitPlayer } from "./powerUp/shield/collision";
 
 /* === Enemies === */
@@ -800,28 +801,16 @@ function SpaceInvaders({ onClose }) {
      ***************************************************************/
 
     /* === SPAWN: SHIELD BUBBLE === */
-    const shieldSpawnInterval = setInterval(() => {
-      if (
-        !bossRef.current?.entering &&
-        scoreRef.current >= shieldConfig.spawn.score
-      ) {
-        const bubble = shieldConfig.bubble;
-
-        const x = Math.floor(
-          Math.random() * (canvas.width - shieldStats.width)
-        );
-        const y = -bubble.height;
-
-        shieldPowerUpRef.current.push({
-          x,
-          y,
-          width: bubble.width,
-          height: bubble.height,
-          speed: bossDefeatedRef.current ? bubble.speed2 : bubble.speed,
-          image: shieldImageRef.current,
-        });
-      }
-    }, shieldConfig.spawn.time);
+    const shieldSpawnInterval = spawnShieldBubble(
+      bossRef,
+      bossDefeatedRef,
+      scoreRef,
+      shieldConfig,
+      canvas,
+      shieldImageRef,
+      shieldPowerUpRef,
+      shieldStats
+    );
 
     /***************************************************************
      *                    SECTION: SPAWN ENEMY                     *
