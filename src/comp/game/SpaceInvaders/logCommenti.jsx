@@ -157,6 +157,11 @@ function SpaceInvaders({ onClose }) {
       speed: 7,
       speed2: 7.3,
     },
+    hitParticles: {
+      color: "white",
+      opacity: 1,
+      count: 25,
+    },
   };
   const playerStats = playerConfig.stats;
   const projectileImages = {
@@ -186,7 +191,7 @@ function SpaceInvaders({ onClose }) {
     createExplosion(
       playerXRef.current + playerWidth / 2,
       playerYRef.current + playerStats.height / 2,
-      playerParticles
+      playerConfig.hitParticles
     );
   };
   // Ship Upgrade
@@ -726,11 +731,6 @@ function SpaceInvaders({ onClose }) {
     color: "white",
   };
   const isBoostingRef = useRef(false);
-  const playerParticles = {
-    color: "white",
-    opacity: 1,
-    count: 25,
-  };
   const meteorParticles = {
     big: {
       color: "#FFA726",
