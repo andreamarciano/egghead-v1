@@ -5,6 +5,9 @@ import "./SpaceInvaders.css";
 import imgURL from "./assets/imgURL";
 import { soundURL, themeURL, theme2URL, battleURL } from "./assets/soundURL";
 
+/* Utils */
+import { createExplosion } from "./utils/explosion";
+
 /* Player */
 import playerConfig from "./player/config";
 import { flashEffect } from "./player/utils";
@@ -70,11 +73,11 @@ function SpaceInvaders({ onClose }) {
   const handlePlayerHit = (playerWidth) => {
     flashEffect(playerOpacityRef, { playerActive: isPlayerActiveRef });
     playSound(soundURL.playerHit, 0.7);
-    createExplosion(
-      playerXRef.current + playerWidth / 2,
-      playerYRef.current + playerStats.height / 2,
-      playerConfig.hitParticles
-    );
+    createExplosion(particlesRef, {
+      x: playerXRef.current + playerWidth / 2,
+      y: playerYRef.current + playerStats.height / 2,
+      ...playerConfig.hitParticles,
+    });
   };
   // Ship Upgrade
   const shipUpgradeRef = useRef(null);
@@ -100,13 +103,13 @@ function SpaceInvaders({ onClose }) {
   const shieldStartTimeRef = useRef(null);
   const shieldStats = shieldConfig.stats;
   const handleShieldBlock = (x, y) => {
-    createExplosion(x, y, shieldConfig.hitParticles);
+    createExplosion(particlesRef, { x, y, ...shieldConfig.hitParticles });
     playSound(soundURL.shieldBlock, 0.5);
   };
 
   /* Enemy */
   const hitEnemy = ({ x, y, particles, sound, volume = 1 }) => {
-    createExplosion(x, y, particles);
+    createExplosion(particlesRef, { x, y, ...particles });
     playSound(sound, volume);
   };
   const destroyEnemy = ({ x, y, particles, sound, volume = 1, score }) => {
@@ -140,7 +143,7 @@ function SpaceInvaders({ onClose }) {
   const bossDefeatedRef = useRef(false);
   const bossStats = bossConfig.stats;
   const handleBossHit = (x, y) => {
-    createExplosion(x, y, bossConfig.hitParticles);
+    createExplosion(particlesRef, { x, y, ...bossConfig.hitParticles });
     playSound(soundURL.hitFollower, 0.6);
   };
   // Phase 1 - Boss Projectiles
@@ -427,31 +430,6 @@ function SpaceInvaders({ onClose }) {
   };
   const isBoostingRef = useRef(false);
   // Destroy-Hit Particles
-  function createExplosion(
-    x,
-    y,
-    { color, count, opacity, radiusRange = [1, 3], velocityRange = [1, 2] }
-  ) {
-    for (let i = 0; i < count; i++) {
-      const radius =
-        Math.random() * (radiusRange[1] - radiusRange[0]) + radiusRange[0];
-      const speed =
-        Math.random() * (velocityRange[1] - velocityRange[0]) +
-        velocityRange[0];
-
-      particlesRef.current.push({
-        x,
-        y,
-        radius,
-        color,
-        velocity: {
-          x: (Math.random() - 0.5) * speed,
-          y: (Math.random() - 0.5) * speed,
-        },
-        opacity,
-      });
-    }
-  }
 
   /***************************************************************
    *                       ANIMATION & UI                        *
