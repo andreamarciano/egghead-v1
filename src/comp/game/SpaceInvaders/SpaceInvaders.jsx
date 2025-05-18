@@ -100,6 +100,47 @@ function SpaceInvaders({ onClose }) {
     });
   }, []);
 
+  /* Power Up */
+  // Shield
+  const shieldImageRef = useRef(new Image());
+  const shieldPowerUpRef = useRef([]);
+  const isShieldActiveRef = useRef(false);
+  const shieldTimerRef = useRef(null);
+  const shieldStartTimeRef = useRef(null);
+  const shieldStats = shieldConfig.stats;
+  const handleShieldBlock = (x, y) => {
+    createExplosion(x, y, shieldConfig.hitParticles);
+    playSound(soundURL.shieldBlock, 0.5);
+  };
+
+  /* Enemy */
+  const hitEnemy = ({ x, y, particles, sound, volume = 1 }) => {
+    createExplosion(x, y, particles);
+    playSound(sound, volume);
+  };
+  const destroyEnemy = ({ x, y, particles, sound, volume = 1, score }) => {
+    hitEnemy({ x, y, particles, sound, volume });
+    addScore(score);
+  };
+
+  /* Invader */
+  const invaderImageRef = useRef(new Image());
+  const invaderGridsRef = useRef([]);
+  const invaderProjectilesRef = useRef([]);  
+
+  /* Follower */
+  const followerImageRef = useRef(new Image());
+  const followerImage2Ref = useRef(new Image());
+  const followersRef = useRef([]);
+
+  /* Meteor */
+  const meteorsRef = useRef([]);
+  const meteorImages = {
+    big: new Image(),
+    med: new Image(),
+    small: new Image(),
+  };
+
   /* Boss */
   const bossImageRef = useRef(new Image());
   const bossImage2Ref = useRef(new Image());
@@ -314,47 +355,6 @@ function SpaceInvaders({ onClose }) {
     }
 
     activeWeakPointsRef.current = selected;
-  };
-
-  /* Invader */
-  const invaderImageRef = useRef(new Image());
-  const invaderGridsRef = useRef([]);
-  const invaderProjectilesRef = useRef([]);
-
-  /* Enemy */
-  const hitEnemy = ({ x, y, particles, sound, volume = 1 }) => {
-    createExplosion(x, y, particles);
-    playSound(sound, volume);
-  };
-  const destroyEnemy = ({ x, y, particles, sound, volume = 1, score }) => {
-    hitEnemy({ x, y, particles, sound, volume });
-    addScore(score);
-  };
-
-  /* Follower */
-  const followerImageRef = useRef(new Image());
-  const followerImage2Ref = useRef(new Image());
-  const followersRef = useRef([]);
-
-  /* Meteor */
-  const meteorsRef = useRef([]);
-  const meteorImages = {
-    big: new Image(),
-    med: new Image(),
-    small: new Image(),
-  };
-
-  /* Power Up */
-  // Shield
-  const shieldImageRef = useRef(new Image());
-  const shieldPowerUpRef = useRef([]);
-  const isShieldActiveRef = useRef(false);
-  const shieldTimerRef = useRef(null);
-  const shieldStartTimeRef = useRef(null);
-  const shieldStats = shieldConfig.stats;
-  const handleShieldBlock = (x, y) => {
-    createExplosion(x, y, shieldConfig.hitParticles);
-    playSound(soundURL.shieldBlock, 0.5);
   };
 
   /* Score */
