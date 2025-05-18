@@ -7,6 +7,7 @@ import { soundURL, themeURL, theme2URL, battleURL } from "./assets/soundURL";
 
 /* Player */
 import playerConfig from "./player/config";
+import { flashEffect } from "./player/utils";
 
 /* Power Up */
 import shieldConfig from "./powerUp/shield/config";
@@ -455,27 +456,6 @@ function SpaceInvaders({ onClose }) {
   /***************************************************************
    *                       ANIMATION & UI                        *
    ***************************************************************/
-
-  /* Player Hit Animation */
-  function flashEffect(
-    ref,
-    { min = 0.2, max = 1, flashes = 10, interval = 100, playerActive } = {}
-  ) {
-    let count = 0;
-    const intervalId = setInterval(() => {
-      if (!playerActive) {
-        clearInterval(intervalId);
-        return;
-      }
-
-      ref.current = ref.current === max ? min : max;
-      count++;
-      if (count > flashes) {
-        clearInterval(intervalId);
-        ref.current = max;
-      }
-    }, interval);
-  }
 
   /* Score UI */
   const renderScoreImages = (score) => {
