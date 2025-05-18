@@ -315,7 +315,6 @@ function SpaceInvaders({ onClose }) {
   const [musicVolume, setMusicVolume] = useState(0.4);
   const [sfxVolume, setSfxVolume] = useState(0.8);
   const [laserVolume, setlaserVolume] = useState(0.2);
-  const [showVolumeSettings, setShowVolumeSettings] = useState(false);
   const gameBgMusic = useRef(null);
   const [currentTheme, setCurrentTheme] = useState(themeURL[0]);
   const sfxVolumeRef = useRef(sfxVolume);
@@ -509,16 +508,17 @@ function SpaceInvaders({ onClose }) {
   }, [score, displayedScore]);
 
   /***************************************************************
-   *                      useEFFECT: VOLUME                       *
+   *                            VOLUME                           *
    ***************************************************************/
 
-  // sfx
+  // Sync: audio ref volume → current volume
   useEffect(() => {
     sfxVolumeRef.current = sfxVolume;
     laserVolumeRef.current = laserVolume;
     audioEnabledRef.current = audioEnabled;
   }, [sfxVolume, laserVolume, audioEnabled]);
-  // Background Music Volume
+
+  // Sync: Bg music volume → current volume
   useEffect(() => {
     if (gameBgMusic.current) {
       gameBgMusic.current.volume = musicVolume;
@@ -527,7 +527,8 @@ function SpaceInvaders({ onClose }) {
       bossMusic.current.volume = musicVolume;
     }
   }, [musicVolume]);
-  // Background Music
+
+  // Load new Bg music
   useEffect(() => {
     if (gameBgMusic.current) {
       gameBgMusic.current.pause();
@@ -547,7 +548,8 @@ function SpaceInvaders({ onClose }) {
       gameBgMusic.current?.pause();
     };
   }, [currentTheme]);
-  // Play/Pause Background Music
+
+  // Play/Pause Bg
   useEffect(() => {
     if (bossActiveRef.current) {
       gameBgMusic.current?.pause();
@@ -566,7 +568,8 @@ function SpaceInvaders({ onClose }) {
       gameBgMusic.current?.pause();
     }
   }, [isGameRunning, gameOver, audioEnabled]);
-  // Global Music
+
+  // Manage all music
   useEffect(() => {
     if (!audioEnabled) {
       gameBgMusic.current?.pause();
