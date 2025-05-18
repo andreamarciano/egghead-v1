@@ -125,12 +125,10 @@ function SpaceInvaders({ onClose }) {
     boss: 5000,
   };
   const spawnScore = {
-    shield: 1000,
     meteor: 500,
     boss: 1000, // cambia - 10k
   };
   const spawnTime = {
-    shield: 15000,
     meteor: 3000,
   };
 
@@ -560,16 +558,30 @@ function SpaceInvaders({ onClose }) {
   const shieldTimerRef = useRef(null);
   const shieldStartTimeRef = useRef(null);
   const shieldConfig = {
-    width: 144,
-    height: 137,
-    time: 5000,
-    bubbleWidth: 40,
-    bubbleHeight: 40,
-    bubbleSpeed: 2,
-    bubbleSpeed2: 3.5,
+    stats: {
+      width: 144,
+      height: 137,
+      time: 5000,
+    },
+    bubble: {
+      width: 40,
+      height: 40,
+      speed: 2,
+      speed2: 3.5,
+    },
+    hitParticles: {
+      color: "#B5B0A8",
+      opacity: 0.5,
+      count: 100,
+    },
+    spawn: {
+      score: 1000,
+      time: 15000,
+    },
   };
+  const shieldStats = shieldConfig.stats;
   const handleShieldBlock = (x, y) => {
-    createExplosion(x, y, shieldParticles);
+    createExplosion(x, y, shieldConfig.hitParticles);
     playSound(soundURL.shieldBlock, 0.5);
   };
 
@@ -755,11 +767,6 @@ function SpaceInvaders({ onClose }) {
     count: 100,
     radiusRange: [2, 6],
     velocityRange: [2, 6],
-  };
-  const shieldParticles = {
-    color: "#B5B0A8",
-    opacity: 0.5,
-    count: 100,
   };
   // Destroy-Hit Particles
   function createExplosion(
@@ -1165,14 +1172,14 @@ function SpaceInvaders({ onClose }) {
     const getPlayerHitbox = (playerWidth) => {
       // === SHIELD HITBOX ===
       if (isShieldActiveRef.current) {
-        const x = playerXRef.current + playerWidth / 2 - shieldConfig.width / 2;
+        const x = playerXRef.current + playerWidth / 2 - shieldStats.width / 2;
         const y =
-          playerYRef.current + playerStats.height / 2 - shieldConfig.height / 2;
+          playerYRef.current + playerStats.height / 2 - shieldStats.height / 2;
         return {
           x,
           y,
-          width: shieldConfig.width,
-          height: shieldConfig.height,
+          width: shieldStats.width,
+          height: shieldStats.height,
         };
       }
 
@@ -1222,24 +1229,27 @@ function SpaceInvaders({ onClose }) {
 
     /* === SPAWN: SHIELD BUBBLE === */
     const shieldSpawnInterval = setInterval(() => {
-      if (!bossRef.current?.entering && scoreRef.current >= spawnScore.shield) {
+      if (
+        !bossRef.current?.entering &&
+        scoreRef.current >= shieldConfig.spawn.score
+      ) {
+        const bubble = shieldConfig.bubble;
+
         const x = Math.floor(
-          Math.random() * (canvas.width - shieldConfig.width)
+          Math.random() * (canvas.width - shieldStats.width)
         );
-        const y = -shieldConfig.bubbleHeight;
+        const y = -bubble.height;
 
         shieldPowerUpRef.current.push({
           x,
           y,
-          width: shieldConfig.bubbleWidth,
-          height: shieldConfig.bubbleHeight,
-          speed: bossDefeatedRef.current
-            ? shieldConfig.bubbleSpeed2
-            : shieldConfig.bubbleSpeed,
+          width: bubble.width,
+          height: bubble.height,
+          speed: bossDefeatedRef.current ? bubble.speed2 : bubble.speed,
           image: shieldImageRef.current,
         });
       }
-    }, spawnTime.shield);
+    }, shieldConfig.spawn.time);
 
     /***************************************************************
      *                    SECTION: SPAWN ENEMY                     *
@@ -1417,7 +1427,7 @@ function SpaceInvaders({ onClose }) {
       shieldTimerRef.current = setTimeout(() => {
         isShieldActiveRef.current = false;
         playSound(soundURL.shieldDown);
-      }, shieldConfig.time);
+      }, shieldStats.time);
     };
 
     /* === INPUT HANDLING === */
@@ -2048,7 +2058,7 @@ function SpaceInvaders({ onClose }) {
       if (isShieldActiveRef.current && shieldImageRef.current.complete) {
         const now = performance.now();
         const elapsed = now - shieldStartTimeRef.current;
-        const remaining = shieldConfig.time - elapsed;
+        const remaining = shieldStats.time - elapsed;
 
         // flash animation
         let opacity = 1;
@@ -2058,9 +2068,9 @@ function SpaceInvaders({ onClose }) {
         }
 
         const shieldX =
-          playerXRef.current + playerWidth / 2 - shieldConfig.width / 2;
+          playerXRef.current + playerWidth / 2 - shieldStats.width / 2;
         const shieldY =
-          playerYRef.current + playerStats.height / 2 - shieldConfig.height / 2;
+          playerYRef.current + playerStats.height / 2 - shieldStats.height / 2;
 
         c.save();
         c.globalAlpha = opacity;
@@ -2068,8 +2078,8 @@ function SpaceInvaders({ onClose }) {
           shieldImageRef.current,
           shieldX,
           shieldY,
-          shieldConfig.width,
-          shieldConfig.height
+          shieldStats.width,
+          shieldStats.height
         );
         c.restore();
       }
