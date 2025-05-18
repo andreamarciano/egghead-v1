@@ -21,17 +21,6 @@ import bossConfig from "./enemy/boss/config";
 import bossProjectileConfig from "./enemy/boss/projConfig";
 import bossLaserConfig from "./enemy/boss/laserConfig";
 
-/******************************************************************************
- *                                                                            *
- *      ▀▄   ▄▀   ▀▄   ▄▀   ▀▄   ▄▀   ▀▄   ▄▀   ▀▄   ▄▀   ▀▄   ▄▀              *
- *     ▄█▀███▀█▄ ▄█▀███▀█▄ ▄█▀███▀█▄ ▄█▀███▀█▄ ▄█▀███▀█▄ ▄█▀███▀█▄             *
- *     █▀█████▀█ █▀█████▀█ █▀█████▀█ █▀█████▀█ █▀█████▀█ █▀█████▀█             *
- *     ▀ ▀▀ ▀▀ ▀ ▀ ▀▀ ▀▀ ▀ ▀ ▀▀ ▀▀ ▀ ▀ ▀▀ ▀▀ ▀ ▀ ▀▀ ▀▀ ▀ ▀ ▀▀ ▀▀ ▀             *
- *                                                                            *
- *                         S P A C E   I N V A D E R S                        *
- *                                                                            *
- ******************************************************************************/
-
 function SpaceInvaders({ onClose }) {
   /* Canvas */
   const canvasRef = useRef(null);
@@ -90,7 +79,6 @@ function SpaceInvaders({ onClose }) {
     speed: 2,
   };
   useEffect(() => {
-    // pre-load
     ["greenPlayer2", "bluePlayer2", "redPlayer2"].forEach((key) => {
       const img = new Image();
       img.src = imgURL[key];
@@ -146,7 +134,7 @@ function SpaceInvaders({ onClose }) {
   const bossDefeatedRef = useRef(false);
   const bossStats = bossConfig.stats;
   const handleBossHit = (x, y) => {
-    createExplosion(x, y, bossParticles);
+    createExplosion(x, y, bossConfig.hitParticles);
     playSound(soundURL.hitFollower, 0.6);
   };
   // Phase 1 - Boss Projectiles
@@ -244,17 +232,6 @@ function SpaceInvaders({ onClose }) {
   const enablePhase3 = (value) => (isPhase3EnabledRef.current = value);
   // Boss Weak Points
   const activeWeakPointsRef = useRef([]);
-  const NUM_WEAK_POINTS = 4;
-  const bossWeakSpaces = [
-    { x: 100, y: 184, width: 29, height: 6 },
-    { x: 190, y: 184, width: 49, height: 6 },
-    { x: 310, y: 184, width: 49, height: 6 },
-    { x: 420, y: 184, width: 39, height: 6 },
-    { x: 540, y: 184, width: 39, height: 6 },
-    { x: 640, y: 184, width: 49, height: 6 },
-    { x: 760, y: 184, width: 49, height: 6 },
-    { x: 870, y: 184, width: 29, height: 6 },
-  ];
   const generateWeakPointInside = (space) => {
     const weakWidth = 18;
     const maxX = space.width - weakWidth;
@@ -268,10 +245,13 @@ function SpaceInvaders({ onClose }) {
     };
   };
   const pickRandomWeakPoints = () => {
-    const available = [...bossWeakSpaces];
+    const available = [...bossConfig.weakPoints.spaces];
     const selected = [];
 
-    while (selected.length < NUM_WEAK_POINTS && available.length > 0) {
+    while (
+      selected.length < bossConfig.weakPoints.count &&
+      available.length > 0
+    ) {
       const index = Math.floor(Math.random() * available.length);
       const space = available[index];
       selected.push(generateWeakPointInside(space));
@@ -440,13 +420,6 @@ function SpaceInvaders({ onClose }) {
     color: "white",
   };
   const isBoostingRef = useRef(false);
-  const bossParticles = {
-    color: "#2B3345",
-    opacity: 0.9,
-    count: 100,
-    radiusRange: [2, 6],
-    velocityRange: [2, 6],
-  };
   // Destroy-Hit Particles
   function createExplosion(
     x,
@@ -2503,7 +2476,7 @@ function SpaceInvaders({ onClose }) {
             const usedSpaces = activeWeakPointsRef.current.map(
               (p) => p.originSpace
             );
-            const remainingSpaces = bossWeakSpaces.filter(
+            const remainingSpaces = bossConfig.weakPoints.spaces.filter(
               (s) => !usedSpaces.includes(s)
             );
             if (remainingSpaces.length > 0) {
