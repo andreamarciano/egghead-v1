@@ -39,7 +39,10 @@ import {
 // Meteor
 import meteorConfig from "./enemy/meteor/config";
 import { setupMeteorSpawn } from "./enemy/meteor/spawn";
-import { collisionMeteorHitPlayer } from "./enemy/meteor/collision";
+import {
+  collisionMeteorHitPlayer,
+  collisionPlayerHitMeteor,
+} from "./enemy/meteor/collision";
 // Follower
 import followerConfig from "./enemy/follower/config";
 import { setupFollowerSpawn } from "./enemy/follower/spawn";
@@ -1095,62 +1098,16 @@ function SpaceInvaders({ onClose }) {
       );
 
       /* === COLLISION DETECTION: PLAYER PROJECTILE → METEOR === */
-      projectilesRef.current.forEach((p, pIndex) => {
-        meteorsRef.current.forEach((m, mIndex) => {
-          const hit =
-            p.x > m.x &&
-            p.x < m.x + m.width &&
-            p.y > m.y &&
-            p.y < m.y + m.height;
-
-          // === HIT: METEOR ===
-          if (hit) {
-            m.lives -= 1;
-            projectilesRef.current.splice(pIndex, 1);
-
-            const centerX = m.x + m.width / 2;
-            const centerY = m.y + m.height / 2;
-
-            if (m.lives <= 0) {
-              // DESTROY METEOR - Small
-              destroyEnemy({
-                x: centerX,
-                y: centerY,
-                particles: meteorConfig.hitParticles[m.type],
-                sound: soundURL.destroyMeteor2,
-                volume: 0.4,
-                score: meteorConfig.score.small,
-              });
-
-              meteorsRef.current.splice(mIndex, 1);
-            } else {
-              // HIT METEOR - Downgrade Type
-              const currentType = m.type;
-
-              if (m.lives === 2) {
-                addScore(meteorConfig.score.big);
-                m.type = "med";
-              } else if (m.lives === 1) {
-                addScore(meteorConfig.score.med);
-                m.type = "small";
-              }
-
-              m.width = meteorConfig.size[m.type];
-              m.height = meteorConfig.size[m.type];
-              m.image = meteorImages[m.type];
-              m.speed = meteorConfig.speed[m.type];
-
-              hitEnemy({
-                x: centerX,
-                y: centerY,
-                particles: meteorConfig.hitParticles[currentType],
-                sound: soundURL.destroyMeteor,
-                volume: 0.4,
-              });
-            }
-          }
-        });
-      });
+      collisionPlayerHitMeteor(
+        projectilesRef,
+        meteorsRef,
+        meteorConfig,
+        meteorImages,
+        hitEnemy,
+        destroyEnemy,
+        addScore,
+        soundURL
+      );
 
       /* === COLLISION DETECTION: PLAYER PROJECTILE → FOLLOWER === */
       collisionPlayerHitFollower(
