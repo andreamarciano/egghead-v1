@@ -16,6 +16,11 @@ import invaderConfig from "./enemy/invader/config";
 import meteorConfig from "./enemy/meteor/config";
 import followerConfig from "./enemy/follower/config";
 
+/* Boss */
+import bossConfig from "./enemy/boss/config";
+import bossProjectileConfig from "./enemy/boss/projConfig";
+import bossLaserConfig from "./enemy/boss/laserConfig";
+
 /******************************************************************************
  *                                                                            *
  *      ▀▄   ▄▀   ▀▄   ▄▀   ▀▄   ▄▀   ▀▄   ▄▀   ▀▄   ▄▀   ▀▄   ▄▀              *
@@ -42,14 +47,6 @@ function SpaceInvaders({ onClose }) {
   const [gameOver, setGameOver] = useState(false);
   const isGameEndingRef = useRef(false);
   const animationIdRef = useRef(null);
-
-  /* Gameplay */
-  const scoreParams = {
-    boss: 5000,
-  };
-  const spawnScore = {
-    boss: 10000, // 10k
-  };
 
   /* Player */
   const playerImageRef = useRef(new Image());
@@ -149,11 +146,7 @@ function SpaceInvaders({ onClose }) {
   const bossActiveRef = useRef(false);
   const bossRef = useRef(null);
   const bossDefeatedRef = useRef(false);
-  const bossConfig = {
-    width: 1000,
-    height: 250,
-    lives: 1000,
-  };
+  const bossStats = bossConfig.stats;
   const handleBossHit = (x, y) => {
     createExplosion(x, y, bossParticles);
     playSound(soundURL.hitFollower, 0.6);
@@ -162,77 +155,8 @@ function SpaceInvaders({ onClose }) {
   const bossProjectilesSmallRef = useRef([]);
   const bossProjectilesMediumRef = useRef([]);
   const bossProjectilesLargeRef = useRef([]);
-  const bossProjectileConfig = {
-    small: {
-      width: 4,
-      height: 12,
-      speed: 3,
-      damage: 1,
-      color: "yellow",
-      type: "small",
-    },
-    medium: {
-      width: 6,
-      height: 16,
-      speed: 2.5,
-      damage: 2,
-      color: "green",
-      type: "medium",
-    },
-    large: {
-      width: 10,
-      height: 20,
-      speed: 2,
-      damage: 3,
-      color: "red",
-      type: "large",
-    },
-  };
-  const bossGunOffsets = {
-    small: [157, 387, 607, 837],
-    medium: [272, 722],
-    large: [495],
-  };
   // Phase 2 - Boss Lasers
   const bossBeamsRef = useRef([]);
-  const bossLaserConfig = {
-    small: {
-      x: [75, 355, 645, 915],
-      y: [113, 113, 113, 113],
-      type: "small",
-      shootInterval: 5000,
-      chargeDuration: 1000,
-      beamDuration: 2000,
-      beamWidth: 12,
-      beamDamage: 1,
-      beamColor: "#00FFFF",
-      chargeColors: ["#ADFFFF", "#6BD6FF", "#3FAEFF", "#007BFF", "#004B8F"],
-    },
-    medium: {
-      x: [215, 779],
-      y: [122, 122],
-      type: "medium",
-      shootInterval: 7000,
-      chargeDuration: 1500,
-      beamDuration: 2500,
-      beamWidth: 20,
-      beamDamage: 2,
-      beamColor: "#00FF00",
-      chargeColors: ["#D4FFB2", "#A8FF7A", "#7DFF4A", "#4CDB29", "#1E7A11"],
-    },
-    large: {
-      x: [499],
-      y: [130],
-      type: "large",
-      shootInterval: 9000,
-      chargeDuration: 2000,
-      beamDuration: 3000,
-      beamWidth: 40,
-      beamDamage: 3,
-      beamColor: "#FF0000",
-      chargeColors: ["#FFFF00", "#FFC300", "#FF8C00", "#FF4500", "#FF0000"],
-    },
-  };
   // Boss Phase
   const updateBossPhase = () => {
     const b = bossRef.current;
@@ -834,7 +758,7 @@ function SpaceInvaders({ onClose }) {
   /* === SPAWN: BOSS === */
   useEffect(() => {
     if (
-      scoreRef.current >= spawnScore.boss &&
+      scoreRef.current >= bossConfig.spawn &&
       !bossActiveRef.current &&
       !bossDefeatedRef.current
     ) {
@@ -2256,17 +2180,17 @@ function SpaceInvaders({ onClose }) {
       if (
         bossActiveRef.current &&
         !bossRef.current &&
-        scoreRef.current >= spawnScore.boss
+        scoreRef.current >= bossConfig.spawn
       ) {
         // debug - boss spawn
         // console.log("Spawning boss");
 
         bossRef.current = {
-          x: canvas.width / 2 - bossConfig.width / 2,
-          y: -bossConfig.height,
-          width: bossConfig.width,
-          height: bossConfig.height,
-          lives: bossConfig.lives,
+          x: canvas.width / 2 - bossStats.width / 2,
+          y: -bossStats.height,
+          width: bossStats.width,
+          height: bossStats.height,
+          lives: bossStats.lives,
           entering: true,
           entrancePhase: "descending",
           phase: 1,
@@ -2370,6 +2294,8 @@ function SpaceInvaders({ onClose }) {
 
               bossBeamsRef.current = [];
               bossMusicPlayedRef.current = false;
+
+              addScore(bossStats.score);
 
               // === DRAW: SHIP BUBBLE ===
               const upgradeX = playerXRef.current + playerWidth / 2 - 20;
@@ -2481,11 +2407,11 @@ function SpaceInvaders({ onClose }) {
         const b = bossRef.current;
 
         // Small
-        bossGunOffsets.small.forEach((offsetX) => {
+        bossConfig.gunOffsets.small.forEach((offsetX) => {
           if (Math.random() < 0.03) {
             bossProjectilesSmallRef.current.push({
               x: b.x + offsetX,
-              y: b.y + bossConfig.height - 1,
+              y: b.y + bossStats.height - 1,
               ...bossProjectileConfig.small,
             });
             playLaserSound(soundURL.laserInvader);
@@ -2493,22 +2419,22 @@ function SpaceInvaders({ onClose }) {
         });
 
         // Medium
-        bossGunOffsets.medium.forEach((offsetX) => {
+        bossConfig.gunOffsets.medium.forEach((offsetX) => {
           if (Math.random() < 0.02) {
             bossProjectilesMediumRef.current.push({
               x: b.x + offsetX,
-              y: b.y + bossConfig.height - 1,
+              y: b.y + bossStats.height - 1,
               ...bossProjectileConfig.medium,
             });
           }
         });
 
         // Large
-        bossGunOffsets.large.forEach((offsetX) => {
+        bossConfig.gunOffsets.large.forEach((offsetX) => {
           if (Math.random() < 0.01) {
             bossProjectilesLargeRef.current.push({
               x: b.x + offsetX,
-              y: b.y + bossConfig.height - 1,
+              y: b.y + bossStats.height - 1,
               ...bossProjectileConfig.large,
             });
           }
