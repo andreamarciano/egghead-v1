@@ -28,6 +28,7 @@ import {
   spawnInvaderProjectile,
 } from "./enemy/invader/spawn";
 import { drawInvaderGrids } from "./enemy/invader/draw";
+import { checkInvaderLoseCondition } from "./enemy/invader/logic";
 // Meteor
 import meteorConfig from "./enemy/meteor/config";
 import { setupMeteorSpawn } from "./enemy/meteor/spawn";
@@ -994,13 +995,7 @@ function SpaceInvaders({ onClose }) {
       });
 
       // === LOSE CONDITION 2 ===
-      const hasLost = invaderGridsRef.current.some(
-        (grid) => grid.y + grid.height >= canvas.height + 10
-      );
-      if (hasLost) {
-        handleGameOver();
-        return;
-      }
+      checkInvaderLoseCondition(invaderGridsRef, canvas, handleGameOver);
 
       /* === CLEAR CANVAS === */
       c.clearRect(0, 0, canvas.width, canvas.height);
