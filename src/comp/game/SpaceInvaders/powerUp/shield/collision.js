@@ -6,8 +6,27 @@ export function collisionShieldHitPlayer(
   playerYRef,
   playerStats,
   playerWidth,
-  activateShield
+  isShieldActiveRef,
+  shieldStartTimeRef,
+  shieldTimerRef,
+  shieldStats,
+  playSound,
+  soundURL
 ) {
+  /* === ACTIVATE SHIELD === */
+  const activateShield = () => {
+    isShieldActiveRef.current = true;
+    shieldStartTimeRef.current = performance.now();
+
+    playSound(soundURL.shieldUp, 0.4);
+
+    if (shieldTimerRef.current) clearTimeout(shieldTimerRef.current);
+    shieldTimerRef.current = setTimeout(() => {
+      isShieldActiveRef.current = false;
+      playSound(soundURL.shieldDown);
+    }, shieldStats.time);
+  };
+
   shieldPowerUpRef.current.forEach((powerUp, sIndex) => {
     if (isGameEndingRef.current || isPlayerInvincible.current) return;
 

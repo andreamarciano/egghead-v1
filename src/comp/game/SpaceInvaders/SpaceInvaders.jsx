@@ -883,20 +883,6 @@ function SpaceInvaders({ onClose }) {
      *                      SECTION: FUNCTIONS                     *
      ***************************************************************/
 
-    /* === ACTIVATE SHIELD === */
-    const activateShield = () => {
-      isShieldActiveRef.current = true;
-      shieldStartTimeRef.current = performance.now();
-
-      playSound(soundURL.shieldUp, 0.4);
-
-      if (shieldTimerRef.current) clearTimeout(shieldTimerRef.current);
-      shieldTimerRef.current = setTimeout(() => {
-        isShieldActiveRef.current = false;
-        playSound(soundURL.shieldDown);
-      }, shieldStats.time);
-    };
-
     /* === INPUT HANDLING === */
     const keysPressed = new Set();
     const handleKeyDown = (e) => {
@@ -969,7 +955,7 @@ function SpaceInvaders({ onClose }) {
       setPlayerX(playerXRef.current);
 
       /***************************************************************
-       *             SECTION: SPAWN ELEMENT & MOVEMENT               *
+       *                        ENEMY MOVEMENT                       *
        ***************************************************************/
 
       /* === INVADER GRIDS MOVEMENT === */
@@ -1084,7 +1070,7 @@ function SpaceInvaders({ onClose }) {
       });
 
       /***************************************************************
-       *    SECTION: COLLISION DETECTION - PLAYER PROJECTILE →→→     *
+       *       COLLISION DETECTION - PLAYER PROJECTILE → ENEMY       *
        ***************************************************************/
 
       /* === COLLISION DETECTION: PLAYER PROJECTILE → INVADER === */
@@ -1121,7 +1107,7 @@ function SpaceInvaders({ onClose }) {
       );
 
       /***************************************************************
-       *       SECTION: COLLISION DETECTION - ENEMY →→→ PLAYER       *
+       *            COLLISION DETECTION - ENEMY → PLAYER             *
        ***************************************************************/
 
       /* === COLLISION DETECTION: SHIELD → PLAYER === */
@@ -1133,7 +1119,12 @@ function SpaceInvaders({ onClose }) {
         playerYRef,
         playerStats,
         playerWidth,
-        activateShield
+        isShieldActiveRef,
+        shieldStartTimeRef,
+        shieldTimerRef,
+        shieldStats,
+        playSound,
+        soundURL
       );
 
       /* === COLLISION DETECTION: INVADER PROJECTILE → PLAYER === */
