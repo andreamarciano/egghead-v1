@@ -8,6 +8,9 @@ import { soundURL, themeURL, theme2URL, battleURL } from "./assets/soundURL";
 /* Player */
 import playerConfig from "./player/config";
 
+/* Power Up */
+import shieldConfig from "./powerUp/shield/config";
+
 /* Enemies */
 import invaderConfig from "./enemy/invader/config";
 import followerConfig from "./enemy/follower/config";
@@ -371,35 +374,13 @@ function SpaceInvaders({ onClose }) {
     small: new Image(),
   };
 
-  /* PowerUp */
+  /* Power Up */
   // Shield
   const shieldImageRef = useRef(new Image());
   const shieldPowerUpRef = useRef([]);
   const isShieldActiveRef = useRef(false);
   const shieldTimerRef = useRef(null);
   const shieldStartTimeRef = useRef(null);
-  const shieldConfig = {
-    stats: {
-      width: 144,
-      height: 137,
-      time: 5000,
-    },
-    bubble: {
-      width: 40,
-      height: 40,
-      speed: 2,
-      speed2: 3.5,
-    },
-    hitParticles: {
-      color: "#B5B0A8",
-      opacity: 0.5,
-      count: 100,
-    },
-    spawn: {
-      score: 1000,
-      time: 15000,
-    },
-  };
   const shieldStats = shieldConfig.stats;
   const handleShieldBlock = (x, y) => {
     createExplosion(x, y, shieldConfig.hitParticles);
