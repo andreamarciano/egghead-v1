@@ -1,4 +1,4 @@
-export function collisionPlayerHitFolower(
+export function collisionPlayerHitFollower(
   projectilesRef,
   followersRef,
   followerConfig,
@@ -47,5 +47,69 @@ export function collisionPlayerHitFolower(
         projectilesRef.current.splice(pIndex, 1);
       }
     });
+  });
+}
+
+export function collisionFollowerHitPlayer(
+  canvas,
+  followersRef,
+  followerConfig,
+  isGameEndingRef,
+  isPlayerInvincible,
+  isShieldActiveRef,
+  handleShieldBlock,
+  handlePlayerHit,
+  livesRef,
+  setLives,
+  handleGameOver,
+  playerWidth,
+  getPlayerHitbox,
+  getFollowerBeamHitbox,
+  bossDefeatedRef
+) {
+  followersRef.current.forEach((follower) => {
+    if (isGameEndingRef.current || isPlayerInvincible.current) return;
+    if (!follower.isShooting) return;
+
+    const fb = followerConfig.beam;
+
+    const beamHitbox = getFollowerBeamHitbox({
+      follower,
+      followerConfig,
+      bossDefeatedRef,
+      canvas,
+    });
+
+    const playerHitbox = getPlayerHitbox(playerWidth);
+
+    const hit =
+      beamHitbox.x < playerHitbox.x + playerHitbox.width &&
+      beamHitbox.x + beamHitbox.width > playerHitbox.x &&
+      beamHitbox.y < playerHitbox.y + playerHitbox.height &&
+      beamHitbox.y + beamHitbox.height > playerHitbox.y;
+
+    if (hit && !follower.hasHitPlayer) {
+      follower.hasHitPlayer = true;
+
+      if (isShieldActiveRef.current) {
+        handleShieldBlock(
+          playerHitbox.x + playerHitbox.width / 2,
+          playerHitbox.y + playerHitbox.height / 2 - 50
+        );
+      } else {
+        handlePlayerHit(playerWidth);
+        const damage = bossDefeatedRef.current ? fb.damage2 : fb.damage;
+        const newLives = Math.max(0, livesRef.current - damage);
+        setLives(newLives);
+
+        if (newLives <= 0) {
+          handleGameOver();
+        }
+      }
+
+      if (!follower.isShooting) {
+        follower.hasHitPlayer = false;
+      }
+    }
   });
 }

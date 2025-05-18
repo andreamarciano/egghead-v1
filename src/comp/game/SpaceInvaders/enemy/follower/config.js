@@ -40,7 +40,7 @@ const followerConfig = {
     count: 100,
   },
   spawn: {
-    score: 10,
+    score: 750,
     time: 6500,
   },
 };
