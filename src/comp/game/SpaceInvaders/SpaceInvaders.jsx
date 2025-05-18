@@ -5,6 +5,9 @@ import "./SpaceInvaders.css";
 import imgURL from "./assets/imgURL";
 import { soundURL, themeURL, theme2URL, battleURL } from "./assets/soundURL";
 
+/* UI */
+import ControlsPopup from "./UI/ControlsPopup";
+
 /* Utils */
 import { createExplosion } from "./utils/explosion";
 
@@ -81,10 +84,9 @@ function SpaceInvaders({ onClose }) {
   };
   // Ship Upgrade
   const shipUpgradeRef = useRef(null);
-  const scaleShipBubble = 0.5;
   const shipBubbleConfig = {
-    width: 112 * scaleShipBubble,
-    height: 75 * scaleShipBubble,
+    width: 112 * 0.5,
+    height: 75 * 0.5,
     speed: 2,
   };
   useEffect(() => {
@@ -429,7 +431,6 @@ function SpaceInvaders({ onClose }) {
     color: "white",
   };
   const isBoostingRef = useRef(false);
-  // Destroy-Hit Particles
 
   /***************************************************************
    *                       ANIMATION & UI                        *
@@ -2285,74 +2286,8 @@ function SpaceInvaders({ onClose }) {
         ✖
       </button>
 
-      {/* Controls */}
-      <button
-        onClick={() => setShowControls((prev) => !prev)}
-        className="absolute top-2 right-20 bg-gray-200 hover:bg-gray-300 px-1 rounded cursor-pointer"
-      >
-        🎮
-      </button>
-      {showControls && (
-        <div className="absolute top-12 right-24 bg-white shadow-xl p-2 rounded border border-gray-300 z-50 text-black w-[350px]">
-          <h3 className="text-lg font-bold mb-4 text-center">
-            Keyboard Controls
-          </h3>
-
-          <div className="flex flex-col gap-2">
-            {/* Row 1 */}
-            <div className="flex gap-1 justify-center">
-              {"1234567890".split("").map((char) => (
-                <Key key={char} label={char} />
-              ))}
-            </div>
-
-            {/* Row 2 */}
-            <div className="flex gap-1 justify-center ml-4">
-              {"qwertyuiop".split("").map((char) => (
-                <Key key={char} label={char} />
-              ))}
-            </div>
-
-            {/* Row 3 */}
-            <div className="flex gap-1 justify-center">
-              {"asdfghjkl".split("").map((char) => (
-                <Key
-                  key={char}
-                  label={char}
-                  highlight={["a", "d"].includes(char)}
-                />
-              ))}
-            </div>
-
-            {/* Row 4 */}
-            <div className="flex gap-1 justify-center mr-10">
-              {"zxcvbnm".split("").map((char) => (
-                <Key key={char} label={char} />
-              ))}
-            </div>
-
-            {/* Row 5: Space + Arrows */}
-            <div className="flex justify-between items-center mt-2">
-              <div className="flex gap-1 ml-25">
-                <Key label="" wide highlight />
-              </div>
-              <div className="flex gap-1 mr-4">
-                <Key label="<" highlight />
-                <div className="flex flex-col gap-0.5">
-                  <Key label="˄" halfHeight tinyText />
-                  <Key label="˅" halfHeight tinyText />
-                </div>
-                <Key label=">" highlight />
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center justify-center mt-1">
-            <p className=" text-center text-sm text-gray-600">
-              Use arrows to move, space to shoot.
-            </p>
-          </div>
-        </div>
-      )}
+      {/* Controls Popup */}
+      <ControlsPopup />
 
       {/* Audio Settings */}
       <button
