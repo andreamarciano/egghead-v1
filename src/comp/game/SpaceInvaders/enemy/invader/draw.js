@@ -1,4 +1,3 @@
-// cambiaaaaaaa
 export function drawInvaderGrids(
   c,
   invaderGridsRef,

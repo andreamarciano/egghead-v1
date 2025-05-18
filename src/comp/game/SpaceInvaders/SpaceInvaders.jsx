@@ -27,6 +27,7 @@ import {
   scheduleInvaderGrid,
   spawnInvaderProjectile,
 } from "./enemy/invader/spawn";
+import { drawInvaderGrids } from "./enemy/invader/draw";
 // Meteor
 import meteorConfig from "./enemy/meteor/config";
 import { setupMeteorSpawn } from "./enemy/meteor/spawn";
@@ -1477,25 +1478,7 @@ function SpaceInvaders({ onClose }) {
       }
 
       /* === DRAW: INVADER GRIDS === */
-      invaderGridsRef.current.forEach((grid) => {
-        const inv = invaderConfig.stats;
-
-        for (let row = 0; row < grid.rows; row++) {
-          for (let col = 0; col < grid.cols; col++) {
-            if (!grid.invaders[row][col]) continue;
-
-            const x = grid.x + col * inv.width;
-            const y = grid.y + row * inv.height;
-
-            if (invaderImageRef.current.complete) {
-              c.drawImage(invaderImageRef.current, x, y, inv.width, inv.height);
-            } else {
-              c.fillStyle = "white";
-              c.fillRect(x, y, inv.width, inv.height);
-            }
-          }
-        }
-      });
+      drawInvaderGrids(c, invaderGridsRef, invaderConfig, invaderImageRef);
 
       /* === DRAW: FOLLOWER & BEAM === */
       drawFollower({
