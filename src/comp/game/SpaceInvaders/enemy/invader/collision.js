@@ -1,4 +1,4 @@
-export function handleCollisionPlayerHitInvader(
+export function collisionPlayerHitInvader(
   projectilesRef,
   invaderGridsRef,
   invaderConfig,
@@ -23,7 +23,7 @@ export function handleCollisionPlayerHitInvader(
               p.y < invaderY + inv.height &&
               p.y + p.height > invaderY;
 
-            // === HIT: INVADER ===
+            // === REMOVE INVADER ===
             if (hit) {
               grid.invaders[row][col] = false;
 
@@ -55,5 +55,55 @@ export function handleCollisionPlayerHitInvader(
       addScore(invaderConfig.stats.grid);
     }
     return stillHasInvaders;
+  });
+}
+
+export function collisionInvaderHitPlayer({
+  invaderProjectilesRef,
+  invaderConfig,
+  isGameEndingRef,
+  isPlayerInvincible,
+  isShieldActiveRef,
+  handleShieldBlock,
+  handlePlayerHit,
+  livesRef,
+  setLives,
+  handleGameOver,
+  playerWidth,
+  getPlayerHitbox,
+}) {
+  invaderProjectilesRef.current.forEach((p, index) => {
+    if (isGameEndingRef.current || isPlayerInvincible.current) return;
+
+    const pr = invaderConfig.projectile;
+
+    const hitbox = getPlayerHitbox(playerWidth);
+    const hit =
+      p.x < hitbox.x + hitbox.width &&
+      p.x + p.width > hitbox.x &&
+      p.y < hitbox.y + hitbox.height &&
+      p.y + p.height > hitbox.y;
+
+    if (hit) {
+      // === INVADER PROJECTILE → SHIELD ===
+      if (isShieldActiveRef.current) {
+        invaderProjectilesRef.current.splice(index, 1);
+
+        handleShieldBlock(p.x, p.y);
+
+        return;
+      }
+
+      handlePlayerHit(playerWidth);
+      const newLives = Math.max(0, livesRef.current - pr.damage);
+      setLives(newLives);
+
+      invaderProjectilesRef.current.splice(index, 1);
+
+      // === PLAYER LOSE ===
+      if (newLives <= 0) {
+        handleGameOver();
+      }
+    }
   });
 }

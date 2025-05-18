@@ -32,7 +32,10 @@ import {
   updateInvaderGrids,
   checkInvaderLoseCondition,
 } from "./enemy/invader/logic";
-import { handleCollisionPlayerHitInvader } from "./enemy/invader/collision";
+import {
+  collisionPlayerHitInvader,
+  collisionInvaderHitPlayer,
+} from "./enemy/invader/collision";
 // Meteor
 import meteorConfig from "./enemy/meteor/config";
 import { setupMeteorSpawn } from "./enemy/meteor/spawn";
@@ -1076,7 +1079,7 @@ function SpaceInvaders({ onClose }) {
        ***************************************************************/
 
       /* === COLLISION DETECTION: PLAYER PROJECTILE → INVADER === */
-      handleCollisionPlayerHitInvader(
+      collisionPlayerHitInvader(
         projectilesRef,
         invaderGridsRef,
         invaderConfig,
@@ -1210,39 +1213,19 @@ function SpaceInvaders({ onClose }) {
       });
 
       /* === COLLISION DETECTION: INVADER PROJECTILE → PLAYER === */
-      invaderProjectilesRef.current.forEach((p, index) => {
-        if (isGameEndingRef.current || isPlayerInvincible.current) return;
-
-        const pr = invaderConfig.projectile;
-
-        const hitbox = getPlayerHitbox(playerWidth);
-        const hit =
-          p.x < hitbox.x + hitbox.width &&
-          p.x + p.width > hitbox.x &&
-          p.y < hitbox.y + hitbox.height &&
-          p.y + p.height > hitbox.y;
-
-        if (hit) {
-          // === COLLISION DETECTION: INVADER PROJECTILE → SHIELD ===
-          if (isShieldActiveRef.current) {
-            invaderProjectilesRef.current.splice(index, 1);
-
-            handleShieldBlock(p.x, p.y);
-
-            return;
-          }
-
-          handlePlayerHit(playerWidth);
-          const newLives = Math.max(0, livesRef.current - pr.damage);
-          setLives(newLives);
-
-          invaderProjectilesRef.current.splice(index, 1);
-
-          // === LOSE CONDITION ===
-          if (newLives <= 0) {
-            handleGameOver();
-          }
-        }
+      collisionInvaderHitPlayer({
+        invaderProjectilesRef,
+        invaderConfig,
+        isGameEndingRef,
+        isPlayerInvincible,
+        isShieldActiveRef,
+        handleShieldBlock,
+        handlePlayerHit,
+        livesRef,
+        setLives,
+        handleGameOver,
+        playerWidth,
+        getPlayerHitbox,
       });
 
       /* === COLLISION DETECTION: METEOR → PLAYER === */
