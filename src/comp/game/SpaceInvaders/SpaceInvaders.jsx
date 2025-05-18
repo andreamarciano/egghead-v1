@@ -22,6 +22,11 @@ import shipBubbleConfig from "./powerUp/ship/config";
 
 /* === Enemies === */
 import invaderConfig from "./enemy/invader/config";
+import {
+  spawnInvaderGrid,
+  scheduleInvaderGrid,
+  spawnInvaderProjectile,
+} from "./enemy/invader/spawn";
 // Meteor
 import meteorConfig from "./enemy/meteor/config";
 import { setupMeteorSpawn } from "./enemy/meteor/spawn";
@@ -805,91 +810,25 @@ function SpaceInvaders({ onClose }) {
      ***************************************************************/
 
     /* === SPAWN: 1st INVADER GRID === */
-    const spawnInvaderGrid = () => {
-      const inv = invaderConfig.stats;
-
-      const cols = Math.floor(Math.random() * 10 + 5);
-      const rows = Math.floor(Math.random() * 5 + 2);
-      const gridWidth = cols * inv.width;
-      const gridHeight = rows * inv.height;
-
-      const x = 0;
-      const y = 0;
-
-      const sizeFactor = cols * rows;
-      const minSize = 5 * 2;
-      const maxSize = 15 * 7;
-      const speed =
-        inv.maxSpeed -
-        ((sizeFactor - minSize) / (maxSize - minSize)) *
-          (inv.maxSpeed - inv.minSpeed);
-
-      invaderGridsRef.current.push({
-        x,
-        y,
-        direction: 1,
-        width: gridWidth,
-        height: gridHeight,
-        cols,
-        rows,
-        speed,
-        invaders: Array.from({ length: rows }, () => Array(cols).fill(true)),
-        retreating: false,
-      });
-    };
-    spawnInvaderGrid();
+    spawnInvaderGrid(invaderGridsRef, invaderConfig);
     /* === SPAWN: NEXT INVADER GRIDS === */
-    let invaderGridTimeout;
-    const scheduleInvaderGrid = () => {
-      if (bossActiveRef.current) return;
-
-      const ft = invaderConfig.spawn;
-
-      const interval = Math.floor(Math.random() * (ft.max - ft.min) + ft.min);
-
-      invaderGridTimeout = setTimeout(() => {
-        if (!isGameRunning || bossActiveRef.current) return;
-
-        spawnInvaderGrid();
-        scheduleInvaderGrid();
-      }, interval);
-    };
-    scheduleInvaderGrid();
+    const invaderGridTimeout = scheduleInvaderGrid(
+      invaderGridsRef,
+      invaderConfig,
+      isGameRunning,
+      bossActiveRef
+    );
 
     /* === SPAWN: INVADER PROJECTILE === */
-    const invaderShootInterval = setInterval(() => {
-      const { stats: inv, projectile: pr } = invaderConfig;
-
-      if (!bossActiveRef.current && !bossDefeatedRef.current) {
-        invaderGridsRef.current.forEach((grid) => {
-          const aliveInvaders = [];
-          for (let row = 0; row < grid.rows; row++) {
-            for (let col = 0; col < grid.cols; col++) {
-              if (grid.invaders[row][col]) {
-                aliveInvaders.push({ row, col });
-              }
-            }
-          }
-
-          if (aliveInvaders.length > 0) {
-            const { row, col } =
-              aliveInvaders[Math.floor(Math.random() * aliveInvaders.length)];
-            const x = grid.x + col * inv.width + inv.width / 2 - pr.width / 2;
-            const y = grid.y + row * inv.height + inv.height;
-
-            invaderProjectilesRef.current.push({
-              x,
-              y,
-              width: pr.width,
-              height: pr.height,
-              speed: pr.speed,
-            });
-
-            playLaserSound(soundURL.laserInvader);
-          }
-        });
-      }
-    }, invaderConfig.spawn.projectile);
+    const invaderShootInterval = spawnInvaderProjectile(
+      invaderGridsRef,
+      invaderProjectilesRef,
+      invaderConfig,
+      bossActiveRef,
+      bossDefeatedRef,
+      soundURL,
+      playLaserSound
+    );
 
     /* === SPAWN: METEOR === */
     const meteorSpawnInterval = setupMeteorSpawn(
