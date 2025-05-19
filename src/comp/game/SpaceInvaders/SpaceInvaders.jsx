@@ -65,7 +65,10 @@ import {
   drawBossProjectiles,
 } from "./enemy/boss/bossProj";
 import bossLaserConfig from "./enemy/boss/laserConfig";
-import { collisionBossprojHitPlayer } from "./enemy/boss/collision";
+import {
+  collisionBossProjHitPlayer,
+  collisionBossBeamHitPlayer,
+} from "./enemy/boss/collision";
 
 /******************************************************************************
  *                                                                            *
@@ -1692,7 +1695,7 @@ function SpaceInvaders({ onClose }) {
       });
 
       /* === COLLISION DETECTION: BOSS PROJECTILES → PLAYER === */
-      collisionBossprojHitPlayer({
+      collisionBossProjHitPlayer({
         bossProjectilesRefs: [
           bossProjectilesSmallRef,
           bossProjectilesMediumRef,
@@ -1711,42 +1714,24 @@ function SpaceInvaders({ onClose }) {
       });
 
       /* === COLLISION DETECTION: BOSS LASERS → PLAYER === */
-      if (bossRef.current && isPhase2EnabledRef.current) {
-        bossBeamsRef.current.forEach((beam) => {
-          if (
-            !beam.isShooting ||
-            isGameEndingRef.current ||
-            isPlayerInvincible.current
-          )
-            return;
-
-          const beamHitbox = getBossBeamHitbox(beam);
-          const playerHitbox = getPlayerHitbox(playerWidth);
-
-          const hit =
-            beamHitbox.x < playerHitbox.x + playerHitbox.width &&
-            beamHitbox.x + beamHitbox.width > playerHitbox.x &&
-            beamHitbox.y < playerHitbox.y + playerHitbox.height &&
-            beamHitbox.y + beamHitbox.height > playerHitbox.y;
-
-          if (hit && !beam.hasHitPlayer) {
-            beam.hasHitPlayer = true;
-
-            if (isShieldActiveRef.current) {
-              handleShieldBlock(playerXRef.current, playerYRef.current - 50);
-              return;
-            }
-
-            handlePlayerHit(playerWidth);
-
-            const beamDamage = beam.damage;
-            const newLives = Math.max(0, livesRef.current - beamDamage);
-            setLives(newLives);
-
-            if (newLives <= 0) handleGameOver();
-          }
-        });
-      }
+      collisionBossBeamHitPlayer({
+        boss: bossRef.current,
+        bossBeamsRef,
+        isPhase2EnabledRef,
+        isGameEndingRef,
+        isPlayerInvincible,
+        isShieldActiveRef,
+        getBossBeamHitbox,
+        getPlayerHitbox,
+        playerWidth,
+        playerXRef,
+        playerYRef,
+        handleShieldBlock,
+        handlePlayerHit,
+        livesRef,
+        setLives,
+        handleGameOver,
+      });
 
       /* === COLLISION DETECTION: PLAYER PROJECTILE → BOSS === */
       if (bossRef.current && !bossRef.current.entering) {

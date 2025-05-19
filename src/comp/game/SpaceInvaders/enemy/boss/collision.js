@@ -1,4 +1,4 @@
-export function collisionBossprojHitPlayer({
+export function collisionBossProjHitPlayer({
   bossProjectilesRefs,
   getPlayerHitbox,
   playerWidth,
@@ -39,4 +39,60 @@ export function collisionBossprojHitPlayer({
       }
     });
   });
+}
+
+export function collisionBossBeamHitPlayer({
+  boss,
+  bossBeamsRef,
+  isPhase2EnabledRef,
+  isGameEndingRef,
+  isPlayerInvincible,
+  isShieldActiveRef,
+  getBossBeamHitbox,
+  getPlayerHitbox,
+  playerWidth,
+  playerXRef,
+  playerYRef,
+  handleShieldBlock,
+  handlePlayerHit,
+  livesRef,
+  setLives,
+  handleGameOver,
+}) {
+  if (boss && isPhase2EnabledRef.current) {
+    bossBeamsRef.current.forEach((beam) => {
+      if (
+        !beam.isShooting ||
+        isGameEndingRef.current ||
+        isPlayerInvincible.current
+      )
+        return;
+
+      const beamHitbox = getBossBeamHitbox(beam);
+      const playerHitbox = getPlayerHitbox(playerWidth);
+
+      const hit =
+        beamHitbox.x < playerHitbox.x + playerHitbox.width &&
+        beamHitbox.x + beamHitbox.width > playerHitbox.x &&
+        beamHitbox.y < playerHitbox.y + playerHitbox.height &&
+        beamHitbox.y + beamHitbox.height > playerHitbox.y;
+
+      if (hit && !beam.hasHitPlayer) {
+        beam.hasHitPlayer = true;
+
+        if (isShieldActiveRef.current) {
+          handleShieldBlock(playerXRef.current, playerYRef.current - 50);
+          return;
+        }
+
+        handlePlayerHit(playerWidth);
+
+        const beamDamage = beam.damage;
+        const newLives = Math.max(0, livesRef.current - beamDamage);
+        setLives(newLives);
+
+        if (newLives <= 0) handleGameOver();
+      }
+    });
+  }
 }
