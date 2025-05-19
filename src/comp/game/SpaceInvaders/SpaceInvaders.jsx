@@ -1856,6 +1856,7 @@ function SpaceInvaders({ onClose }) {
       isShieldActiveRef.current = false;
       shieldStartTimeRef.current = null;
       shieldPowerUpRef.current = [];
+      shipUpgradeRef.current = null;
 
       // reset enemy
       invaderGridsRef.current = [];
