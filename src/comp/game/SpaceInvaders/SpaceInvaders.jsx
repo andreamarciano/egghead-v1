@@ -1695,10 +1695,19 @@ function SpaceInvaders({ onClose }) {
       ) {
       }
 
-      /* === UPDATE: BOSS PROJECTILES === */
+      /* === DRAW & UPDATE: BOSS PROJECTILES === */
       const drawBossProjectiles = (projectiles, config) => {
         projectiles.forEach((p) => {
           p.y += p.speed;
+
+          c.fillStyle = config.borderColor;
+          c.fillRect(
+            p.x - config.borderSize,
+            p.y - config.borderSize,
+            config.width + config.borderSize * 2,
+            config.height + config.borderSize * 2
+          );
+
           c.fillStyle = config.color;
           c.fillRect(p.x, p.y, config.width, config.height);
         });

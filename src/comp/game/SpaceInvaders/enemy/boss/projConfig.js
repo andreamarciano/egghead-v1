@@ -5,6 +5,8 @@ const bossProjectileConfig = {
     speed: 3,
     damage: 1,
     color: "yellow",
+    borderColor: "#806600",
+    borderSize: 2,
     type: "small",
   },
   medium: {
@@ -13,6 +15,8 @@ const bossProjectileConfig = {
     speed: 2.5,
     damage: 2,
     color: "green",
+    borderColor: "#114232",
+    borderSize: 2,
     type: "medium",
   },
   large: {
@@ -21,6 +25,8 @@ const bossProjectileConfig = {
     speed: 2,
     damage: 3,
     color: "red",
+    borderColor: "#6D2C32",
+    borderSize: 3,
     type: "large",
   },
 };
