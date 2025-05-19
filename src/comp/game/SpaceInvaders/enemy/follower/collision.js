@@ -89,7 +89,7 @@ export function collisionFollowerHitPlayer(
       beamHitbox.y + beamHitbox.height > playerHitbox.y;
 
     if (hit && !follower.hasHitPlayer) {
-      follower.hasHitPlayer = true;
+      follower.hasHitPlayer = true; // avoid multiple hits in the same beam
 
       if (isShieldActiveRef.current) {
         handleShieldBlock(
@@ -107,6 +107,7 @@ export function collisionFollowerHitPlayer(
         }
       }
 
+      // allow new hits in the next beam
       if (!follower.isShooting) {
         follower.hasHitPlayer = false;
       }
