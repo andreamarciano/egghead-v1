@@ -65,6 +65,7 @@ import {
   drawBossProjectiles,
 } from "./enemy/boss/bossProj";
 import bossLaserConfig from "./enemy/boss/laserConfig";
+import { collisionBossprojHitPlayer } from "./enemy/boss/collision";
 
 /******************************************************************************
  *                                                                            *
@@ -1677,7 +1678,7 @@ function SpaceInvaders({ onClose }) {
       ) {
       }
 
-      /* === DRAW & UPDATE: BOSS PROJECTILES === */
+      /* === DRAW: BOSS PROJECTILES === */
       [
         bossProjectilesSmallRef,
         bossProjectilesMediumRef,
@@ -1691,38 +1692,22 @@ function SpaceInvaders({ onClose }) {
       });
 
       /* === COLLISION DETECTION: BOSS PROJECTILES → PLAYER === */
-      const bossProjectileRefs = [
-        bossProjectilesSmallRef,
-        bossProjectilesMediumRef,
-        bossProjectilesLargeRef,
-      ];
-      bossProjectileRefs.forEach((ref) => {
-        ref.current.forEach((p, index) => {
-          if (isGameEndingRef.current || isPlayerInvincible.current) return;
-
-          const hitbox = getPlayerHitbox(playerWidth);
-          const hit =
-            p.x < hitbox.x + hitbox.width &&
-            p.x + p.width > hitbox.x &&
-            p.y < hitbox.y + hitbox.height &&
-            p.y + p.height > hitbox.y;
-
-          if (hit) {
-            ref.current.splice(index, 1);
-
-            if (isShieldActiveRef.current) {
-              handleShieldBlock(p.x, p.y);
-              return;
-            }
-
-            handlePlayerHit(playerWidth);
-
-            const newLives = Math.max(0, livesRef.current - (p.damage || 1));
-            setLives(newLives);
-
-            if (newLives <= 0) handleGameOver();
-          }
-        });
+      collisionBossprojHitPlayer({
+        bossProjectilesRefs: [
+          bossProjectilesSmallRef,
+          bossProjectilesMediumRef,
+          bossProjectilesLargeRef,
+        ],
+        getPlayerHitbox,
+        playerWidth,
+        isPlayerInvincible,
+        isGameEnding: isGameEndingRef,
+        isShieldActive: isShieldActiveRef,
+        handleShieldBlock,
+        handlePlayerHit,
+        livesRef,
+        setLives,
+        handleGameOver,
       });
 
       /* === COLLISION DETECTION: BOSS LASERS → PLAYER === */
