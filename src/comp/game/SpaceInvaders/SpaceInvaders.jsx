@@ -1397,7 +1397,7 @@ function SpaceInvaders({ onClose }) {
             // DESCENDING → RISING
             if (b.entrancePhase === "descending") {
               playerTransitionRef.current = "exitScene";
-              b.y += 0.3; // descending speed
+              b.y += 2; // descending speed - cambia 0.3
 
               if (b.y >= 0) {
                 b.entrancePhase = "rising";
@@ -1406,7 +1406,7 @@ function SpaceInvaders({ onClose }) {
             } else if (b.entrancePhase === "rising") {
               playerTransitionRef.current = "reenterScene";
               isBoostingRef.current = false;
-              b.y -= 0.5; // rising speed
+              b.y -= 2; // rising speed - cambia 0.5
 
               if (b.y <= -40) {
                 b.y = -40;
@@ -1583,6 +1583,7 @@ function SpaceInvaders({ onClose }) {
               x: b.x + offsetX,
               y: b.y + bossStats.height - 1,
               ...bossProjectileConfig.small,
+              shape: Math.random() < 0.5 ? "rect" : "triangle",
             });
             playLaserSound(soundURL.laserInvader);
           }
@@ -1700,16 +1701,42 @@ function SpaceInvaders({ onClose }) {
         projectiles.forEach((p) => {
           p.y += p.speed;
 
-          c.fillStyle = config.borderColor;
-          c.fillRect(
-            p.x - config.borderSize,
-            p.y - config.borderSize,
-            config.width + config.borderSize * 2,
-            config.height + config.borderSize * 2
-          );
+          if (p.shape === "triangle") {
+            c.fillStyle = config.borderColor;
+            c.beginPath();
+            c.moveTo(p.x - config.borderSize, p.y);
+            c.lineTo(
+              p.x + config.width / 2,
+              p.y + config.height + config.borderSize
+            );
+            c.lineTo(p.x + config.width + config.borderSize, p.y);
+            c.closePath();
+            c.fill();
 
-          c.fillStyle = config.color;
-          c.fillRect(p.x, p.y, config.width, config.height);
+            c.fillStyle = config.color;
+            c.beginPath();
+            c.moveTo(p.x, p.y);
+            c.lineTo(p.x + config.width / 2, p.y + config.height);
+            c.lineTo(p.x + config.width, p.y);
+            c.closePath();
+            c.fill();
+
+            // hitbox
+            // c.strokeStyle = "lime";
+            // c.lineWidth = 1;
+            // c.strokeRect(p.x, p.y, config.width, config.height);
+          } else {
+            c.fillStyle = config.borderColor;
+            c.fillRect(
+              p.x - config.borderSize,
+              p.y - config.borderSize,
+              config.width + config.borderSize * 2,
+              config.height + config.borderSize * 2
+            );
+
+            c.fillStyle = config.color;
+            c.fillRect(p.x, p.y, config.width, config.height);
+          }
         });
       };
 
