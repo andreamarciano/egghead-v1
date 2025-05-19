@@ -1644,30 +1644,166 @@ function SpaceInvaders({ onClose }) {
           }
 
           // === BEAM RENDER ===
-          if (beam.isShooting) {
-            const baseWidth = hitbox.width * 2;
-            const tipWidth = hitbox.width;
-            const beamHeight = hitbox.height;
-            const startX = hitbox.x + hitbox.width / 2;
-            const startY = hitbox.y + 15;
+          // if (beam.isShooting) {
+          //   const baseWidth = hitbox.width * 2;
+          //   const tipWidth = hitbox.width;
+          //   const beamHeight = hitbox.height;
+          //   const startX = hitbox.x + hitbox.width / 2;
+          //   const startY = hitbox.y + 15;
+
+          //   c.save();
+          //   c.beginPath();
+          //   c.moveTo(startX - baseWidth / 2, startY);
+          //   c.quadraticCurveTo(
+          //     startX,
+          //     startY - 40,
+          //     startX + baseWidth / 2,
+          //     startY
+          //   );
+          //   c.lineTo(startX + tipWidth / 2, startY + beamHeight);
+          //   c.lineTo(startX - tipWidth / 2, startY + beamHeight);
+          //   c.closePath();
+
+          //   c.fillStyle = beam.color;
+          //   c.globalAlpha = 0.7;
+          //   c.fill();
+          //   c.restore();
+          // }
+
+          if (beam.isShooting && beam.type === "small") {
+            const baseX = hitbox.x;
+            const baseY = hitbox.y;
+            const width = hitbox.width;
+            const height = hitbox.height;
+
+            const time = performance.now() / 200;
+            const oscillationAmplitude = width * 0.1;
+
+            const pointsLeft = [
+              { x: 5, y: 20 },
+              { x: 4, y: 18 },
+              { x: 5, y: 17 },
+              { x: 4, y: 15 },
+              { x: 5, y: 14 },
+              { x: 3.5, y: 11 },
+              { x: 4, y: 10 },
+              { x: 3.6, y: 9 },
+              { x: 3.8, y: 8 },
+              { x: 3.6, y: 7 },
+              { x: 3.8, y: 6 },
+              { x: 3, y: 5 },
+              { x: 5, y: 3 },
+              { x: 4, y: 2 },
+              { x: 4.5, y: 1.5 },
+              { x: 4, y: 0.5 },
+              { x: 4, y: -0.5 },
+            ];
+
+            const pointsRight = [
+              { x: 6, y: 20 },
+              { x: 5, y: 18 },
+              { x: 6, y: 17 },
+              { x: 5, y: 15 },
+              { x: 6, y: 14 },
+              { x: 4.5, y: 11 },
+              { x: 5, y: 10 },
+              { x: 4.6, y: 9 },
+              { x: 5, y: 8 },
+              { x: 4.8, y: 7 },
+              { x: 5, y: 6 },
+              { x: 4, y: 5 },
+              { x: 6, y: 3 },
+              { x: 5, y: 2 },
+              { x: 5.5, y: 1.5 },
+              { x: 5, y: 0.5 },
+              { x: 5, y: -0.5 },
+            ];
+
+            function transformPoint(p, sideFactor = 1) {
+              const oscillationX =
+                oscillationAmplitude * Math.sin(time + p.y * 0.5) * sideFactor;
+
+              return {
+                x: baseX + (p.x - 4.5) * width + oscillationX,
+                y: baseY + height - p.y * (height / 20),
+              };
+            }
 
             c.save();
             c.beginPath();
-            c.moveTo(startX - baseWidth / 2, startY);
-            c.quadraticCurveTo(
-              startX,
-              startY - 40,
-              startX + baseWidth / 2,
-              startY
-            );
-            c.lineTo(startX + tipWidth / 2, startY + beamHeight);
-            c.lineTo(startX - tipWidth / 2, startY + beamHeight);
+
+            let p = transformPoint(pointsLeft[0], -1);
+            c.moveTo(p.x, p.y);
+
+            for (let i = 1; i < pointsLeft.length; i++) {
+              p = transformPoint(pointsLeft[i], -1);
+              c.lineTo(p.x, p.y);
+            }
+
+            for (let i = pointsRight.length - 1; i >= 0; i--) {
+              p = transformPoint(pointsRight[i], 1);
+              c.lineTo(p.x, p.y);
+            }
+
             c.closePath();
 
             c.fillStyle = beam.color;
-            c.globalAlpha = 0.7;
+            c.globalAlpha = 0.8;
             c.fill();
+
+            // Sparkles
+            if (!beam.sparkles) {
+              beam.sparkles = Array.from({ length: 20 }).map(() => ({
+                xOffset: (Math.random() - 0.5) * 20,
+                y: Math.random() * height,
+                speed: 0.3 + Math.random() * 0.5,
+                life: 1000 + Math.random() * 1000,
+                startTime: performance.now() - Math.random() * 1000,
+                length: 6 + Math.random() * 6,
+              }));
+            }
+            const now = performance.now();
+            const centerX = baseX + width / 2;
+            beam.sparkles.forEach((sparkle) => {
+              const elapsed = now - sparkle.startTime;
+              if (elapsed > sparkle.life) {
+                sparkle.y = Math.random() * height;
+                sparkle.startTime = now;
+              } else {
+                sparkle.y -= sparkle.speed;
+                if (sparkle.y > height) sparkle.y = 0;
+
+                const flashFrequency = 2;
+                const alpha =
+                  0.4 +
+                  0.6 *
+                    Math.abs(
+                      Math.sin(
+                        (elapsed / sparkle.life) * flashFrequency * Math.PI * 2
+                      )
+                    );
+
+                c.strokeStyle = `rgba(30, 120, 200, ${alpha.toFixed(2)})`;
+                c.lineWidth = 1;
+
+                const direction = sparkle.xOffset > 0 ? 1 : -1;
+
+                c.beginPath();
+                c.moveTo(centerX + sparkle.xOffset, baseY + height - sparkle.y);
+                c.lineTo(
+                  centerX + sparkle.xOffset + direction * 2,
+                  baseY + height - sparkle.y - sparkle.length
+                );
+                c.stroke();
+              }
+            });
+
             c.restore();
+
+            // hitbox
+            // c.strokeStyle = "white";
+            // c.lineWidth = 2;
+            // c.strokeRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
           }
 
           return true;
