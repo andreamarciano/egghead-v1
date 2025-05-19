@@ -111,8 +111,8 @@ function SpaceInvaders({ onClose }) {
   const lastShotTimeRef = useRef(0);
   const projectilesRef = useRef([]);
   // Lives
-  const [lives, setLives] = useState(5);
-  const livesRef = useRef(5);
+  const [lives, setLives] = useState(50); // cambia - 5
+  const livesRef = useRef(50); // cambia -5
   const [animateLifeLoss, setAnimateLifeLoss] = useState(false);
   const previousLivesRef = useRef(lives);
   const handlePlayerHit = (playerWidth) => {
@@ -1579,11 +1579,12 @@ function SpaceInvaders({ onClose }) {
         // Small
         bossConfig.gunOffsets.small.forEach((offsetX) => {
           if (Math.random() < 0.03) {
+            const shapes = ["rect", "triangle"];
             bossProjectilesSmallRef.current.push({
               x: b.x + offsetX,
               y: b.y + bossStats.height - 1,
               ...bossProjectileConfig.small,
-              shape: Math.random() < 0.5 ? "rect" : "triangle",
+              shape: shapes[Math.floor(Math.random() * shapes.length)],
             });
             playLaserSound(soundURL.laserInvader);
           }
@@ -1592,10 +1593,12 @@ function SpaceInvaders({ onClose }) {
         // Medium
         bossConfig.gunOffsets.medium.forEach((offsetX) => {
           if (Math.random() < 0.02) {
+            const shapes = ["rect", "diamond", "s"];
             bossProjectilesMediumRef.current.push({
               x: b.x + offsetX,
               y: b.y + bossStats.height - 1,
               ...bossProjectileConfig.medium,
+              shape: shapes[Math.floor(Math.random() * shapes.length)],
             });
           }
         });
@@ -1603,10 +1606,12 @@ function SpaceInvaders({ onClose }) {
         // Large
         bossConfig.gunOffsets.large.forEach((offsetX) => {
           if (Math.random() < 0.01) {
+            const shapes = ["rect", "diamond", "triangle"];
             bossProjectilesLargeRef.current.push({
               x: b.x + offsetX,
               y: b.y + bossStats.height - 1,
               ...bossProjectileConfig.large,
+              shape: shapes[Math.floor(Math.random() * shapes.length)],
             });
           }
         });
@@ -1701,41 +1706,214 @@ function SpaceInvaders({ onClose }) {
         projectiles.forEach((p) => {
           p.y += p.speed;
 
-          if (p.shape === "triangle") {
-            c.fillStyle = config.borderColor;
-            c.beginPath();
-            c.moveTo(p.x - config.borderSize, p.y);
-            c.lineTo(
-              p.x + config.width / 2,
-              p.y + config.height + config.borderSize
-            );
-            c.lineTo(p.x + config.width + config.borderSize, p.y);
-            c.closePath();
-            c.fill();
+          switch (p.shape) {
+            case "triangle":
+              if (p.type === "large") {
+                const time = performance.now() / 300;
+                const stretch = 1 + Math.sin(time + p.y * 0.05) * 0.2;
+                const wobble = Math.sin(time + p.x * 0.05) * 4;
+                const dynamicHeight = config.height * stretch;
 
-            c.fillStyle = config.color;
-            c.beginPath();
-            c.moveTo(p.x, p.y);
-            c.lineTo(p.x + config.width / 2, p.y + config.height);
-            c.lineTo(p.x + config.width, p.y);
-            c.closePath();
-            c.fill();
+                c.fillStyle = config.borderColor;
+                c.beginPath();
+                c.moveTo(p.x - config.borderSize + wobble, p.y);
+                c.lineTo(
+                  p.x + config.width / 2,
+                  p.y + dynamicHeight + config.borderSize
+                );
+                c.lineTo(p.x + config.width + config.borderSize + wobble, p.y);
+                c.closePath();
+                c.fill();
 
-            // hitbox
-            // c.strokeStyle = "lime";
-            // c.lineWidth = 1;
-            // c.strokeRect(p.x, p.y, config.width, config.height);
-          } else {
-            c.fillStyle = config.borderColor;
-            c.fillRect(
-              p.x - config.borderSize,
-              p.y - config.borderSize,
-              config.width + config.borderSize * 2,
-              config.height + config.borderSize * 2
-            );
+                c.fillStyle = config.color;
+                c.beginPath();
+                c.moveTo(p.x + wobble, p.y);
+                c.lineTo(p.x + config.width / 2, p.y + dynamicHeight);
+                c.lineTo(p.x + config.width + wobble, p.y);
+                c.closePath();
+                c.fill();
 
-            c.fillStyle = config.color;
-            c.fillRect(p.x, p.y, config.width, config.height);
+                // hitbox
+                // c.strokeStyle = "lime";
+                // c.lineWidth = 1;
+                // c.strokeRect(p.x, p.y, config.width, config.height);
+              } else {
+                c.fillStyle = config.borderColor;
+                c.beginPath();
+                c.moveTo(p.x - config.borderSize, p.y);
+                c.lineTo(
+                  p.x + config.width / 2,
+                  p.y + config.height + config.borderSize
+                );
+                c.lineTo(p.x + config.width + config.borderSize, p.y);
+                c.closePath();
+                c.fill();
+
+                c.fillStyle = config.color;
+                c.beginPath();
+                c.moveTo(p.x, p.y);
+                c.lineTo(p.x + config.width / 2, p.y + config.height);
+                c.lineTo(p.x + config.width, p.y);
+                c.closePath();
+                c.fill();
+
+                // hitbox
+                // c.strokeStyle = "red";
+                // c.lineWidth = 1;
+                // c.strokeRect(p.x, p.y, config.width, config.height);
+
+                break;
+              }
+
+            case "diamond": {
+              let width = config.width;
+              let height = config.height;
+              let offsetY = 0;
+
+              const isMedium = p.type === "medium";
+              const isLarge = p.type === "large";
+
+              if (isLarge) {
+                const time = performance.now() / 200;
+                const wave = Math.sin(time + p.x * 0.05);
+                width += wave * 3;
+                offsetY = Math.sin(time + p.y * 0.1) * 1.5;
+
+                // hitbox
+                // c.strokeStyle = "lime";
+                // c.lineWidth = 1;
+                // c.strokeRect(p.x, p.y, config.width, config.height);
+              }
+
+              if (isMedium) {
+                c.save();
+
+                const centerX = p.x + width / 2;
+                const centerY = p.y + height / 2 + offsetY;
+                const rotation = (performance.now() / 300) % (2 * Math.PI);
+
+                c.translate(centerX, centerY);
+                c.rotate(rotation);
+                c.translate(-centerX, -centerY);
+              }
+
+              c.fillStyle = config.borderColor;
+              c.beginPath();
+              c.moveTo(p.x + width / 2, p.y + offsetY - config.borderSize);
+              c.lineTo(p.x - config.borderSize, p.y + height / 2 + offsetY);
+              c.lineTo(
+                p.x + width / 2,
+                p.y + height + offsetY + config.borderSize
+              );
+              c.lineTo(
+                p.x + width + config.borderSize,
+                p.y + height / 2 + offsetY
+              );
+              c.closePath();
+              c.fill();
+
+              c.fillStyle = config.color;
+              c.beginPath();
+              c.moveTo(p.x + width / 2, p.y + offsetY);
+              c.lineTo(p.x, p.y + height / 2 + offsetY);
+              c.lineTo(p.x + width / 2, p.y + height + offsetY);
+              c.lineTo(p.x + width, p.y + height / 2 + offsetY);
+              c.closePath();
+              c.fill();
+
+              if (isMedium) {
+                // hitbox
+                // c.strokeStyle = "red";
+                // c.lineWidth = 1;
+                // c.strokeRect(p.x, p.y, config.width, config.height);
+
+                c.restore();
+              }
+
+              break;
+            }
+
+            case "s": {
+              c.save();
+
+              const centerX = p.x + config.width / 2;
+              const centerY = p.y + config.height / 2;
+              const rotation = (performance.now() / 100) % (2 * Math.PI);
+
+              c.translate(centerX, centerY);
+              c.rotate(rotation);
+              c.translate(-centerX, -centerY);
+
+              const path = [
+                [p.x + config.width, p.y],
+                [p.x, p.y],
+                [p.x, p.y + config.height / 2],
+                [p.x + config.width, p.y + config.height / 2],
+                [p.x + config.width, p.y + config.height],
+                [p.x, p.y + config.height],
+              ];
+
+              c.strokeStyle = config.borderColor;
+              c.lineWidth = config.borderSize + 2;
+              c.beginPath();
+              c.moveTo(...path[0]);
+              path.slice(1).forEach(([x, y]) => c.lineTo(x, y));
+              c.stroke();
+
+              c.strokeStyle = config.color;
+              c.lineWidth = config.borderSize;
+              c.beginPath();
+              c.moveTo(...path[0]);
+              path.slice(1).forEach(([x, y]) => c.lineTo(x, y));
+              c.stroke();
+
+              c.restore();
+
+              // hitbox
+              // c.strokeStyle = "red";
+              // c.lineWidth = 1;
+              // c.strokeRect(p.x, p.y, config.width, config.height);
+
+              break;
+            }
+
+            default:
+              if (p.type === "large") {
+                const time = performance.now() / 200;
+                const wave = Math.sin(time + p.x * 0.1) * 3;
+
+                const dynamicWidth = config.width + wave;
+                const dynamicHeight =
+                  config.height + Math.sin(time + p.y * 0.1) * 2;
+
+                c.fillStyle = config.borderColor;
+                c.fillRect(
+                  p.x - config.borderSize,
+                  p.y - config.borderSize,
+                  dynamicWidth + config.borderSize * 2,
+                  dynamicHeight + config.borderSize * 2
+                );
+
+                c.fillStyle = config.color;
+                c.fillRect(p.x, p.y, dynamicWidth, dynamicHeight);
+
+                // hitbox
+                // c.strokeStyle = "lime";
+                // c.lineWidth = 1;
+                // c.strokeRect(p.x, p.y, config.width, config.height);
+              } else {
+                c.fillStyle = config.borderColor;
+                c.fillRect(
+                  p.x - config.borderSize,
+                  p.y - config.borderSize,
+                  config.width + config.borderSize * 2,
+                  config.height + config.borderSize * 2
+                );
+
+                c.fillStyle = config.color;
+                c.fillRect(p.x, p.y, config.width, config.height);
+              }
+              break;
           }
         });
       };
