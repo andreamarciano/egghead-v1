@@ -1814,7 +1814,7 @@ function SpaceInvaders({ onClose }) {
           });
 
           if (hitIndex !== -1) {
-            b.lives -= 10; // cambia - 1
+            b.lives -= 500; // cambia - 1
             handleBossHit(p.x + p.width / 2, p.y);
             projectilesRef.current.splice(pIndex, 1);
 
