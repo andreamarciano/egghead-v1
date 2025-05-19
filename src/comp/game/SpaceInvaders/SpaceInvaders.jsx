@@ -1805,6 +1805,66 @@ function SpaceInvaders({ onClose }) {
             // c.lineWidth = 2;
             // c.strokeRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
           }
+          if (beam.isShooting && beam.type === "medium") {
+            const baseWidth = hitbox.width;
+            const beamHeight = hitbox.height;
+            const centerX = hitbox.x + hitbox.width / 2;
+            const startY = hitbox.y + 15;
+
+            const pulse = 1 + 0.25 * Math.sin(now / 200);
+            const beamWidth = baseWidth * pulse;
+
+            const segments = 20;
+            const amplitude = 5;
+            const waveSpeed = 400;
+
+            c.save();
+
+            // Gradiente centrale
+            const gradient = c.createLinearGradient(
+              centerX - beamWidth / 2,
+              startY,
+              centerX + beamWidth / 2,
+              startY + beamHeight
+            );
+            gradient.addColorStop(0, "rgba(0,255,0,0.2)");
+            gradient.addColorStop(0.4, beam.color);
+            gradient.addColorStop(0.6, beam.color);
+            gradient.addColorStop(1, "rgba(0,255,0,0.2)");
+
+            c.fillStyle = gradient;
+            c.globalAlpha = 0.9;
+
+            c.beginPath();
+
+            for (let i = 0; i <= segments; i++) {
+              const y = startY + (i / segments) * beamHeight;
+              const offset = Math.sin((now + y * 3) / waveSpeed) * amplitude;
+              const x = centerX - beamWidth / 2 + offset;
+              if (i === 0) c.moveTo(x, y);
+              else c.lineTo(x, y);
+            }
+
+            for (let i = segments; i >= 0; i--) {
+              const y = startY + (i / segments) * beamHeight;
+              const offset = Math.sin((now + y * 3) / waveSpeed) * amplitude;
+              const x = centerX + beamWidth / 2 + offset;
+              c.lineTo(x, y);
+            }
+
+            c.closePath();
+            c.fill();
+
+            for (let i = 0; i < beamHeight; i += 20) {
+              const waveWidth = 6 + 2 * Math.sin((now + i * 10) / 150);
+              c.beginPath();
+              c.arc(centerX, startY + i, waveWidth, 0, Math.PI * 2);
+              c.fillStyle = "rgba(80,255,80,0.3)";
+              c.fill();
+            }
+
+            c.restore();
+          }
 
           return true;
         });
