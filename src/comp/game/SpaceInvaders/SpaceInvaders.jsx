@@ -60,6 +60,10 @@ import {
 /* Boss */
 import bossConfig from "./enemy/boss/config";
 import bossProjectileConfig from "./enemy/boss/projConfig";
+import {
+  generateBossProjectiles,
+  drawBossProjectiles,
+} from "./enemy/boss/bossProj";
 import bossLaserConfig from "./enemy/boss/laserConfig";
 
 /******************************************************************************
@@ -1574,46 +1578,18 @@ function SpaceInvaders({ onClose }) {
         !bossRef.current.entering &&
         isPhase1EnabledRef.current
       ) {
-        const b = bossRef.current;
-
-        // Small
-        bossConfig.gunOffsets.small.forEach((offsetX) => {
-          if (Math.random() < 0.03) {
-            const shapes = ["rect", "triangle"];
-            bossProjectilesSmallRef.current.push({
-              x: b.x + offsetX,
-              y: b.y + bossStats.height - 1,
-              ...bossProjectileConfig.small,
-              shape: shapes[Math.floor(Math.random() * shapes.length)],
-            });
-            playLaserSound(soundURL.laserInvader);
-          }
-        });
-
-        // Medium
-        bossConfig.gunOffsets.medium.forEach((offsetX) => {
-          if (Math.random() < 0.02) {
-            const shapes = ["rect", "diamond", "s"];
-            bossProjectilesMediumRef.current.push({
-              x: b.x + offsetX,
-              y: b.y + bossStats.height - 1,
-              ...bossProjectileConfig.medium,
-              shape: shapes[Math.floor(Math.random() * shapes.length)],
-            });
-          }
-        });
-
-        // Large
-        bossConfig.gunOffsets.large.forEach((offsetX) => {
-          if (Math.random() < 0.01) {
-            const shapes = ["rect", "diamond", "triangle"];
-            bossProjectilesLargeRef.current.push({
-              x: b.x + offsetX,
-              y: b.y + bossStats.height - 1,
-              ...bossProjectileConfig.large,
-              shape: shapes[Math.floor(Math.random() * shapes.length)],
-            });
-          }
+        generateBossProjectiles({
+          boss: bossRef.current,
+          bossConfig,
+          bossStats,
+          bossProjectileConfig,
+          bossProjectilesRefs: {
+            small: bossProjectilesSmallRef,
+            medium: bossProjectilesMediumRef,
+            large: bossProjectilesLargeRef,
+          },
+          playLaserSound,
+          soundURL,
         });
       }
       // === PHASE 2 ===
@@ -1702,222 +1678,6 @@ function SpaceInvaders({ onClose }) {
       }
 
       /* === DRAW & UPDATE: BOSS PROJECTILES === */
-      const drawBossProjectiles = (projectiles, config) => {
-        projectiles.forEach((p) => {
-          p.y += p.speed;
-
-          switch (p.shape) {
-            case "triangle":
-              if (p.type === "large") {
-                const time = performance.now() / 300;
-                const stretch = 1 + Math.sin(time + p.y * 0.05) * 0.2;
-                const wobble = Math.sin(time + p.x * 0.05) * 4;
-                const dynamicHeight = config.height * stretch;
-
-                c.fillStyle = config.borderColor;
-                c.beginPath();
-                c.moveTo(p.x - config.borderSize + wobble, p.y);
-                c.lineTo(
-                  p.x + config.width / 2,
-                  p.y + dynamicHeight + config.borderSize
-                );
-                c.lineTo(p.x + config.width + config.borderSize + wobble, p.y);
-                c.closePath();
-                c.fill();
-
-                c.fillStyle = config.color;
-                c.beginPath();
-                c.moveTo(p.x + wobble, p.y);
-                c.lineTo(p.x + config.width / 2, p.y + dynamicHeight);
-                c.lineTo(p.x + config.width + wobble, p.y);
-                c.closePath();
-                c.fill();
-
-                // hitbox
-                // c.strokeStyle = "lime";
-                // c.lineWidth = 1;
-                // c.strokeRect(p.x, p.y, config.width, config.height);
-              } else {
-                c.fillStyle = config.borderColor;
-                c.beginPath();
-                c.moveTo(p.x - config.borderSize, p.y);
-                c.lineTo(
-                  p.x + config.width / 2,
-                  p.y + config.height + config.borderSize
-                );
-                c.lineTo(p.x + config.width + config.borderSize, p.y);
-                c.closePath();
-                c.fill();
-
-                c.fillStyle = config.color;
-                c.beginPath();
-                c.moveTo(p.x, p.y);
-                c.lineTo(p.x + config.width / 2, p.y + config.height);
-                c.lineTo(p.x + config.width, p.y);
-                c.closePath();
-                c.fill();
-
-                // hitbox
-                // c.strokeStyle = "red";
-                // c.lineWidth = 1;
-                // c.strokeRect(p.x, p.y, config.width, config.height);
-
-                break;
-              }
-
-            case "diamond": {
-              let width = config.width;
-              let height = config.height;
-              let offsetY = 0;
-
-              const isMedium = p.type === "medium";
-              const isLarge = p.type === "large";
-
-              if (isLarge) {
-                const time = performance.now() / 200;
-                const wave = Math.sin(time + p.x * 0.05);
-                width += wave * 3;
-                offsetY = Math.sin(time + p.y * 0.1) * 1.5;
-
-                // hitbox
-                // c.strokeStyle = "lime";
-                // c.lineWidth = 1;
-                // c.strokeRect(p.x, p.y, config.width, config.height);
-              }
-
-              if (isMedium) {
-                c.save();
-
-                const centerX = p.x + width / 2;
-                const centerY = p.y + height / 2 + offsetY;
-                const rotation = (performance.now() / 300) % (2 * Math.PI);
-
-                c.translate(centerX, centerY);
-                c.rotate(rotation);
-                c.translate(-centerX, -centerY);
-              }
-
-              c.fillStyle = config.borderColor;
-              c.beginPath();
-              c.moveTo(p.x + width / 2, p.y + offsetY - config.borderSize);
-              c.lineTo(p.x - config.borderSize, p.y + height / 2 + offsetY);
-              c.lineTo(
-                p.x + width / 2,
-                p.y + height + offsetY + config.borderSize
-              );
-              c.lineTo(
-                p.x + width + config.borderSize,
-                p.y + height / 2 + offsetY
-              );
-              c.closePath();
-              c.fill();
-
-              c.fillStyle = config.color;
-              c.beginPath();
-              c.moveTo(p.x + width / 2, p.y + offsetY);
-              c.lineTo(p.x, p.y + height / 2 + offsetY);
-              c.lineTo(p.x + width / 2, p.y + height + offsetY);
-              c.lineTo(p.x + width, p.y + height / 2 + offsetY);
-              c.closePath();
-              c.fill();
-
-              if (isMedium) {
-                // hitbox
-                // c.strokeStyle = "red";
-                // c.lineWidth = 1;
-                // c.strokeRect(p.x, p.y, config.width, config.height);
-
-                c.restore();
-              }
-
-              break;
-            }
-
-            case "s": {
-              c.save();
-
-              const centerX = p.x + config.width / 2;
-              const centerY = p.y + config.height / 2;
-              const rotation = (performance.now() / 100) % (2 * Math.PI);
-
-              c.translate(centerX, centerY);
-              c.rotate(rotation);
-              c.translate(-centerX, -centerY);
-
-              const path = [
-                [p.x + config.width, p.y],
-                [p.x, p.y],
-                [p.x, p.y + config.height / 2],
-                [p.x + config.width, p.y + config.height / 2],
-                [p.x + config.width, p.y + config.height],
-                [p.x, p.y + config.height],
-              ];
-
-              c.strokeStyle = config.borderColor;
-              c.lineWidth = config.borderSize + 2;
-              c.beginPath();
-              c.moveTo(...path[0]);
-              path.slice(1).forEach(([x, y]) => c.lineTo(x, y));
-              c.stroke();
-
-              c.strokeStyle = config.color;
-              c.lineWidth = config.borderSize;
-              c.beginPath();
-              c.moveTo(...path[0]);
-              path.slice(1).forEach(([x, y]) => c.lineTo(x, y));
-              c.stroke();
-
-              c.restore();
-
-              // hitbox
-              // c.strokeStyle = "red";
-              // c.lineWidth = 1;
-              // c.strokeRect(p.x, p.y, config.width, config.height);
-
-              break;
-            }
-
-            default:
-              if (p.type === "large") {
-                const time = performance.now() / 200;
-                const wave = Math.sin(time + p.x * 0.1) * 3;
-
-                const dynamicWidth = config.width + wave;
-                const dynamicHeight =
-                  config.height + Math.sin(time + p.y * 0.1) * 2;
-
-                c.fillStyle = config.borderColor;
-                c.fillRect(
-                  p.x - config.borderSize,
-                  p.y - config.borderSize,
-                  dynamicWidth + config.borderSize * 2,
-                  dynamicHeight + config.borderSize * 2
-                );
-
-                c.fillStyle = config.color;
-                c.fillRect(p.x, p.y, dynamicWidth, dynamicHeight);
-
-                // hitbox
-                // c.strokeStyle = "lime";
-                // c.lineWidth = 1;
-                // c.strokeRect(p.x, p.y, config.width, config.height);
-              } else {
-                c.fillStyle = config.borderColor;
-                c.fillRect(
-                  p.x - config.borderSize,
-                  p.y - config.borderSize,
-                  config.width + config.borderSize * 2,
-                  config.height + config.borderSize * 2
-                );
-
-                c.fillStyle = config.color;
-                c.fillRect(p.x, p.y, config.width, config.height);
-              }
-              break;
-          }
-        });
-      };
-
       [
         bossProjectilesSmallRef,
         bossProjectilesMediumRef,
@@ -1927,7 +1687,7 @@ function SpaceInvaders({ onClose }) {
         const config = bossProjectileConfig[type];
 
         ref.current = ref.current.filter((p) => p.y < canvas.height);
-        drawBossProjectiles(ref.current, config);
+        drawBossProjectiles(ref.current, config, c);
       });
 
       /* === COLLISION DETECTION: BOSS PROJECTILES → PLAYER === */
@@ -2028,7 +1788,7 @@ function SpaceInvaders({ onClose }) {
           });
 
           if (hitIndex !== -1) {
-            b.lives -= 500; // cambia - 1
+            b.lives -= 300; // cambia - 1
             handleBossHit(p.x + p.width / 2, p.y);
             projectilesRef.current.splice(pIndex, 1);
 
