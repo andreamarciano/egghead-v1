@@ -230,7 +230,6 @@ function SpaceInvaders({ onClose }) {
       case 1:
         enablePhase1(true);
         enablePhase2(false);
-        enablePhase3(false);
         bossBeamsRef.current = [];
         beamIntervalsRef.current.forEach(clearInterval);
         beamIntervalsRef.current = [];
@@ -238,7 +237,6 @@ function SpaceInvaders({ onClose }) {
       case 2:
         enablePhase1(false);
         enablePhase2(true);
-        enablePhase3(false);
 
         if (b) {
           b.entering = true;
@@ -279,16 +277,13 @@ function SpaceInvaders({ onClose }) {
       case 3:
         enablePhase1(true);
         enablePhase2(true);
-        enablePhase3(true);
         break;
     }
   };
   const isPhase1EnabledRef = useRef(true);
   const isPhase2EnabledRef = useRef(false);
-  const isPhase3EnabledRef = useRef(false);
   const enablePhase1 = (value) => (isPhase1EnabledRef.current = value);
   const enablePhase2 = (value) => (isPhase2EnabledRef.current = value);
-  const enablePhase3 = (value) => (isPhase3EnabledRef.current = value);
   // Boss Weak Points
   const activeWeakPointsRef = useRef([]);
   const generateWeakPointInside = (space) => {
@@ -1460,13 +1455,6 @@ function SpaceInvaders({ onClose }) {
           soundURL,
         });
       }
-      // === PHASE 3 ===
-      if (
-        bossRef.current &&
-        !bossRef.current.entering &&
-        isPhase3EnabledRef.current
-      ) {
-      }
 
       /* === DRAW: BOSS PROJECTILES === */
       [
@@ -1580,7 +1568,6 @@ function SpaceInvaders({ onClose }) {
 
           enablePhase1(false);
           enablePhase2(false);
-          enablePhase3(false);
           beamIntervalsRef.current.forEach(clearInterval);
           beamIntervalsRef.current = [];
 
@@ -1660,7 +1647,6 @@ function SpaceInvaders({ onClose }) {
       bossRef.current = null;
       isPhase1EnabledRef.current = true;
       isPhase2EnabledRef.current = false;
-      isPhase3EnabledRef.current = false;
       bossProjectilesSmallRef.current = [];
       bossProjectilesMediumRef.current = [];
       bossProjectilesLargeRef.current = [];
