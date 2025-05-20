@@ -1,3 +1,5 @@
+import { getBossBeamHitbox } from "./bossBeam";
+
 export function collisionBossProjHitPlayer({
   bossProjectilesRefs,
   getPlayerHitbox,
@@ -43,12 +45,13 @@ export function collisionBossProjHitPlayer({
 
 export function collisionBossBeamHitPlayer({
   boss,
+  bossRef,
   bossBeamsRef,
+  bossBeamConfig,
   isPhase2EnabledRef,
   isGameEndingRef,
   isPlayerInvincible,
   isShieldActiveRef,
-  getBossBeamHitbox,
   getPlayerHitbox,
   playerWidth,
   playerXRef,
@@ -58,6 +61,7 @@ export function collisionBossBeamHitPlayer({
   livesRef,
   setLives,
   handleGameOver,
+  canvas,
 }) {
   if (boss && isPhase2EnabledRef.current) {
     bossBeamsRef.current.forEach((beam) => {
@@ -68,7 +72,12 @@ export function collisionBossBeamHitPlayer({
       )
         return;
 
-      const beamHitbox = getBossBeamHitbox(beam);
+      const beamHitbox = getBossBeamHitbox(
+        beam,
+        bossRef,
+        canvas,
+        bossBeamConfig
+      );
       const playerHitbox = getPlayerHitbox(playerWidth);
 
       const hit =

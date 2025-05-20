@@ -811,21 +811,6 @@ function SpaceInvaders({ onClose }) {
       };
     };
 
-    /* === BOSS BEAM HITBOX === */
-    const getBossBeamHitbox = (beam) => {
-      const beamWidth = bossBeamConfig[beam.type].beamWidth;
-      const beamX = bossRef.current.x + beam.x - beamWidth / 2;
-      const beamY = bossRef.current.y + beam.y;
-      const beamHeight = canvas.height - beamY;
-
-      return {
-        x: beamX,
-        y: beamY,
-        width: beamWidth,
-        height: beamHeight,
-      };
-    };
-
     /***************************************************************
      *                   SECTION: SPAWN POWER UP                   *
      ***************************************************************/
@@ -1606,10 +1591,10 @@ function SpaceInvaders({ onClose }) {
         const now = performance.now();
         generateBossBeams({
           ctx: c,
+          canvas,
           now,
           bossBeamsRef,
           bossBeamConfig,
-          getBossBeamHitbox,
           isPhase2EnabledRef,
           bossRef,
           playSound,
@@ -1659,12 +1644,13 @@ function SpaceInvaders({ onClose }) {
       /* === COLLISION DETECTION: BOSS LASERS → PLAYER === */
       collisionBossBeamHitPlayer({
         boss: bossRef.current,
+        bossRef,
         bossBeamsRef,
+        bossBeamConfig,
         isPhase2EnabledRef,
         isGameEndingRef,
         isPlayerInvincible,
         isShieldActiveRef,
-        getBossBeamHitbox,
         getPlayerHitbox,
         playerWidth,
         playerXRef,
@@ -1674,6 +1660,7 @@ function SpaceInvaders({ onClose }) {
         livesRef,
         setLives,
         handleGameOver,
+        canvas,
       });
 
       /* === COLLISION DETECTION: PLAYER PROJECTILE → BOSS === */

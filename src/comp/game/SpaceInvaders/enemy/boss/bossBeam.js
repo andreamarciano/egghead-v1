@@ -1,9 +1,9 @@
 export function generateBossBeams({
   ctx: c,
+  canvas,
   now,
   bossBeamsRef,
   bossBeamConfig,
-  getBossBeamHitbox,
   isPhase2EnabledRef,
   bossRef,
   playSound,
@@ -25,7 +25,7 @@ export function generateBossBeams({
 
   bossBeamsRef.current = bossBeamsRef.current.filter((beam) => {
     const config = bossBeamConfig[beam.type];
-    const hitbox = getBossBeamHitbox(beam);
+    const hitbox = getBossBeamHitbox(beam, bossRef, canvas, bossBeamConfig);
 
     // === BEAM STATE TRANSITIONS ===
     if (beam.isCharging && now >= beam.chargeEnd) {
@@ -60,6 +60,20 @@ export function generateBossBeams({
 
     return true;
   });
+}
+
+export function getBossBeamHitbox(beam, bossRef, canvas, bossBeamConfig) {
+  const beamWidth = bossBeamConfig[beam.type].beamWidth;
+  const beamX = bossRef.current.x + beam.x - beamWidth / 2;
+  const beamY = bossRef.current.y + beam.y;
+  const beamHeight = canvas.height - beamY;
+
+  return {
+    x: beamX,
+    y: beamY,
+    width: beamWidth,
+    height: beamHeight,
+  };
 }
 
 function renderLaserByType({ beam, hitbox, now, ctx: c }) {
