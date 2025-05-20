@@ -68,6 +68,7 @@ import {
 import bossConfig from "./enemy/boss/config";
 import { spawnBoss } from "./enemy/boss/spawn";
 import { handleBossEntranceAndDraw } from "./enemy/boss/draw";
+import { updateBossPhase, handleBossPhaseChange } from "./enemy/boss/bossPhase";
 import bossProjectileConfig from "./enemy/boss/proj/projConfig";
 import {
   generateBossProjectiles,
@@ -268,82 +269,6 @@ function SpaceInvaders({ onClose }) {
   const bossBeamsRef = useRef([]);
   const beamIntervalsRef = useRef([]);
   // Boss Phase
-  const updateBossPhase = () => {
-    const b = bossRef.current;
-    if (!b || b.entering) return;
-
-    let newPhase;
-    if (b.lives <= 400) {
-      newPhase = 3;
-    } else if (b.lives <= 700) {
-      newPhase = 2;
-    } else {
-      newPhase = 1;
-    }
-
-    if (b.phase !== newPhase) {
-      b.phase = newPhase;
-      handleBossPhaseChange(newPhase);
-    }
-  };
-  const handleBossPhaseChange = (phase) => {
-    const b = bossRef.current;
-    if (!b) return;
-
-    switch (phase) {
-      case 1:
-        enablePhase1(true);
-        enablePhase2(false);
-        bossBeamsRef.current = [];
-        beamIntervalsRef.current.forEach(clearInterval);
-        beamIntervalsRef.current = [];
-        break;
-      case 2:
-        enablePhase1(false);
-        enablePhase2(true);
-
-        if (b) {
-          b.entering = true;
-          b.entrancePhase = "rising";
-          b.hasChangedImage = false;
-        }
-
-        const configs = [
-          bossBeamConfig.small,
-          bossBeamConfig.medium,
-          bossBeamConfig.large,
-        ];
-        configs.forEach((config) => {
-          config.x.forEach((x, i) => {
-            const y = config.y[i];
-            const interval = setInterval(() => {
-              const now = performance.now();
-              bossBeamsRef.current.push({
-                x,
-                y,
-                width: config.beamWidth,
-                damage: config.beamDamage,
-                color: config.beamColor,
-                type: config.type,
-                isCharging: true,
-                isShooting: false,
-                createdAt: now,
-                chargeEnd: now + config.chargeDuration,
-                shootEnd: now + config.chargeDuration + config.beamDuration,
-              });
-            }, config.shootInterval);
-
-            beamIntervalsRef.current.push(interval);
-          });
-        });
-
-        break;
-      case 3:
-        enablePhase1(true);
-        enablePhase2(true);
-        break;
-    }
-  };
   const isPhase1EnabledRef = useRef(true);
   const isPhase2EnabledRef = useRef(false);
   const enablePhase1 = (value) => (isPhase1EnabledRef.current = value);
@@ -1475,7 +1400,16 @@ function SpaceInvaders({ onClose }) {
         usedRedSpacesRef,
         generateBlueWeakPoint,
         handleBossHit,
-        updateBossPhase,
+        updateBossPhase: () =>
+          updateBossPhase(bossRef, (newPhase) =>
+            handleBossPhaseChange(newPhase, bossRef, {
+              enablePhase1,
+              enablePhase2,
+              bossBeamsRef,
+              beamIntervalsRef,
+              bossBeamConfig,
+            })
+          ),
         isPlayerFrozenRef,
         enablePhase1,
         enablePhase2,
