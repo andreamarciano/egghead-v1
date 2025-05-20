@@ -30,7 +30,7 @@ const bossLaserConfig = {
     shootInterval: 9000,
     chargeDuration: 2000,
     beamDuration: 3000,
-    beamWidth: 40,
+    beamWidth: 50,
     beamDamage: 3,
     beamColor: "#FF0000",
     chargeColors: ["#FFFF00", "#FFC300", "#FF8C00", "#FF4500", "#FF0000"],

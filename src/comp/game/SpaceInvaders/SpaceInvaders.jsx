@@ -1820,7 +1820,6 @@ function SpaceInvaders({ onClose }) {
 
             c.save();
 
-            // Gradiente centrale
             const gradient = c.createLinearGradient(
               centerX - beamWidth / 2,
               startY,
@@ -1864,6 +1863,79 @@ function SpaceInvaders({ onClose }) {
             }
 
             c.restore();
+
+            // hitbox
+            // c.strokeStyle = "white";
+            // c.lineWidth = 2;
+            // c.strokeRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+          }
+
+          if (beam.isShooting && beam.type === "large") {
+            const { x, y, width, height } = getBossBeamHitbox(beam);
+            const centerX = x + width / 2;
+            const baseWidth = width * 1.3;
+            const pulsate = 1 + 0.2 * Math.sin(now / 100);
+            const animatedWidth = baseWidth * pulsate;
+            const gradient = c.createLinearGradient(
+              centerX - animatedWidth / 2,
+              y,
+              centerX + animatedWidth / 2,
+              y
+            );
+            gradient.addColorStop(0, "#FF8C00");
+            gradient.addColorStop(0.5, "#FF0000");
+            gradient.addColorStop(1, "#FF8C00");
+
+            // Core beam
+            c.save();
+            c.globalAlpha = 0.85;
+            c.fillStyle = gradient;
+            c.fillRect(
+              centerX - animatedWidth / 2,
+              y + 15,
+              animatedWidth,
+              height
+            );
+            c.restore();
+
+            // Rotating rings
+            const ringCount = 3;
+            for (let i = 0; i < ringCount; i++) {
+              const radius =
+                animatedWidth / 2 + i * 8 + 10 * Math.sin(now / 200 + i);
+              c.beginPath();
+              c.strokeStyle = `rgba(255, 120, 0, ${
+                0.3 + 0.3 * Math.sin(now / 300 + i)
+              })`;
+              c.lineWidth = 2.5;
+              c.ellipse(centerX, y + 40, radius, radius / 3, 0, 0, Math.PI * 2);
+              c.stroke();
+            }
+
+            // Solar flares
+            const flareCount = 20;
+            for (let i = 0; i < flareCount; i++) {
+              const fx =
+                centerX - animatedWidth / 2 + Math.random() * animatedWidth;
+              const fy = y + 15 + Math.random() * height;
+              const flareLength = 5 + Math.random() * 10;
+              const angle = (Math.random() - 0.5) * Math.PI;
+
+              const dx = Math.cos(angle) * flareLength;
+              const dy = Math.sin(angle) * flareLength;
+
+              c.beginPath();
+              c.moveTo(fx, fy);
+              c.lineTo(fx + dx, fy + dy);
+              c.strokeStyle = "rgba(255, 255, 0, 0.5)";
+              c.lineWidth = 1;
+              c.stroke();
+
+              // hitbox
+              // c.strokeStyle = "white";
+              // c.lineWidth = 2;
+              // c.strokeRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+            }
           }
 
           return true;
