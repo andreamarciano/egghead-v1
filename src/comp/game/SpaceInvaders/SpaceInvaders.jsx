@@ -128,6 +128,7 @@ function SpaceInvaders({ onClose }) {
   const playerImageRef = useRef(new Image());
   const playerPart2Ref = useRef(false);
   const playerStats = playerConfig.stats;
+  const playerWidthRef = useRef(playerStats.width);
   const playerOpacityRef = useRef(1);
   const playerRotationRef = useRef(0);
   const [playerX, setPlayerX] = useState(0);
@@ -811,9 +812,10 @@ function SpaceInvaders({ onClose }) {
       /***************************************************************
        *                            PLAYER                           *
        ***************************************************************/
-      const playerWidth = playerPart2Ref.current
+      playerWidthRef.current = playerPart2Ref.current
         ? playerStats.width2
         : playerStats.width;
+      const playerWidth = playerWidthRef.current;
 
       if (isPlayerActiveRef.current) {
         const playerProj = playerConfig.projectile;
