@@ -106,6 +106,10 @@ function SpaceInvaders({ onClose }) {
   const isGameEndingRef = useRef(false);
   const animationIdRef = useRef(null);
 
+  /***************************************************************
+   *                           PLAYER                            *
+   ***************************************************************/
+
   /* Player */
   const playerImageRef = useRef(new Image());
   const playerPart2Ref = useRef(false);
@@ -119,7 +123,8 @@ function SpaceInvaders({ onClose }) {
   const isPlayerInvincible = useRef(false);
   const isPlayerFrozenRef = useRef(false);
   const playerTransitionRef = useRef(null);
-  // Projectile
+
+  /* Projectile */
   const projectileImages = {
     greenPlayer: new Image(),
     bluePlayer: new Image(),
@@ -127,11 +132,13 @@ function SpaceInvaders({ onClose }) {
   };
   const lastShotTimeRef = useRef(0);
   const projectilesRef = useRef([]);
-  // Lives
+
+  /* Lives */
   const [lives, setLives] = useState(10); // cambia - 5
   const livesRef = useRef(10); // cambia -5
   const [animateLifeLoss, setAnimateLifeLoss] = useState(false);
   const previousLivesRef = useRef(lives);
+  // Player Hit
   const handlePlayerHit = (playerWidth) => {
     flashEffect(playerOpacityRef, { playerActive: isPlayerActiveRef });
     playSound(soundURL.playerHit, 0.7);
@@ -141,17 +148,47 @@ function SpaceInvaders({ onClose }) {
       ...playerConfig.hitParticles,
     });
   };
-  // Ship Upgrade
-  const shipUpgradeRef = useRef(null);
-  useEffect(() => {
-    ["greenPlayer2", "bluePlayer2", "redPlayer2"].forEach((key) => {
-      const img = new Image();
-      img.src = imgURL[key];
-    });
-  }, []);
+  // Lives UI
+  const renderLives = (lives) => {
+    const livesStr = lives.toString().padStart(1, "0");
+    const lifeIconKey = bossDefeatedRef.current
+      ? `${playerColor}Lives2`
+      : `${playerColor}Lives`;
 
-  /* Power Up */
-  // Shield
+    return (
+      <div className="flex items-center bg-black/60 px-2 py-1 rounded">
+        <img
+          src={imgURL[lifeIconKey]}
+          alt="life"
+          className={`w-6 h-auto mr-1 transition-transform duration-300 ${
+            animateLifeLoss ? "scale-175" : ""
+          }`}
+        />
+        <img src={imgURL.nX} alt="x" className="w-3 h-3 mx-0.5" />
+        {livesStr.split("").map((digit, idx) => (
+          <img
+            key={idx}
+            src={imgURL[`n${digit}`]}
+            alt={digit}
+            className="w-4.5 h-4.5 mx-0.5"
+          />
+        ))}
+      </div>
+    );
+  };
+  // Lives Animation
+  useEffect(() => {
+    if (lives < previousLivesRef.current) {
+      setAnimateLifeLoss(true);
+      setTimeout(() => setAnimateLifeLoss(false), 300);
+    }
+    previousLivesRef.current = lives;
+  }, [lives]);
+
+  /***************************************************************
+   *                          POWER UP                           *
+   ***************************************************************/
+  /* Shield */
   const shieldImageRef = useRef(new Image());
   const shieldPowerUpRef = useRef([]);
   const isShieldActiveRef = useRef(false);
@@ -162,6 +199,19 @@ function SpaceInvaders({ onClose }) {
     createExplosion(particlesRef, { x, y, ...shieldConfig.hitParticles });
     playSound(soundURL.shieldBlock, 0.5);
   };
+
+  /* Ship Upgrade */
+  const shipUpgradeRef = useRef(null);
+  useEffect(() => {
+    ["greenPlayer2", "bluePlayer2", "redPlayer2"].forEach((key) => {
+      const img = new Image();
+      img.src = imgURL[key];
+    });
+  }, []);
+
+  /***************************************************************
+   *                            ENEMY                            *
+   ***************************************************************/
 
   /* Enemy */
   const hitEnemy = ({ x, y, particles, sound, volume = 1 }) => {
@@ -321,28 +371,9 @@ function SpaceInvaders({ onClose }) {
     activeWeakPointsRef.current = selected;
   };
 
-  /* Score */
-  const [score, setScore] = useState(0);
-  const scoreRef = useRef(score);
-  const addScore = (points) => {
-    scoreRef.current += points;
-    setScore(scoreRef.current);
-  };
-  const [displayedScore, setDisplayedScore] = useState(0);
-  const [scoreTextSize, setScoreTextSize] = useState("w-4.5 h-4.5");
-  const [topScores, setTopScores] = useState([]);
-  const SCORE_KEY = "spaceInvadersTopScores";
-  const getBestScores = () => {
-    const stored = localStorage.getItem(SCORE_KEY);
-    return stored ? JSON.parse(stored) : [];
-  };
-  const saveScoreIfHigh = (newScore) => {
-    const scores = getBestScores();
-    scores.push(newScore);
-    const sorted = scores.sort((a, b) => b - a).slice(0, 3);
-    localStorage.setItem(SCORE_KEY, JSON.stringify(sorted));
-    setTopScores(sorted);
-  };
+  /***************************************************************
+   *                            MENU                             *
+   ***************************************************************/
 
   /* Menu */
   // Color Pick
@@ -361,6 +392,19 @@ function SpaceInvaders({ onClose }) {
   const DISCOUNT_CODE = "INVADER5";
   const SCORE_THRESHOLD = 10000;
   const [hasUnlockedDiscount, setHasUnlockedDiscount] = useState(false);
+
+  /***************************************************************
+   *                         PARTICLES                           *
+   ***************************************************************/
+
+  /* Particles */
+  const particlesRef = useRef([]);
+  const backgroundParticlesRef = useRef([]);
+  const isBoostingRef = useRef(false);
+
+  /***************************************************************
+   *                            VOLUME                           *
+   ***************************************************************/
 
   /* Sound */
   const [audioEnabled, setAudioEnabled] = useState(true); // master
@@ -443,124 +487,6 @@ function SpaceInvaders({ onClose }) {
     }
   };
 
-  /* Particles */
-  const particlesRef = useRef([]);
-  const backgroundParticlesRef = useRef([]);
-  const isBoostingRef = useRef(false);
-
-  /***************************************************************
-   *                       ANIMATION & UI                        *
-   ***************************************************************/
-
-  /* Score UI */
-  const renderScoreImages = (score) => {
-    const padded = score.toString().padStart(5, "0");
-    return padded
-      .split("")
-      .map((digit, index) => (
-        <img
-          key={index}
-          src={imgURL[`n${digit}`]}
-          alt={digit}
-          className={`${scoreTextSize} mx-0.5 transition-all duration-200`}
-        />
-      ));
-  };
-
-  /* Lives UI */
-  const renderLives = (lives) => {
-    const livesStr = lives.toString().padStart(1, "0");
-    const lifeIconKey = bossDefeatedRef.current
-      ? `${playerColor}Lives2`
-      : `${playerColor}Lives`;
-
-    return (
-      <div className="flex items-center bg-black/60 px-2 py-1 rounded">
-        <img
-          src={imgURL[lifeIconKey]}
-          alt="life"
-          className={`w-6 h-auto mr-1 transition-transform duration-300 ${
-            animateLifeLoss ? "scale-175" : ""
-          }`}
-        />
-        <img src={imgURL.nX} alt="x" className="w-3 h-3 mx-0.5" />
-        {livesStr.split("").map((digit, idx) => (
-          <img
-            key={idx}
-            src={imgURL[`n${digit}`]}
-            alt={digit}
-            className="w-4.5 h-4.5 mx-0.5"
-          />
-        ))}
-      </div>
-    );
-  };
-
-  /* Lives Animation */
-  useEffect(() => {
-    if (lives < previousLivesRef.current) {
-      setAnimateLifeLoss(true);
-      setTimeout(() => setAnimateLifeLoss(false), 300);
-    }
-    previousLivesRef.current = lives;
-  }, [lives]);
-
-  /* Score Animation */
-  function getStep(delta) {
-    if (delta <= 0) return 0;
-
-    const maxPercent = 0.05;
-    const minPercent = 0.02;
-
-    const deltaLog = Math.log10(delta);
-    let percent = maxPercent - (deltaLog / 4) * (maxPercent - minPercent);
-    percent = Math.min(maxPercent, Math.max(minPercent, percent));
-
-    const step = Math.max(2, Math.floor(delta * percent));
-
-    return step;
-  }
-  useEffect(() => {
-    if (displayedScore === score || displayedScore > score) return;
-
-    const interval = setInterval(() => {
-      setDisplayedScore((prev) => {
-        const delta = score - prev;
-        const step = getStep(delta);
-
-        const next = Math.min(prev + step, score);
-        // console.log(
-        //   `Score: ${score}, Prev: ${prev}, Delta: ${delta}, Step: ${step}, Next: ${next}`
-        // );
-
-        const currentK = Math.floor(prev / 1000);
-        const nextK = Math.floor(next / 1000);
-
-        const current10K = Math.floor(prev / 10000);
-        const next10K = Math.floor(next / 10000);
-
-        // large expansion
-        if (current10K !== next10K) {
-          setScoreTextSize("w-8 h-8");
-          setTimeout(() => setScoreTextSize("w-4.5 h-4.5"), 400);
-        }
-        // medium expansion
-        else if (currentK !== nextK) {
-          setScoreTextSize("w-6 h-6");
-          setTimeout(() => setScoreTextSize("w-4.5 h-4.5"), 300);
-        }
-
-        return next;
-      });
-    }, 30);
-
-    return () => clearInterval(interval);
-  }, [score, displayedScore]);
-
-  /***************************************************************
-   *                            VOLUME                           *
-   ***************************************************************/
-
   // Sync: audio ref volume → current volume
   useEffect(() => {
     sfxVolumeRef.current = sfxVolume;
@@ -640,8 +566,97 @@ function SpaceInvaders({ onClose }) {
   }, [audioEnabled, isGameRunning, gameOver]);
 
   /***************************************************************
-   *                      useEFFECT: SCORE                       *
+   *                            SCORE                            *
    ***************************************************************/
+  /* Score */
+  const [score, setScore] = useState(0);
+  const scoreRef = useRef(score);
+  const addScore = (points) => {
+    scoreRef.current += points;
+    setScore(scoreRef.current);
+  };
+  const [displayedScore, setDisplayedScore] = useState(0);
+  const [scoreTextSize, setScoreTextSize] = useState("w-4.5 h-4.5");
+  const [topScores, setTopScores] = useState([]);
+  const SCORE_KEY = "spaceInvadersTopScores";
+  const getBestScores = () => {
+    const stored = localStorage.getItem(SCORE_KEY);
+    return stored ? JSON.parse(stored) : [];
+  };
+  const saveScoreIfHigh = (newScore) => {
+    const scores = getBestScores();
+    scores.push(newScore);
+    const sorted = scores.sort((a, b) => b - a).slice(0, 3);
+    localStorage.setItem(SCORE_KEY, JSON.stringify(sorted));
+    setTopScores(sorted);
+  };
+
+  /* Score UI */
+  const renderScoreImages = (score) => {
+    const padded = score.toString().padStart(5, "0");
+    return padded
+      .split("")
+      .map((digit, index) => (
+        <img
+          key={index}
+          src={imgURL[`n${digit}`]}
+          alt={digit}
+          className={`${scoreTextSize} mx-0.5 transition-all duration-200`}
+        />
+      ));
+  };
+
+  /* Score Animation */
+  function getStep(delta) {
+    if (delta <= 0) return 0;
+
+    const maxPercent = 0.05;
+    const minPercent = 0.02;
+
+    const deltaLog = Math.log10(delta);
+    let percent = maxPercent - (deltaLog / 4) * (maxPercent - minPercent);
+    percent = Math.min(maxPercent, Math.max(minPercent, percent));
+
+    const step = Math.max(2, Math.floor(delta * percent));
+
+    return step;
+  }
+  useEffect(() => {
+    if (displayedScore === score || displayedScore > score) return;
+
+    const interval = setInterval(() => {
+      setDisplayedScore((prev) => {
+        const delta = score - prev;
+        const step = getStep(delta);
+
+        const next = Math.min(prev + step, score);
+        // console.log(
+        //   `Score: ${score}, Prev: ${prev}, Delta: ${delta}, Step: ${step}, Next: ${next}`
+        // );
+
+        const currentK = Math.floor(prev / 1000);
+        const nextK = Math.floor(next / 1000);
+
+        const current10K = Math.floor(prev / 10000);
+        const next10K = Math.floor(next / 10000);
+
+        // large expansion
+        if (current10K !== next10K) {
+          setScoreTextSize("w-8 h-8");
+          setTimeout(() => setScoreTextSize("w-4.5 h-4.5"), 400);
+        }
+        // medium expansion
+        else if (currentK !== nextK) {
+          setScoreTextSize("w-6 h-6");
+          setTimeout(() => setScoreTextSize("w-4.5 h-4.5"), 300);
+        }
+
+        return next;
+      });
+    }, 30);
+
+    return () => clearInterval(interval);
+  }, [score, displayedScore]);
 
   /* Game Over - Score + Discount Code */
   useEffect(() => {
