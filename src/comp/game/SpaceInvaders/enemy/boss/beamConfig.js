@@ -1,4 +1,4 @@
-const bossLaserConfig = {
+const bossBeamConfig = {
   small: {
     x: [75, 355, 645, 915],
     y: [113, 113, 113, 113],
@@ -37,4 +37,4 @@ const bossLaserConfig = {
   },
 };
 
-export default bossLaserConfig;
+export default bossBeamConfig;

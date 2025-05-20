@@ -64,7 +64,7 @@ import {
   generateBossProjectiles,
   drawBossProjectiles,
 } from "./enemy/boss/bossProj";
-import bossLaserConfig from "./enemy/boss/laserConfig";
+import bossBeamConfig from "./enemy/boss/beamConfig";
 import {
   collisionBossProjHitPlayer,
   collisionBossBeamHitPlayer,
@@ -244,9 +244,9 @@ function SpaceInvaders({ onClose }) {
         }
 
         const configs = [
-          bossLaserConfig.small,
-          bossLaserConfig.medium,
-          bossLaserConfig.large,
+          bossBeamConfig.small,
+          bossBeamConfig.medium,
+          bossBeamConfig.large,
         ];
         configs.forEach((config) => {
           config.x.forEach((x, i) => {
@@ -812,7 +812,7 @@ function SpaceInvaders({ onClose }) {
 
     /* === BOSS BEAM HITBOX === */
     const getBossBeamHitbox = (beam) => {
-      const beamWidth = bossLaserConfig[beam.type].beamWidth;
+      const beamWidth = bossBeamConfig[beam.type].beamWidth;
       const beamX = bossRef.current.x + beam.x - beamWidth / 2;
       const beamY = bossRef.current.y + beam.y;
       const beamHeight = canvas.height - beamY;
@@ -1630,9 +1630,9 @@ function SpaceInvaders({ onClose }) {
 
           // === BEAM CHARGE ===
           if (beam.isCharging) {
-            const config = bossLaserConfig[beam.type];
+            const config = bossBeamConfig[beam.type];
             const colorCycle =
-              config?.chargeColors || bossLaserConfig.large.chargeColors;
+              config?.chargeColors || bossBeamConfig.large.chargeColors;
 
             const colorIndex = Math.floor(now / 100) % colorCycle.length;
             const alpha = 0.3 + 0.5 * Math.abs(Math.sin(now / 300));
