@@ -1,4 +1,4 @@
-import { getBossBeamHitbox } from "./bossBeam";
+import { getBossBeamHitbox } from "./beam/beam";
 
 export function collisionBossProjHitPlayer({
   bossProjectilesRefs,

@@ -66,14 +66,14 @@ import {
 
 /* Boss */
 import bossConfig from "./enemy/boss/config";
-import { handleBossEntranceAndDraw } from "./enemy/boss/bossEntranceAndDraw";
-import bossProjectileConfig from "./enemy/boss/projConfig";
+import { handleBossEntranceAndDraw } from "./enemy/boss/draw";
+import bossProjectileConfig from "./enemy/boss/proj/projConfig";
 import {
   generateBossProjectiles,
   drawBossProjectiles,
-} from "./enemy/boss/bossProj";
-import bossBeamConfig from "./enemy/boss/beamConfig";
-import { generateBossBeams } from "./enemy/boss/bossBeam";
+} from "./enemy/boss/proj/proj";
+import bossBeamConfig from "./enemy/boss/beam/beamConfig";
+import { generateBossBeams } from "./enemy/boss/beam/beam";
 import {
   collisionBossProjHitPlayer,
   collisionBossBeamHitPlayer,
@@ -1303,7 +1303,6 @@ function SpaceInvaders({ onClose }) {
        ***************************************************************/
 
       /* === SPAWN: BOSS === */
-      //qui
       if (
         bossActiveRef.current &&
         !bossRef.current &&

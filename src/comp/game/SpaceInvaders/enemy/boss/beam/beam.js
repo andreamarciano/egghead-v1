@@ -2,7 +2,7 @@ import {
   renderSmallLaser,
   renderMediumLaser,
   renderLargeLaser,
-} from "./bossBeamRender";
+} from "./beamRender";
 
 export function generateBossBeams({
   ctx: c,
