@@ -1320,6 +1320,7 @@ function SpaceInvaders({ onClose }) {
           retreating: false,
         };
 
+        // Weak Points
         activeBlueWeakPointsRef.current = pickBlueWeakPoints(
           bossConfig.blueWeakPoints.spaces,
           bossConfig.blueWeakPoints.count
