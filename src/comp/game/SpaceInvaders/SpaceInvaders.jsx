@@ -78,6 +78,12 @@ import {
   collisionBossProjHitPlayer,
   collisionBossBeamHitPlayer,
 } from "./enemy/boss/collision";
+import {
+  generateBlueWeakPoint,
+  pickBlueWeakPoints,
+  pickRedWeakPoints,
+  spawnBlueWeakPoints,
+} from "./enemy/boss/weakPoint";
 
 /******************************************************************************
  *                                                                            *
@@ -344,47 +350,7 @@ function SpaceInvaders({ onClose }) {
   const activeBlueWeakPointsRef = useRef([]);
   const activeRedWeakPointsRef = useRef([]);
   const usedRedSpacesRef = useRef([]);
-  const bluePoint = bossConfig.blueWeakPoints;
-  const redPoint = bossConfig.redWeakPoints;
-
-  const generateBlueWeakPoint = (space) => {
-    const weakWidth = 18;
-    const maxX = space.width - weakWidth;
-    const offsetX = Math.floor(Math.random() * (maxX + 1));
-    return {
-      x: space.x + offsetX,
-      y: space.y,
-      width: weakWidth,
-      height: space.height,
-      originSpace: space,
-    };
-  };
-
-  const pickBlueWeakPoints = () => {
-    const allBlueSpaces = [...bluePoint.spaces];
-    const selected = [];
-
-    while (selected.length < bluePoint.count && allBlueSpaces.length > 0) {
-      const index = Math.floor(Math.random() * allBlueSpaces.length);
-      const space = allBlueSpaces[index];
-      selected.push(generateBlueWeakPoint(space));
-      allBlueSpaces.splice(index, 1);
-    }
-
-    activeBlueWeakPointsRef.current = selected;
-  };
-
-  const allRedSpaces = [...redPoint.spaces];
-  const pickRedWeakPoints = () => {
-    const selected = [];
-    while (selected.length < redPoint.count && allRedSpaces.length > 0) {
-      const index = Math.floor(Math.random() * allRedSpaces.length);
-      selected.push(allRedSpaces[index]);
-      usedRedSpacesRef.current.push(allRedSpaces[index]);
-      allRedSpaces.splice(index, 1);
-    }
-    activeRedWeakPointsRef.current = selected;
-  };
+  const allRedSpaces = [...bossConfig.redWeakPoints.spaces];
 
   /***************************************************************
    *                            MENU                             *
@@ -883,15 +849,11 @@ function SpaceInvaders({ onClose }) {
     );
 
     /* === SPAWN: BOSS WEAK POINTS === */
-    const bossWeakPointsSpawn = setInterval(() => {
-      if (
-        bossRef.current &&
-        !bossRef.current.retreating &&
-        !bossRef.current.entering
-      ) {
-        pickBlueWeakPoints();
-      }
-    }, 5000);
+    const bossWeakPointsSpawn = spawnBlueWeakPoints({
+      bossRef,
+      activeBlueWeakPointsRef,
+      bossConfig,
+    });
 
     /***************************************************************
      *                      SECTION: FUNCTIONS                     *
@@ -1358,8 +1320,15 @@ function SpaceInvaders({ onClose }) {
           retreating: false,
         };
 
-        pickBlueWeakPoints();
-        pickRedWeakPoints();
+        activeBlueWeakPointsRef.current = pickBlueWeakPoints(
+          bossConfig.blueWeakPoints.spaces,
+          bossConfig.blueWeakPoints.count
+        );
+        activeRedWeakPointsRef.current = pickRedWeakPoints(
+          allRedSpaces,
+          usedRedSpacesRef.current,
+          bossConfig.redWeakPoints.count
+        );
 
         isPlayerActiveRef.current = false;
         isPlayerFrozenRef.current = true;
@@ -1526,17 +1495,15 @@ function SpaceInvaders({ onClose }) {
             );
           });
           if (hitIndex !== -1) {
-            b.lives -= bluePoint.damage;
+            b.lives -= bossConfig.blueWeakPoints.damage;
             handleBossHit(p.x + p.width / 2, p.y);
             projectilesRef.current.splice(pIndex, 1);
-
-            console.log(`[blue] dmg: ${bluePoint.damage} | boss: ${b.lives}`);
 
             // replace
             const usedSpaces = activeBlueWeakPointsRef.current.map(
               (p) => p.originSpace
             );
-            const remainingSpaces = bluePoint.spaces.filter(
+            const remainingSpaces = bossConfig.blueWeakPoints.spaces.filter(
               (s) => !usedSpaces.includes(s)
             );
             if (remainingSpaces.length > 0) {
@@ -1559,7 +1526,7 @@ function SpaceInvaders({ onClose }) {
             );
           });
           if (redHitIndex !== -1) {
-            b.lives -= redPoint.damage;
+            b.lives -= bossConfig.redWeakPoints.damage;
             handleBossHit(p.x + p.width / 2, p.y);
             projectilesRef.current.splice(pIndex, 1);
 
