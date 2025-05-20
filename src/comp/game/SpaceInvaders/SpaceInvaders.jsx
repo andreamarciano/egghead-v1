@@ -1871,53 +1871,74 @@ function SpaceInvaders({ onClose }) {
           }
 
           if (beam.isShooting && beam.type === "large") {
-            const { x, y, width, height } = getBossBeamHitbox(beam);
-            const centerX = x + width / 2;
-            const baseWidth = width * 1.3;
-            const pulsate = 1 + 0.2 * Math.sin(now / 100);
-            const animatedWidth = baseWidth * pulsate;
+            const hitbox = getBossBeamHitbox(beam);
+            const baseWidth = hitbox.width * 2;
+            const tipWidth = hitbox.width;
+            const beamHeight = hitbox.height;
+            const startX = hitbox.x + hitbox.width / 2;
+            const startY = hitbox.y + 15;
+            const pulsate = 1 + 0.3 * Math.sin(now / 100);
+            const animatedBaseWidth = baseWidth * pulsate;
+
             const gradient = c.createLinearGradient(
-              centerX - animatedWidth / 2,
-              y,
-              centerX + animatedWidth / 2,
-              y
+              startX - animatedBaseWidth / 2,
+              startY,
+              startX + animatedBaseWidth / 2,
+              startY
             );
             gradient.addColorStop(0, "#FF8C00");
             gradient.addColorStop(0.5, "#FF0000");
             gradient.addColorStop(1, "#FF8C00");
 
-            // Core beam
+            // Core Beam
             c.save();
-            c.globalAlpha = 0.85;
-            c.fillStyle = gradient;
-            c.fillRect(
-              centerX - animatedWidth / 2,
-              y + 15,
-              animatedWidth,
-              height
+            c.beginPath();
+            c.moveTo(startX - animatedBaseWidth / 2, startY);
+            c.quadraticCurveTo(
+              startX,
+              startY - 40,
+              startX + animatedBaseWidth / 2,
+              startY
             );
+            c.lineTo(startX + tipWidth / 2, startY + beamHeight);
+            c.lineTo(startX - tipWidth / 2, startY + beamHeight);
+            c.closePath();
+
+            c.fillStyle = gradient;
+            c.globalAlpha = 0.85;
+            c.fill();
             c.restore();
 
-            // Rotating rings
+            // Rings
             const ringCount = 3;
             for (let i = 0; i < ringCount; i++) {
               const radius =
-                animatedWidth / 2 + i * 8 + 10 * Math.sin(now / 200 + i);
+                animatedBaseWidth / 2 + i * 8 + 10 * Math.sin(now / 200 + i);
               c.beginPath();
               c.strokeStyle = `rgba(255, 120, 0, ${
                 0.3 + 0.3 * Math.sin(now / 300 + i)
               })`;
               c.lineWidth = 2.5;
-              c.ellipse(centerX, y + 40, radius, radius / 3, 0, 0, Math.PI * 2);
+              c.ellipse(
+                startX,
+                startY + 40,
+                radius,
+                radius / 3,
+                0,
+                0,
+                Math.PI * 2
+              );
               c.stroke();
             }
 
-            // Solar flares
+            // === Solar flares ===
             const flareCount = 20;
             for (let i = 0; i < flareCount; i++) {
               const fx =
-                centerX - animatedWidth / 2 + Math.random() * animatedWidth;
-              const fy = y + 15 + Math.random() * height;
+                startX -
+                animatedBaseWidth / 2 +
+                Math.random() * animatedBaseWidth;
+              const fy = startY + Math.random() * beamHeight;
               const flareLength = 5 + Math.random() * 10;
               const angle = (Math.random() - 0.5) * Math.PI;
 
