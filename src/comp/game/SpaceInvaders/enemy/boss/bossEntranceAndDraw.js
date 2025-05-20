@@ -6,7 +6,8 @@ export function handleBossEntranceAndDraw({
   bossActiveRef,
   bossDefeatedRef,
   bossMusicPlayedRef,
-  activeWeakPointsRef,
+  activeBlueWeakPointsRef,
+  activeRedWeakPointsRef,
   shipUpgradeRef,
   playerXRef,
   playerYRef,
@@ -151,9 +152,30 @@ export function handleBossEntranceAndDraw({
     const bossX = b.x;
     const bossY = b.y;
 
-    activeWeakPointsRef.current.forEach((wp) => {
+    // === DRAW: BLUE WEAK POINTS ===
+    activeBlueWeakPointsRef.current.forEach((wp) => {
       c.fillStyle = "rgba(0, 0, 255, 0.4)";
       c.fillRect(bossX + wp.x, bossY + wp.y, wp.width, wp.height);
+    });
+
+    // === DRAW: RED WEAK POINTS ===
+    const pulse = Math.sin((performance.now() / 1000) * Math.PI);
+    const scale = 1 + pulse * 0.01;
+    const opacity = 0.5 + pulse * 0.1;
+
+    activeRedWeakPointsRef.current.forEach((wp) => {
+      const drawWidth = wp.width * scale;
+      const drawHeight = wp.height * scale;
+      const offsetX = (drawWidth - wp.width) / 2;
+      const offsetY = (drawHeight - wp.height) / 2;
+
+      c.fillStyle = `rgba(255, 0, 0, ${opacity.toFixed(2)})`;
+      c.fillRect(
+        bossX + wp.x - offsetX,
+        bossY + wp.y - offsetY,
+        drawWidth,
+        drawHeight
+      );
     });
 
     // === DRAW: LIFE BAR ===

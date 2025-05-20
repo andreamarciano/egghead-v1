@@ -341,8 +341,13 @@ function SpaceInvaders({ onClose }) {
   const enablePhase1 = (value) => (isPhase1EnabledRef.current = value);
   const enablePhase2 = (value) => (isPhase2EnabledRef.current = value);
   // Boss Weak Points
-  const activeWeakPointsRef = useRef([]);
-  const generateWeakPointInside = (space) => {
+  const activeBlueWeakPointsRef = useRef([]);
+  const activeRedWeakPointsRef = useRef([]);
+  const usedRedSpacesRef = useRef([]);
+  const bluePoint = bossConfig.blueWeakPoints;
+  const redPoint = bossConfig.redWeakPoints;
+
+  const generateBlueWeakPoint = (space) => {
     const weakWidth = 18;
     const maxX = space.width - weakWidth;
     const offsetX = Math.floor(Math.random() * (maxX + 1));
@@ -354,21 +359,31 @@ function SpaceInvaders({ onClose }) {
       originSpace: space,
     };
   };
-  const pickRandomWeakPoints = () => {
-    const available = [...bossConfig.weakPoints.spaces];
+
+  const pickBlueWeakPoints = () => {
+    const allBlueSpaces = [...bluePoint.spaces];
     const selected = [];
 
-    while (
-      selected.length < bossConfig.weakPoints.count &&
-      available.length > 0
-    ) {
-      const index = Math.floor(Math.random() * available.length);
-      const space = available[index];
-      selected.push(generateWeakPointInside(space));
-      available.splice(index, 1);
+    while (selected.length < bluePoint.count && allBlueSpaces.length > 0) {
+      const index = Math.floor(Math.random() * allBlueSpaces.length);
+      const space = allBlueSpaces[index];
+      selected.push(generateBlueWeakPoint(space));
+      allBlueSpaces.splice(index, 1);
     }
 
-    activeWeakPointsRef.current = selected;
+    activeBlueWeakPointsRef.current = selected;
+  };
+
+  const allRedSpaces = [...redPoint.spaces];
+  const pickRedWeakPoints = () => {
+    const selected = [];
+    while (selected.length < redPoint.count && allRedSpaces.length > 0) {
+      const index = Math.floor(Math.random() * allRedSpaces.length);
+      selected.push(allRedSpaces[index]);
+      usedRedSpacesRef.current.push(allRedSpaces[index]);
+      allRedSpaces.splice(index, 1);
+    }
+    activeRedWeakPointsRef.current = selected;
   };
 
   /***************************************************************
@@ -874,7 +889,7 @@ function SpaceInvaders({ onClose }) {
         !bossRef.current.retreating &&
         !bossRef.current.entering
       ) {
-        pickRandomWeakPoints();
+        pickBlueWeakPoints();
       }
     }, 5000);
 
@@ -1343,7 +1358,8 @@ function SpaceInvaders({ onClose }) {
           retreating: false,
         };
 
-        pickRandomWeakPoints();
+        pickBlueWeakPoints();
+        pickRedWeakPoints();
 
         isPlayerActiveRef.current = false;
         isPlayerFrozenRef.current = true;
@@ -1358,7 +1374,8 @@ function SpaceInvaders({ onClose }) {
         bossActiveRef,
         bossDefeatedRef,
         bossMusicPlayedRef,
-        activeWeakPointsRef,
+        activeBlueWeakPointsRef,
+        activeRedWeakPointsRef,
         shipUpgradeRef,
         playerXRef,
         playerYRef,
@@ -1491,22 +1508,16 @@ function SpaceInvaders({ onClose }) {
         canvas,
       });
 
-      /* === COLLISION DETECTION: PLAYER PROJECTILE → BOSS === */
+      /* === COLLISION DETECTION: PLAYER PROJECTILE → BOSS WEAK POINTS === */
       if (bossRef.current && !bossRef.current.entering) {
         const b = bossRef.current;
-
-        const hitbox = {
-          x: b.x,
-          y: b.y + b.height - 10,
-          width: b.width,
-          height: 10,
-        };
 
         projectilesRef.current.forEach((p, pIndex) => {
           const bossX = b.x;
           const bossY = b.y;
 
-          const hitIndex = activeWeakPointsRef.current.findIndex((wp) => {
+          // === BLUE WEAK POINTS ===
+          const hitIndex = activeBlueWeakPointsRef.current.findIndex((wp) => {
             return (
               p.x < bossX + wp.x + wp.width &&
               p.x + p.width > bossX + wp.x &&
@@ -1514,17 +1525,18 @@ function SpaceInvaders({ onClose }) {
               p.y + p.height > bossY + wp.y
             );
           });
-
           if (hitIndex !== -1) {
-            b.lives -= 300; // cambia - 1
+            b.lives -= bluePoint.damage;
             handleBossHit(p.x + p.width / 2, p.y);
             projectilesRef.current.splice(pIndex, 1);
 
-            // replace weak point
-            const usedSpaces = activeWeakPointsRef.current.map(
+            console.log(`[blue] dmg: ${bluePoint.damage} | boss: ${b.lives}`);
+
+            // replace
+            const usedSpaces = activeBlueWeakPointsRef.current.map(
               (p) => p.originSpace
             );
-            const remainingSpaces = bossConfig.weakPoints.spaces.filter(
+            const remainingSpaces = bluePoint.spaces.filter(
               (s) => !usedSpaces.includes(s)
             );
             if (remainingSpaces.length > 0) {
@@ -1532,8 +1544,33 @@ function SpaceInvaders({ onClose }) {
                 remainingSpaces[
                   Math.floor(Math.random() * remainingSpaces.length)
                 ];
-              const newPoint = generateWeakPointInside(newSpace);
-              activeWeakPointsRef.current[hitIndex] = newPoint;
+              const newPoint = generateBlueWeakPoint(newSpace);
+              activeBlueWeakPointsRef.current[hitIndex] = newPoint;
+            }
+          }
+
+          // === RED WEAK POINTS ===
+          const redHitIndex = activeRedWeakPointsRef.current.findIndex((wp) => {
+            return (
+              p.x < b.x + wp.x + wp.width &&
+              p.x + p.width > b.x + wp.x &&
+              p.y < b.y + wp.y + wp.height &&
+              p.y + p.height > b.y + wp.y
+            );
+          });
+          if (redHitIndex !== -1) {
+            b.lives -= redPoint.damage;
+            handleBossHit(p.x + p.width / 2, p.y);
+            projectilesRef.current.splice(pIndex, 1);
+
+            activeRedWeakPointsRef.current.splice(redHitIndex, 1);
+
+            if (allRedSpaces.length > 0) {
+              const index = Math.floor(Math.random() * allRedSpaces.length);
+              const newRedPoint = allRedSpaces[index];
+              activeRedWeakPointsRef.current.push(newRedPoint);
+              usedRedSpacesRef.current.push(newRedPoint);
+              allRedSpaces.splice(index, 1);
             }
           }
         });
