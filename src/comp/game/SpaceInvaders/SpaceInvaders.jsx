@@ -19,9 +19,10 @@ import { flashEffect } from "./player/flashEffect";
 
 /* Power Up */
 import shieldConfig from "./powerUp/shield/config";
-import shipBubbleConfig from "./powerUp/ship/config";
 import { spawnShieldBubble } from "./powerUp/shield/spawn";
 import { collisionShieldHitPlayer } from "./powerUp/shield/collision";
+import shipBubbleConfig from "./powerUp/ship/config";
+import { handleShipBubbleSpawn } from "./powerUp/ship/spawn";
 
 /* === Enemies === */
 import invaderConfig from "./enemy/invader/config";
@@ -59,6 +60,7 @@ import {
 
 /* Boss */
 import bossConfig from "./enemy/boss/config";
+import { handleBossEntranceAndDraw } from "./enemy/boss/bossEntranceAndDraw";
 import bossProjectileConfig from "./enemy/boss/projConfig";
 import {
   generateBossProjectiles,
@@ -120,8 +122,8 @@ function SpaceInvaders({ onClose }) {
   const lastShotTimeRef = useRef(0);
   const projectilesRef = useRef([]);
   // Lives
-  const [lives, setLives] = useState(50); // cambia - 5
-  const livesRef = useRef(50); // cambia -5
+  const [lives, setLives] = useState(10); // cambia - 5
+  const livesRef = useRef(10); // cambia -5
   const [animateLifeLoss, setAnimateLifeLoss] = useState(false);
   const previousLivesRef = useRef(lives);
   const handlePlayerHit = (playerWidth) => {
@@ -1372,194 +1374,51 @@ function SpaceInvaders({ onClose }) {
       }
 
       /* === DRAW: BOSS === */
-      if (bossRef.current) {
-        // === ANIMATION: ENTERING ===
-        if (bossRef.current.entering) {
-          const b = bossRef.current;
-
-          isBoostingRef.current = true;
-
-          if (b.phase === 1) {
-            isPlayerInvincible.current = true;
-
-            // play boss entrance music
-            if (!bossMusicPlayedRef.current) {
-              bossMusicPlayedRef.current = true;
-              playBossMusic();
-            }
-
-            // DESCENDING → RISING
-            if (b.entrancePhase === "descending") {
-              playerTransitionRef.current = "exitScene";
-              b.y += 2; // descending speed - cambia 0.3
-
-              if (b.y >= 0) {
-                b.entrancePhase = "rising";
-                playSound(soundURL.bossDescending, 0.5);
-              }
-            } else if (b.entrancePhase === "rising") {
-              playerTransitionRef.current = "reenterScene";
-              isBoostingRef.current = false;
-              b.y -= 2; // rising speed - cambia 0.5
-
-              if (b.y <= -40) {
-                b.y = -40;
-                b.entering = false;
-                b.entrancePhase = null;
-
-                isPlayerActiveRef.current = true;
-                isPlayerInvincible.current = false;
-                isPlayerFrozenRef.current = false;
-              }
-            }
-          } else if (b.phase === 2) {
-            // RISING → IMAGE SWAP → DESCENDING
-            if (b.entrancePhase === "rising") {
-              b.y -= 1.2; // rising speed
-
-              if (b.y <= -b.height) {
-                b.y = -b.height;
-                playSound(soundURL.bossDescending2, 0.5);
-
-                if (!b.hasChangedImage) {
-                  bossImageRef.current = bossImage2Ref.current;
-                  b.hasChangedImage = true;
-                }
-
-                b.entrancePhase = "descending";
-              }
-            } else if (b.entrancePhase === "descending") {
-              isBoostingRef.current = false;
-              b.y += 1; // descending speed
-
-              if (b.y >= -40) {
-                b.y = -40;
-                b.entering = false;
-                b.entrancePhase = null;
-
-                isPlayerActiveRef.current = true;
-                isPlayerInvincible.current = false;
-                isPlayerFrozenRef.current = false;
-              }
-            }
-          } else if (b.entrancePhase === "retreat") {
-            // === BOSS DEFEATED ===
-
-            isPlayerInvincible.current = true;
-            b.y -= 1; // rising speed
-
-            if (b.y + b.height < 0) {
-              bossRef.current = null;
-              bossActiveRef.current = false;
-              bossDefeatedRef.current = true;
-              isBoostingRef.current = false;
-
-              isPlayerActiveRef.current = true;
-              isPlayerFrozenRef.current = false;
-              isPlayerInvincible.current = false;
-              playerTransitionRef.current = null;
-
-              bossBeamsRef.current = [];
-              bossMusicPlayedRef.current = false;
-
-              addScore(bossStats.score);
-
-              // === DRAW: SHIP BUBBLE ===
-              const upgradeX = playerXRef.current + playerWidth / 2 - 20;
-              const upgradeY = -60;
-              const upgradeImage = new Image();
-              upgradeImage.src = imgURL[`${playerColor}2`];
-              shipUpgradeRef.current = {
-                x: upgradeX,
-                y: upgradeY,
-                width: shipBubbleConfig.width,
-                height: shipBubbleConfig.height,
-                speed: shipBubbleConfig.speed,
-                stopY: playerYRef.current - 10,
-                image: upgradeImage,
-              };
-            }
-          }
-        }
-
-        // === DRAW BOSS IMAGE ===
-        if (bossRef.current) {
-          const b = bossRef.current;
-
-          if (bossImageRef.current.complete) {
-            c.drawImage(bossImageRef?.current, b.x, b.y, b.width, b.height);
-          } else {
-            c.fillStyle = "red";
-            c.fillRect(b.x, b.y, b.width, b.height);
-          }
-        }
-
-        // === DRAW BOSS WEAK POINTS ===
-        if (bossRef.current && !bossRef.current.entering) {
-          const bossX = bossRef.current.x;
-          const bossY = bossRef.current.y;
-
-          activeWeakPointsRef.current.forEach((wp) => {
-            c.fillStyle = "rgba(0, 0, 255, 0.4)";
-            c.fillRect(bossX + wp.x, bossY + wp.y, wp.width, wp.height);
-          });
-        }
-
-        // === DRAW BOSS LIFE BAR ===
-        if (bossRef.current && !bossRef.current.entering) {
-          const lifeRatio = Math.max(bossRef.current.lives / 1000, 0);
-
-          const barHeight = 7;
-          const barWidth = canvas.width / 2;
-          const x = (canvas.width - barWidth) / 2;
-          const y = 1;
-
-          c.fillStyle = "rgba(0, 0, 0, 0.2)";
-          c.fillRect(x, y, barWidth, barHeight);
-
-          if (bossRef.current.lives > 700) {
-            c.fillStyle = "rgba(34, 211, 238, 0.4)";
-          } else if (bossRef.current.lives > 400) {
-            c.fillStyle = "rgba(250, 204, 21, 0.6)";
-          } else {
-            c.fillStyle = "rgba(239, 68, 68, 0.8)";
-          }
-
-          c.fillRect(x, y, barWidth * lifeRatio, barHeight);
-
-          c.strokeStyle = "rgba(255, 255, 255, 0.4)";
-          c.lineWidth = 2;
-          c.strokeRect(x, y, barWidth, barHeight);
-        }
-      }
+      handleBossEntranceAndDraw({
+        bossRef,
+        bossImageRef,
+        bossImage2Ref,
+        bossBeamsRef,
+        bossActiveRef,
+        bossDefeatedRef,
+        bossMusicPlayedRef,
+        activeWeakPointsRef,
+        shipUpgradeRef,
+        playerXRef,
+        playerYRef,
+        playerWidth,
+        playerColor,
+        isPlayerActiveRef,
+        isPlayerFrozenRef,
+        isPlayerInvincible,
+        playerTransitionRef,
+        isBoostingRef,
+        addScore,
+        playSound,
+        playBossMusic,
+        soundURL,
+        imgURL,
+        shipBubbleConfig,
+        bossStats,
+        c,
+        canvas,
+      });
 
       /* === SPAWN: SHIP BUBBLE === */
-      if (shipUpgradeRef.current) {
-        const u = shipUpgradeRef.current;
-
-        if (u.y < u.stopY) {
-          u.y += u.speed;
-        }
-
-        c.drawImage(u.image, u.x, u.y, u.width, u.height);
-
-        // COLLISION DETECTION: SHIP BUBBLE → PLAYER
-        const hit =
-          u.x < playerXRef.current + playerWidth &&
-          u.x + u.width > playerXRef.current &&
-          u.y < playerYRef.current + playerStats.height &&
-          u.y + u.height > playerYRef.current;
-
-        if (hit) {
-          shipUpgradeRef.current = null;
-
-          playerImageRef.current = new Image();
-          playerImageRef.current.src = imgURL[`${playerColor}2`];
-          playerPart2Ref.current = true;
-
-          playSound(soundURL.shipUpgrade);
-        }
-      }
+      handleShipBubbleSpawn({
+        shipUpgradeRef,
+        playerXRef,
+        playerYRef,
+        playerWidth,
+        playerStats,
+        playerImageRef,
+        playerPart2Ref,
+        playSound,
+        imgURL,
+        playerColor,
+        soundURL,
+        c,
+      });
 
       /* === DRAW: BOSS PROJECTILES === */
       // === PHASE 1 ===
