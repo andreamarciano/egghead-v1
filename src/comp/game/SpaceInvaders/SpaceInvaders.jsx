@@ -202,6 +202,7 @@ function SpaceInvaders({ onClose }) {
   const bossProjectilesLargeRef = useRef([]);
   // Phase 2 - Boss Lasers
   const bossBeamsRef = useRef([]);
+  const beamIntervalsRef = useRef([]);
   // Boss Phase
   const updateBossPhase = () => {
     const b = bossRef.current;
@@ -221,7 +222,6 @@ function SpaceInvaders({ onClose }) {
       handleBossPhaseChange(newPhase);
     }
   };
-  const beamIntervalsRef = useRef([]);
   const handleBossPhaseChange = (phase) => {
     const b = bossRef.current;
     if (!b) return;
