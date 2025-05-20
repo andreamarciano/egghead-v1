@@ -105,3 +105,108 @@ export function collisionBossBeamHitPlayer({
     });
   }
 }
+
+export function collisionPlayerHitBoss({
+  bossRef,
+  projectilesRef,
+  bossConfig,
+  activeBlueWeakPointsRef,
+  activeRedWeakPointsRef,
+  allRedSpaces,
+  usedRedSpacesRef,
+  generateBlueWeakPoint,
+  handleBossHit,
+  updateBossPhase,
+  isPlayerFrozenRef,
+  enablePhase1,
+  enablePhase2,
+  beamIntervalsRef,
+  soundURL,
+  playSound,
+  resumeBackgroundMusic,
+}) {
+  if (bossRef.current && !bossRef.current.entering) {
+    const b = bossRef.current;
+
+    projectilesRef.current.forEach((p, pIndex) => {
+      const bossX = b.x;
+      const bossY = b.y;
+
+      // === BLUE WEAK POINTS ===
+      const hitIndex = activeBlueWeakPointsRef.current.findIndex((wp) => {
+        return (
+          p.x < bossX + wp.x + wp.width &&
+          p.x + p.width > bossX + wp.x &&
+          p.y < bossY + wp.y + wp.height &&
+          p.y + p.height > bossY + wp.y
+        );
+      });
+
+      if (hitIndex !== -1) {
+        b.lives -= bossConfig.blueWeakPoints.damage;
+        handleBossHit(p.x + p.width / 2, p.y);
+        projectilesRef.current.splice(pIndex, 1);
+
+        // replace
+        const usedSpaces = activeBlueWeakPointsRef.current.map(
+          (p) => p.originSpace
+        );
+        const remainingSpaces = bossConfig.blueWeakPoints.spaces.filter(
+          (s) => !usedSpaces.includes(s)
+        );
+        if (remainingSpaces.length > 0) {
+          const newSpace =
+            remainingSpaces[Math.floor(Math.random() * remainingSpaces.length)];
+          const newPoint = generateBlueWeakPoint(newSpace);
+          activeBlueWeakPointsRef.current[hitIndex] = newPoint;
+        }
+      }
+
+      // === RED WEAK POINTS ===
+      const redHitIndex = activeRedWeakPointsRef.current.findIndex((wp) => {
+        return (
+          p.x < b.x + wp.x + wp.width &&
+          p.x + p.width > b.x + wp.x &&
+          p.y < b.y + wp.y + wp.height &&
+          p.y + p.height > b.y + wp.y
+        );
+      });
+
+      if (redHitIndex !== -1) {
+        b.lives -= bossConfig.redWeakPoints.damage;
+        handleBossHit(p.x + p.width / 2, p.y);
+        projectilesRef.current.splice(pIndex, 1);
+
+        activeRedWeakPointsRef.current.splice(redHitIndex, 1);
+
+        if (allRedSpaces.length > 0) {
+          const index = Math.floor(Math.random() * allRedSpaces.length);
+          const newRedPoint = allRedSpaces[index];
+          activeRedWeakPointsRef.current.push(newRedPoint);
+          usedRedSpacesRef.current.push(newRedPoint);
+          allRedSpaces.splice(index, 1);
+        }
+      }
+    });
+
+    updateBossPhase();
+
+    // === BOSS DEFEATED CONDITION ===
+    if (b.lives <= 0 && !b.retreating) {
+      b.retreating = true;
+      b.entering = true;
+      b.entrancePhase = "retreat";
+      isPlayerFrozenRef.current = true;
+
+      enablePhase1(false);
+      enablePhase2(false);
+      beamIntervalsRef.current.forEach(clearInterval);
+      beamIntervalsRef.current = [];
+
+      playSound(soundURL.bossDefeated);
+      setTimeout(() => {
+        resumeBackgroundMusic();
+      }, 4000);
+    }
+  }
+}
