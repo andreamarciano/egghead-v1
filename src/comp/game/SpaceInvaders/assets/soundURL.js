@@ -7,12 +7,15 @@ const soundURL = {
   beamActive2: "/sounds/spaceInvaders/laser/beamActiveShort.mp3",
   // Hit & Destroy
   playerHit: "/sounds/spaceInvaders/destroy/playerHit.mp3",
-  destroyInvader: "/sounds/spaceInvaders/destroy/destroyInvader.mp3",
-  destroyGrid: "/sounds/spaceInvaders/destroy/destroyGrid.mp3",
   destroyMeteor: "/sounds/spaceInvaders/destroy/destroyMeteor.mp3",
   destroyMeteor2: "/sounds/spaceInvaders/destroy/destroyMeteorSmall.mp3",
   destroyFollower: "/sounds/spaceInvaders/destroy/destroyFollower.mp3",
   hitFollower: "/sounds/spaceInvaders/destroy/hitFollower.mp3",
+  // Invader
+  destroyInvader: "/sounds/spaceInvaders/invader/destroyInvader.mp3",
+  destroyGrid: "/sounds/spaceInvaders/invader/destroyGrid.mp3",
+  gridHitBorder: "/sounds/spaceInvaders/invader/gridHitBorder.mp3",
+  spawnGrid: "/sounds/spaceInvaders/invader/spawnGrid.mp3",
   // Boss
   bossEnter: "/sounds/spaceInvaders/boss/bossEnter.mp3",
   bossDescending: "/sounds/spaceInvaders/boss/bossDescending.mp3",

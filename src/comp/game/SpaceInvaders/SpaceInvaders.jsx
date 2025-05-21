@@ -745,13 +745,22 @@ function SpaceInvaders({ onClose }) {
      ***************************************************************/
 
     /* === SPAWN: 1st INVADER GRID === */
-    spawnInvaderGrid(invaderGridsRef, invaderConfig);
+    spawnInvaderGrid(
+      invaderGridsRef,
+      invaderConfig,
+      playSound,
+      soundURL,
+      false
+    );
     /* === SPAWN: NEXT INVADER GRIDS === */
     const invaderGridTimeout = scheduleInvaderGrid(
       invaderGridsRef,
       invaderConfig,
       isGameRunning,
-      bossActiveRef
+      bossActiveRef,
+      playSound,
+      soundURL,
+      true
     );
 
     /* === SPAWN: INVADER PROJECTILE === */
@@ -873,7 +882,13 @@ function SpaceInvaders({ onClose }) {
        ***************************************************************/
 
       /* === INVADER GRIDS MOVEMENT === */
-      updateInvaderGrids(invaderGridsRef, canvas, invaderConfig);
+      updateInvaderGrids(
+        invaderGridsRef,
+        canvas,
+        invaderConfig,
+        playSound,
+        soundURL
+      );
 
       /* === FOLLOWER MOVEMENT === */
       updateFollower({

@@ -1,4 +1,10 @@
-export function updateInvaderGrids(invaderGridsRef, canvas, invaderConfig) {
+export function updateInvaderGrids(
+  invaderGridsRef,
+  canvas,
+  invaderConfig,
+  playSound,
+  soundURL
+) {
   invaderGridsRef.current.forEach((grid) => {
     const inv = invaderConfig.stats;
 
@@ -20,6 +26,7 @@ export function updateInvaderGrids(invaderGridsRef, canvas, invaderConfig) {
       if (hitLeft || hitRight) {
         grid.direction *= -1;
         grid.y += 30;
+        playSound(soundURL.gridHitBorder, 0.3);
       }
     }
   });

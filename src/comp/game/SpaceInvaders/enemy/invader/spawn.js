@@ -1,4 +1,10 @@
-export function spawnInvaderGrid(invaderGridsRef, invaderConfig) {
+export function spawnInvaderGrid(
+  invaderGridsRef,
+  invaderConfig,
+  playSound,
+  soundURL,
+  firstGrid = true
+) {
   const inv = invaderConfig.stats;
 
   const cols = Math.floor(Math.random() * 10 + 5);
@@ -29,13 +35,17 @@ export function spawnInvaderGrid(invaderGridsRef, invaderConfig) {
     invaders: Array.from({ length: rows }, () => Array(cols).fill(true)),
     retreating: false,
   });
+
+  if (firstGrid) playSound(soundURL.spawnGrid, 0.6);
 }
 
 export function scheduleInvaderGrid(
   invaderGridsRef,
   invaderConfig,
   isGameRunning,
-  bossActiveRef
+  bossActiveRef,
+  playSound,
+  soundURL
 ) {
   if (bossActiveRef.current) return;
 
@@ -45,12 +55,14 @@ export function scheduleInvaderGrid(
   return setTimeout(() => {
     if (!isGameRunning || bossActiveRef.current) return;
 
-    spawnInvaderGrid(invaderGridsRef, invaderConfig);
+    spawnInvaderGrid(invaderGridsRef, invaderConfig, playSound, soundURL);
     scheduleInvaderGrid(
       invaderGridsRef,
       invaderConfig,
       isGameRunning,
-      bossActiveRef
+      bossActiveRef,
+      playSound,
+      soundURL
     );
   }, interval);
 }
