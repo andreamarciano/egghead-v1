@@ -47,7 +47,7 @@ export function handleBossEntranceAndDraw({
       // DESCENDING → RISING
       if (b.entrancePhase === "descending") {
         playerTransitionRef.current = "exitScene";
-        b.y += 2; // descending speed - cambia 0.3
+        b.y += 0.3; // descending speed
 
         if (b.y >= 0) {
           b.entrancePhase = "rising";
@@ -56,7 +56,7 @@ export function handleBossEntranceAndDraw({
       } else if (b.entrancePhase === "rising") {
         playerTransitionRef.current = "reenterScene";
         isBoostingRef.current = false;
-        b.y -= 2; // rising speed - cambia 0.5
+        b.y -= 2; // rising speed
 
         if (b.y <= -40) {
           b.y = -40;
