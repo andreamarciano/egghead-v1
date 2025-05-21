@@ -29,6 +29,7 @@ const soundURL = {
   shipUpgrade: "/sounds/spaceInvaders/powerUp/shipUpgrade.mp3",
   // Gameplay
   gameOver: "/sounds/spaceInvaders/gameplay/gameOver.mp3",
+  score10K: "/sounds/spaceInvaders/gameplay/score10K.mp3",
 };
 
 const themeURL = [

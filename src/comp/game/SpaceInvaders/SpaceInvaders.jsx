@@ -488,6 +488,7 @@ function SpaceInvaders({ onClose }) {
    ***************************************************************/
   /* Score */
   const [score, setScore] = useState(0);
+  const last10KRef = useRef(0);
   const scoreRef = useRef(score);
   const addScore = (points) => {
     scoreRef.current += points;
@@ -559,9 +560,12 @@ function SpaceInvaders({ onClose }) {
         const next10K = Math.floor(next / 10000);
 
         // large expansion
-        if (current10K !== next10K) {
+        if (current10K !== next10K && next10K > last10KRef.current) {
+          last10KRef.current = next10K;
+
           setScoreTextSize("w-8 h-8");
           setTimeout(() => setScoreTextSize("w-4.5 h-4.5"), 400);
+          playSound(soundURL.score10K, 0.4);
         }
         // medium expansion
         else if (currentK !== nextK) {
@@ -1478,6 +1482,7 @@ function SpaceInvaders({ onClose }) {
 
       // score
       scoreRef.current = 0;
+      last10KRef.current = 0;
       setScore(0);
       setDisplayedScore(0);
     }
