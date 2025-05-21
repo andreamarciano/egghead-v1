@@ -124,6 +124,7 @@ export function collisionPlayerHitBoss({
   soundURL,
   playSound,
   resumeBackgroundMusic,
+  damageLabelsRef,
 }) {
   if (bossRef.current && !bossRef.current.entering) {
     const b = bossRef.current;
@@ -146,6 +147,16 @@ export function collisionPlayerHitBoss({
         b.lives -= bossConfig.blueWeakPoints.damage;
         handleBossHit(p.x + p.width / 2, p.y);
         projectilesRef.current.splice(pIndex, 1);
+
+        damageLabelsRef.current.push({
+          x: p.x,
+          y: p.y,
+          text: `-${bossConfig.blueWeakPoints.damage}`,
+          alpha: 1,
+          lifetime: 60,
+          color: "blue",
+          font: "bold 16px Arial",
+        });
 
         // replace
         const usedSpaces = activeBlueWeakPointsRef.current.map(
@@ -178,6 +189,16 @@ export function collisionPlayerHitBoss({
         projectilesRef.current.splice(pIndex, 1);
 
         activeRedWeakPointsRef.current.splice(redHitIndex, 1);
+
+        damageLabelsRef.current.push({
+          x: p.x,
+          y: p.y,
+          text: `-${bossConfig.redWeakPoints.damage}`,
+          alpha: 1,
+          lifetime: 60,
+          color: "red",
+          font: "bold 20px Arial",
+        });
 
         if (allRedSpaces.length > 0) {
           const index = Math.floor(Math.random() * allRedSpaces.length);

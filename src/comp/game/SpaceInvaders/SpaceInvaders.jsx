@@ -90,6 +90,7 @@ import {
   pickBlueWeakPoints,
   pickRedWeakPoints,
   spawnBlueWeakPoints,
+  drawDamageLabels,
 } from "./enemy/boss/weakPoint";
 
 /******************************************************************************
@@ -282,6 +283,7 @@ function SpaceInvaders({ onClose }) {
   const enablePhase1 = (value) => (isPhase1EnabledRef.current = value);
   const enablePhase2 = (value) => (isPhase2EnabledRef.current = value);
   // Boss Weak Points
+  const damageLabelsRef = useRef([]);
   const activeBlueWeakPointsRef = useRef([]);
   const activeRedWeakPointsRef = useRef([]);
   const usedRedSpacesRef = useRef([]);
@@ -1218,6 +1220,11 @@ function SpaceInvaders({ onClose }) {
         canvas,
       });
 
+      drawDamageLabels({
+        ctx: c,
+        damageLabelsRef,
+      });
+
       /* === SPAWN: SHIP BUBBLE === */
       handleShipBubbleSpawn({
         shipUpgradeRef,
@@ -1355,6 +1362,7 @@ function SpaceInvaders({ onClose }) {
         soundURL,
         playSound,
         resumeBackgroundMusic,
+        damageLabelsRef,
       });
 
       /* GAME LOOP END */
@@ -1441,6 +1449,7 @@ function SpaceInvaders({ onClose }) {
       bossImageRef.current.src = imgURL.boss1;
       bossImage2Ref.current = new Image();
       bossImage2Ref.current.src = imgURL.boss2;
+      damageLabelsRef.current = [];
 
       // score
       scoreRef.current = 0;

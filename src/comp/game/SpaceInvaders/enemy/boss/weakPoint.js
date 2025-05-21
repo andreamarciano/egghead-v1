@@ -55,3 +55,22 @@ export const pickRedWeakPoints = (allRedSpaces, usedRedSpaces, count) => {
   }
   return selected;
 };
+
+export function drawDamageLabels({ ctx, damageLabelsRef }) {
+  damageLabelsRef.current.forEach((label) => {
+    ctx.save();
+    ctx.globalAlpha = label.alpha;
+    ctx.fillStyle = label.color;
+    ctx.font = label.font;
+    ctx.fillText(label.text, label.x, label.y);
+    ctx.restore();
+
+    label.y -= 0.5;
+    label.lifetime--;
+    label.alpha -= 1 / 60;
+  });
+
+  damageLabelsRef.current = damageLabelsRef.current.filter(
+    (label) => label.lifetime > 0
+  );
+}
