@@ -35,6 +35,11 @@ export function spawnBoss({
         amplitudeY: 10,
         speed: 0.01,
         t: 0,
+        timer: 0,
+        direction: 1,
+        rotationsCount: 0,
+        rotationsToSwitch: 4,
+        rotationsSinceLastSwitch: 0,
       },
     };
 

@@ -143,17 +143,41 @@ export function handleBossEntranceAndDraw({
   let drawY = b.y;
 
   if (!b.entering && b.oscillation) {
-    b.oscillation.t += 1;
+    const osc = b.oscillation;
+    osc.timer += 1; // total rotation
+    osc.t += osc.direction; // current direction
 
-    const offsetX =
-      Math.sin(b.oscillation.t * b.oscillation.speed) *
-      b.oscillation.amplitudeX;
-    const offsetY =
-      Math.cos(b.oscillation.t * b.oscillation.speed) *
-      b.oscillation.amplitudeY;
+    const offsetX = Math.sin(osc.t * osc.speed) * osc.amplitudeX;
+    const offsetY = Math.cos(osc.t * osc.speed) * osc.amplitudeY;
 
     drawX += offsetX;
     drawY += offsetY;
+
+    const totalRotations = Math.floor((osc.timer * osc.speed) / (2 * Math.PI));
+
+    if (totalRotations > osc.rotationsCount) {
+      osc.rotationsCount = totalRotations;
+      osc.rotationsSinceLastSwitch += 1;
+
+      // const remaining = osc.rotationsToSwitch - osc.rotationsSinceLastSwitch;
+
+      // console.log(`Full rotations: ${osc.rotationsCount}`);
+      // console.log(`Missing rotations: ${remaining}`);
+      // console.log(
+      //   `Current direction: ${
+      //     osc.direction === 1 ? "counterclockwise" : "clockwise"
+      //   }`
+      // );
+
+      if (osc.rotationsSinceLastSwitch >= osc.rotationsToSwitch) {
+        osc.direction *= -1;
+        osc.rotationsSinceLastSwitch = 0;
+        // console.log(
+        //   "Change direction: " +
+        //     (osc.direction === 1 ? "counterclockwise" : "clockwise")
+        // );
+      }
+    }
   }
 
   // === DRAW: BOSS IMAGE ===
