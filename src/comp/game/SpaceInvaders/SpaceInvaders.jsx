@@ -152,8 +152,8 @@ function SpaceInvaders({ onClose }) {
   const projectilesRef = useRef([]);
 
   /* Lives */
-  const [lives, setLives] = useState(10);
-  const livesRef = useRef(10);
+  const [lives, setLives] = useState(5);
+  const livesRef = useRef(5);
   const [animateLifeLoss, setAnimateLifeLoss] = useState(false);
   const previousLivesRef = useRef(lives);
   // Player Hit
