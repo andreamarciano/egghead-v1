@@ -1220,6 +1220,7 @@ function SpaceInvaders({ onClose }) {
         canvas,
       });
 
+      /* === DRAW: Weak Point Label === */
       drawDamageLabels({
         ctx: c,
         damageLabelsRef,
