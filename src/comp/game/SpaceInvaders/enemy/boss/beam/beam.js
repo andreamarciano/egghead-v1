@@ -16,6 +16,7 @@ export function generateBossBeams({
   drawY,
   playSound,
   soundURL,
+  debugHitbox,
 }) {
   if (
     !bossRef.current ||
@@ -69,7 +70,7 @@ export function generateBossBeams({
 
     // === BEAM RENDER ===
     if (beam.isShooting) {
-      renderLaserByType({ beam, hitbox, now, ctx: c });
+      renderLaserByType({ beam, hitbox, now, ctx: c, debugHitbox });
     }
 
     return true;
@@ -90,16 +91,16 @@ export function getBossBeamHitbox(beam, drawX, drawY, canvas, bossBeamConfig) {
   };
 }
 
-function renderLaserByType({ beam, hitbox, now, ctx: c }) {
+function renderLaserByType({ beam, hitbox, now, ctx: c, debugHitbox }) {
   switch (beam.type) {
     case "small":
-      renderSmallLaser(c, beam, hitbox, now);
+      renderSmallLaser(c, beam, hitbox, now, debugHitbox);
       break;
     case "medium":
-      renderMediumLaser(c, beam, hitbox, now);
+      renderMediumLaser(c, beam, hitbox, now, debugHitbox);
       break;
     case "large":
-      renderLargeLaser(c, beam, hitbox, now);
+      renderLargeLaser(c, beam, hitbox, now, debugHitbox);
       break;
   }
 }

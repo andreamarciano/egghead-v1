@@ -1282,6 +1282,7 @@ function SpaceInvaders({ onClose }) {
           drawY,
           playSound,
           soundURL,
+          debugHitbox,
         });
       }
 

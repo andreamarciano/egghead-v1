@@ -1,4 +1,4 @@
-export function renderSmallLaser(c, beam, hitbox, now) {
+export function renderSmallLaser(c, beam, hitbox, now, debugHitbox) {
   const baseX = hitbox.x;
   const baseY = hitbox.y;
   const width = hitbox.width;
@@ -126,12 +126,14 @@ export function renderSmallLaser(c, beam, hitbox, now) {
   c.restore();
 
   // hitbox
-  // c.strokeStyle = "white";
-  // c.lineWidth = 2;
-  // c.strokeRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+  if (debugHitbox) {
+    c.strokeStyle = "white";
+    c.lineWidth = 2;
+    c.strokeRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+  }
 }
 
-export function renderMediumLaser(c, beam, hitbox, now) {
+export function renderMediumLaser(c, beam, hitbox, now, debugHitbox) {
   const baseWidth = hitbox.width;
   const beamHeight = hitbox.height;
   const centerX = hitbox.x + hitbox.width / 2;
@@ -191,12 +193,14 @@ export function renderMediumLaser(c, beam, hitbox, now) {
   c.restore();
 
   // hitbox
-  // c.strokeStyle = "white";
-  // c.lineWidth = 2;
-  // c.strokeRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+  if (debugHitbox) {
+    c.strokeStyle = "white";
+    c.lineWidth = 2;
+    c.strokeRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+  }
 }
 
-export function renderLargeLaser(c, beam, hitbox, now) {
+export function renderLargeLaser(c, beam, hitbox, now, debugHitbox) {
   const baseWidth = hitbox.width * 2;
   const tipWidth = hitbox.width;
   const beamHeight = hitbox.height;
@@ -265,8 +269,10 @@ export function renderLargeLaser(c, beam, hitbox, now) {
     c.stroke();
 
     // hitbox
-    // c.strokeStyle = "white";
-    // c.lineWidth = 2;
-    // c.strokeRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+    if (debugHitbox) {
+      c.strokeStyle = "white";
+      c.lineWidth = 2;
+      c.strokeRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+    }
   }
 }
