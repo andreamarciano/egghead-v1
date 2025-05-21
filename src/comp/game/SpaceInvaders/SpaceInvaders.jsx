@@ -1220,8 +1220,6 @@ function SpaceInvaders({ onClose }) {
         canvas,
       });
 
-      // console.log(`x: ${drawX}, y: ${drawY}`);
-
       drawDamageLabels({
         ctx: c,
         damageLabelsRef,
@@ -1371,6 +1369,8 @@ function SpaceInvaders({ onClose }) {
         playSound,
         resumeBackgroundMusic,
         damageLabelsRef,
+        drawX,
+        drawY,
       });
 
       /* GAME LOOP END */

@@ -128,13 +128,15 @@ export function collisionPlayerHitBoss({
   playSound,
   resumeBackgroundMusic,
   damageLabelsRef,
+  drawX,
+  drawY,
 }) {
   if (bossRef.current && !bossRef.current.entering) {
     const b = bossRef.current;
 
     projectilesRef.current.forEach((p, pIndex) => {
-      const bossX = b.x;
-      const bossY = b.y;
+      const bossX = drawX;
+      const bossY = drawY;
 
       // === BLUE WEAK POINTS ===
       const hitIndex = activeBlueWeakPointsRef.current.findIndex((wp) => {
@@ -179,10 +181,10 @@ export function collisionPlayerHitBoss({
       // === RED WEAK POINTS ===
       const redHitIndex = activeRedWeakPointsRef.current.findIndex((wp) => {
         return (
-          p.x < b.x + wp.x + wp.width &&
-          p.x + p.width > b.x + wp.x &&
-          p.y < b.y + wp.y + wp.height &&
-          p.y + p.height > b.y + wp.y
+          p.x < bossX + wp.x + wp.width &&
+          p.x + p.width > bossX + wp.x &&
+          p.y < bossY + wp.y + wp.height &&
+          p.y + p.height > bossY + wp.y
         );
       });
 
