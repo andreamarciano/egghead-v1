@@ -198,6 +198,10 @@
   By **freesound_community**
   Downloaded on May 16th, 2025 from [pixabay](https://pixabay.com/users/freesound_community-46691455/)
 
+- **Thunder**
+  By **BlenderTimer**
+  Downloaded on May 21th, 2025 from [pixabay](https://pixabay.com/users/blendertimer-9538909/)
+
 > All above assets, images, and sounds used are either in the public domain (CC0) or free to use under their respective licenses. Where possible, authors have been credited.
 
 ## Suno AI [suno] (https://suno.com/)

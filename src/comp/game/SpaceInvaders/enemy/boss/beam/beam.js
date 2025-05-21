@@ -30,7 +30,7 @@ export function generateBossBeams({
     medium: false,
     large: false,
   };
-  const volumeMapActive = { small: 0.4, medium: 0.5, large: 0.6 };
+  const volumeMapActive = { small: 0.5, medium: 0.6, large: 0.9 };
 
   bossBeamsRef.current = bossBeamsRef.current.filter((beam) => {
     const config = bossBeamConfig[beam.type];
@@ -49,7 +49,11 @@ export function generateBossBeams({
 
       if (!playedShootSound[beam.type]) {
         playedShootSound[beam.type] = true;
-        playSound(soundURL.beamActive2, volumeMapActive[beam.type]);
+
+        const soundToPlay =
+          beam.type === "small" ? soundURL.thunder : soundURL.beamActive2;
+
+        playSound(soundToPlay, volumeMapActive[beam.type]);
       }
     }
 

@@ -18,6 +18,7 @@ const soundURL = {
   bossDescending: "/sounds/spaceInvaders/boss/bossDescending.mp3",
   bossDescending2: "/sounds/spaceInvaders/boss/bossDescending2.mp3",
   bossDefeated: "/sounds/spaceInvaders/boss/bossDefeated.mp3",
+  thunder: "/sounds/spaceInvaders/boss/thunder.mp3",
   // Power Up
   shieldUp: "/sounds/spaceInvaders/powerUp/shieldUp.mp3",
   shieldDown: "/sounds/spaceInvaders/powerUp/shieldDown.mp3",
