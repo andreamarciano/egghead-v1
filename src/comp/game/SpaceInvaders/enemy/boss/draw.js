@@ -56,7 +56,7 @@ export function handleBossEntranceAndDraw({
       } else if (b.entrancePhase === "rising") {
         playerTransitionRef.current = "reenterScene";
         isBoostingRef.current = false;
-        b.y -= 2; // rising speed
+        b.y -= 0.5; // rising speed
 
         if (b.y <= -40) {
           b.y = -40;
