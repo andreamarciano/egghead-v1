@@ -5,7 +5,7 @@ const bossConfig = {
     lives: 1000,
     score: 5000,
   },
-  spawn: 1000, // cambia - 10k
+  spawn: 5500,
   gunOffsets: {
     small: [157, 387, 607, 837],
     medium: [272, 722],
@@ -23,7 +23,7 @@ const bossConfig = {
       { x: 870, y: 184, width: 29, height: 6 },
     ],
     count: 4,
-    damage: 20, // cambia - 5
+    damage: 5,
   },
   redWeakPoints: {
     spaces: [
@@ -76,7 +76,7 @@ const bossConfig = {
       { x: 980, y: 204, width: 10, height: 6 },
     ],
     count: 3,
-    damage: 50, // cambia - 30
+    damage: 30,
   },
   hitParticles: {
     color: "#2B3345",
