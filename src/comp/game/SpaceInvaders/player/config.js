@@ -4,7 +4,7 @@ const playerConfig = {
     width2: 112 * 0.5,
     height: 75 * 0.5,
     speed: 5,
-    speed2: 5.4,
+    speed2: 8, //5.4
     rotation: 0.15,
     rotationBack: 0.95,
   },
@@ -13,7 +13,7 @@ const playerConfig = {
     width: 8,
     height: 20,
     speed: 7,
-    speed2: 7.3,
+    speed2: 12, //7.3
   },
   hitParticles: {
     color: "white",

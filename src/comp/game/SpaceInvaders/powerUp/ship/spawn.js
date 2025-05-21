@@ -4,11 +4,9 @@ export function handleShipBubbleSpawn({
   playerYRef,
   playerWidth,
   playerStats,
-  playerImageRef,
-  playerPart2Ref,
+  playerUpgradeInProgressRef,
+  playerUpgradeTimerRef,
   playSound,
-  imgURL,
-  playerColor,
   soundURL,
   c,
 }) {
@@ -46,9 +44,8 @@ export function handleShipBubbleSpawn({
   if (hit) {
     shipUpgradeRef.current = null;
 
-    playerImageRef.current = new Image();
-    playerImageRef.current.src = imgURL[`${playerColor}2`];
-    playerPart2Ref.current = true;
+    playerUpgradeInProgressRef.current = true;
+    playerUpgradeTimerRef.current = performance.now();
 
     playSound(soundURL.shipUpgrade);
   }

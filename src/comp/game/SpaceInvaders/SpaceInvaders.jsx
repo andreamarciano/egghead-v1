@@ -138,6 +138,8 @@ function SpaceInvaders({ onClose }) {
   const isPlayerInvincible = useRef(false);
   const isPlayerFrozenRef = useRef(false);
   const playerTransitionRef = useRef(null);
+  const playerUpgradeInProgressRef = useRef(false);
+  const playerUpgradeTimerRef = useRef(0);
 
   /* Projectile */
   const projectileImages = {
@@ -1118,6 +1120,11 @@ function SpaceInvaders({ onClose }) {
         isPlayerFrozenRef,
         playerTransitionRef,
         debugHitbox,
+        playerUpgradeInProgressRef,
+        playerUpgradeTimerRef,
+        playerPart2Ref,
+        imgURL,
+        playerColor,
       });
 
       /* === DRAW: SHIELD ON PLAYER === */
@@ -1218,11 +1225,9 @@ function SpaceInvaders({ onClose }) {
         playerYRef,
         playerWidth,
         playerStats,
-        playerImageRef,
-        playerPart2Ref,
+        playerUpgradeInProgressRef,
+        playerUpgradeTimerRef,
         playSound,
-        imgURL,
-        playerColor,
         soundURL,
         c,
       });
@@ -1396,6 +1401,8 @@ function SpaceInvaders({ onClose }) {
       isPlayerInvincible.current = false;
       isPlayerFrozenRef.current = false;
       playerPart2Ref.current = false;
+      playerUpgradeInProgressRef.current = false;
+      playerUpgradeTimerRef.current = 0;
 
       // clear canvas
       projectilesRef.current = [];

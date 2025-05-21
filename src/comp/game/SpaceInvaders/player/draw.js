@@ -12,6 +12,11 @@ export function drawPlayer({
   isPlayerFrozenRef,
   playerTransitionRef,
   debugHitbox,
+  playerUpgradeInProgressRef,
+  playerUpgradeTimerRef,
+  playerPart2Ref,
+  imgURL,
+  playerColor,
 }) {
   // Handle transitions (exit/reenter)
   if (playerTransitionRef.current === "exitScene") {
@@ -48,18 +53,32 @@ export function drawPlayer({
     -playerYRef.current - playerStats.height / 2
   );
 
-  if (playerImageRef.current.complete) {
+  // Upgrade Ship Animation
+  let imageToDraw = playerImageRef.current;
+
+  if (playerUpgradeInProgressRef.current) {
+    const now = performance.now();
+    const elapsed = now - playerUpgradeTimerRef.current;
+
+    const flashInterval = 200;
+    const frame = Math.floor(elapsed / flashInterval) % 2;
+
+    const tempImage = new Image();
+    tempImage.src =
+      frame === 0 ? imgURL[`${playerColor}`] : imgURL[`${playerColor}2`];
+    imageToDraw = tempImage;
+
+    if (elapsed >= 2000) {
+      playerUpgradeInProgressRef.current = false;
+      playerImageRef.current = new Image();
+      playerImageRef.current.src = imgURL[`${playerColor}2`];
+      playerPart2Ref.current = true;
+    }
+  }
+
+  if (imageToDraw.complete) {
     c.drawImage(
-      playerImageRef.current,
-      playerXRef.current,
-      playerYRef.current,
-      playerWidth,
-      playerStats.height
-    );
-  } else {
-    // Fallback
-    c.fillStyle = "green";
-    c.fillRect(
+      imageToDraw,
       playerXRef.current,
       playerYRef.current,
       playerWidth,
