@@ -138,7 +138,7 @@ export function handleBossEntranceAndDraw({
     }
   }
 
-  // === DRAW: BOSS IMAGE ===
+  // === ANIMATION: BOSS MOVEMENT ===
   let drawX = b.x;
   let drawY = b.y;
 
@@ -152,18 +152,11 @@ export function handleBossEntranceAndDraw({
       Math.cos(b.oscillation.t * b.oscillation.speed) *
       b.oscillation.amplitudeY;
 
-    // console.log("Oscillation t:", b.oscillation.t);
-    // console.log(
-    //   "Offset X:",
-    //   offsetX.toFixed(2),
-    //   "Offset Y:",
-    //   offsetY.toFixed(2)
-    // );
-
     drawX += offsetX;
     drawY += offsetY;
   }
 
+  // === DRAW: BOSS IMAGE ===
   if (bossImageRef.current.complete) {
     c.drawImage(bossImageRef.current, drawX, drawY, b.width, b.height);
   } else {
