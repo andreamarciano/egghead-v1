@@ -47,7 +47,7 @@ export function handleBossEntranceAndDraw({
       // DESCENDING → RISING
       if (b.entrancePhase === "descending") {
         playerTransitionRef.current = "exitScene";
-        b.y += 0.3; // descending speed
+        b.y += bossStats.descendingSpeed;
 
         if (b.y >= 0) {
           b.entrancePhase = "rising";
@@ -56,7 +56,7 @@ export function handleBossEntranceAndDraw({
       } else if (b.entrancePhase === "rising") {
         playerTransitionRef.current = "reenterScene";
         isBoostingRef.current = false;
-        b.y -= 0.5; // rising speed
+        b.y -= bossStats.risingSpeed;
 
         if (b.y <= -40) {
           b.y = -40;
@@ -71,7 +71,7 @@ export function handleBossEntranceAndDraw({
     } else if (b.phase === 2) {
       // RISING → IMAGE SWAP → DESCENDING
       if (b.entrancePhase === "rising") {
-        b.y -= 1.2; // rising speed
+        b.y -= bossStats.risingSpeed2;
 
         if (b.y <= -b.height) {
           b.y = -b.height;
@@ -86,7 +86,7 @@ export function handleBossEntranceAndDraw({
         }
       } else if (b.entrancePhase === "descending") {
         isBoostingRef.current = false;
-        b.y += 1; // descending speed
+        b.y += bossStats.descendingSpeed2;
 
         if (b.y >= -40) {
           b.y = -40;
@@ -100,7 +100,7 @@ export function handleBossEntranceAndDraw({
       }
     } else if (b.entrancePhase === "retreat") {
       // === BOSS DEFEATED ===
-      b.y -= 1; // rising speed
+      b.y -= bossStats.risingSpeed3;
 
       isPlayerInvincible.current = true;
 

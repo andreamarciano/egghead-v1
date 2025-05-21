@@ -280,8 +280,10 @@ function SpaceInvaders({ onClose }) {
   // Boss Phase
   const isPhase1EnabledRef = useRef(true);
   const isPhase2EnabledRef = useRef(false);
+  const isPhase3EnabledRef = useRef(false);
   const enablePhase1 = (value) => (isPhase1EnabledRef.current = value);
   const enablePhase2 = (value) => (isPhase2EnabledRef.current = value);
+  const enablePhase3 = (value) => (isPhase3EnabledRef.current = value);
   // Boss Weak Points
   const damageLabelsRef = useRef([]);
   const activeBlueWeakPointsRef = useRef([]);
@@ -1278,6 +1280,7 @@ function SpaceInvaders({ onClose }) {
             medium: bossProjectilesMediumRef,
             large: bossProjectilesLargeRef,
           },
+          isPhase3EnabledRef,
           playLaserSound,
           soundURL,
         });
@@ -1377,6 +1380,7 @@ function SpaceInvaders({ onClose }) {
             handleBossPhaseChange(newPhase, bossRef, {
               enablePhase1,
               enablePhase2,
+              enablePhase3,
               bossBeamsRef,
               beamIntervalsRef,
               bossBeamConfig,
@@ -1385,6 +1389,7 @@ function SpaceInvaders({ onClose }) {
         isPlayerFrozenRef,
         enablePhase1,
         enablePhase2,
+        enablePhase3,
         beamIntervalsRef,
         soundURL,
         playSound,
@@ -1465,6 +1470,7 @@ function SpaceInvaders({ onClose }) {
       bossRef.current = null;
       isPhase1EnabledRef.current = true;
       isPhase2EnabledRef.current = false;
+      isPhase3EnabledRef.current = false;
       bossProjectilesSmallRef.current = [];
       bossProjectilesMediumRef.current = [];
       bossProjectilesLargeRef.current = [];

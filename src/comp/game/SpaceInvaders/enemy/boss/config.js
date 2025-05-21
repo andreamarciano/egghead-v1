@@ -3,9 +3,17 @@ const bossConfig = {
     width: 1000,
     height: 250,
     lives: 1000,
-    score: 5000,
+    score: 10000,
+    descendingSpeed: 2, // 0.3
+    risingSpeed: 2, // 0.5
+    risingSpeed2: 1.2,
+    descendingSpeed2: 1,
+    risingSpeed3: 1,
+    amplitudeX: 30,
+    amplitudeY: 10,
+    speed: 0.008, //0.009
   },
-  spawn: 5500,
+  spawn: 1000,
   gunOffsets: {
     small: [157, 387, 607, 837],
     medium: [272, 722],
@@ -23,7 +31,7 @@ const bossConfig = {
       { x: 870, y: 184, width: 29, height: 6 },
     ],
     count: 4,
-    damage: 5,
+    damage: 10,
   },
   redWeakPoints: {
     spaces: [
@@ -76,7 +84,7 @@ const bossConfig = {
       { x: 980, y: 204, width: 10, height: 6 },
     ],
     count: 3,
-    damage: 30,
+    damage: 40,
   },
   hitParticles: {
     color: "#2B3345",

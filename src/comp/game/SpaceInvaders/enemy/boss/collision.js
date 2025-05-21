@@ -123,6 +123,7 @@ export function collisionPlayerHitBoss({
   isPlayerFrozenRef,
   enablePhase1,
   enablePhase2,
+  enablePhase3,
   beamIntervalsRef,
   soundURL,
   playSound,
@@ -226,6 +227,8 @@ export function collisionPlayerHitBoss({
 
       enablePhase1(false);
       enablePhase2(false);
+      enablePhase3(false);
+
       beamIntervalsRef.current.forEach(clearInterval);
       beamIntervalsRef.current = [];
 

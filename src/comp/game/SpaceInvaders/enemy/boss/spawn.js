@@ -31,9 +31,9 @@ export function spawnBoss({
       hasChangedImage: false,
       retreating: false,
       oscillation: {
-        amplitudeX: 30,
-        amplitudeY: 10,
-        speed: 0.01,
+        amplitudeX: bossStats.amplitudeX,
+        amplitudeY: bossStats.amplitudeY,
+        speed: bossStats.speed,
         t: 0,
         timer: 0,
         direction: 1,

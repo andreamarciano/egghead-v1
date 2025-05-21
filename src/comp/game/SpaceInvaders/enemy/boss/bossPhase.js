@@ -20,7 +20,14 @@ export function updateBossPhase(bossRef, handleBossPhaseChange) {
 export function handleBossPhaseChange(
   phase,
   bossRef,
-  { enablePhase1, enablePhase2, bossBeamsRef, beamIntervalsRef, bossBeamConfig }
+  {
+    enablePhase1,
+    enablePhase2,
+    enablePhase3,
+    bossBeamsRef,
+    beamIntervalsRef,
+    bossBeamConfig,
+  }
 ) {
   const b = bossRef.current;
   if (!b) return;
@@ -75,6 +82,7 @@ export function handleBossPhaseChange(
     case 3:
       enablePhase1(true);
       enablePhase2(true);
+      enablePhase3(true);
       break;
   }
 }

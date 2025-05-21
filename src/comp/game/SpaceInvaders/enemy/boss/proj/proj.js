@@ -6,6 +6,7 @@ export function generateBossProjectiles({
   bossStats,
   bossProjectileConfig,
   bossProjectilesRefs,
+  isPhase3EnabledRef,
   playLaserSound,
   soundURL,
 }) {
@@ -15,7 +16,11 @@ export function generateBossProjectiles({
 
   types.forEach((type) => {
     const offsets = bossConfig.gunOffsets[type];
+
     const chance = { small: 0.03, medium: 0.02, large: 0.01 }[type];
+    const chance2 = { small: 0.01, medium: 0.01, large: 0.01 }[type];
+    const chanceByPhase = isPhase3EnabledRef.current ? chance2 : chance;
+
     const shapesByType = {
       small: ["rect", "triangle"],
       medium: ["rect", "diamond", "s"],
@@ -23,7 +28,7 @@ export function generateBossProjectiles({
     };
 
     offsets.forEach((offsetX) => {
-      if (Math.random() < chance) {
+      if (Math.random() < chanceByPhase) {
         const shapeChoices = shapesByType[type];
         const shape =
           shapeChoices[Math.floor(Math.random() * shapeChoices.length)];
