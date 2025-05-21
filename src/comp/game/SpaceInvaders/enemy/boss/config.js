@@ -3,17 +3,17 @@ const bossConfig = {
     width: 1000,
     height: 250,
     lives: 1000,
-    score: 10000,
-    descendingSpeed: 2, // 0.3
-    risingSpeed: 2, // 0.5
+    score: 5000,
+    descendingSpeed: 0.3,
+    risingSpeed: 0.5,
     risingSpeed2: 1.2,
     descendingSpeed2: 1,
     risingSpeed3: 1,
     amplitudeX: 30,
     amplitudeY: 10,
-    speed: 0.008, //0.009
+    speed: 0.008,
   },
-  spawn: 1000,
+  spawn: 6666,
   gunOffsets: {
     small: [157, 387, 607, 837],
     medium: [272, 722],
