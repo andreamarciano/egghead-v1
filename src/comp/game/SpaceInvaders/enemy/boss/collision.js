@@ -150,7 +150,7 @@ export function collisionPlayerHitBoss({
 
       if (hitIndex !== -1) {
         b.lives -= bossConfig.blueWeakPoints.damage;
-        handleBossHit(p.x + p.width / 2, p.y);
+        handleBossHit(p.x + p.width / 2, p.y, soundURL.hitFollower);
         projectilesRef.current.splice(pIndex, 1);
 
         damageLabelsRef.current.push({
@@ -190,7 +190,7 @@ export function collisionPlayerHitBoss({
 
       if (redHitIndex !== -1) {
         b.lives -= bossConfig.redWeakPoints.damage;
-        handleBossHit(p.x + p.width / 2, p.y);
+        handleBossHit(p.x + p.width / 2, p.y, soundURL.destroyFollower);
         projectilesRef.current.splice(pIndex, 1);
 
         activeRedWeakPointsRef.current.splice(redHitIndex, 1);

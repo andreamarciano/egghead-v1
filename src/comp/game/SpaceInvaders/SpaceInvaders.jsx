@@ -266,9 +266,9 @@ function SpaceInvaders({ onClose }) {
   const bossRef = useRef(null);
   const bossDefeatedRef = useRef(false);
   const bossStats = bossConfig.stats;
-  const handleBossHit = (x, y) => {
+  const handleBossHit = (x, y, sound) => {
     createExplosion(particlesRef, { x, y, ...bossConfig.hitParticles });
-    playSound(soundURL.hitFollower, 0.6);
+    playSound(sound, 0.6);
   };
   // Phase 1 - Boss Projectiles
   const bossProjectilesSmallRef = useRef([]);
