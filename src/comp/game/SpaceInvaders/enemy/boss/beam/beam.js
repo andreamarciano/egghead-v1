@@ -12,6 +12,8 @@ export function generateBossBeams({
   bossBeamConfig,
   isPhase2EnabledRef,
   bossRef,
+  drawX,
+  drawY,
   playSound,
   soundURL,
 }) {
@@ -31,7 +33,13 @@ export function generateBossBeams({
 
   bossBeamsRef.current = bossBeamsRef.current.filter((beam) => {
     const config = bossBeamConfig[beam.type];
-    const hitbox = getBossBeamHitbox(beam, bossRef, canvas, bossBeamConfig);
+    const hitbox = getBossBeamHitbox(
+      beam,
+      drawX,
+      drawY,
+      canvas,
+      bossBeamConfig
+    );
 
     // === BEAM STATE TRANSITIONS ===
     if (beam.isCharging && now >= beam.chargeEnd) {
@@ -68,10 +76,10 @@ export function generateBossBeams({
   });
 }
 
-export function getBossBeamHitbox(beam, bossRef, canvas, bossBeamConfig) {
+export function getBossBeamHitbox(beam, drawX, drawY, canvas, bossBeamConfig) {
   const beamWidth = bossBeamConfig[beam.type].beamWidth;
-  const beamX = bossRef.current.x + beam.x - beamWidth / 2;
-  const beamY = bossRef.current.y + beam.y;
+  const beamX = drawX + beam.x - beamWidth / 2;
+  const beamY = drawY + beam.y;
   const beamHeight = canvas.height - beamY;
 
   return {

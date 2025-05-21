@@ -152,8 +152,8 @@ function SpaceInvaders({ onClose }) {
   const projectilesRef = useRef([]);
 
   /* Lives */
-  const [lives, setLives] = useState(10); // cambia - 5
-  const livesRef = useRef(10); // cambia -5
+  const [lives, setLives] = useState(100); // cambia - 5
+  const livesRef = useRef(100); // cambia -5
   const [animateLifeLoss, setAnimateLifeLoss] = useState(false);
   const previousLivesRef = useRef(lives);
   // Player Hit
@@ -1189,7 +1189,7 @@ function SpaceInvaders({ onClose }) {
       });
 
       /* === DRAW: BOSS === */
-      handleBossEntranceAndDraw({
+      const { drawX, drawY } = handleBossEntranceAndDraw({
         bossRef,
         bossImageRef,
         bossImage2Ref,
@@ -1220,6 +1220,8 @@ function SpaceInvaders({ onClose }) {
         canvas,
       });
 
+      // console.log(`x: ${drawX}, y: ${drawY}`);
+
       drawDamageLabels({
         ctx: c,
         damageLabelsRef,
@@ -1249,6 +1251,8 @@ function SpaceInvaders({ onClose }) {
         generateBossProjectiles({
           boss: bossRef.current,
           bossConfig,
+          drawX,
+          drawY,
           bossStats,
           bossProjectileConfig,
           bossProjectilesRefs: {
@@ -1275,6 +1279,8 @@ function SpaceInvaders({ onClose }) {
           bossBeamConfig,
           isPhase2EnabledRef,
           bossRef,
+          drawX,
+          drawY,
           playSound,
           soundURL,
         });
@@ -1332,6 +1338,8 @@ function SpaceInvaders({ onClose }) {
         setLives,
         handleGameOver,
         canvas,
+        drawX,
+        drawY,
       });
 
       /* === COLLISION DETECTION: PLAYER PROJECTILE → BOSS WEAK POINTS === */

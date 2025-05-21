@@ -1,6 +1,8 @@
 export function generateBossProjectiles({
   boss,
   bossConfig,
+  drawX,
+  drawY,
   bossStats,
   bossProjectileConfig,
   bossProjectilesRefs,
@@ -27,8 +29,8 @@ export function generateBossProjectiles({
           shapeChoices[Math.floor(Math.random() * shapeChoices.length)];
 
         const newProjectile = {
-          x: boss.x + offsetX,
-          y: boss.y + bossStats.height - 1,
+          x: drawX + offsetX,
+          y: drawY + bossStats.height - 1,
           ...bossProjectileConfig[type],
           shape,
         };

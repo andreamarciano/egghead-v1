@@ -30,6 +30,12 @@ export function spawnBoss({
       phase: 1,
       hasChangedImage: false,
       retreating: false,
+      oscillation: {
+        amplitudeX: 30,
+        amplitudeY: 10,
+        speed: 0.01,
+        t: 0,
+      },
     };
 
     // Weak Points

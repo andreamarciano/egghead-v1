@@ -28,9 +28,8 @@ export function handleBossEntranceAndDraw({
   c,
   canvas,
 }) {
-  if (!bossRef.current) return;
-
   const b = bossRef.current;
+  if (!b) return { drawX: 0, drawY: 0 };
 
   // === ANIMATION: ENTERING ===
   if (b.entering) {
@@ -140,17 +139,42 @@ export function handleBossEntranceAndDraw({
   }
 
   // === DRAW: BOSS IMAGE ===
+  let drawX = b.x;
+  let drawY = b.y;
+
+  if (!b.entering && b.oscillation) {
+    b.oscillation.t += 1;
+
+    const offsetX =
+      Math.sin(b.oscillation.t * b.oscillation.speed) *
+      b.oscillation.amplitudeX;
+    const offsetY =
+      Math.cos(b.oscillation.t * b.oscillation.speed) *
+      b.oscillation.amplitudeY;
+
+    // console.log("Oscillation t:", b.oscillation.t);
+    // console.log(
+    //   "Offset X:",
+    //   offsetX.toFixed(2),
+    //   "Offset Y:",
+    //   offsetY.toFixed(2)
+    // );
+
+    drawX += offsetX;
+    drawY += offsetY;
+  }
+
   if (bossImageRef.current.complete) {
-    c.drawImage(bossImageRef.current, b.x, b.y, b.width, b.height);
+    c.drawImage(bossImageRef.current, drawX, drawY, b.width, b.height);
   } else {
     c.fillStyle = "red";
-    c.fillRect(b.x, b.y, b.width, b.height);
+    c.fillRect(drawX, drawY, b.width, b.height);
   }
 
   // === DRAW: WEAK POINTS ===
   if (!b.entering) {
-    const bossX = b.x;
-    const bossY = b.y;
+    const bossX = drawX;
+    const bossY = drawY;
 
     // === DRAW: BLUE WEAK POINTS ===
     activeBlueWeakPointsRef.current.forEach((wp) => {
@@ -201,4 +225,6 @@ export function handleBossEntranceAndDraw({
     c.lineWidth = 2;
     c.strokeRect(x, y, barWidth, barHeight);
   }
+
+  return { drawX, drawY };
 }

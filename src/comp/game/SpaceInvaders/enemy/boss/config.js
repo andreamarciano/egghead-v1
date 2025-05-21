@@ -23,7 +23,7 @@ const bossConfig = {
       { x: 870, y: 184, width: 29, height: 6 },
     ],
     count: 4,
-    damage: 500, // cambia - 5
+    damage: 20, // cambia - 5
   },
   redWeakPoints: {
     spaces: [
@@ -76,7 +76,7 @@ const bossConfig = {
       { x: 980, y: 204, width: 10, height: 6 },
     ],
     count: 3,
-    damage: 500, // cambia - 30
+    damage: 50, // cambia - 30
   },
   hitParticles: {
     color: "#2B3345",

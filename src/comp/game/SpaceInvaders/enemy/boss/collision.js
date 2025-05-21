@@ -62,6 +62,8 @@ export function collisionBossBeamHitPlayer({
   setLives,
   handleGameOver,
   canvas,
+  drawX,
+  drawY,
 }) {
   if (boss && isPhase2EnabledRef.current) {
     bossBeamsRef.current.forEach((beam) => {
@@ -74,7 +76,8 @@ export function collisionBossBeamHitPlayer({
 
       const beamHitbox = getBossBeamHitbox(
         beam,
-        bossRef,
+        drawX,
+        drawY,
         canvas,
         bossBeamConfig
       );
