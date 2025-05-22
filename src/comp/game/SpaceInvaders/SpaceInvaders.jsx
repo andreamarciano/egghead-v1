@@ -21,7 +21,7 @@ import playerConfig from "./player/config";
 import { drawPlayer } from "./player/draw";
 import { flashEffect } from "./player/flashEffect";
 
-/* Power Up */
+/* === Power Up === */
 // Shield
 import shieldConfig from "./powerUp/shield/config";
 import { spawnShieldBubble } from "./powerUp/shield/spawn";
@@ -34,6 +34,7 @@ import { handleShipBubbleSpawn } from "./powerUp/ship/spawn";
 /* === Enemies === */
 // Utils
 import { createExplosion } from "./enemy/createExplosion";
+
 // Invader
 import invaderConfig from "./enemy/invader/config";
 import {
@@ -50,6 +51,7 @@ import {
   collisionPlayerHitInvader,
   collisionInvaderHitPlayer,
 } from "./enemy/invader/collision";
+
 // Meteor
 import meteorConfig from "./enemy/meteor/config";
 import { setupMeteorSpawn } from "./enemy/meteor/spawn";
@@ -57,6 +59,7 @@ import {
   collisionMeteorHitPlayer,
   collisionPlayerHitMeteor,
 } from "./enemy/meteor/collision";
+
 // Follower
 import followerConfig from "./enemy/follower/config";
 import { setupFollowerSpawn } from "./enemy/follower/spawn";
