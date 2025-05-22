@@ -120,9 +120,13 @@ function SpaceInvaders({ onClose }) {
 
   /* Start Game */
   const [isGameRunning, setIsGameRunning] = useState(false);
+  const isGameRunningRef = useRef(isGameRunning);
   const [gameOver, setGameOver] = useState(false);
   const isGameEndingRef = useRef(false);
   const animationIdRef = useRef(null);
+  useEffect(() => {
+    isGameRunningRef.current = isGameRunning;
+  }, [isGameRunning]);
 
   /***************************************************************
    *                           PLAYER                            *
@@ -754,34 +758,33 @@ function SpaceInvaders({ onClose }) {
      ***************************************************************/
 
     /* === SPAWN: 1st INVADER GRID === */
-    spawnInvaderGrid(
+    spawnInvaderGrid({
       invaderGridsRef,
       invaderConfig,
       playSound,
       soundURL,
-      false
-    );
+      firstGrid: false,
+    });
     /* === SPAWN: NEXT INVADER GRIDS === */
-    const invaderGridTimeout = scheduleInvaderGrid(
+    const invaderGridTimeout = scheduleInvaderGrid({
       invaderGridsRef,
       invaderConfig,
-      isGameRunning,
+      isGameRunningRef,
       bossActiveRef,
       playSound,
       soundURL,
-      true
-    );
+    });
 
     /* === SPAWN: INVADER PROJECTILE === */
-    const invaderShootInterval = spawnInvaderProjectile(
+    const invaderShootInterval = spawnInvaderProjectile({
       invaderGridsRef,
       invaderProjectilesRef,
       invaderConfig,
       bossActiveRef,
       bossDefeatedRef,
       soundURL,
-      playLaserSound
-    );
+      playLaserSound,
+    });
 
     /* === SPAWN: METEOR === */
     const meteorSpawnInterval = setupMeteorSpawn(

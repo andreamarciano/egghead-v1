@@ -1,10 +1,10 @@
-export function spawnInvaderGrid(
+export function spawnInvaderGrid({
   invaderGridsRef,
   invaderConfig,
   playSound,
   soundURL,
-  firstGrid = true
-) {
+  firstGrid = true,
+}) {
   const inv = invaderConfig.stats;
 
   const cols = Math.floor(Math.random() * 10 + 5);
@@ -39,43 +39,43 @@ export function spawnInvaderGrid(
   if (firstGrid) playSound(soundURL.spawnGrid, 0.6);
 }
 
-export function scheduleInvaderGrid(
+export function scheduleInvaderGrid({
   invaderGridsRef,
   invaderConfig,
-  isGameRunning,
+  isGameRunningRef,
   bossActiveRef,
   playSound,
-  soundURL
-) {
+  soundURL,
+}) {
   if (bossActiveRef.current) return;
 
   const ft = invaderConfig.spawn;
 
   const interval = Math.floor(Math.random() * (ft.max - ft.min) + ft.min);
   return setTimeout(() => {
-    if (!isGameRunning || bossActiveRef.current) return;
+    if (!isGameRunningRef.current || bossActiveRef.current) return;
 
-    spawnInvaderGrid(invaderGridsRef, invaderConfig, playSound, soundURL);
-    scheduleInvaderGrid(
+    spawnInvaderGrid({ invaderGridsRef, invaderConfig, playSound, soundURL });
+    scheduleInvaderGrid({
       invaderGridsRef,
       invaderConfig,
-      isGameRunning,
+      isGameRunningRef,
       bossActiveRef,
       playSound,
-      soundURL
-    );
+      soundURL,
+    });
   }, interval);
 }
 
-export function spawnInvaderProjectile(
+export function spawnInvaderProjectile({
   invaderGridsRef,
   invaderProjectilesRef,
   invaderConfig,
   bossActiveRef,
   bossDefeatedRef,
   soundURL,
-  playLaserSound
-) {
+  playLaserSound,
+}) {
   return setInterval(() => {
     if (!bossActiveRef.current && !bossDefeatedRef.current) {
       const { stats: inv, projectile: pr } = invaderConfig;
