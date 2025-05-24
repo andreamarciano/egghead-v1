@@ -5,11 +5,11 @@ import { addToCart } from "../../redux/cartSlice";
 import { decreaseAvailability } from "../../redux/eggSlice";
 import { toast } from "react-toastify";
 import SidebarCart from "./SidebarCart";
-// import BubbleShooter from "../game/BubbleShooter/BubbleShooter";
+
+import { addUnlockedGame } from "../game/gameUnlocker";
 import SpaceInvaders from "../game/SpaceInvaders/SpaceInvaders";
 
 function ProductInfoCard() {
-  // const [isBubbleOpen, setIsBubbleOpen] = useState(false);
   const [isSpaceInvadersOpen, setIsSpaceInvadersOpen] = useState(false);
 
   const { cardID } = useParams(); // get prod id by url
@@ -66,7 +66,7 @@ function ProductInfoCard() {
     );
 
     dispatch(decreaseAvailability({ id: eggs[0].id, quantity }));
-    setQuantity(1); // reset a 1 dopo l'aggiunta
+    setQuantity(1);
     toast.success(`${quantity} ${eggs[0].alt} aggiunto/i al carrello!`);
   };
 
@@ -141,7 +141,7 @@ function ProductInfoCard() {
         <button
           onClick={() => {
             setIsSpaceInvadersOpen(true);
-            localStorage.setItem("unlockedSpaceInvaders", "true");
+            addUnlockedGame("SpaceInvaders");
           }}
           className="bg-zinc-700 hover:bg-zinc-800 text-2xl transition cursor-pointer absolute bottom-1 right-1 rounded-2xl"
         >
@@ -152,21 +152,6 @@ function ProductInfoCard() {
       {isSpaceInvadersOpen && (
         <SpaceInvaders onClose={() => setIsSpaceInvadersOpen(false)} />
       )}
-
-      {/* Bubble Shooter */}
-      {/* {eggs[0].game && (
-        <button
-          onClick={() => {
-            setIsBubbleOpen(true);
-            localStorage.setItem("unlockedBubbleShooter", "true");
-          }}
-          className="bg-zinc-700 hover:bg-zinc-800 text-2xl transition cursor-pointer absolute bottom-1 right-1 rounded-2xl"
-        >
-          🫧
-        </button>
-      )} */}
-      {/* Bubble Shooter */}
-      {/* {isBubbleOpen && <BubbleShooter onClose={() => setIsBubbleOpen(false)} />} */}
     </div>
   );
 }

@@ -5,7 +5,8 @@ import Navbar from "../comp/Navbar";
 import ProductCard from "../comp/shop/ProductCard";
 import Footer from "../comp/Footer";
 import Filter from "../comp/shop/Filter";
-// import BubbleShooter from "../comp/game/BubbleShooter/BubbleShooter";
+
+import { isGameUnlocked } from "../comp/game/gameUnlocker";
 import SpaceInvaders from "../comp/game/SpaceInvaders/SpaceInvaders";
 
 function Shop() {
@@ -14,21 +15,21 @@ function Shop() {
     window.scrollTo(0, 0);
   }, []);
 
-  // space invaders shortcut
+  // Space Invaders Shortcut
   const [isSpaceInvadersOpen, setIsSpaceInvadersOpen] = useState(false);
   const [isUnlocked, setIsUnlocked] = useState(false);
   useEffect(() => {
-    const unlocked = localStorage.getItem("unlockedSpaceInvaders") === "true";
-    setIsUnlocked(unlocked);
-  }, []);
+    const checkUnlock = () => {
+      setIsUnlocked(isGameUnlocked("SpaceInvaders"));
+    };
 
-  // bubble shooter shortcut
-  // const [isBubbleOpen, setIsBubbleOpen] = useState(false);
-  // const [isUnlocked, setIsUnlocked] = useState(false);
-  // useEffect(() => {
-  //   const unlocked = localStorage.getItem("unlockedBubbleShooter") === "true";
-  //   setIsUnlocked(unlocked);
-  // }, []);
+    checkUnlock();
+    window.addEventListener("gameUnlocked", checkUnlock);
+
+    return () => {
+      window.removeEventListener("gameUnlocked", checkUnlock);
+    };
+  }, []);
 
   const eggs = useSelector((state) => state.eggs.value); // redux store
   const [selectedProduct, setSelectedProduct] = useState(null); // outlet
@@ -114,18 +115,7 @@ function Shop() {
         {isSpaceInvadersOpen && (
           <SpaceInvaders onClose={() => setIsSpaceInvadersOpen(false)} />
         )}
-
-        {/* Bubble Shooter Shortcut */}
-        {/* {isUnlocked && (
-          <button
-            onClick={() => setIsBubbleOpen(true)}
-            className="bg-zinc-700 hover:bg-zinc-800 text-2xl transition cursor-pointer absolute top-1 left-25 rounded-2xl"
-          >
-            🫧
-          </button>
-        )} */}
       </div>
-      {/* {isBubbleOpen && <BubbleShooter onClose={() => setIsBubbleOpen(false)} />} */}
 
       {/* Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mb-5">
