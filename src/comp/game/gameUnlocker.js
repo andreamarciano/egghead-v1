@@ -16,8 +16,10 @@ export function isGameUnlocked(gameName) {
 }
 
 export const GameNames = {
-  SPACE_INVADERS: "SpaceInvaders",
-  ORDER_GAME: "OrderGame",
-  CONNECT_FOUR: "ConnectFour",
   BATTLE: "Battle",
+  CONNECT_FOUR: "ConnectFour",
+  ORDER_GAME: "OrderGame",
+  SPACE_INVADERS: "SpaceInvaders",
+  TRIS: "Tris",
+  FLOWER: "Flower",
 };

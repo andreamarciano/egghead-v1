@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+
+import { addUnlockedGame, GameNames } from "./game/gameUnlocker";
 import Tris from "./game/Tris/Tris";
 import Flower from "./game/Flower/Flower";
 
@@ -7,6 +9,16 @@ function Footer() {
   const [isTrisOpen, setIsTrisOpen] = useState(false);
   const [isFlowerOpen, setIsFlowerOpen] = useState(false);
   // const [isSnakeOpen, setIsSnakeOpen] = useState(false);
+
+  const openTris = () => {
+    setIsTrisOpen(true);
+    addUnlockedGame(GameNames.TRIS);
+  };
+
+  const openFlower = () => {
+    setIsFlowerOpen(true);
+    addUnlockedGame(GameNames.FLOWER);
+  };
 
   return (
     <footer className="bg-blue-500 text-white py-10">
@@ -81,7 +93,7 @@ function Footer() {
 
             {/* Tris */}
             <button
-              onClick={() => setIsTrisOpen(true)}
+              onClick={openTris}
               className="hover:opacity-75 transition cursor-pointer"
             >
               <img
@@ -93,7 +105,7 @@ function Footer() {
 
             {/* Flower */}
             <button
-              onClick={() => setIsFlowerOpen(true)}
+              onClick={openFlower}
               className="hover:opacity-75 transition cursor-pointer"
             >
               <img
