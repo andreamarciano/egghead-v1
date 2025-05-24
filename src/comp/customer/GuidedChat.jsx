@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
-import OrderGame from "../game/Order/OrderGame";
 import "./GuidedChat.css";
+
+import {
+  addUnlockedGame,
+  isGameUnlocked,
+  GameNames,
+} from "../game/gameUnlocker";
+import OrderGame from "../game/Order/OrderGame";
 
 // Chat Flow
 const chatFlow = {
@@ -330,21 +336,19 @@ const GuidedChat = () => {
   const currentCodes = JSON.parse(
     localStorage.getItem("unlockedCodes") || "[]"
   );
+  // LOCAL STORAGE GAME
   const [orderGameUnlocked, setOrderGameUnlocked] = useState(false);
-
-  // Get state from localStorage
   useEffect(() => {
-    const unlocked = localStorage.getItem("unlockedOrderGame") === "true";
-    setOrderGameUnlocked(unlocked);
+    setOrderGameUnlocked(isGameUnlocked(GameNames.ORDER_GAME));
   }, []);
 
+  // Typing Animation
   useEffect(() => {
-    // Simula scrittura iniziale
     setIsTyping(true);
     setTimeout(() => {
       setMessages([{ from: "bot", text: chatFlow.start.message }]);
       setIsTyping(false);
-    }, 1500); // 1.5 secondi di attesa
+    }, 1500);
   }, []);
 
   const handleOptionClick = (option) => {
@@ -356,7 +360,8 @@ const GuidedChat = () => {
 
     if (option.action === "launch-game") {
       setShowGame(true);
-      localStorage.setItem("unlockedOrderGame", "true");
+      addUnlockedGame(GameNames.ORDER_GAME);
+      setOrderGameUnlocked(true);
       return;
     }
 
