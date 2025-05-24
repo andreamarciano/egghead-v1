@@ -1,5 +1,13 @@
 # Credits
 
+## Font
+
+### dafont
+
+- **BEBAS NEUE**
+  By **Dharma Type**
+  (https://www.dafont.com/bebas-neue.font)
+
 ## Images
 
 ### Unsplash
@@ -51,6 +59,10 @@
 ### Adobe Stock
 
 - Photo by [Sasa Kadrijevic](https://stock.adobe.com/it/contributor/206956416/sasa-kadrijevic)
+
+### Pixabay
+
+- Illustration by [geralt](https://pixabay.com/illustrations/stars-sky-space-space-wallpaper-2643089/)
 
 ## Game Assets
 
@@ -216,7 +228,7 @@
 
 > All above assets, images, and sounds used are either in the public domain (CC0) or free to use under their respective licenses. Where possible, authors have been credited.
 
-## Suno AI [suno] (https://suno.com/)
+## [Suno AI](https://suno.com/)
 
 Music Generated with Suno AI
 Some background music tracks in this project were generated using Suno AI under a free (non-commercial) account.
