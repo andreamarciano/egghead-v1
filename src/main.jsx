@@ -14,16 +14,17 @@ import ProductInfoCard from "./comp/shop/ProductInfoCard";
 import Checkout from "./pages/Checkout";
 import About from "./pages/About";
 import Customer from "./pages/Customer";
+import Cabinet from "./pages/Cabinet";
 import NotFound from "./pages/NotFound";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App></App>,
+    element: <App />,
   },
   {
     path: "/shop",
-    element: <Shop></Shop>,
+    element: <Shop />,
     children: [
       {
         path: ":cardID",
@@ -33,19 +34,23 @@ const router = createBrowserRouter([
   },
   {
     path: "/checkout",
-    element: <Checkout></Checkout>,
+    element: <Checkout />,
   },
   {
     path: "/about",
-    element: <About></About>,
+    element: <About />,
   },
   {
     path: "/customer",
-    element: <Customer></Customer>,
+    element: <Customer />,
+  },
+  {
+    path: "/games",
+    element: <Cabinet />,
   },
   {
     path: "*",
-    element: <NotFound></NotFound>,
+    element: <NotFound />,
   },
 ]);
 

@@ -1,8 +1,30 @@
 import { NavLink } from "react-router-dom";
+import { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import SidebarCart from "./shop/SidebarCart";
 
 function Navbar() {
+  const [showGamesLink, setShowGamesLink] = useState(false);
+
+  const checkUnlockedGames = () => {
+    const unlocked = JSON.parse(localStorage.getItem("unlockedGames") || "[]");
+    setShowGamesLink(unlocked.length >= 3);
+  };
+
+  useEffect(() => {
+    checkUnlockedGames();
+
+    const handleUnlock = () => {
+      checkUnlockedGames();
+    };
+
+    window.addEventListener("gameUnlocked", handleUnlock);
+
+    return () => {
+      window.removeEventListener("gameUnlocked", handleUnlock);
+    };
+  }, []);
+
   return (
     <nav className="bg-gray-900 text-white p-4">
       <ul className="flex gap-6">
@@ -62,7 +84,7 @@ function Navbar() {
             About Us
           </NavLink>
         </li>
-        {/* About Us */}
+        {/* Customer Service */}
         <li>
           <NavLink
             to="/customer"
@@ -75,6 +97,21 @@ function Navbar() {
             Customer Service
           </NavLink>
         </li>
+        {/* Cabinet */}
+        {showGamesLink && (
+          <li>
+            <NavLink
+              to="/games"
+              className={({ isActive }) =>
+                `hover:text-yellow-300 transition-colors duration-200 ${
+                  isActive ? "text-yellow-400 font-bold" : ""
+                }`
+              }
+            >
+              Games
+            </NavLink>
+          </li>
+        )}
         {/* Cart */}
         <li>
           <SidebarCart />
