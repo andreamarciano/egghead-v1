@@ -1,28 +1,28 @@
 import { NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
+
+import "./Navbar.css";
+
 import Sidebar from "./Sidebar";
 import SidebarCart from "./shop/SidebarCart";
 
-function Navbar() {
-  const [showGamesLink, setShowGamesLink] = useState(false);
+import { getUnlockedGames } from "./game/gameUnlocker";
 
-  const checkUnlockedGames = () => {
-    const unlocked = JSON.parse(localStorage.getItem("unlockedGames") || "[]");
-    setShowGamesLink(unlocked.length >= 3);
-  };
+function Navbar() {
+  const [showGamesLink, setShowGamesLink] = useState(() => {
+    return getUnlockedGames().length >= 3;
+  });
 
   useEffect(() => {
-    checkUnlockedGames();
-
-    const handleUnlock = () => {
-      checkUnlockedGames();
+    const handleGameUnlock = () => {
+      const unlocked = JSON.parse(
+        localStorage.getItem("unlockedGames") || "[]"
+      );
+      setShowGamesLink(unlocked.length >= 3);
     };
 
-    window.addEventListener("gameUnlocked", handleUnlock);
-
-    return () => {
-      window.removeEventListener("gameUnlocked", handleUnlock);
-    };
+    window.addEventListener("gameUnlocked", handleGameUnlock);
+    return () => window.removeEventListener("gameUnlocked", handleGameUnlock);
   }, []);
 
   return (
@@ -103,12 +103,12 @@ function Navbar() {
             <NavLink
               to="/games"
               className={({ isActive }) =>
-                `hover:text-yellow-300 transition-colors duration-200 ${
-                  isActive ? "text-yellow-400 font-bold" : ""
+                `rainbow-text font-extrabold tracking-wide uppercase transition duration-300 ${
+                  isActive ? "active" : ""
                 }`
               }
             >
-              Games
+              CABINET
             </NavLink>
           </li>
         )}
