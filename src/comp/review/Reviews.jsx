@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ReviewCard from "./ReviewCard";
 import ReviewForm from "./ReviewForm";
 import Battle from "../game/Battle/Battle";
@@ -7,9 +7,7 @@ import ConnectFour from "../game/ConnectFour/ConnectFour";
 
 function Reviews() {
   const reviews = useSelector((state) => state.reviews.value); // redux store
-  const [game, setGame] = useState(null);
   const [filter, setFilter] = useState("all");
-
   const filteredReviews = () => {
     switch (filter) {
       case "spontaneity":
@@ -20,6 +18,16 @@ function Reviews() {
         return reviews;
     }
   };
+
+  const [game, setGame] = useState(null);
+  useEffect(() => {
+    function handleOpenGame(e) {
+      setGame(e.detail);
+    }
+
+    window.addEventListener("openGame", handleOpenGame);
+    return () => window.removeEventListener("openGame", handleOpenGame);
+  }, []);
 
   return (
     <div className="py-10">

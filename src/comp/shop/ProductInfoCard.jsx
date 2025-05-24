@@ -6,7 +6,7 @@ import { decreaseAvailability } from "../../redux/eggSlice";
 import { toast } from "react-toastify";
 import SidebarCart from "./SidebarCart";
 
-import { addUnlockedGame } from "../game/gameUnlocker";
+import { addUnlockedGame, GameNames } from "../game/gameUnlocker";
 import SpaceInvaders from "../game/SpaceInvaders/SpaceInvaders";
 
 function ProductInfoCard() {
@@ -141,7 +141,7 @@ function ProductInfoCard() {
         <button
           onClick={() => {
             setIsSpaceInvadersOpen(true);
-            addUnlockedGame("SpaceInvaders");
+            addUnlockedGame(GameNames.SPACE_INVADERS);
           }}
           className="bg-zinc-700 hover:bg-zinc-800 text-2xl transition cursor-pointer absolute bottom-1 right-1 rounded-2xl"
         >

@@ -2,22 +2,42 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { add } from "../../redux/reviewSlice";
 
+import {
+  addUnlockedGame,
+  isGameUnlocked,
+  GameNames,
+} from "../game/gameUnlocker";
+
 function ReviewForm({ onTriggerGame }) {
   const [name, setName] = useState("");
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [text, setText] = useState("");
+  const dispatch = useDispatch();
+
   const [unlockedGames, setUnlockedGames] = useState({
     battle: false,
     connect4: false,
   });
-  const dispatch = useDispatch();
 
   // Get state from localStorage
   useEffect(() => {
-    const battle = localStorage.getItem("unlockedBattle") === "true";
-    const connect4 = localStorage.getItem("unlockedConnectFour") === "true";
-    setUnlockedGames({ battle, connect4 });
+    // Carica da localStorage tramite gameUnlocker
+    setUnlockedGames({
+      battle: isGameUnlocked(GameNames.BATTLE),
+      connect4: isGameUnlocked(GameNames.CONNECT_FOUR),
+    });
+
+    // Ascolta evento unlock per aggiornare shortcut live
+    const onUnlock = () => {
+      setUnlockedGames({
+        battle: isGameUnlocked(GameNames.BATTLE),
+        connect4: isGameUnlocked(GameNames.CONNECT_FOUR),
+      });
+    };
+
+    window.addEventListener("gameUnlocked", onUnlock);
+    return () => window.removeEventListener("gameUnlocked", onUnlock);
   }, []);
 
   // Submit
@@ -27,12 +47,10 @@ function ReviewForm({ onTriggerGame }) {
 
     // choosing game
     if (rating >= 0 && rating <= 3) {
-      localStorage.setItem("unlockedBattle", "true");
-      setUnlockedGames((prev) => ({ ...prev, battle: true }));
+      addUnlockedGame(GameNames.BATTLE);
       onTriggerGame("battle");
     } else if (rating === 4) {
-      localStorage.setItem("unlockedConnectFour", "true");
-      setUnlockedGames((prev) => ({ ...prev, connect4: true }));
+      addUnlockedGame(GameNames.CONNECT_FOUR);
       onTriggerGame("connect4");
     }
 

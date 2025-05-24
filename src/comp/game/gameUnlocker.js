@@ -14,3 +14,10 @@ export function addUnlockedGame(gameName) {
 export function isGameUnlocked(gameName) {
   return getUnlockedGames().includes(gameName);
 }
+
+export const GameNames = {
+  SPACE_INVADERS: "SpaceInvaders",
+  ORDER_GAME: "OrderGame",
+  CONNECT_FOUR: "ConnectFour",
+  BATTLE: "Battle",
+};

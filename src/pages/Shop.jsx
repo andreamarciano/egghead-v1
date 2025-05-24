@@ -6,7 +6,7 @@ import ProductCard from "../comp/shop/ProductCard";
 import Footer from "../comp/Footer";
 import Filter from "../comp/shop/Filter";
 
-import { isGameUnlocked } from "../comp/game/gameUnlocker";
+import { isGameUnlocked, GameNames } from "../comp/game/gameUnlocker";
 import SpaceInvaders from "../comp/game/SpaceInvaders/SpaceInvaders";
 
 function Shop() {
@@ -20,7 +20,7 @@ function Shop() {
   const [isUnlocked, setIsUnlocked] = useState(false);
   useEffect(() => {
     const checkUnlock = () => {
-      setIsUnlocked(isGameUnlocked("SpaceInvaders"));
+      setIsUnlocked(isGameUnlocked(GameNames.SPACE_INVADERS));
     };
 
     checkUnlock();
