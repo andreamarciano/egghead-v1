@@ -1,0 +1,36 @@
+.arcade-bg {
+    background: linear-gradient(135deg, #1e2a78, #5a2a85, #3b2671);
+    position: relative;
+}
+
+.arcade-cabinet {
+    filter: drop-shadow(0 0 10px #0ff) drop-shadow(0 0 20px #0ff);
+    border: 2px solid #0ff;
+    border-radius: 20px;
+    transition: filter 0.3s ease;
+}
+
+.arcade-cabinet:hover {
+    filter: drop-shadow(0 0 20px #0ff) drop-shadow(0 0 40px #0ff);
+}
+
+.press-start {
+    text-align: center;
+    color: yellow;
+    font-family: 'Press Start 2P', cursive;
+    animation: blink 1.5s infinite;
+    text-shadow: 0 0 5px #ff0, 0 0 10px #ff0;
+    pointer-events: none;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
