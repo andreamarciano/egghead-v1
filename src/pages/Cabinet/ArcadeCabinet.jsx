@@ -17,7 +17,7 @@ function ArcadeCabinet() {
   const playSound = (url) => {
     const audio = new Audio(url);
     audio.play();
-    audio.volume = 0.6;
+    audio.volume = 0.3;
   };
 
   useEffect(() => {
@@ -40,6 +40,10 @@ function ArcadeCabinet() {
         setZoomStage("idle");
       }, 1000);
       return () => clearTimeout(timer);
+    }
+
+    if (zoomStage === "exiting") {
+      setZoomStage("idle");
     }
   }, [zoomStage]);
 
@@ -120,7 +124,7 @@ function ArcadeCabinet() {
             <motion.div
               initial={{ scale: 3, opacity: 1, filter: "blur(0px)" }}
               animate={{ scale: 8, opacity: 0, filter: "blur(8px)" }}
-              transition={{ duration: 2 }}
+              transition={{ duration: 1 }}
               className="relative w-72 md:w-96"
             >
               <img
@@ -136,9 +140,29 @@ function ArcadeCabinet() {
               transition={{ delay: 1, duration: 0.8 }}
               className="absolute inset-0"
             >
-              <Cabinet />
+              <Cabinet
+                onExit={() => {
+                  setZoomStage("exiting");
+                  playSound(soundURL.back);
+                }}
+              />
             </motion.div>
           </>
+        )}
+
+        {zoomStage === "exiting" && (
+          <motion.div
+            initial={{ scale: 8, opacity: 0, filter: "blur(8px)" }}
+            animate={{ scale: 3, opacity: 1, filter: "blur(0px)" }}
+            transition={{ duration: 1.5 }}
+            className="relative w-72 md:w-96"
+          >
+            <img
+              src={cabinetImage}
+              alt="Arcade Cabinet"
+              className="arcade-cabinet"
+            />
+          </motion.div>
         )}
       </div>
     </>

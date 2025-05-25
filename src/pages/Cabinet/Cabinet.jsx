@@ -27,10 +27,20 @@ const carousel = (slider) => {
   slider.on("detailsChanged", rotate);
 };
 
-function Cabinet() {
+function Cabinet({ onExit }) {
   const games = useSelector((state) => state.cabinet.value);
   const [unlockedGames, setUnlockedGames] = useState(getUnlockedGames());
   const [openGameId, setOpenGameId] = useState(null);
+
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === "Escape") {
+        onExit();
+      }
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, [onExit]);
 
   useEffect(() => {
     const onGameUnlocked = () => {
