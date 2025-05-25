@@ -6,16 +6,29 @@ import Cabinet from "./Cabinet";
 
 const cabinetImage = "/images/cabinet/cabinet.png";
 
+const soundURL = {
+  next: "/sounds/cabinet/next.mp3",
+  back: "/sounds/cabinet/back.mp3",
+};
+
 function ArcadeCabinet() {
   const [zoomStage, setZoomStage] = useState("idle");
+
+  const playSound = (url) => {
+    const audio = new Audio(url);
+    audio.play();
+    audio.volume = 0.6;
+  };
 
   useEffect(() => {
     if (zoomStage === "zooming") {
       const handleKey = (e) => {
         if (e.key === "Enter") {
           setZoomStage("entering");
+          playSound(soundURL.next);
         } else if (e.key === "Escape") {
           setZoomStage("zoomingOut");
+          playSound(soundURL.back);
         }
       };
       window.addEventListener("keydown", handleKey);
@@ -40,7 +53,10 @@ function ArcadeCabinet() {
             initial={{ scale: 1, y: 0 }}
             animate={{ scale: 1, y: 0 }}
             className="relative w-72 md:w-96 cursor-pointer"
-            onClick={() => setZoomStage("zooming")}
+            onClick={() => {
+              playSound(soundURL.next);
+              setZoomStage("zooming");
+            }}
           >
             <img
               src={cabinetImage}
