@@ -104,7 +104,7 @@ function ArcadeCabinet() {
             <motion.div
               initial={{ scale: 3, opacity: 1, filter: "blur(0px)" }}
               animate={{ scale: 8, opacity: 0, filter: "blur(8px)" }}
-              transition={{ duration: 1 }}
+              transition={{ duration: 2 }}
               className="relative w-72 md:w-96"
             >
               <img
