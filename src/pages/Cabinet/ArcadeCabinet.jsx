@@ -4,20 +4,24 @@ import "./ArcadeCabinet.css";
 import Navbar from "../../comp/Navbar";
 import Cabinet from "./Cabinet";
 
-const cabinetImage = "/images/cabinet/cabinet.png";
-
-const soundURL = {
-  next: "/sounds/cabinet/next.mp3",
-  back: "/sounds/cabinet/back.mp3",
-};
-
 function ArcadeCabinet() {
+  const cabinetImage = "/images/cabinet/cabinet.png";
   const [zoomStage, setZoomStage] = useState("idle");
 
-  const playSound = (url) => {
-    const audio = new Audio(url);
+  const soundNext = new Audio("/sounds/cabinet/next.mp3");
+  const soundBack = new Audio("/sounds/cabinet/back.mp3");
+
+  soundNext.volume = 0.3;
+  soundBack.volume = 0.3;
+
+  const soundURL = {
+    next: soundNext,
+    back: soundBack,
+  };
+
+  const playSound = (audio) => {
+    audio.currentTime = 0;
     audio.play();
-    audio.volume = 0.3;
   };
 
   useEffect(() => {
