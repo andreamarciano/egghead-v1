@@ -11,13 +11,22 @@ function ArcadeCabinet() {
 
   useEffect(() => {
     if (zoomStage === "zooming") {
-      const handleEnter = (e) => {
+      const handleKey = (e) => {
         if (e.key === "Enter") {
           setZoomStage("entering");
+        } else if (e.key === "Escape") {
+          setZoomStage("zoomingOut");
         }
       };
-      window.addEventListener("keydown", handleEnter);
-      return () => window.removeEventListener("keydown", handleEnter);
+      window.addEventListener("keydown", handleKey);
+      return () => window.removeEventListener("keydown", handleKey);
+    }
+
+    if (zoomStage === "zoomingOut") {
+      const timer = setTimeout(() => {
+        setZoomStage("idle");
+      }, 1000);
+      return () => clearTimeout(timer);
     }
   }, [zoomStage]);
 
@@ -46,6 +55,25 @@ function ArcadeCabinet() {
           </motion.div>
         )}
 
+        {/* ZOOMING - Siamo davanti allo schermo, si usa ESC */}
+        {zoomStage === "zoomingOut" && (
+          <motion.div
+            initial={{ scale: 3, y: -10 }}
+            animate={{ scale: 1, y: 0 }}
+            transition={{ duration: 1, ease: "easeInOut" }}
+            className="relative w-72 md:w-96"
+          >
+            <img
+              src={cabinetImage}
+              alt="Arcade Cabinet"
+              className="arcade-cabinet"
+            />
+            <div className="press-start absolute top-[33%] left-[50.5%] -translate-x-1/2 text-center text-sm">
+              <span>EXIT...</span>
+            </div>
+          </motion.div>
+        )}
+
         {/* ZOOMING - Siamo davanti allo schermo, si aspetta ENTER */}
         {zoomStage === "zooming" && (
           <motion.div
@@ -63,6 +91,9 @@ function ArcadeCabinet() {
               <span>PRESS</span>
               <br />
               <span>ENTER</span>
+            </div>
+            <div className="absolute top-[48%] left-[50.5%] -translate-x-1/2 text-[7px] text-white font-mono opacity-70">
+              <span className="text-red-400">ESC</span> to go back
             </div>
           </motion.div>
         )}
