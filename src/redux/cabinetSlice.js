@@ -6,32 +6,30 @@ export const cabinetSlice = createSlice({
     value: [
       {
         id: "Tris",
-        title: "Tris",
-        description: "Sfreccia tra i neon evitando gli ostacoli.",
-        highscore: "9320",
+        title: "Tic-Tac-Toe",
+        description: "Outsmart your opponent!",
       },
       {
         id: "Flower",
-        title: "Flower",
-        description: "Distruggi le navicelle aliene prima che ti colpiscano!",
-        highscore: "7280",
+        title: "Minesweeper",
+        description: "Collect all the eggs!",
       },
       {
         id: "ConnectFour",
         title: "Connect Four",
-        description: "Mastica pixel e diventa infinito!",
-        highscore: "10450",
+        description: "Stack discs, block opponent, claim victory!",
       },
       {
         id: "OrderGame",
         title: "Order",
-        description: "Rimbalza la pallina per distruggere i blocchi.",
+        description:
+          "Tap numbers in sequence before time runs out. Stay sharp!",
         highscore: "8820",
       },
       {
         id: "SpaceInvaders",
         title: "Space Invaders",
-        description: "Difendi la Terra da onde di alieni pixelati.",
+        description: "Defend Earth from waves of pixelated aliens.",
         highscore: "13370",
       },
     ],
