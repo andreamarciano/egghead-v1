@@ -226,6 +226,14 @@
   By **floraphonic**
   Downloaded on May 21th, 2025 from [pixabay](https://pixabay.com/users/floraphonic-38928062/)
 
+- **90s Game UI 2**
+  By **floraphonic**
+  Downloaded on May 25th, 2025 from [pixabay](https://pixabay.com/users/floraphonic-38928062/)
+
+- **90s Game UI 3**
+  By **floraphonic**
+  Downloaded on May 25th, 2025 from [pixabay](https://pixabay.com/users/floraphonic-38928062/)
+
 > All above assets, images, and sounds used are either in the public domain (CC0) or free to use under their respective licenses. Where possible, authors have been credited.
 
 ## [Suno AI](https://suno.com/)
