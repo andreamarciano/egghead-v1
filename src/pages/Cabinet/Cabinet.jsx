@@ -5,6 +5,12 @@ import { getUnlockedGames, getTopScore } from "../../comp/game/gameUnlocker";
 import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
 
+import Tris from "../../comp/game/Tris/Tris";
+import Flower from "../../comp/game/Flower/Flower";
+import ConnectFour from "../../comp/game/ConnectFour/ConnectFour";
+import OrderGame from "../../comp/game/Order/OrderGame";
+import SpaceInvaders from "../../comp/game/SpaceInvaders/SpaceInvaders";
+
 const carousel = (slider) => {
   const z = 300;
   function rotate() {
@@ -24,6 +30,7 @@ const carousel = (slider) => {
 function Cabinet() {
   const games = useSelector((state) => state.cabinet.value);
   const [unlockedGames, setUnlockedGames] = useState(getUnlockedGames());
+  const [openGameId, setOpenGameId] = useState(null);
 
   useEffect(() => {
     const onGameUnlocked = () => {
@@ -97,7 +104,12 @@ function Cabinet() {
                     {topScore !== null && (
                       <p className="game-score">🏆 Record: {topScore}</p>
                     )}
-                    <button className="play-button">PLAY</button>
+                    <button
+                      className="play-button"
+                      onClick={() => setOpenGameId(game.id)}
+                    >
+                      PLAY
+                    </button>
                   </div>
                 );
               })}
@@ -133,6 +145,21 @@ function Cabinet() {
           </div>
         </div>
       </div>
+
+      {/* Render */}
+      {openGameId === "Tris" && <Tris onClose={() => setOpenGameId(null)} />}
+      {openGameId === "Flower" && (
+        <Flower onClose={() => setOpenGameId(null)} />
+      )}
+      {openGameId === "ConnectFour" && (
+        <ConnectFour onClose={() => setOpenGameId(null)} />
+      )}
+      {openGameId === "OrderGame" && (
+        <OrderGame onClose={() => setOpenGameId(null)} />
+      )}
+      {openGameId === "SpaceInvaders" && (
+        <SpaceInvaders onClose={() => setOpenGameId(null)} />
+      )}
     </div>
   );
 }
