@@ -14,7 +14,7 @@ import ProductInfoCard from "./comp/shop/ProductInfoCard";
 import Checkout from "./pages/Checkout";
 import About from "./pages/About";
 import Customer from "./pages/Customer";
-import Cabinet from "./pages/Cabinet";
+import ArcadeCabinet from "./pages/Cabinet/ArcadeCabinet";
 import NotFound from "./pages/NotFound";
 
 const router = createBrowserRouter([
@@ -46,7 +46,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/games",
-    element: <Cabinet />,
+    element: <ArcadeCabinet />,
   },
   {
     path: "*",
