@@ -3,6 +3,7 @@ import { animalsReducer } from "./animalSlice";
 import { eggsReducer } from "./eggSlice";
 import { reviewsReducer } from "./reviewSlice";
 import { cartReducer } from "./cartSlice";
+import { cabinetReducer } from "./cabinetSlice";
 
 export default configureStore({
   reducer: {
@@ -10,5 +11,6 @@ export default configureStore({
     eggs: eggsReducer,
     reviews: reviewsReducer,
     cart: cartReducer,
+    cabinet: cabinetReducer,
   },
 });

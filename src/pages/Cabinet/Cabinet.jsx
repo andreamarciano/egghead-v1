@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import "./Cabinet.css";
 import { getUnlockedGames } from "../../comp/game/gameUnlocker";
 import "keen-slider/keen-slider.min.css";
@@ -21,34 +22,9 @@ const carousel = (slider) => {
 };
 
 function Cabinet() {
-  // const [unlockedGames, setUnlockedGames] = useState(getUnlockedGames());
-  const [unlockedGames, setUnlockedGames] = useState([
-    {
-      title: "Tris",
-      description: "Sfreccia tra i neon evitando gli ostacoli.",
-      highscore: "9320",
-    },
-    {
-      title: "Flower",
-      description: "Distruggi le navicelle aliene prima che ti colpiscano!",
-      highscore: "7280",
-    },
-    {
-      title: "Connect Four",
-      description: "Mastica pixel e diventa infinito!",
-      highscore: "10450",
-    },
-    {
-      title: "Order",
-      description: "Rimbalza la pallina per distruggere i blocchi.",
-      highscore: "8820",
-    },
-    {
-      title: "Space Invaders",
-      description: "Difendi la Terra da onde di alieni pixelati.",
-      highscore: "13370",
-    },
-  ]);
+  const games = useSelector((state) => state.cabinet.value);
+  const [unlockedGames, setUnlockedGames] = useState(getUnlockedGames());
+
   useEffect(() => {
     const onGameUnlocked = () => {
       setUnlockedGames(getUnlockedGames());
@@ -77,16 +53,18 @@ function Cabinet() {
         <div className="cabinet-header">ARCADE</div>
         <div className="scene">
           <div className="carousel keen-slider" ref={sliderRef}>
-            {unlockedGames.map((game, index) => (
-              <div key={index} className="carousel__cell crt-effect">
-                <h3 className="game-title">{game.title}</h3>
-                <p className="game-desc">{game.description}</p>
-                {game.highscore && (
-                  <p className="game-score">🏆 Record: {game.highscore}</p>
-                )}
-                <button className="play-button">PLAY</button>
-              </div>
-            ))}
+            {games
+              .filter((game) => unlockedGames.includes(game.id))
+              .map((game, index) => (
+                <div key={index} className="carousel__cell crt-effect">
+                  <h3 className="game-title">{game.title}</h3>
+                  <p className="game-desc">{game.description}</p>
+                  {game.highscore && (
+                    <p className="game-score">🏆 Record: {game.highscore}</p>
+                  )}
+                  <button className="play-button">PLAY</button>
+                </div>
+              ))}
           </div>
         </div>
         <div className="cabinet-controls">
