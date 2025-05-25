@@ -1,3 +1,23 @@
+/* === Layout === */
+.cabinet-body {
+    animation: crt-flicker 80ms infinite alternate;
+    position: relative;
+    overflow: hidden;
+    width: 800px;
+    height: 600px;
+    background: #333;
+    border: 8px solid #111;
+    border-radius: 20px;
+    box-shadow: 0 0 20px #0ff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    position: relative;
+}
+
+/* === Arcade Screen === */
 .scene {
     width: 260px;
     height: 200px;
@@ -32,14 +52,7 @@
     box-shadow: inset 0 0 10px #0f0;
 }
 
-.crt-effect {
-    background: repeating-linear-gradient(to bottom,
-            #000,
-            #000 2px,
-            #111 2px,
-            #111 4px);
-}
-
+/* === Games content === */
 .game-title {
     font-size: 1.2rem;
     font-weight: bold;
@@ -74,40 +87,65 @@
     box-shadow: 0 0 10px #0f0;
 }
 
-.cabinet-container {
+/* === Directional Buttons === */
+
+.cabinet-controls {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #0a0a0a;
-    height: 100vh;
-    padding: 2rem;
+    gap: 1rem;
+    margin-top: 1rem;
 }
 
-.cabinet-body {
-    animation: crt-flicker 80ms infinite alternate;
-    position: relative;
-    overflow: hidden;
-    width: 800px;
-    height: 600px;
-    background: #333;
-    border: 8px solid #111;
-    border-radius: 20px;
-    box-shadow: 0 0 20px #0ff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem;
-    position: relative;
+.button {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 5px #000;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.button:active {
+    transform: translateY(2px);
+    box-shadow: inset 0 0 2px #000;
+}
+
+.button-label {
+    font-family: "Press Start 2P", monospace;
+    font-size: 0.55rem;
+    color: #0f0;
+    text-shadow: 0 0 2px #0f0;
+    line-height: 1;
+}
+
+.red {
+    background: red;
+}
+
+.blue {
+    background: blue;
+}
+
+.yellow {
+    background: yellow;
+}
+
+/* === CRT effect === */
+
+.crt-effect {
+    background: repeating-linear-gradient(to bottom,
+            #000,
+            #000 2px,
+            #111 2px,
+            #111 4px);
 }
 
 @keyframes crt-flicker {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0.97;
-  }
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0.97;
+    }
 }
 
 .cabinet-body::before {
@@ -151,69 +189,4 @@
     100% {
         top: 100%;
     }
-}
-
-.cabinet-header {
-    font-family: "Press Start 2P", cursive;
-    font-size: 1.2rem;
-    color: #ff0044;
-    margin-bottom: 1rem;
-}
-
-.cabinet-screen {
-    background: #000;
-    width: 100%;
-    height: 60%;
-    border: 4px inset #555;
-    padding: 1rem;
-    overflow-y: auto;
-    border-radius: 10px;
-    color: #0f0;
-    font-family: monospace;
-}
-
-.cabinet-controls {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1rem;
-}
-
-.button {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    box-shadow: inset 0 0 5px #000;
-    transition: transform 0.1s ease, box-shadow 0.1s ease;
-}
-
-.button:active {
-    transform: translateY(2px);
-    box-shadow: inset 0 0 2px #000;
-}
-
-.button-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.25rem;
-}
-
-.button-label {
-    font-family: "Press Start 2P", monospace;
-    font-size: 0.55rem;
-    color: #0f0;
-    text-shadow: 0 0 2px #0f0;
-    line-height: 1;
-}
-
-.red {
-    background: red;
-}
-
-.blue {
-    background: blue;
-}
-
-.yellow {
-    background: yellow;
 }

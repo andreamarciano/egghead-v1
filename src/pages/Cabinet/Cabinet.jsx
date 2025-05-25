@@ -98,9 +98,11 @@ function Cabinet({ onExit }) {
   };
 
   return (
-    <div className="cabinet-container">
+    <div className="flex justify-center items-center bg-[#0a0a0a] h-screen p-8">
       <div className="cabinet-body">
-        <div className="cabinet-header">ARCADE</div>
+        <div className="font-['Press_Start_2P'] text-[1.2rem] text-[#ff0044] mb-4">
+          ARCADE
+        </div>
         <div className="scene">
           <div className="carousel keen-slider" ref={sliderRef}>
             {games
@@ -126,7 +128,7 @@ function Cabinet({ onExit }) {
           </div>
         </div>
         <div className="cabinet-controls">
-          <div className="button-wrapper">
+          <div className="flex flex-col items-center gap-1">
             <div className="button red">
               <button
                 className="w-7 h-7 cursor-pointer"
@@ -135,7 +137,7 @@ function Cabinet({ onExit }) {
             </div>
             <div className="button-label">←</div>
           </div>
-          <div className="button-wrapper">
+          <div className="flex flex-col items-center gap-1">
             <div className="button blue">
               <button
                 className="w-7 h-7 cursor-pointer"
@@ -144,7 +146,7 @@ function Cabinet({ onExit }) {
             </div>
             <div className="button-label">🎲</div>
           </div>
-          <div className="button-wrapper">
+          <div className="flex flex-col items-center gap-1">
             <div className="button yellow">
               <button
                 className="w-7 h-7 cursor-pointer"
