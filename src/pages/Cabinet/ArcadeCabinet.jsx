@@ -47,7 +47,7 @@ function ArcadeCabinet() {
               alt="Arcade Cabinet"
               className="arcade-cabinet"
             />
-            <div className="press-start absolute top-[33%] left-[50.5%] -translate-x-1/2 text-center text-xl">
+            <div className="press-start absolute top-[33%] left-[50.5%] -translate-x-1/2 text-center text-sm sm:text-md md:text-xl">
               <span>CLICK</span>
               <br />
               <span>HERE</span>
@@ -68,7 +68,7 @@ function ArcadeCabinet() {
               alt="Arcade Cabinet"
               className="arcade-cabinet"
             />
-            <div className="press-start absolute top-[33%] left-[50.5%] -translate-x-1/2 text-center text-sm">
+            <div className="press-start absolute top-[33%] left-[50.5%] -translate-x-1/2 text-center text-[9px] sm:text-[11px] md:text-sm">
               <span>EXIT...</span>
             </div>
           </motion.div>
@@ -87,12 +87,12 @@ function ArcadeCabinet() {
               alt="Arcade Cabinet"
               className="arcade-cabinet"
             />
-            <div className="press-start absolute top-[33%] left-[50.5%] -translate-x-1/2 text-center text-xl">
+            <div className="press-start absolute top-[33%] left-[50.5%] -translate-x-1/2 text-center text-sm sm:text-md md:text-xl">
               <span>PRESS</span>
               <br />
               <span>ENTER</span>
             </div>
-            <div className="absolute top-[48%] left-[50.5%] -translate-x-1/2 text-[7px] text-white font-mono opacity-70">
+            <div className="absolute top-[48%] left-[50.5%] -translate-x-1/2 text-[3px] sm:text-[5px] md:text-[7px] text-white font-mono opacity-70">
               <span className="text-red-400">ESC</span> to go back
             </div>
           </motion.div>
