@@ -23,3 +23,22 @@ export const GameNames = {
   TRIS: "Tris",
   FLOWER: "Flower",
 };
+
+export function getTopScore(gameId) {
+  const scoreKeyMap = {
+    [GameNames.SPACE_INVADERS]: "spaceInvadersTopScores",
+    [GameNames.ORDER_GAME]: "orderGameLevel5Scores",
+  };
+
+  const key = scoreKeyMap[gameId];
+  if (!key) return null;
+
+  try {
+    const scores = JSON.parse(localStorage.getItem(key));
+    if (!Array.isArray(scores) || scores.length === 0) return null;
+    return Math.max(...scores);
+  } catch (err) {
+    console.error(`Errore nel recupero score per ${gameId}:`, err);
+    return null;
+  }
+}

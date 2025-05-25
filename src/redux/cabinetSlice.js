@@ -24,13 +24,11 @@ export const cabinetSlice = createSlice({
         title: "Order",
         description:
           "Tap numbers in sequence before time runs out. Stay sharp!",
-        highscore: "8820",
       },
       {
         id: "SpaceInvaders",
         title: "Space Invaders",
         description: "Defend Earth from waves of pixelated aliens.",
-        highscore: "13370",
       },
     ],
   },

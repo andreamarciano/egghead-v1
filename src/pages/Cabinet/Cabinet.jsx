@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import "./Cabinet.css";
-import { getUnlockedGames } from "../../comp/game/gameUnlocker";
+import { getUnlockedGames, getTopScore } from "../../comp/game/gameUnlocker";
 import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
 
@@ -88,16 +88,19 @@ function Cabinet() {
           <div className="carousel keen-slider" ref={sliderRef}>
             {games
               .filter((game) => unlockedGames.includes(game.id))
-              .map((game, index) => (
-                <div key={index} className="carousel__cell crt-effect">
-                  <h3 className="game-title">{game.title}</h3>
-                  <p className="game-desc">{game.description}</p>
-                  {game.highscore && (
-                    <p className="game-score">🏆 Record: {game.highscore}</p>
-                  )}
-                  <button className="play-button">PLAY</button>
-                </div>
-              ))}
+              .map((game, index) => {
+                const topScore = getTopScore(game.id); // qui, dentro la funzione di map ma prima del return JSX
+                return (
+                  <div key={index} className="carousel__cell crt-effect">
+                    <h3 className="game-title">{game.title}</h3>
+                    <p className="game-desc">{game.description}</p>
+                    {topScore !== null && (
+                      <p className="game-score">🏆 Record: {topScore}</p>
+                    )}
+                    <button className="play-button">PLAY</button>
+                  </div>
+                );
+              })}
           </div>
         </div>
         <div className="cabinet-controls">
