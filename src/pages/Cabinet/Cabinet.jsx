@@ -37,7 +37,7 @@ function Cabinet() {
     };
   }, []);
 
-  const [sliderRef] = useKeenSlider(
+  const [sliderRef, slider] = useKeenSlider(
     {
       loop: true,
       selector: ".carousel__cell",
@@ -46,6 +46,39 @@ function Cabinet() {
     },
     [carousel]
   );
+
+  const spinCarousel = () => {
+    if (!slider.current) return;
+
+    const availableGames = games.filter((game) =>
+      unlockedGames.includes(game.id)
+    );
+
+    const randomIndex = Math.floor(Math.random() * availableGames.length);
+    const totalSpins = 10 + randomIndex;
+    let count = 0;
+    let delay = 100;
+
+    const spin = () => {
+      slider.current.next();
+      count++;
+
+      if (count < totalSpins) {
+        delay += 20; // slow down
+        setTimeout(spin, delay);
+      }
+    };
+
+    spin();
+  };
+
+  const goLeft = () => {
+    slider.current?.prev();
+  };
+
+  const goRight = () => {
+    slider.current?.next();
+  };
 
   return (
     <div className="cabinet-container">
@@ -68,14 +101,32 @@ function Cabinet() {
           </div>
         </div>
         <div className="cabinet-controls">
-          <div className="button red">
-            <button className="bg-green-500 opacity-10 w-7 h-7 cursor-pointer"></button>
+          <div className="button-wrapper">
+            <div className="button red">
+              <button
+                className="bg-green-500 opacity-10 w-7 h-7 cursor-pointer"
+                onClick={goLeft}
+              ></button>
+            </div>
+            <div className="button-label">←</div>
           </div>
-          <div className="button blue">
-            <button className="bg-green-500 opacity-10 w-7 h-7 cursor-pointer"></button>
+          <div className="button-wrapper">
+            <div className="button blue">
+              <button
+                className="bg-green-500 opacity-10 w-7 h-7 cursor-pointer"
+                onClick={spinCarousel}
+              ></button>
+            </div>
+            <div className="button-label">🎲</div>
           </div>
-          <div className="button yellow">
-            <button className="bg-green-500 opacity-10 w-7 h-7 cursor-pointer"></button>
+          <div className="button-wrapper">
+            <div className="button yellow">
+              <button
+                className="bg-green-500 opacity-10 w-7 h-7 cursor-pointer"
+                onClick={goRight}
+              ></button>
+            </div>
+            <div className="button-label">→</div>
           </div>
         </div>
       </div>
