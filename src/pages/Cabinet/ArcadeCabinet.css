@@ -23,6 +23,12 @@
     pointer-events: none;
 }
 
+.enter-hint {
+    font-family: 'Press Start 2P', cursive;
+    text-shadow: 0 0 6px #fff, 0 0 12px #ff0;
+}
+
+
 @keyframes blink {
 
     0%,

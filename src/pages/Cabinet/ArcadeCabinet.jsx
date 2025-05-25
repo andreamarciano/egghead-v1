@@ -11,10 +11,13 @@ function ArcadeCabinet() {
 
   useEffect(() => {
     if (zoomStage === "zooming") {
-      const timer = setTimeout(() => {
-        setZoomStage("entered");
-      }, 3000);
-      return () => clearTimeout(timer);
+      const handleEnter = (e) => {
+        if (e.key === "Enter") {
+          setZoomStage("entering");
+        }
+      };
+      window.addEventListener("keydown", handleEnter);
+      return () => window.removeEventListener("keydown", handleEnter);
     }
   }, [zoomStage]);
 
@@ -22,6 +25,7 @@ function ArcadeCabinet() {
     <>
       <Navbar />
       <div className="arcade-bg h-screen flex items-center justify-center relative overflow-hidden">
+        {/* IDLE - Prima interazione */}
         {zoomStage === "idle" && (
           <motion.div
             initial={{ scale: 1, y: 0 }}
@@ -35,13 +39,14 @@ function ArcadeCabinet() {
               className="arcade-cabinet"
             />
             <div className="press-start absolute top-[33%] left-[50.5%] -translate-x-1/2 text-center text-xl">
-              <span>PRESS</span>
+              <span>CLICK</span>
               <br />
-              <span>START</span>
+              <span>HERE</span>
             </div>
           </motion.div>
         )}
 
+        {/* ZOOMING - Siamo davanti allo schermo, si aspetta ENTER */}
         {zoomStage === "zooming" && (
           <motion.div
             initial={{ scale: 1, y: 0 }}
@@ -57,20 +62,36 @@ function ArcadeCabinet() {
             <div className="press-start absolute top-[33%] left-[50.5%] -translate-x-1/2 text-center text-xl">
               <span>PRESS</span>
               <br />
-              <span>START</span>
+              <span>ENTER</span>
             </div>
           </motion.div>
         )}
 
-        {zoomStage === "entered" && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1 }}
-            className="absolute inset-0"
-          >
-            <Cabinet />
-          </motion.div>
+        {/* ENTERING - Effetto tuffo */}
+        {zoomStage === "entering" && (
+          <>
+            <motion.div
+              initial={{ scale: 3, opacity: 1, filter: "blur(0px)" }}
+              animate={{ scale: 8, opacity: 0, filter: "blur(8px)" }}
+              transition={{ duration: 1 }}
+              className="relative w-72 md:w-96"
+            >
+              <img
+                src={cabinetImage}
+                alt="Arcade Cabinet"
+                className="arcade-cabinet"
+              />
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1, duration: 0.8 }}
+              className="absolute inset-0"
+            >
+              <Cabinet />
+            </motion.div>
+          </>
         )}
       </div>
     </>
