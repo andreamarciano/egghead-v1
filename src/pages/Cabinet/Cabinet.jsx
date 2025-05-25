@@ -89,7 +89,7 @@ function Cabinet() {
             {games
               .filter((game) => unlockedGames.includes(game.id))
               .map((game, index) => {
-                const topScore = getTopScore(game.id); // qui, dentro la funzione di map ma prima del return JSX
+                const topScore = getTopScore(game.id);
                 return (
                   <div key={index} className="carousel__cell crt-effect">
                     <h3 className="game-title">{game.title}</h3>
@@ -107,7 +107,7 @@ function Cabinet() {
           <div className="button-wrapper">
             <div className="button red">
               <button
-                className="bg-green-500 opacity-10 w-7 h-7 cursor-pointer"
+                className="w-7 h-7 cursor-pointer"
                 onClick={goLeft}
               ></button>
             </div>
@@ -116,7 +116,7 @@ function Cabinet() {
           <div className="button-wrapper">
             <div className="button blue">
               <button
-                className="bg-green-500 opacity-10 w-7 h-7 cursor-pointer"
+                className="w-7 h-7 cursor-pointer"
                 onClick={spinCarousel}
               ></button>
             </div>
@@ -125,7 +125,7 @@ function Cabinet() {
           <div className="button-wrapper">
             <div className="button yellow">
               <button
-                className="bg-green-500 opacity-10 w-7 h-7 cursor-pointer"
+                className="w-7 h-7 cursor-pointer"
                 onClick={goRight}
               ></button>
             </div>
