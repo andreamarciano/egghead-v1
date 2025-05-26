@@ -111,14 +111,19 @@ function Cabinet({ onExit }) {
                 const topScore = getTopScore(game.id);
                 return (
                   <div key={index} className="carousel__cell crt-effect">
-                    <h3 className="game-title">{game.title}</h3>
-                    <p className="game-desc">{game.description}</p>
+                    <h3 className="text-[19px] font-bold mb-2">{game.title}</h3>
+                    <p className="text-sm text-center mb-2">
+                      {game.description}
+                    </p>
                     {topScore !== null && (
-                      <p className="game-score">🏆 Record: {topScore}</p>
+                      <p className="text-[13px] mb-2">🏆 Record: {topScore}</p>
                     )}
                     <button
-                      className="play-button"
                       onClick={() => setOpenGameId(game.id)}
+                      className="bg-lime-500 text-black font-bold px-4 py-2 rounded-md cursor-pointer transition-transform duration-100 hover:scale-110"
+                      style={{
+                        boxShadow: "0 0 7px #0f0",
+                      }}
                     >
                       PLAY
                     </button>
@@ -127,34 +132,33 @@ function Cabinet({ onExit }) {
               })}
           </div>
         </div>
-        <div className="cabinet-controls">
-          <div className="flex flex-col items-center gap-1">
-            <div className="button red">
-              <button
-                className="w-7 h-7 cursor-pointer"
-                onClick={goLeft}
-              ></button>
+        {/* Cabinet Controls */}
+        <div className="flex gap-4 mt-4">
+          {[
+            { color: "bg-red-600", label: "←", onClick: goLeft },
+            { color: "bg-blue-900", label: "🎲", onClick: spinCarousel },
+            { color: "bg-yellow-500", label: "→", onClick: goRight },
+          ].map(({ color, label, onClick }, idx) => (
+            <div key={idx} className="flex flex-col items-center gap-1">
+              <div
+                className={`w-[30px] h-[30px] rounded-full ${color} transition-transform active:translate-y-[2px]`}
+                style={{
+                  boxShadow: "inset 0 0 5px #000",
+                }}
+              >
+                <button
+                  onClick={onClick}
+                  className="w-full h-full cursor-pointer"
+                ></button>
+              </div>
+              <div
+                className="font-['Press_Start_2P'] text-[0.55rem] text-green-500 leading-none"
+                style={{ textShadow: "0 0 2px #0f0" }}
+              >
+                {label}
+              </div>
             </div>
-            <div className="button-label">←</div>
-          </div>
-          <div className="flex flex-col items-center gap-1">
-            <div className="button blue">
-              <button
-                className="w-7 h-7 cursor-pointer"
-                onClick={spinCarousel}
-              ></button>
-            </div>
-            <div className="button-label">🎲</div>
-          </div>
-          <div className="flex flex-col items-center gap-1">
-            <div className="button yellow">
-              <button
-                className="w-7 h-7 cursor-pointer"
-                onClick={goRight}
-              ></button>
-            </div>
-            <div className="button-label">→</div>
-          </div>
+          ))}
         </div>
       </div>
 
