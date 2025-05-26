@@ -16,6 +16,10 @@ function Cabinet({ onExit }) {
   const [unlockedGames, setUnlockedGames] = useState(getUnlockedGames());
   const [openGameId, setOpenGameId] = useState(null);
 
+  const tickSound = new Audio("/sounds/cabinet/tick.mp3");
+  tickSound.volume = 0.5;
+  tickSound.preload = "auto";
+
   /* Exit Cabinet Screen → Arcade Cabinet */
   useEffect(() => {
     const handleEsc = (e) => {
@@ -42,19 +46,38 @@ function Cabinet({ onExit }) {
 
   /* === 3D CAROUSEL === */
   const carousel = (slider) => {
-    const z = 300;
+    const z = 300; // depth distance for 3D
+    let lastSlide = null;
+    let hasMounted = false;
+
     function rotate() {
       const deg = 360 * slider.track.details.progress;
       slider.container.style.transform = `translateZ(-${z}px) rotateY(${-deg}deg)`;
     }
+
+    // Event: Slider Created
     slider.on("created", () => {
       const deg = 360 / slider.slides.length;
       slider.slides.forEach((el, idx) => {
         el.style.transform = `rotateY(${deg * idx}deg) translateZ(${z}px)`;
       });
       rotate();
+      lastSlide = slider.track.details.rel;
+      setTimeout(() => {
+        hasMounted = true;
+      }, 50);
     });
-    slider.on("detailsChanged", rotate);
+
+    // Event: Slider Change Position
+    slider.on("detailsChanged", () => {
+      rotate();
+      const current = slider.track.details.rel;
+      if (hasMounted && current !== lastSlide) {
+        tickSound.currentTime = 0;
+        tickSound.play();
+        lastSlide = current;
+      }
+    });
   };
   // INIT SLIDER
   const [sliderRef, slider] = useKeenSlider(
