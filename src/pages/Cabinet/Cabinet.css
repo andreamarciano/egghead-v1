@@ -1,9 +1,4 @@
-/* === Layout === */
-.cabinet-body {
-    animation: crt-flicker 80ms infinite alternate;
-}
-
-/* === 3D Container for Carousel === */
+/* 3D Container for Carousel */
 .scene {
     width: 260px;
     height: 200px;
@@ -40,7 +35,11 @@
     box-shadow: inset 0 0 10px #0f0;
 }
 
-/* === CRT effect === */
+/* CRT effect */
+
+.cabinet-body {
+    animation: crt-flicker 80ms infinite alternate;
+}
 
 .crt-effect {
     background: repeating-linear-gradient(to bottom,

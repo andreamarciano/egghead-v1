@@ -5,7 +5,7 @@ import Navbar from "../../comp/Navbar";
 import Cabinet from "./Cabinet";
 
 function ArcadeCabinet() {
-  const cabinetImage = "/images/cabinet/cabinet.png";
+  const cabinetImage = "/images/cabinet/cabinet.webp";
   const [zoomStage, setZoomStage] = useState("idle");
 
   const soundNext = new Audio("/sounds/cabinet/next.mp3");
@@ -55,7 +55,7 @@ function ArcadeCabinet() {
     <>
       <Navbar />
       <div className="arcade-bg h-screen flex items-center justify-center relative overflow-hidden">
-        {/* IDLE - Prima interazione */}
+        {/* IDLE - Click */}
         {zoomStage === "idle" && (
           <motion.div
             initial={{ scale: 1, y: 0 }}
@@ -79,26 +79,7 @@ function ArcadeCabinet() {
           </motion.div>
         )}
 
-        {/* ZOOMING - Siamo davanti allo schermo, si usa ESC */}
-        {zoomStage === "zoomingOut" && (
-          <motion.div
-            initial={{ scale: 3, y: -10 }}
-            animate={{ scale: 1, y: 0 }}
-            transition={{ duration: 1, ease: "easeInOut" }}
-            className="relative w-72 md:w-96"
-          >
-            <img
-              src={cabinetImage}
-              alt="Arcade Cabinet"
-              className="arcade-cabinet"
-            />
-            <div className="press-start absolute top-[33%] left-[50.5%] -translate-x-1/2 text-center text-[9px] sm:text-[11px] md:text-sm">
-              <span>EXIT...</span>
-            </div>
-          </motion.div>
-        )}
-
-        {/* ZOOMING - Siamo davanti allo schermo, si aspetta ENTER */}
+        {/* ZOOM - ENTER */}
         {zoomStage === "zooming" && (
           <motion.div
             initial={{ scale: 1, y: 0 }}
@@ -122,7 +103,26 @@ function ArcadeCabinet() {
           </motion.div>
         )}
 
-        {/* ENTERING - Effetto tuffo */}
+        {/* ZOOM OUT - ESC */}
+        {zoomStage === "zoomingOut" && (
+          <motion.div
+            initial={{ scale: 3, y: -10 }}
+            animate={{ scale: 1, y: 0 }}
+            transition={{ duration: 1, ease: "easeInOut" }}
+            className="relative w-72 md:w-96"
+          >
+            <img
+              src={cabinetImage}
+              alt="Arcade Cabinet"
+              className="arcade-cabinet"
+            />
+            <div className="press-start absolute top-[33%] left-[50.5%] -translate-x-1/2 text-center text-[9px] sm:text-[11px] md:text-sm">
+              <span>EXIT...</span>
+            </div>
+          </motion.div>
+        )}
+
+        {/* ENTERING */}
         {zoomStage === "entering" && (
           <>
             <motion.div
@@ -154,6 +154,7 @@ function ArcadeCabinet() {
           </>
         )}
 
+        {/* Exit Cabinet Screen */}
         {zoomStage === "exiting" && (
           <motion.div
             initial={{ scale: 8, opacity: 0, filter: "blur(8px)" }}

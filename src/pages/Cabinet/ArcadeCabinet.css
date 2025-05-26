@@ -1,3 +1,4 @@
+/* Cabinet */
 .arcade-bg {
     background: linear-gradient(135deg, #1e2a78, #5a2a85, #3b2671);
     position: relative;
@@ -14,6 +15,7 @@
     filter: drop-shadow(0 0 20px #0ff) drop-shadow(0 0 40px #0ff);
 }
 
+/* Blink Text Animation */
 .press-start {
     text-align: center;
     color: yellow;
@@ -22,12 +24,6 @@
     text-shadow: 0 0 5px #ff0, 0 0 10px #ff0;
     pointer-events: none;
 }
-
-.enter-hint {
-    font-family: 'Press Start 2P', cursive;
-    text-shadow: 0 0 6px #fff, 0 0 12px #ff0;
-}
-
 
 @keyframes blink {
 
