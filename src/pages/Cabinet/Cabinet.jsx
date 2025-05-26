@@ -12,10 +12,11 @@ import OrderGame from "../../comp/game/Order/OrderGame";
 import SpaceInvaders from "../../comp/game/SpaceInvaders/SpaceInvaders";
 
 function Cabinet({ onExit }) {
-  const games = useSelector((state) => state.cabinet.value);
+  const games = useSelector((state) => state.cabinet.value); // redux
   const [unlockedGames, setUnlockedGames] = useState(getUnlockedGames());
   const [openGameId, setOpenGameId] = useState(null);
 
+  /* Exit Cabinet Screen → Arcade Cabinet */
   useEffect(() => {
     const handleEsc = (e) => {
       if (e.key === "Escape") {
@@ -26,6 +27,7 @@ function Cabinet({ onExit }) {
     return () => window.removeEventListener("keydown", handleEsc);
   }, [onExit]);
 
+  /* Unlocked Games */
   useEffect(() => {
     const onGameUnlocked = () => {
       setUnlockedGames(getUnlockedGames());
@@ -38,6 +40,7 @@ function Cabinet({ onExit }) {
     };
   }, []);
 
+  /* === 3D CAROUSEL === */
   const carousel = (slider) => {
     const z = 300;
     function rotate() {
@@ -53,7 +56,7 @@ function Cabinet({ onExit }) {
     });
     slider.on("detailsChanged", rotate);
   };
-
+  // INIT SLIDER
   const [sliderRef, slider] = useKeenSlider(
     {
       loop: true,
@@ -63,7 +66,7 @@ function Cabinet({ onExit }) {
     },
     [carousel]
   );
-
+  // === SPIN CAROUSEL ===
   const spinCarousel = () => {
     if (!slider.current) return;
 
@@ -88,27 +91,30 @@ function Cabinet({ onExit }) {
 
     spin();
   };
-
+  // CAROUSEL NAVIGATION
   const goLeft = () => {
     slider.current?.prev();
   };
-
   const goRight = () => {
     slider.current?.next();
   };
 
   return (
     <div className="flex justify-center items-center bg-[#0a0a0a] h-screen p-8">
+      {/* Cabinet */}
       <div
         className="cabinet-body w-[800px] h-[600px] bg-[#333333] flex flex-col items-center justify-between p-4 relative border-[8px] border-[#111111] rounded-[20px] overflow-hidden"
         style={{
           boxShadow: "0 0 20px #0ff",
         }}
       >
+        {/* Title */}
         <div className="font-['Press_Start_2P'] text-[1.2rem] text-[#ff0044] mb-4">
           ARCADE
         </div>
+        {/* 3D Container */}
         <div className="scene">
+          {/* Game Cards */}
           <div className="carousel keen-slider" ref={sliderRef}>
             {games
               .filter((game) => unlockedGames.includes(game.id))
