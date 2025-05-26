@@ -123,7 +123,7 @@ function Cabinet({ onExit }) {
   };
 
   return (
-    <div className="flex justify-center items-center bg-[#0a0a0a] h-screen p-8">
+    <div className="flex justify-center items-center h-screen p-8">
       {/* Cabinet */}
       <div
         className="cabinet-body w-[800px] h-[600px] bg-[#333333] flex flex-col items-center justify-between p-4 relative border-[8px] border-[#111111] rounded-[20px] overflow-hidden"
