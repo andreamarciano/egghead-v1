@@ -196,7 +196,7 @@ function Cabinet({ onExit }) {
         </div>
       </div>
 
-      {/* Render */}
+      {/* Render Games */}
       {openGameId === "Tris" && <Tris onClose={() => setOpenGameId(null)} />}
       {openGameId === "Flower" && (
         <Flower onClose={() => setOpenGameId(null)} />
