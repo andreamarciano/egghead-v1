@@ -11,22 +11,6 @@ import ConnectFour from "../../comp/game/ConnectFour/ConnectFour";
 import OrderGame from "../../comp/game/Order/OrderGame";
 import SpaceInvaders from "../../comp/game/SpaceInvaders/SpaceInvaders";
 
-const carousel = (slider) => {
-  const z = 300;
-  function rotate() {
-    const deg = 360 * slider.track.details.progress;
-    slider.container.style.transform = `translateZ(-${z}px) rotateY(${-deg}deg)`;
-  }
-  slider.on("created", () => {
-    const deg = 360 / slider.slides.length;
-    slider.slides.forEach((el, idx) => {
-      el.style.transform = `rotateY(${deg * idx}deg) translateZ(${z}px)`;
-    });
-    rotate();
-  });
-  slider.on("detailsChanged", rotate);
-};
-
 function Cabinet({ onExit }) {
   const games = useSelector((state) => state.cabinet.value);
   const [unlockedGames, setUnlockedGames] = useState(getUnlockedGames());
@@ -53,6 +37,22 @@ function Cabinet({ onExit }) {
       window.removeEventListener("gameUnlocked", onGameUnlocked);
     };
   }, []);
+
+  const carousel = (slider) => {
+    const z = 300;
+    function rotate() {
+      const deg = 360 * slider.track.details.progress;
+      slider.container.style.transform = `translateZ(-${z}px) rotateY(${-deg}deg)`;
+    }
+    slider.on("created", () => {
+      const deg = 360 / slider.slides.length;
+      slider.slides.forEach((el, idx) => {
+        el.style.transform = `rotateY(${deg * idx}deg) translateZ(${z}px)`;
+      });
+      rotate();
+    });
+    slider.on("detailsChanged", rotate);
+  };
 
   const [sliderRef, slider] = useKeenSlider(
     {
@@ -99,7 +99,12 @@ function Cabinet({ onExit }) {
 
   return (
     <div className="flex justify-center items-center bg-[#0a0a0a] h-screen p-8">
-      <div className="cabinet-body">
+      <div
+        className="cabinet-body w-[800px] h-[600px] bg-[#333333] flex flex-col items-center justify-between p-4 relative border-[8px] border-[#111111] rounded-[20px] overflow-hidden"
+        style={{
+          boxShadow: "0 0 20px #0ff",
+        }}
+      >
         <div className="font-['Press_Start_2P'] text-[1.2rem] text-[#ff0044] mb-4">
           ARCADE
         </div>
