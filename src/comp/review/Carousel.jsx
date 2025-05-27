@@ -1,32 +1,16 @@
 import { useState, useEffect, useRef } from "react";
-
-const images = [
-  {
-    src: "https://images.unsplash.com/photo-1444858291040-58f756a3bdd6?q=80&w=1978&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    caption: "La nostra fattoria sulla Terra",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1541873676-a18131494184?q=80&w=2036&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    caption: "Il nostro allevatore Mario a lavoro",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1614728263952-84ea256f9679?q=80&w=1908&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    caption: "Spedizione garantita in un giorno in tutto il pianeta",
-  },
-  {
-    src: "https://t3.ftcdn.net/jpg/03/01/64/66/240_F_301646631_42E6MJ9eexfworD9GfIPWSeTznBg8bb2.jpg",
-    caption: "I nostri clienti abituali",
-  },
-];
-
-// Continuous scrolling effect
-const extendedImages = [
-  images[images.length - 1], // last image first
-  ...images,
-  images[0], // first image last
-];
+import { useSelector } from "react-redux";
 
 function Carousel() {
+  const images = useSelector((state) => state.carousel.value); // redux store
+
+  // Continuous scrolling effect
+  const extendedImages = [
+    images[images.length - 1], // last image first
+    ...images,
+    images[0], // first image last
+  ];
+
   const [currentIndex, setCurrentIndex] = useState(1); // first image
   const transitionRef = useRef(true); // transition on
   const intervalRef = useRef(null);
@@ -34,13 +18,13 @@ function Carousel() {
   // ->
   const nextSlide = () => {
     setCurrentIndex((prevIndex) => prevIndex + 1);
-    resetAutoPlay(); // Reset del timer
+    resetAutoPlay(); // reset timer
   };
 
   // <-
   const prevSlide = () => {
     setCurrentIndex((prevIndex) => prevIndex - 1);
-    resetAutoPlay(); // Reset del timer
+    resetAutoPlay(); // reset timer
   };
 
   // Reset Timer - User Interaction
