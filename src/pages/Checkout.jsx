@@ -7,9 +7,9 @@ const discountCodes = [
   "TRIS5",
   "FLOW5",
   "FOUR5",
-  "GRAZIEATE5",
+  "NOTREALLYSORRY5",
   "ORDER5",
-  "MAZE5",
+  "INVADER5",
 ];
 
 function Checkout() {

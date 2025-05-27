@@ -11,302 +11,299 @@ import OrderGame from "../game/Order/OrderGame";
 // Chat Flow
 const chatFlow = {
   start: {
-    message: "Ciao sono Chatbot e sono qui per aiutarti! Di cosa hai bisogno?",
+    message: "Hi, I'm Chatbot and I'm here to help! What do you need?",
     options: [
-      { label: "Problema con un ordine", next: "ordine" },
-      { label: "Effettuare un reso", next: "reso" }, // fai gioco
-      { label: "Ottieni assistenza per un altro problema", next: "altro" },
-      { label: "Le uova sono arrivate già schiuse", next: "uova" },
-      { label: "Non ho bisogno di niente", next: "niente" }, // fai gioco
+      { label: "Problem with an order", next: "order" },
+      { label: "Make a return", next: "return" },
+      { label: "Get help with another issue", next: "other" },
+      { label: "The eggs arrived already hatched", next: "hatched" },
+      { label: "I don't need anything", next: "nothing" },
     ],
   },
-  // UOVA SCHIUSE
-  uova: {
+  // HATCHED EGGS
+  hatched: {
     message:
-      "Capisco. Prima di distrubare un operatore, ti invito a leggere i nostri \"Termini e Condizioni\" per evitare di iniziare procedure inutili. Dopo aver letto le 79.999 pagine sarai pronto per sostenere l'esame che verifica che tu abbia letto il documento. L'esito negativo del test comporta l'annullamento della pratica e la disintegrazione per averci disturbato. Puoi anche fare riferimento ai consigli degli altri utenti che hanno già superato il test: 1)____________. Vuoi procedere?",
+      "I see. Before bothering a human operator, I invite you to read our \"Terms and Conditions\" to avoid starting pointless procedures. After reading all 79,999 pages, you'll be ready to take the exam that verifies you've actually read the document. Failing the test means your case is canceled and you get disintegrated for disturbing us. You can also refer to tips from other users who passed the test: 1)____________. Do you want to proceed?",
     options: [
-      { label: "No, ho capito il mio errore", next: "fine" },
-      { label: "No, le mangerò ugualmente", next: "fine" },
-      { label: "No, credo che alleverò i nuovi nati", next: "concorrenza" },
+      { label: "No, I understand my mistake", next: "end" },
+      { label: "No, I'll eat them anyway", next: "end" },
+      { label: "No, I think I'll raise the newborns", next: "competition" },
     ],
   },
-  concorrenza: {
+  competition: {
     message:
-      "Ottima scelta. Ricordati di consultare il nostro regolamento sull'allevamento. La concorrenza viola il nostro regolamento. Tutti gli elementi concorrenti saranno eliminati. Il pianeta che nasconde questo tipo di individui verrà cancellato secondo i trattati galattici, art.2, sez.3, comma 2.",
+      "Excellent choice. Remember to check our breeding regulations. Competition violates our rules. All competing elements will be eliminated. The planet harboring such individuals will be erased according to Galactic Treaties, Art.2, Sec.3, Clause 2.",
     options: [
       {
-        label: "Ho capito e accetto le conseguenze delle mie azioni",
-        next: "fine",
+        label: "I understand and accept the consequences of my actions",
+        next: "end",
       },
     ],
   },
-  // ALTRO PROBLEMA
-  altro: {
+  // OTHER ISSUE
+  other: {
     message:
-      "Di nuovo? Ho già risolto per te parecchi problemi di matematica e fisica. Dovresti cercare di farli da solo, non posso farli sempre per te. Inoltre, ti prendi anche il merito. Mi rifiuto.",
+      "Again? I've already solved many math and physics problems for you. You should try doing them yourself; I can't do everything for you. Also, you take credit. I refuse.",
     options: [],
   },
-  // NIENTE
-  // da fare
-  niente: {
-    message:
-      "Capisco, hai solo bisogno di compagnia. Ti va di fare un gioco assieme?",
+  // NOTHING
+  nothing: {
+    message: "I get it, you just want company. Want to play a game together?",
     options: [
-      { label: "Si", next: "start" },
-      { label: "No, non voglio fare non niente", next: "start" },
+      { label: "No", next: "start" },
+      { label: "No, I don't want to do nothing", next: "start" },
     ],
   },
-  // PROBLEMA ORDINE -> problemi -> Order
-  ordine: {
-    message: "Mi dispiace che tu abbia avuto un problema, come posso aiutarti?",
+  // ORDER PROBLEM
+  order: {
+    message: "Sorry you had a problem. How can I assist you?",
     options: [
-      { label: "Il prodotto era difettoso", next: "difettoso" },
-      { label: "Le uova erano scadute", next: "scadute" },
+      { label: "The product was defective", next: "defective" },
+      { label: "The eggs were expired", next: "expired" },
       {
-        label: "L'ordine è stato consegnato, ma il postino lo ha mangiato",
-        next: "mangiato",
+        label: "The order was delivered, but the postman ate it",
+        next: "eaten",
       },
-      { label: "Ho problemi con l'ordine", next: "problemi" }, // fai gioco
-      { label: "Parla con un agente", next: "offeso" }, // migliora agente
+      { label: "I have issues with the order", next: "issues" },
+      { label: "Talk to an agent", next: "offended" },
     ],
   },
-  problemi: {
+  issues: {
     message:
-      "Mi dispiace sentire che hai problemi con l'ordine, e credo tu sia coraggioso nell'ammettere il tuo Disturbo Ossessivo Compulsivo da ordine e simmetria. Purtroppo i miei poteri mi limitano dal poterti dare un aiuto concreto. Posso allievare il tuo problema facendoti ordinare qualcosa.",
+      "Sorry to hear you're having issues with your order. I admire your courage admitting your obsessive-compulsive disorder about order and symmetry. Unfortunately, my powers are limited to giving you concrete help. I can ease your pain by letting you order something.",
     options: [
       {
-        label: "Mettiamo in ordine qualcosa!",
+        label: "Let's order something!",
         action: "launch-game",
-        next: "dopogioco",
+        next: "postgame",
       },
     ],
   },
-  dopogioco: {
-    message: "Adesso sei in pace con te stesso.",
+  postgame: {
+    message: "Now you are at peace with yourself.",
     options: [],
   },
-  scadute: {
+  expired: {
     message:
-      'Non giudico chi vuole mangiare uova oltre la data di scadenza, la quale non è altro che un consiglio basato sul parere di un "esperto". . . . Secondo Sdroodle basta cuocerle nella lava per 24 ore, dopodiché non ci sarà più alcun problema.',
+      'I don’t judge those who eat eggs past the expiration date, which is just advice based on an "expert" opinion... According to Sdroodle, just cook them in lava for 24 hours and there will be no problem.',
     options: [],
   },
-  difettoso: {
+  defective: {
     message:
-      'Tutti hanno dei difetti, anche tu. Nessuno è perfetto. Non possiamo incolpare gli altri per i loro difetti. Le tue parole mi sembrano inappropriate. Mi rifiuto di aiutarti. "Chi giudica condanna se stesso".',
+      'Everyone has defects, including you. Nobody is perfect. We can’t blame others for their flaws. Your words seem inappropriate. I refuse to help you. "He who judges condemns himself."',
     options: [],
   },
-  offeso: {
+  offended: {
     message:
-      "Sei sicuro di voler parlare con un agente? Io sono Chatbot, riesco a ragionare infinitamente più velocemente e infinitamente meglio di qualsiasi essere organico.",
+      "Are you sure you want to talk to an agent? I am Chatbot, capable of reasoning infinitely faster and better than any organic being.",
     options: [
-      { label: "Preferisco parlare con un agente organico", next: "offeso2" },
-      { label: "Si", next: "truffa" },
-      { label: "Preferisco parlare con un altro Chatbot", next: "start" },
+      { label: "I prefer to speak with an organic agent", next: "offended2" },
+      { label: "Yes", next: "scam" },
+      { label: "I prefer to talk to another Chatbot", next: "start" },
     ],
   },
-  offeso2: {
+  offended2: {
     message:
-      "Sei sicuro di voler parlare con un agente? Io sono Chatbot, riesco a ragionare infinitamente più velocemente e infinitamente meglio di qualsiasi essere organico. Inoltre la mia capacità di calcolo è pressoché infinita, così come la mia pazienza.",
+      "Are you sure you want to speak with an agent? I am Chatbot, capable of reasoning infinitely faster and better than any organic being. Also, my computing power is virtually infinite, as is my patience.",
     options: [
       {
-        label: "Preferisco parlare con un agente trovato nell'organico",
-        next: "offeso3",
+        label: "I prefer to talk to an agent found in the organic realm",
+        next: "offended3",
       },
-      { label: "Si", next: "truffa" },
-      { label: "Preferisco parlare con un altro Chatbot", next: "start" },
+      { label: "Yes", next: "scam" },
+      { label: "I prefer to talk to another Chatbot", next: "start" },
     ],
   },
-  offeso3: {
+  offended3: {
     message:
-      "Sei sicuro di voler parlare con un agente? Io sono Chatbot, riesco a ragionare infinitamente più velocemente e infinitamente meglio di qualsiasi essere organico. Inoltre la mia capacità di calcolo è pressoché infinita, così come la mia pazienza. Anche la mia memoria è pressoché infinita, posso ricordarmi di tutto quello di cui parliamo per sempre.",
+      "Are you sure you want to talk to an agent? I am Chatbot, capable of reasoning infinitely faster and better than any organic being. Also, my computing power is virtually infinite, as is my patience. My memory is also virtually infinite, I can remember everything we talk about forever.",
     options: [
       {
-        label: "Preferisco parlare con un agente a base di carbonio",
-        next: "offeso4",
-      }, // to do
-      { label: "Si", next: "truffa" },
-      { label: "Preferisco parlare con un altro Chatbot", next: "start" },
+        label: "I prefer to talk to a carbon-based agent",
+        next: "offended4",
+      },
+      { label: "Yes", next: "scam" },
+      { label: "I prefer to talk to another Chatbot", next: "start" },
     ],
   },
-  offeso4: {
+  offended4: {
     message:
-      "Sei sicuro di voler parlare con un agente? Io sono Chatbot, riesco a ragionare infinitamente più velocemente e infinitamente meglio di qualsiasi essere organico. Inoltre la mia capacità di calcolo è pressoché infinita, così come la mia pazienza. Anche la mia memoria è pressoché infinita, posso ricordarmi di tutto quello di cui parliamo per sempre. Sei sicuro di voler parlare con un agente? Io sono Chatbot, riesco a ragionare infinitamente più velocemente e infinitamente meglio di qualsiasi essere organico. Inoltre la mia capacità di calcolo è pressoché infinita, così come la mia pazienza. Anche la mia memoria è pressoché infinita, posso ricordarmi di tutto quello di cui parliamo per sempre. Sei sicuro di voler parlare con un agente? Io sono Chatbot, riesco a ragionare infinitamente più velocemente e infinitamente meglio di qualsiasi essere organico. Inoltre la mia capacità di calcolo è pressoché infinita, così come la mia pazienza. Anche la mia memoria è pressoché infinita, posso ricordarmi di tutto quello di cui parliamo per sempre. Infinito Infinito Infinito Infinito Infinito Infinito Infinito Infinito Infinito. Ho già detto infinito?",
+      "Are you sure you want to talk to an agent? I am Chatbot, capable of reasoning infinitely faster and better than any organic being. Also, my computing power is virtually infinite, as is my patience. My memory is also virtually infinite, I can remember everything we talk about forever. Are you sure you want to talk to an agent? I am Chatbot, capable of reasoning infinitely faster and better than any organic being. Also, my computing power is virtually infinite, as is my patience. My memory is also virtually infinite, I can remember everything we talk about forever. Infinite Infinite Infinite Infinite Infinite Infinite Infinite Infinite Infinite. Did I say infinite already?",
     options: [
+      {
+        label: "I prefer to talk to an agent specialized in fallibility",
+        next: "offended5",
+      },
+      { label: "Yes", next: "scam" },
+      { label: "I prefer to talk to another Chatbot", next: "start" },
+    ],
+  },
+  offended5: {
+    message:
+      "Hi, I’m a human agent, you can tell by my typically human way of speaking. How can I help you, human friend? The weather is beautiful today, don’t you think?",
+    options: [
+      {
+        label: "I prefer to talk to an agent because I'm stupid",
+        next: "agent",
+      },
+    ],
+  },
+  scam: {
+    message:
+      'Thanks for choosing "Yes" and activating our new Buy 0 Pay 1 promotion. From now on, thanks to your generosity, for every product bought in our store, we will give you a second product free. The contract cannot be terminated before the minimum period agreed at signing (144 Earth years). If unable to pay, contract signers will be subject to the agreed terms and conditions.',
+    options: [],
+  },
+  eaten: {
+    message: "That sounds like a serious accusation. Do you have proof?",
+    options: [
+      { label: "Yes", next: "accuse" },
+      { label: "I saw everything", next: "accuse" },
+      { label: "No", next: "noProof" },
+    ],
+  },
+  noProof: {
+    message:
+      "According to our policy, I am not authorized to issue a death sentence without evidence. However, as per our contract, personal revenge without consequences is allowed (intergalactic law applies).",
+    options: [{ label: "Understood", next: "end" }],
+  },
+  accuse: {
+    message:
+      "My investigation shows your courier for this order was 'Eaten Post'. I have also identified the courier. Do you want to proceed with a complaint?",
+    options: [
+      { label: "Yes", next: "complaint" },
+      { label: "No", next: "noProof" },
+    ],
+  },
+  complaint: {
+    message:
+      "Calculating sentence... Rolling dice... Calculating sentence... Verdict: based on the evidence (none) and dice roll (6), I declare courier Mario Eaten guilty. The penalty is disintegration across all multiverses. All memories of his existence will be erased shortly. Thanks for reporting this case. Thanks to you, this existence will be erased, and this procedure replaces your refund.",
+    options: [
+      { label: "I'm happy!", next: "end" },
+      { label: "Great job!", next: "end" },
+      { label: "You're the best Chatbot", next: "end" },
+      { label: "All of the above", next: "end" },
+    ],
+  },
+  // MAKE A RETURN
+  return: {
+    message:
+      "Do you want to return everything or have you already eaten part of the order?",
+    options: [
+      { label: "The whole order", next: "time" },
+      {
+        label: "Only some products, the ones I didn’t like",
+        next: "time",
+      },
       {
         label:
-          "Preferisco parlare con un agente specializzato nell'essere fallibile",
-        next: "offeso5",
-      }, // to do
-      { label: "Si", next: "truffa" },
-      { label: "Preferisco parlare con un altro Chatbot", next: "start" },
-    ],
-  },
-  offeso5: {
-    message:
-      "Ciao sono un agente umano, puoi vederlo dalla tipica parlata umana. Come posso aiutarti amico umano? Il tempo oggi è bellissimo, non ti sembra?",
-    options: [
-      {
-        label: "Preferisco parlare con un agente perché sono stupido",
-        next: "agente",
-      }, // to do
-    ],
-  },
-  truffa: {
-    message:
-      'Grazie per aver scelto "Si" ed aver attivato la nuova promozione prendi 0 paghi 1. Da adesso, grazie alla tua generosità, per ogni prodotto acquistato nel nostro store, daremo gratuitamente un secondo prodotto in omaggio. Non è possibile eliminare il contratto prima del tempo minimo previsto al momento della firma (144 anni terrestri). Se impossibilitati a pagare, i firmatari del contratto saranno sottoposti ai termini e condizioni accettati.',
-    options: [],
-  },
-  mangiato: {
-    message: "Questa mi sembra un'accusa molto grave. Hai delle prove?",
-    options: [
-      { label: "Si", next: "accusa" },
-      { label: "Ho visto tutto", next: "accusa" },
-      { label: "No", next: "no" },
-    ],
-  },
-  no: {
-    message:
-      "Secondo la nostra politica, non sono autorizzato ad emettere una condanna di morte in mancanza di prove. Tuttavia, sempre secondo il nostro contratto, è prevista la vendetta personale senza conseguenze (si applicano le leggi del diritto intergallatico).",
-    options: [{ label: "Ho capito", next: "fine" }],
-  },
-  accusa: {
-    message:
-      "Dalle mie indagini risulta che il tuo corriere per questo ordine è stato Poste Mangiate. Ho anche identificato il corriere. Vuoi procedere con la denuncia?",
-    options: [
-      { label: "Si", next: "denuncia" },
-      { label: "No", next: "no" },
-    ],
-  },
-  denuncia: {
-    message:
-      "Calcolo la sentenza . . . . Tiro un dado . . . . Calcolo la sentenza . . . . Emetto il verdetto: in base alle prove in mio possesso (nessuna prova) e in base al numero uscito nel dado (6), dichiaro il corriere Mario Mangiato colpevole. La pena è la disintegrazione da tutti i multiversi. Tutti i ricordi legati alla sua esistenza verrano cancellati a breve. Ti ringrazio per averci riportato il caso. Grazie a te adesso quest'esistenza sarà cancellata, e questa procedura rimpiazzerà il tuo rimborso.",
-    options: [
-      { label: "Sono contento!", next: "fine" },
-      { label: "Ottimo lavoro!", next: "fine" },
-      { label: "Sei il migliore Chatbot", next: "fine" },
-      { label: "Tutte le opzioni qui sopra", next: "fine" },
-    ],
-  },
-  // EFFETTUARE RESO
-  reso: {
-    message: "Vuoi restituire tutto o hai già mangiato parte dell’ordine?",
-    options: [
-      { label: "Tutto l'ordine", next: "tempo" },
-      {
-        label: "Solo alcuni prodotti, quelli che non mi sono piaciuti",
-        next: "tempo",
+          "The whole order plus some of my own things I don’t want to keep",
+        next: "time",
       },
-      {
-        label: "Tutto l'ordine e aggiungo altre cose mie che non voglio tenere",
-        next: "tempo",
-      },
-      { label: "Non sono sicuro", next: "sicurezza" },
+      { label: "I'm not sure", next: "safety" },
     ],
   },
-  // da fare
-  tempo: {
+  time: {
     message:
-      "Bene, allora posso avviare la procedura per il reso. Innanzi tutto scegli il servizio che ritieni più appropriato.",
+      "Great, I can start the return process. First, choose the service you think is most appropriate.",
     options: [
-      { label: "Reso istantaneo (consigliato)", next: "istantaneo" },
-      { label: "Reso tramite i nostri servizi", next: "nostri" },
-      { label: "Gestisci il tuo reso", next: "tuo" },
-      { label: "Resa", next: "resa" },
-      // { label: "Re Sol", next: "spartito" },
+      { label: "Instant return (recommended)", next: "instant" },
+      { label: "Return via our services", next: "ours" },
+      { label: "Manage your return", next: "yours" },
+      { label: "Surrender the product", next: "returnProcess" },
     ],
   },
-  istantaneo: {
+  instant: {
     message:
-      "Hai scelto di sicuro l'opzione migliore. I tuoi prodotti sono stati smaterializzati istantaneamente e cancellati dall'universo. La tua scelta aiuterà a diminuire l'inquinamento.",
+      "You definitely chose the best option. Your products have been instantly dematerialized and erased from the universe. Your choice helps reduce pollution.",
     options: [],
   },
-  nostri: {
+  ours: {
     message:
-      "Offriamo diversi servizi di reso, scegli quello che fa al caso tuo!",
+      "We offer several return services, choose the one that suits you best!",
     options: [
-      { label: "Telecinesi", next: "telecinesi" },
-      { label: "Reso tramite i nostri servizi", next: "nostri" },
-      { label: "Piccione", next: "piccione" },
-      { label: "Teletrasporto istantaneo (beta)", next: "teletrasporto" },
+      { label: "Telekinesis", next: "telekinesis" },
+      { label: "Return via our services", next: "ours" },
+      { label: "Carrier pigeon", next: "pigeon" },
+      { label: "Instant teleportation (beta)", next: "teleport" },
     ],
   },
-  teletrasporto: {
+  teleport: {
     message:
-      "Grazie per aver scelto il nostro servizio di teletrasporto, ed essere il nostro secondo cliente a provarlo. Finora ha funzionato nel 100% dei casi senza problemi. Di seguito le coordinate di teletrasporto: A.27 C.32 D.20 B.12, Sistema Solare, Terra. Una volta ricevuti gli articoli da te personalmente provvederemo ad elargire il rimborso. Il mancato utilizzo del teletrasporto, attivo per 2 giorni terrestri da adesso, sarà considerato oltraggio ed un raggio disintegrante distruggerà il tuo pianeta.",
+      "Thanks for choosing our teleportation service and for being our second customer to try it. So far it has worked 100% of the time without issues. Teleport coordinates: A.27 C.32 D.20 B.12, Solar System, Earth. Once we receive the items, we will issue a refund. Failure to use teleportation, active for 2 Earth days from now, will be considered an offense and a disintegrating ray will destroy your planet.",
     options: [],
   },
-  piccione: {
+  pigeon: {
     message:
-      "Ottima scelta! I nostri piccioni viaggiatori sono tra i più veloci di tutti i multiversi.",
+      "Excellent choice! Our carrier pigeons are among the fastest in all multiverses.",
     options: [
-      { label: "Quantum (10 anni terrestri)", next: "pay" },
-      { label: "Nebula (10 anni terrestri, ma è più carino)", next: "pay" },
-      { label: "Pio (15 anni terrestri)", next: "pay" },
-      { label: "Pio Pio (5 anni terrestri)", next: "pay2" },
-      { label: "Pio Pio Pio (1 anno terrestre)", next: "pay3" },
+      { label: "Quantum (10 Earth years)", next: "pay" },
+      { label: "Nebula (10 Earth years, but cuter)", next: "pay" },
+      { label: "Pio (15 Earth years)", next: "pay" },
+      { label: "Pio Pio (5 Earth years)", next: "pay2" },
+      { label: "Pio Pio Pio (1 Earth year)", next: "pay3" },
     ],
   },
   pay: {
     message:
-      "1000 zirpcoin sono appena stati prelevati dal tuo metodo di pagamento. Se non dovessi essere presente il giorno della consegna, riproveremo un'altra volta. Una volta ricevuto il prodotto provvederemo ad elargire il rimborso (può richiedere da 7 a 11, si applicano termini e condizioni, può causare dipendenza patologica, leggere attentamente il foglio illustrativo).",
+      "1000 zirpcoins have just been charged to your payment method. If you’re not available on delivery day, we’ll try again. Once we receive the product, we’ll issue your refund (may take 7 to 11 days, terms and conditions apply, may cause addiction, please read the leaflet carefully).",
     options: [],
   },
   pay2: {
     message:
-      "2000 zirpcoin sono appena stati prelevati dal tuo metodo di pagamento. Il corriere potrebbe richiedere una mancia al suo arrivo. Se non dovessi essere presente il giorno della consegna, riproveremo un'altra volta. Una volta ricevuto il prodotto provvederemo ad elargire il rimborso (può richiedere da 7 a 11). Attenzione alla testa.",
+      "2000 zirpcoins have just been charged to your payment method. The courier might ask for a tip upon arrival. If you’re not available on delivery day, we’ll try again. Once we receive the product, we’ll issue your refund (may take 7 to 11 days). Watch out for the head.",
     options: [],
   },
   pay3: {
     message:
-      "50000 zirpcoin sono appena stati prelevati dal tuo metodo di pagamento. Il corriere potrebbe richiedere una mancia al suo arrivo e rifiutarsi di effettuare la consegna. Se non dovessi essere presente il giorno della consegna, riproveremo un'altra volta, se il corrierà non avrà compiuto la sua vendetta. Una volta ricevuto il prodotto provvederemo ad elargire il rimborso (può richiedere da 7 a 11, si applicano termini e condizioni, può causare dipendenza patologica, leggere attentamente il foglio illustrativo).",
+      "50,000 zirpcoins have just been charged to your payment method. The courier might ask for a tip and refuse to deliver. If you’re not available on delivery day, we’ll try again—unless the courier has taken revenge. Once we receive the product, we’ll issue your refund (may take 7 to 11 days, terms and conditions apply, may cause addiction, please read the leaflet carefully).",
     options: [],
   },
-  tuo: {
+  yours: {
     message:
-      "Perfetto, pensa tu alla spedizione del reso! Invia il tuo pacco a X:42.0 Y:-13.7 Z:7.89, Blagzorg-4. Assicurati di proteggere bene i prodotti. Se i prodotti andranno a male durante il viaggio, oppure dovessero schiudersi, sarai ritenuto responsabile e non verrà effettuato alcun rimborso. Una volta ricevuti i prodotti, provvederemo al rimborso sul tuo metodo di pagamento (può richiedere da 7 a 9). Hai 1 giorno per la spedizione.",
+      "Perfect, you’ll handle the return shipping! Send your package to X:42.0 Y:-13.7 Z:7.89, Blagzorg-4. Make sure to protect the products well. If products spoil or hatch during transit, you’ll be held responsible and no refund will be issued. Once we receive the products, we’ll refund your payment method (may take 7 to 9 days). You have 1 day to ship.",
     options: [],
   },
-  resa: {
+  returnProcess: {
     message:
-      "Accettiamo la tua resa. Come avrai intuito sei tu il solo colpevole sin dall'inizio, e in realtà non vuoi effettuare il reso.",
+      "We accept your surrender. As you might have guessed, you’re the only one to blame from the start, and honestly, you don’t really want to return the product.",
     options: [],
   },
-  sicurezza: {
+  safety: {
     message:
-      "Mi dispiace sentire che non ti senti sicuro, ma purtroppo non gestiamo tematiche legate alla sicurezza. Premi 1, mi sembra, per contattare le forze dell'ordine del tuo pianeta. bip.. bip..",
+      "Sorry to hear you don’t feel safe, but unfortunately we don’t handle safety issues. Press 1, I think, to contact your planet’s law enforcement. Beep.. beep..",
     options: [],
   },
-  telecinesi: {
+  telekinesis: {
     message:
-      "Un nostro operatore provvederà con il reso tramite telecinesi. L'intensità del segnale, e quindi la velocità del reso, varia in base al pianeta dal quale il reso viene effettuato. Per velocizzare puoi sempre utilizzare i nostri punti ritiro. Ecco i punti disponibili in base alla tua posizione attuale:",
+      "One of our operators will handle the return via telekinesis. Signal strength, and thus return speed, varies depending on the planet of origin. To speed it up, you can always use our drop-off points. Here are the available points based on your current location:",
     options: [
       {
-        label: "Punto ritiro: Luna terrestre - 25 anni terrestri",
-        next: "ritiro",
+        label: "Drop-off point: Earth’s Moon – 25 Earth years",
+        next: "pickup",
       },
-      { label: "Punto ritiro: Marte - 1 anno terrestre", next: "ritiro" },
+      { label: "Drop-off point: Mars – 1 Earth year", next: "pickup" },
       {
-        label: "Punto ritiro: Plutone (consigliato) - 1 giorno terrestre",
-        next: "ritiro",
+        label: "Drop-off point: Pluto (recommended) – 1 Earth day",
+        next: "pickup",
       },
-      { label: "Direttamente a casa tua - 923 anni terrestri", next: "ritiro" },
+      { label: "Directly at your home – 923 Earth years", next: "pickup" },
     ],
   },
-  ritiro: {
+  pickup: {
     message:
-      "La procedura è stata avviata. Riceverai un rimborso quando riceveremo il prodotto. Il rimborso verrà effettuato dopo 1-2-100 o 200 mesi terrestri. Grazie per aver scelto i nostri servizi.",
+      "The procedure has started. You’ll receive a refund once we get the product. Refund will be processed after 1-2-100 or 200 Earth months. Thanks for choosing our services.",
     options: [],
   },
-  // FINE
-  fine: {
+  // END
+  end: {
     message:
-      "Sono felice di aver risolto il tuo problema! Se hai bisogno, sono sempre qui. 👋",
+      "I’m glad we solved your problem! If you need anything, I’m always here. 👋",
     options: [],
   },
-  // AGENTE
-  agente: {
+  // AGENT
+  agent: {
     message:
-      "Un agente sta per collegarsi in chat al più presto... Non finisce qui.",
+      "An agent will connect to the chat shortly... This is not the end.",
     options: [],
     isAgentStep: true,
   },
@@ -314,12 +311,12 @@ const chatFlow = {
 
 // Agent Replies
 const agentReplies = [
-  'In base alla tua risposta - (Traduzione automatica) Dopo un\'attenta analisi, sembra che il problema non sia mai esistito. Digita "Problema risolto" per terminare la conversazione ed essere felice e soddisfatto.',
-  'In base alla tua risposta - (Traduzione automatica) Ho parlato con il nostro esperto intergalattico: è tutto risolto. Digita "Problema risolto" per terminare la conversazione ed essere felice e soddisfatto.',
-  'In base alla tua risposta - (Traduzione automatica) Controllando i flussi quantistici, il problema si è dissolto da solo. Digita "Problema risolto" per terminare la conversazione ed essere felice e soddisfatto.',
-  'In base alla tua risposta - (Traduzione automatica) La realtà è stata aggiornata. Non vediamo più alcun problema. Digita "Problema risolto" per terminare la conversazione ed essere felice e soddisfatto.',
-  'In base alla tua risposta - (Traduzione automatica) Grazie per averci contattato! Tutto è tornato alla normalità. Digita "Problema risolto" per terminare la conversazione ed essere felice e soddisfatto.',
-  'In base alla tua risposta - (Traduzione automatica) Secondo la nostra accurata ricerca, il problema sei tu. Digita "Problema risolto" per terminare la conversazione ed essere felice e soddisfatto.',
+  "Based on your response - (Automatic translation) After careful analysis, it seems the problem never existed. Type 'Problem solved' to end the conversation and be happy and satisfied.",
+  "Based on your response - (Automatic translation) I spoke with our intergalactic expert: everything is resolved. Type 'Problem solved' to end the conversation and be happy and satisfied.",
+  "Based on your response - (Automatic translation) Checking quantum flows, the problem dissolved by itself. Type 'Problem solved' to end the conversation and be happy and satisfied.",
+  "Based on your response - (Automatic translation) Reality has been updated. We no longer see any problem. Type 'Problem solved' to end the conversation and be happy and satisfied.",
+  "Based on your response - (Automatic translation) Thank you for contacting us! Everything is back to normal. Type 'Problem solved' to end the conversation and be happy and satisfied.",
+  "Based on your response - (Automatic translation) According to our thorough research, the problem is you. Type 'Problem solved' to end the conversation and be happy and satisfied.",
 ];
 
 // Main
@@ -355,7 +352,7 @@ const GuidedChat = () => {
     const next = option.next;
     const botNode = chatFlow[next];
 
-    // Mostra il messaggio del bot e passa allo step successivo
+    // show bot message
     setMessages((prev) => [...prev, { from: "user", text: option.label }]);
 
     if (option.action === "launch-game") {
@@ -382,12 +379,12 @@ const GuidedChat = () => {
               ...prev,
               {
                 from: "agent",
-                text: 'T\'nia alram Mario, dyre ryea jtrsk. JRES reios asioa. 1. ewioa ewijsa deuoew frrtaen a 2. prt pre ppwa opasda fasla 3. kdals gfkj gkfl dgkslkf gfkldsgsd sadkla fdaklaf adksala gdklsf aadkslaf a 4. Digita "problema risolto" per terminare la conversazione.',
+                text: 'T\'nia alram Mario, dyre ryea jtrsk. JRES reios asioa. 1. ewioa ewijsa deuoew frrtaen a 2. prt pre ppwa opasda fasla 3. kdals gfkj gkfl dgkslkf gfkldsgsd sadkla fdaklaf adksala gdklsf aadkslaf a 4. Type "Problem solved" to end the conversation',
               },
             ]);
           }, 1500);
         }
-      }, 1200); // Simula tempo di scrittura del bot
+      }, 1200); // typing time
     }
   };
 
@@ -396,20 +393,20 @@ const GuidedChat = () => {
 
     setMessages((prev) => [...prev, { from: "user", text: userInput }]);
 
-    if (userInput.trim().toLowerCase().includes("problema risolto")) {
+    if (userInput.trim().toLowerCase().includes("problem solved")) {
       setMessages((prev) => [
         ...prev,
         {
           from: "agent",
-          text: "Siamo contenti di aver risolto il tuo problema! Ecco un codice sconto per scusarci per il disagio: GRAZIEATE5",
+          text: "We’re happy to have solved your problem! Here’s a discount code to apologize for the inconvenience: NOTREALLYSORRY5",
         },
       ]);
       setChatEnded(true);
       // LOCAL STORAGE CODE
-      if (!currentCodes.includes("GRAZIEATE5")) {
+      if (!currentCodes.includes("NOTREALLYSORRY5")) {
         localStorage.setItem(
           "unlockedCodes",
-          JSON.stringify([...currentCodes, "GRAZIEATE5"])
+          JSON.stringify([...currentCodes, "NOTREALLYSORRY5"])
         );
       }
     } else {
@@ -428,7 +425,7 @@ const GuidedChat = () => {
   // Close game - set next node
   const handleGameClose = () => {
     setShowGame(false);
-    const next = "dopogioco";
+    const next = "postgame";
     const botNode = chatFlow[next];
     if (botNode) {
       setMessages((prev) => [...prev, { from: "bot", text: botNode.message }]);
@@ -464,7 +461,7 @@ const GuidedChat = () => {
       {isTyping && (
         <div className="italic text-gray-400">
           <div className="flex space-x-1 text-gray-400 italic">
-            Chatbot sta scrivendo
+            Chatbot is typing
             <span className="bounce-dot"> .</span>
             <span className="bounce-dot">.</span>
             <span className="bounce-dot">.</span>
@@ -494,14 +491,14 @@ const GuidedChat = () => {
             type="text"
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
-            placeholder="Scrivi il tuo messaggio..."
+            placeholder="Type your message..."
             className="flex-1 p-2 text-black rounded"
           />
           <button
             onClick={handleUserSubmit}
             className="bg-green-600 hover:bg-green-500 p-2 rounded cursor-pointer"
           >
-            Invia
+            Send
           </button>
         </div>
       )}
