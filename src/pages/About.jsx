@@ -24,49 +24,49 @@ function About() {
         <div className="max-w-5xl mx-auto px-6">
           {/* Title */}
           <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">
-            Chi Siamo
+            About Us
           </h1>
 
-          {/* Sec 1: La Nostra Storia */}
+          {/* Sec 1: Our Story */}
           <section className="mb-10">
             <h2 className="text-2xl font-semibold text-gray-700 mb-3">
-              La Nostra Storia
+              Our Story
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto text-center">
-              Nel lontano <strong>1972</strong>, un gruppo di visionari
-              agricoltori decise che la Terra non era abbastanza per coltivare
-              le migliori uova. Con un razzo di seconda mano e un paio di
-              galline molto coraggiose, lanciammo il nostro primo allevamento
-              sulla <strong> Luna</strong>. Oggi, continuiamo a innovare,
-              portando sul mercato le uova più straordinarie dell'universo!
+              Back in <strong>1972</strong>, a group of visionary farmers
+              decided that Earth simply wasn't enough to raise the best eggs.
+              With a second-hand rocket and a couple of very brave chickens, we
+              launched our first farm on the <strong>Moon</strong>. Today, we
+              continue to innovate, bringing the most extraordinary eggs in the
+              universe to your table!
             </p>
           </section>
 
-          {/* Sec 2: Missione */}
+          {/* Sec 2: Our Mission */}
           <section className="mb-10">
             <h2 className="text-2xl font-semibold text-gray-700 mb-3">
-              La Nostra Missione
+              Our Mission
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto text-center">
-              Il nostro obiettivo è{" "}
-              <strong>rivoluzionare il concetto di uova</strong>. Non vendiamo
-              semplici uova, ma esperienze! La nostra missione è combinare{" "}
-              <strong>scienza, innovazione e un pizzico di follia</strong> per
-              creare il miglior prodotto possibile.
+              Our goal is to <strong>revolutionize the concept of eggs</strong>.
+              We don’t just sell eggs — we sell experiences! Our mission is to
+              combine{" "}
+              <strong>science, innovation, and a pinch of madness</strong> to
+              create the best product possible.
             </p>
           </section>
 
-          {/* Sec 3: Dove Siamo */}
+          {/* Sec 3: Where We Are */}
           <section className="mb-10">
             <h2 className="text-2xl font-semibold text-gray-700 mb-3">
-              Dove Siamo
+              Where We Are
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto text-center">
-              Anche se sogniamo le stelle, la nostra sede principale si trova in
-              una tranquilla fattoria
-              <strong> nelle colline dell'Ouagadougou</strong>, circondata da
-              galline felici, scienziati eccentrici e qualche pecora che si è
-              intrufolata per caso.
+              Though we dream among the stars, our main headquarters is nestled
+              in a quiet farm
+              <strong> among the hills of Ouagadougou</strong>, surrounded by
+              happy hens, eccentric scientists, and a few sheep who wandered in
+              by accident.
             </p>
 
             {/* Maze */}
@@ -75,104 +75,100 @@ function About() {
               onClick={() => setIsMazeOpen(true)}
             >
               <p className="text-gray-700">
-                📍 <strong>Indirizzo:</strong> Via delle Galline Ribelli, 42,
-                00042, Fattoria Lunare, Burchina Faso
+                📍 <strong>Address:</strong> Rebel Hens Lane, 42, 00042, Lunar
+                Farm, Burkina Faso
               </p>
               <p className="text-gray-700">
-                📞 <strong>Telefono:</strong> +39 555-OVO-123
+                📞 <strong>Phone:</strong> +39 555-OVO-123
               </p>
               <p className="text-gray-700">
-                📧 <strong>Email:</strong> info@uovidaluna.com
+                📧 <strong>Email:</strong> info@moonlayeggs.com
               </p>
             </div>
           </section>
 
-          {/* Sec 4: Team */}
+          {/* Sec 4: Our Team */}
           <section className="mb-10">
             <h2 className="text-2xl font-semibold text-gray-700 mb-3">
-              Il Nostro Team
+              Our Team
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto text-center">
-              Il nostro team è composto da un mix esplosivo di{" "}
-              <strong>
-                agricoltori, scienziati pazzi e astronauti in pensione
-              </strong>
-              .
+              Our team is a wild mix of{" "}
+              <strong>farmers, mad scientists, and retired astronauts</strong>.
             </p>
             <ul className="list-disc pl-5 mt-3 text-gray-600 max-w-2xl mx-auto text-center">
               <li>
-                🥚 <strong>Dr. Eggo Nauta</strong> – Ex astronauta, ora
-                responsabile della qualità delle uova.
+                🥚 <strong>Dr. Eggo Nauta</strong> - Former astronaut, now Head
+                of Egg Quality.
               </li>
               <li>
-                🥚 <strong>Signora Yolanda Tuorli</strong> – Esperta di galline
-                spaziali e sviluppo del gusto.
+                🥚 <strong>Ms. Yolanda Yolk</strong> - Specialist in space hens
+                and flavor development.
               </li>
               <li>
-                🥚 <strong>Professor Albumino</strong> – Scienziato capo,
-                responsabile delle uova a gravità zero.
+                🥚 <strong>Professor Albumino</strong> - Chief scientist, in
+                charge of zero-gravity eggs.
               </li>
             </ul>
           </section>
 
-          {/* Sec 5: Prodotti Speciali */}
+          {/* Sec 5: Special Eggs */}
           <section className="mb-10">
             <h2 className="text-2xl font-semibold text-gray-700 mb-3">
-              Le Nostre Uova Speciali
+              Our Special Eggs
             </h2>
             <ul className="list-disc pl-5 text-gray-600 max-w-2xl mx-auto text-center">
               <li>
-                🚀 <strong>Uova ZeroG</strong> – Perfette per le missioni
-                spaziali, non rotolano!
+                🚀 <strong>ZeroG Eggs</strong> - Perfect for space missions.
+                They don’t roll away!
               </li>
               <li>
-                🌈 <strong>Uova Arcobaleno</strong> – Il colore del tuorlo
-                cambia in base all’umore di chi lo cucina.
+                🌈 <strong>Rainbow Eggs</strong> - The yolk changes color
+                depending on the cook’s mood.
               </li>
               <li>
-                🎵 <strong>Uova Canterine</strong> – Quando le rompi, intonano
-                una canzone a caso.
+                🎵 <strong>Singing Eggs</strong> - Crack one open and it sings a
+                random tune.
               </li>
               <li>
-                🔥 <strong>Uova Vulcaniche</strong> – Si cuociono da sole!
-                (Maneggiare con cautela)
+                🔥 <strong>Volcanic Eggs</strong> - They cook themselves!
+                (Handle with care.)
               </li>
             </ul>
           </section>
 
-          {/* Sec 6: Sostenibilità */}
+          {/* Sec 6: Sustainability */}
           <section className="mb-10">
             <h2 className="text-2xl font-semibold text-gray-700 mb-3">
-              Sostenibilità e Innovazione
+              Sustainability & Innovation
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto text-center">
-              Il nostro allevamento lunare utilizza energia solare e ricicla il
-              100% delle risorse. Stiamo anche sperimentando un progetto per
-              creare <strong>galline bioniche</strong>, ma per ora tendono a
-              ribellarsi.
+              Our lunar farm is fully solar-powered and recycles 100% of its
+              resources. We're also experimenting with{" "}
+              <strong>bionic chickens</strong> — though they tend to rebel… for
+              now.
             </p>
           </section>
 
-          {/* Sec 7: Perché Sceglierci */}
+          {/* Sec 7: Why Choose Us */}
           <section className="mb-10">
             <h2 className="text-2xl font-semibold text-gray-700 mb-3">
-              Perché Sceglierci?
+              Why Choose Us?
             </h2>
             <ul className="list-disc pl-5 text-gray-600 max-w-2xl mx-auto text-center">
               <li>
-                ✔️ <strong>Uova uniche al mondo</strong> (letteralmente, alcune
-                arrivano dallo spazio!)
+                ✔️ <strong>Truly one-of-a-kind eggs on Earth</strong> (literally
+                — some come from outer space!)
               </li>
               <li>
-                ✔️ <strong>Innovazione e creatività</strong> in ogni prodotto.
+                ✔️ <strong>Innovation and creativity</strong> in every product.
               </li>
               <li>
-                ✔️ <strong>100% galline felici</strong> (e con il casco
-                spaziale).
+                ✔️ <strong>100% happy hens</strong> (with space helmets).
               </li>
               <li>
-                ✔️ <strong>Servizio clienti sempre disponibile</strong> (tranne
-                durante i lanci spaziali).
+                ✔️ <strong>Always-available customer service</strong> (except
+                during launch countdowns).
               </li>
             </ul>
           </section>
