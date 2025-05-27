@@ -11,9 +11,9 @@ export const animalsSlice = createSlice({
           "https://images.unsplash.com/photo-1616225994053-e629b171cfa3?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
           "https://images.unsplash.com/photo-1616225994053-e629b171cfa3?q=80&w=400&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1616225994053-e629b171cfa3?q=80&w=800&auto=format&fit=crop 800w",
-        alt: "Livornese",
+        alt: "White Leghorn",
         description:
-          "La gallina è un uccello domestico che fornisce le uova bianche. È un animale molto comune nelle aziende agricole e ha bisogno di un ambiente caldo e tranquillo per deporre le uova.",
+          "The White Leghorn is a prolific egg layer known for its pristine white shells. Native to Italy, it thrives in calm, warm environments and is the backbone of commercial egg production thanks to its reliability and efficiency.",
         position: "center 70%",
       },
       {
@@ -46,9 +46,9 @@ export const animalsSlice = createSlice({
           "https://images.unsplash.com/photo-1610847188112-fda7a87b39a3?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
           "https://images.unsplash.com/photo-1610847188112-fda7a87b39a3?q=80&w=400&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1610847188112-fda7a87b39a3?q=80&w=800&auto=format&fit=crop 800w",
-        alt: "Tacchino",
+        alt: "Turkey",
         description:
-          "Il tacchino è un altro animale che fornisce uova di grandi dimensioni. La sua carne e le sue uova sono molto ricercate per il loro sapore delicato e la loro alta qualità.",
+          "The turkey is a large ground-dwelling bird that lays sizeable, speckled eggs. These birds require quiet nesting spaces and are known for their calm temperament during the laying season.",
       },
       {
         id: "animal-4",
@@ -59,7 +59,7 @@ export const animalsSlice = createSlice({
           "https://images.unsplash.com/photo-1567428289786-cddc036eadfb?w=400&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1567428289786-cddc036eadfb?w=500&auto=format&fit=crop 800w",
         alt: "T-Rex",
         description:
-          "Il Tyrannosaurus rex, uno dei dinosauri più iconici, deponeva uova enormi che schiudevano piccoli cuccioli già pronti per iniziare la caccia. Con una lunghezza di oltre 12 metri, il T-Rex dominava la Terra circa 66 milioni di anni fa, ma le sue uova erano altrettanto impressionanti. Immaginate di poterle raccogliere!",
+          "The T-Rex, a prehistoric apex predator, laid massive eggs said to be as large as a football. Buried in soft earth and warmed by the sun, these eggs now hatch into fierce hatchlings — which, thanks to recent advances, can even be domesticated and ridden.",
         position: "center 30%",
       },
       {
@@ -69,9 +69,9 @@ export const animalsSlice = createSlice({
           "https://images.unsplash.com/photo-1605649461784-7d5e4df56c97?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
           "https://images.unsplash.com/photo-1605649461784-7d5e4df56c97?q=80&w=400&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1605649461784-7d5e4df56c97?q=80&w=800&auto=format&fit=crop 800w",
-        alt: "Coccodrillo",
+        alt: "Crocodile",
         description:
-          "I coccodrilli, animali preistorici sopravvissuti fino ai giorni nostri, depongono uova robuste che si schiudono sotto le calde sabbie. Questi rettili possono sembrare minacciosi, ma le loro uova sono il simbolo di una specie che ha resistito per milioni di anni.",
+          "Crocodile eggs are tough-shelled and carefully hidden in warm sand nests. As ancient survivors, crocodiles represent evolutionary endurance — and their eggs, often overlooked, echo that primeval resilience.",
       },
       {
         id: "animal-6",
@@ -89,11 +89,11 @@ export const animalsSlice = createSlice({
         num: 7,
         imgURL:
           "https://images.unsplash.com/photo-1521217155737-0d5632e9813f?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        alt: "Tartaruga",
+        alt: "Turtle",
         srcSet:
           "https://images.unsplash.com/photo-1521217155737-0d5632e9813f?q=80&w=400&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1521217155737-0d5632e9813f?q=80&w=800&auto=format&fit=crop 800w",
         description:
-          "Le tartarughe, con la loro lunga vita, sono famose per deporre uova in nidi nascosti nelle sabbie delle spiagge. Alcune specie, come la tartaruga marina, percorrono migliaia di chilometri per ritornare al loro luogo di deposizione, mostrando una straordinaria capacità di orientamento.",
+          "Turtles travel immense distances to lay eggs in secret beach nests. Whether freshwater or marine, their soft-shelled eggs incubate under warm sand until hatchlings emerge and instinctively race to the sea.",
         position: "center 65%",
       },
       {
@@ -116,7 +116,7 @@ export const animalsSlice = createSlice({
           "https://images.unsplash.com/photo-1592007694563-dc0a128d6c69?w=400&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1592007694563-dc0a128d6c69?w=500&auto=format&fit=crop 800w",
         alt: "Yoshi",
         description:
-          "Yoshi è un dinosauro agile e forte, noto per la sua capacità di saltare grandi distanze e per il suo spirito laborioso. Non solo è un ottimo compagno di avventure, ma fornisce anche uova particolari, che sono rinomate per la loro forza e resistenza.",
+          "Yoshi, a strong and agile dinosaur, is famed for his colorful, ultra-durable eggs. These eggs, known to withstand extreme impacts, are prized by adventurers and collectors alike. Some say they hold surprising powers inside.",
       },
       {
         id: "animal-10",
@@ -125,9 +125,9 @@ export const animalsSlice = createSlice({
           "https://images.unsplash.com/photo-1607335614551-3062bf90f30e?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
           "https://images.unsplash.com/photo-1607335614551-3062bf90f30e?q=80&w=400&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1607335614551-3062bf90f30e?q=80&w=800&auto=format&fit=crop 800w",
-        alt: "Alieno",
+        alt: "Alien",
         description:
-          "Sono facili da curare e molto affettuosi. Dotato di abilità molto utili, è in grado di teletrasportarsi e di adattarsi rapidamente a qualsiasi ambiente. Le sue uova sono ancora più particolari, con poteri che sfidano le leggi della fisica. Non produce escrementi.",
+          "They are easy to care for and extremely affectionate. Gifted with useful abilities, they can teleport and adapt instantly to any environment. Their eggs are even more extraordinary, with powers that defy the laws of physics. They produce no waste.",
       },
       {
         id: "animal-11",
@@ -169,9 +169,9 @@ export const animalsSlice = createSlice({
           "https://images.unsplash.com/photo-1560275619-4662e36fa65c?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
           "https://images.unsplash.com/photo-1560275619-4662e36fa65c?q=80&w=400&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1560275619-4662e36fa65c?q=80&w=800&auto=format&fit=crop 800w",
-        alt: "Squalo",
+        alt: "Shark",
         description:
-          "Lo squalo è un predatore marino temibile. Alcuni squali depongono uova, ma molti danno alla luce piccoli già sviluppati, in un processo noto come parto viviparo.",
+          'While many sharks give live birth, several species lay "mermaid\'s purses" — leathery egg cases that drift through the sea. These eggs contain perfectly formed mini-sharks, already armed for survival in the deep.',
       },
       {
         id: "animal-15",
@@ -213,9 +213,9 @@ export const animalsSlice = createSlice({
           "https://images.unsplash.com/photo-1596296455028-bb216ae02ff7?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
           "https://images.unsplash.com/photo-1596296455028-bb216ae02ff7?q=80&w=400&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1596296455028-bb216ae02ff7?q=80&w=800&auto=format&fit=crop 800w",
-        alt: "Mosca",
+        alt: "Fly",
         description:
-          "La mosca è un insetto prolifico che depone le uova in luoghi umidi e in decomposizione. Da queste uova nascono rapidamente le larve che si sviluppano in pochi giorni.",
+          "Flies lay hundreds of eggs at a time, often in moist, decaying matter. Within hours, the eggs hatch into larvae, beginning a rapid and efficient life cycle that turns waste into new life at astonishing speed.",
       },
       {
         id: "animal-19",
@@ -224,9 +224,9 @@ export const animalsSlice = createSlice({
           "https://images.unsplash.com/photo-1588470045344-4393b295297c?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
           "https://images.unsplash.com/photo-1588470045344-4393b295297c?q=80&w=400&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1588470045344-4393b295297c?q=80&w=800&auto=format&fit=crop 800w",
-        alt: "Formica",
+        alt: "Ant",
         description:
-          "Le formiche sono insetti sociali che depongono le uova nel loro formicaio. Ogni colonia è governata da una regina che produce tutte le uova necessarie per mantenere la popolazione.",
+          "In the hidden depths of the anthill, the queen ant lays all the eggs for her colony. These tiny white ovals form the heartbeat of the hive, sustaining vast numbers of tireless workers and fierce defenders.",
       },
       {
         id: "animal-20",
