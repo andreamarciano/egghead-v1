@@ -27,7 +27,7 @@ function Filter({ onFilterChange }) {
     setIsApplied(true);
     setTimeout(() => {
       setIsApplied(false);
-    }, 2000); // hyde after 2 sec
+    }, 2000); // hyde
   };
 
   const handleReset = () => {
@@ -51,7 +51,7 @@ function Filter({ onFilterChange }) {
     setIsApplied(true);
     setTimeout(() => {
       setIsApplied(false);
-    }, 2000); // hyde after 2 sec
+    }, 2000); // hyde
   };
 
   return (
@@ -75,7 +75,7 @@ function Filter({ onFilterChange }) {
           {/* Price */}
           <div className="flex flex-col">
             <h3 className="text-xs sm:text-sm md:text-base lg:text-lg font-bold">
-              Prezzo
+              Price
             </h3>
             <div className="flex space-x-2 mt-2 mx-auto">
               <input
@@ -97,14 +97,14 @@ function Filter({ onFilterChange }) {
           {/* Availability */}
           <div className="flex flex-col items-center">
             <h3 className="text-xs sm:text-sm md:text-base lg:text-lg font-bold mb-2">
-              Disponibilità
+              Availability
             </h3>
             <input
               type="number"
               value={minAvailability}
               onChange={(e) => setMinAvailability(Number(e.target.value))}
               className="p-2 bg-gray-700 text-white rounded w-14 sm:w-16 md:w-18 lg:w-20"
-              placeholder="Quantità minima"
+              placeholder="0"
             />
           </div>
           {/* Shipping */}
