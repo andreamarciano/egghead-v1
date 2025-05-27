@@ -66,9 +66,9 @@ function Scrollbar() {
         size={24}
         className="text-gray-600 cursor-pointer hover:bg-gray-800 hover:text-white rounded p-1"
         onClick={handleScrollDown}
-        onMouseDown={() => startScroll("down")} // Inizia lo scroll continuo verso il basso
-        onMouseUp={stopScroll} // Ferma lo scroll continuo
-        onMouseLeave={stopScroll} // Ferma lo scroll quando il mouse lascia l'area
+        onMouseDown={() => startScroll("down")}
+        onMouseUp={stopScroll}
+        onMouseLeave={stopScroll}
       />
 
       {/* Divider */}
@@ -79,9 +79,9 @@ function Scrollbar() {
         size={24}
         className="text-gray-600 cursor-pointer hover:bg-gray-800 hover:text-white rounded p-1"
         onClick={handleScrollUp}
-        onMouseDown={() => startScroll("up")} // Inizia lo scroll continuo verso l'alto
-        onMouseUp={stopScroll} // Ferma lo scroll continuo
-        onMouseLeave={stopScroll} // Ferma lo scroll quando il mouse lascia l'area
+        onMouseDown={() => startScroll("up")}
+        onMouseUp={stopScroll}
+        onMouseLeave={stopScroll}
       />
 
       {/* Scroll Top */}
