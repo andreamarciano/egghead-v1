@@ -25,7 +25,7 @@ const SidebarCart = () => {
       toast.success(
         <>
           <FaTrashAlt style={{ color: "red", marginRight: "10px" }} />
-          {`${item.name} rimosso/i dal carrello!`}
+          {`${item.name} removed from cart!`}
         </>,
         {
           icon: false, // disable default icon
@@ -57,7 +57,7 @@ const SidebarCart = () => {
         <button
           onClick={toggleSidebar}
           className="p-2 hover:bg-gray-700 rounded-2xl absolute top-[-7px] left-[-9px] cursor-pointer"
-          aria-label={isOpen ? "Chiudi Carrello" : "Apri Carrello"} // accessibility
+          aria-label={isOpen ? "Close Cart" : "Open Cart"} // accessibility
         >
           <ShoppingCart size={22} />
           {/* Product Number - Badge */}
@@ -75,11 +75,11 @@ const SidebarCart = () => {
       >
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-bold text-gray-800">Carrello</h2>
+          <h2 className="text-lg font-bold text-gray-800">Cart</h2>
           <button
             onClick={toggleSidebar}
             className="cursor-pointer"
-            aria-label="Chiudi Carrello" // accessibility
+            aria-label="Close Cart" // accessibility
           >
             <X size={24} className="hover:bg-gray-300 rounded-full" />
           </button>
@@ -87,7 +87,7 @@ const SidebarCart = () => {
 
         {/* Product List */}
         {cartItems.length === 0 ? (
-          <p className="text-gray-600">Il carrello è vuoto.</p>
+          <p className="text-gray-600">Your cart is empty.</p>
         ) : (
           <ul className="space-y-4">
             {cartItems.map((item) => (
@@ -95,7 +95,7 @@ const SidebarCart = () => {
                 <div>
                   <h3 className="font-semibold">{item.name}</h3>
                   <p className="text-sm">
-                    Quantità: {item.quantity} × €{item.price}
+                    Quantity: {item.quantity} x €{item.price}
                   </p>
                 </div>
                 {/* Remove Product */}
@@ -116,12 +116,12 @@ const SidebarCart = () => {
         {/* Total + Checkout */}
         {cartItems.length > 0 && (
           <div className="mt-6 border-t pt-4">
-            <p className="font-semibold">Totale: €{total}</p>
+            <p className="font-semibold">Total: €{total}</p>
             <button
               onClick={handleCheckout}
               className="mt-2 w-full cursor-pointer bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded-2xl"
             >
-              Procedi con l'ordine
+              Proceed to Checkout
             </button>
           </div>
         )}
