@@ -51,7 +51,7 @@ function ProductInfoCard() {
   // Add product to Cart
   const handleAddCart = () => {
     if (quantity > eggs[0].available) {
-      toast.warning("Hai superato la disponibilità del prodotto!");
+      toast.warning("You’ve exceeded the available stock!");
       return;
     }
 
@@ -67,7 +67,7 @@ function ProductInfoCard() {
 
     dispatch(decreaseAvailability({ id: eggs[0].id, quantity }));
     setQuantity(1);
-    toast.success(`${quantity} ${eggs[0].alt} aggiunto/i al carrello!`);
+    toast.success(`${quantity} ${eggs[0].alt} added to cart!`);
   };
 
   return (
@@ -77,7 +77,7 @@ function ProductInfoCard() {
     >
       {/* Title */}
       <h1 className="text-3xl font-bold text-white text-center mb-6">
-        Dettagli prodotto per {eggs[0].alt}
+        Product details for {eggs[0].alt}
       </h1>
 
       <div className="flex flex-col md:flex-row">
@@ -93,10 +93,10 @@ function ProductInfoCard() {
           <p className="text-gray-500 mt-2 mb-4">{eggs[0].description}</p>
           <div className="flex flex-col mb-6">
             <p className="text-gray-300 font-semibold">
-              Prezzo: {eggs[0].price} €
+              Price: {eggs[0].price} €
             </p>
             <p className="text-gray-300">
-              Disponibilità: {eggs[0].available} uova
+              Availability: {eggs[0].available} eggs
             </p>
             <p className="text-gray-300">
               1-Day Shipping: {eggs[0].shipping ? "✔️" : "❌"}
@@ -136,7 +136,7 @@ function ProductInfoCard() {
         </div>
       </div>
 
-      {/* Space Invaders */}
+      {/* Space Invaders - Shortcut + Render */}
       {eggs[0].game && (
         <button
           onClick={() => {
@@ -148,7 +148,6 @@ function ProductInfoCard() {
           👾
         </button>
       )}
-      {/* Space Invaders */}
       {isSpaceInvadersOpen && (
         <SpaceInvaders onClose={() => setIsSpaceInvadersOpen(false)} />
       )}

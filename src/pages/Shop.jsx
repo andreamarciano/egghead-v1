@@ -97,7 +97,7 @@ function Shop() {
   return (
     <>
       <Navbar />
-      <h1 className="text-4xl p-5 font-bold">Trova l'uovo che fa per te!</h1>
+      <h1 className="text-4xl p-5 font-bold">The Right Egg for Every Taste</h1>
 
       {/* Filter */}
       <div className="relative">
@@ -143,6 +143,10 @@ function Shop() {
           <Outlet />
         </div>
       )}
+
+      <div className="text-center text-lg italic text-gray-300 mt-10 mb-4">
+        Every Egg Tells a Story — Start Yours Here
+      </div>
 
       {/* Pagination */}
       <div className="flex justify-center items-center space-x-2 mt-5 mb-5">
