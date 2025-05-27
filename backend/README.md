@@ -101,7 +101,6 @@ The Flask backend is deployed on [Render.com](https://render.com/), which allows
 ### My Setup:
 
 - The API key (`OPENWEATHER_API_KEY`) is stored securely in the **Environment Variables** section of the Render dashboard.
-- The service is exposed at `https://andreafactoryproject-v1.onrender.com/weather`.
 
 ---
 
