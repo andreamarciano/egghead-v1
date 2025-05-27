@@ -36,17 +36,17 @@ function Footer() {
         <div className="md:col-span-2 flex flex-col items-center md:items-start">
           <img
             src={imgURL.logo}
-            alt="Andrea Factory Project Logo"
+            alt="ArziFact Project Logo"
             width="160"
             height="160"
           />
           <p className="text-sm mt-4 text-center md:text-left">
-            © 2025 Andrea Factory Project Inc. <br />
+            © 2025 ArziFact Project Inc. <br />
             All rights reserved. <br />
             All images and logos are property of their respective creators.{" "}
             <br />
             <br />
-            Andrea Factory Project is a fictional brand.
+            ArziFact Project is a fictional brand.
           </p>
         </div>
 
