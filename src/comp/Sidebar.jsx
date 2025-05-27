@@ -16,7 +16,7 @@ const Sidebar = () => {
         <button
           onClick={toggleSidebar}
           className="p-2 hover:bg-gray-500 rounded-2xl cursor-pointer absolute top-[-7px] left-[-9px]"
-          aria-label={isOpen ? "Chiudi menu" : "Apri menu"} // accessibility
+          aria-label={isOpen ? "Close Menu" : "Open Menu"} // accessibility
         >
           {/* Icon */}
           <Menu size={22} />
@@ -34,7 +34,7 @@ const Sidebar = () => {
           <h2 className="text-lg font-bold">Menu</h2>
           <button
             onClick={toggleSidebar}
-            aria-label="Chiudi menu" // accessibility
+            aria-label="Close Menu" // accessibility
           >
             <X
               size={24}
@@ -45,107 +45,103 @@ const Sidebar = () => {
 
         {/* Sections */}
         <div>
-          <h3 className="font-bold text-gray-700 text-lg">Di tendenza</h3>
+          <h3 className="font-bold text-gray-700 text-lg">Trending</h3>
           <ul className="mb-4">
             <li>
-              <Link to="/shop">Uova rare</Link>
+              <Link to="/shop">Rare Eggs</Link>
             </li>
             <li>
-              <Link to="/shop">Uova in saldo</Link>
+              <Link to="/shop">Eggs on Sale</Link>
             </li>
             <li>
-              <Link to="/shop">Nuovi arrivi</Link>
+              <Link to="/shop">New Arrivals</Link>
             </li>
             <li>
-              <Link to="/shop">Le più vendute</Link>
+              <Link to="/shop">Best Sellers</Link>
             </li>
           </ul>
           <hr className="text-gray-700" />
 
           <h3 className="font-bold text-gray-700 text-lg">
-            Creature leggendarie
+            Legendary Creatures
           </h3>
           <ul className="mb-4">
             <li>
-              <Link to="/shop">Draghi</Link>
+              <Link to="/shop">Dragons</Link>
             </li>
             <li>
-              <Link to="/shop">Fenici</Link>
+              <Link to="/shop">Phoenixes</Link>
             </li>
             <li>
               <Link to="/shop">Kraken</Link>
             </li>
             <li>
-              <Link to="/shop">Grifoni</Link>
+              <Link to="/shop">Griffins</Link>
             </li>
           </ul>
           <hr className="text-gray-700" />
 
           <h3 className="font-bold text-gray-700 text-lg">
-            Scegli per categoria
+            Browse by Category
           </h3>
           <ul className="mb-4">
             <li>
-              <Link to="/shop">Uova terrestri</Link>
+              <Link to="/shop">Terrestrial Eggs</Link>
             </li>
             <li>
-              <Link to="/shop">Uova acquatiche</Link>
+              <Link to="/shop">Aquatic Eggs</Link>
             </li>
             <li>
-              <Link to="/shop">Uova aliene</Link>
+              <Link to="/shop">Alien Eggs</Link>
             </li>
             <li>
-              <Link to="/shop">Uova misteriose</Link>
+              <Link to="/shop">Mysterious Eggs</Link>
             </li>
             <li>
-              <Link to="/shop">Mostra tutto</Link>
+              <Link to="/shop">Show All</Link>
             </li>
           </ul>
           <hr className="text-gray-700" />
 
-          <h3 className="font-bold text-gray-700 text-lg">
-            Programmi speciali
-          </h3>
+          <h3 className="font-bold text-gray-700 text-lg">Special Programs</h3>
           <ul className="mb-4">
             <li>
-              <Link to="/shop">Incubatrici magiche</Link>
+              <Link to="/shop">Magic Incubators</Link>
             </li>
             <li>
-              <Link to="/shop">Accessori per uova</Link>
+              <Link to="/shop">Egg Accessories</Link>
             </li>
             <li>
-              <Link to="/shop">Kit allevamento base</Link>
+              <Link to="/shop">Starter Breeding Kits</Link>
             </li>
             <li>
-              <Link to="/shop">Offerte segrete</Link>
+              <Link to="/shop">Secret Deals</Link>
             </li>
           </ul>
           <hr className="text-gray-700" />
 
-          <h3 className="font-bold text-gray-700 text-lg">
-            Aiuto e impostazioni
-          </h3>
+          <h3 className="font-bold text-gray-700 text-lg">Help & Settings</h3>
           <ul className="mb-4">
             <li>
-              <Link to="/about">Il mio account</Link>
+              <Link to="/about">My Account</Link>
             </li>
             <li>
-              <Link to="/about">I miei ordini</Link>
+              <Link to="/about">My Orders</Link>
             </li>
             <li>
-              <Link to="/about">Tracciamento spedizione</Link>
+              <Link to="/about">Shipping Tracker</Link>
             </li>
             <li>
-              <Link to="/about">Lingua e valuta</Link>
+              <Link to="/about">Language & Currency</Link>
             </li>
             <li>
-              <Link to="/about">Assistenza clienti</Link>
+              <Link to="/customer">Customer Service</Link>
             </li>
             <li>
-              <Link to="/about">Resi e rimborsi</Link>
+              <Link to="/customer">Returns & Refunds</Link>
             </li>
             <li>
-              <Link to="/about">Domande frequenti</Link>
+              <Link to="/about">FAQs</Link>
             </li>
           </ul>
         </div>
