@@ -33,7 +33,7 @@ function Reviews() {
     <div className="py-10">
       <div className="mb-4">
         <h2 className="text-3xl font-bold text-center text-gray-800">
-          Le opinioni dei nostri clienti
+          Customer Reviews
         </h2>
         {/* Filter dropdown */}
         <div className="flex justify-end">

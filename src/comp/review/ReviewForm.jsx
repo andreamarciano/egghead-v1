@@ -22,13 +22,12 @@ function ReviewForm({ onTriggerGame }) {
 
   // Get state from localStorage
   useEffect(() => {
-    // Carica da localStorage tramite gameUnlocker
     setUnlockedGames({
       battle: isGameUnlocked(GameNames.BATTLE),
       connect4: isGameUnlocked(GameNames.CONNECT_FOUR),
     });
 
-    // Ascolta evento unlock per aggiornare shortcut live
+    // update shortcut
     const onUnlock = () => {
       setUnlockedGames({
         battle: isGameUnlocked(GameNames.BATTLE),
@@ -68,12 +67,12 @@ function ReviewForm({ onTriggerGame }) {
           className="bg-yellow-300 p-5 shadow-md rounded-lg text-center"
         >
           <h2 className="text-2xl pb-3 font-bold text-gray-400">
-            Lascia una recensione!
+            Leave a Review!
           </h2>
           {/* Username */}
           <input
             type="text"
-            placeholder="Nome Utente"
+            placeholder="Username"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="border p-2 w-full mb-3 rounded text-gray-400"
@@ -102,7 +101,7 @@ function ReviewForm({ onTriggerGame }) {
           </div>
           {/* Description */}
           <textarea
-            placeholder="Scrivi la tua recensione (max 100 caratteri)"
+            placeholder="Write your review (max 100 characters)"
             value={text}
             onChange={(e) => setText(e.target.value)}
             maxLength={100}
