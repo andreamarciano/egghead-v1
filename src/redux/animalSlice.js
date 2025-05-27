@@ -136,9 +136,9 @@ export const animalsSlice = createSlice({
           "https://images.unsplash.com/photo-1598439210625-5067c578f3f6?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
           "https://images.unsplash.com/photo-1598439210625-5067c578f3f6?q=80&w=400&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1598439210625-5067c578f3f6?q=80&w=800&auto=format&fit=crop 800w",
-        alt: "Pinguino",
+        alt: "Penguin",
         description:
-          "Il pinguino è un uccello incapace di volare, ma un abile nuotatore. Vive nelle regioni fredde e le sue uova vengono deposte in luoghi gelidi, protette sotto il corpo per mantenere il calore.",
+          "Penguins are flightless birds and excellent swimmers, adapted to cold climates. They lay their eggs on icy terrain and keep them warm by balancing them on their feet, covered by a flap of skin to protect against the freezing temperatures.",
       },
       {
         id: "animal-12",
@@ -147,9 +147,9 @@ export const animalsSlice = createSlice({
           "https://images.unsplash.com/photo-1531884070720-875c7622d4c6?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
           "https://images.unsplash.com/photo-1531884070720-875c7622d4c6?q=80&w=400&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1531884070720-875c7622d4c6?q=80&w=800&auto=format&fit=crop 800w",
-        alt: "Aquila",
+        alt: "Eagle",
         description:
-          "L'aquila è un rapace maestoso, simbolo di forza e coraggio. Depone le sue uova in alte scogliere, dove i piccoli possono crescere in sicurezza, lontano dai predatori.",
+          "Eagles are majestic birds of prey, symbols of strength and resilience. They lay their eggs on high cliffs or treetops, providing their young with a secure vantage point away from predators and close to open skies for their first flight.",
       },
       {
         id: "animal-13",
@@ -158,9 +158,9 @@ export const animalsSlice = createSlice({
           "https://images.unsplash.com/photo-1592220806191-fc82daadd2fd?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
           "https://images.unsplash.com/photo-1592220806191-fc82daadd2fd?q=80&w=400&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1592220806191-fc82daadd2fd?q=80&w=800&auto=format&fit=crop 800w",
-        alt: "Serpente",
+        alt: "Snake",
         description:
-          "Il serpente è un rettile che depone uova in luoghi sicuri e nascosti. Le sue uova sono circondate da una membrana che le protegge da predatori e cambiamenti climatici.",
+          "Snakes lay leathery eggs in hidden, humid locations to ensure protection and stability. Their eggs are enveloped in a soft membrane, allowing oxygen exchange while shielding the embryos from threats and temperature fluctuations.",
       },
       {
         id: "animal-14",
@@ -180,9 +180,9 @@ export const animalsSlice = createSlice({
           "https://images.unsplash.com/photo-1509415173911-37ff7a1aa29c?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
           "https://images.unsplash.com/photo-1509415173911-37ff7a1aa29c?q=80&w=400&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1509415173911-37ff7a1aa29c?q=80&w=800&auto=format&fit=crop 800w",
-        alt: "Granchio",
+        alt: "Crab",
         description:
-          "Il granchio è un crostaceo che depone centinaia di piccole uova sotto il carapace, in ambienti sabbiosi dove sono protette dal mare e dai predatori.",
+          "Crabs carry hundreds of tiny eggs beneath their abdomen, securing them with fine hairs. Laid in sandy or underwater environments, these eggs remain safe under the mother’s protection until they are ready to hatch into free-swimming larvae.",
       },
       {
         id: "animal-16",
@@ -235,9 +235,9 @@ export const animalsSlice = createSlice({
           "https://images.unsplash.com/photo-1523151594509-9d2e49774fec?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
           "https://images.unsplash.com/photo-1523151594509-9d2e49774fec?q=80&w=400&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1523151594509-9d2e49774fec?q=80&w=800&auto=format&fit=crop 800w",
-        alt: "Mantide",
+        alt: "Mantis",
         description:
-          "La mantide depone le sue uova in una protezione spessa chiamata ooteca, dove le uova si schiuderanno dopo un periodo di incubazione, dando vita a numerosi piccoli predatori.",
+          "The praying mantis encases its eggs in a foamy structure called an ootheca, which hardens to form a protective shell. After incubation, dozens of tiny mantises emerge, ready to hunt from their very first moments.",
       },
       {
         id: "animal-21",
@@ -246,9 +246,9 @@ export const animalsSlice = createSlice({
           "https://images.unsplash.com/photo-1440952306150-7f239990787e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cmFnbm98ZW58MHx8MHx8fDI%3D",
         srcSet:
           "https://images.unsplash.com/photo-1440952306150-7f239990787e?w=400&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1440952306150-7f239990787e?w=500&auto=format&fit=crop 800w",
-        alt: "Ragno",
+        alt: "Spider",
         description:
-          "Il ragno depone le sue uova in una sacca protetta da seta, che mantiene al sicuro i piccoli fino al momento della schiusa.",
+          "Spiders deposit their eggs inside silky sacs, expertly woven to shield the developing spiderlings. Depending on the species, the mother may guard the sac, carry it with her, or leave it hidden in a safe location until hatching.",
       },
       {
         id: "animal-22",
@@ -257,9 +257,9 @@ export const animalsSlice = createSlice({
           "https://images.unsplash.com/photo-1618752362049-bcc57fb5ddb0?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
           "https://images.unsplash.com/photo-1618752362049-bcc57fb5ddb0?q=80&w=400&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1618752362049-bcc57fb5ddb0?q=80&w=800&auto=format&fit=crop 800w",
-        alt: "Scorpione",
+        alt: "Scorpion",
         description:
-          "Lo scorpione è un aracnide che protegge le sue uova fino alla schiusa, durante la quale i piccoli scorpioni rimangono sulla schiena della madre per un po' di tempo.",
+          "Scorpions are unique among arachnids: they give live birth, but their eggs develop internally. Once born, the young climb onto their mother’s back, staying there for protection until they molt and are ready to fend for themselves.",
       },
       {
         id: "animal-23",
@@ -268,9 +268,9 @@ export const animalsSlice = createSlice({
           "https://images.unsplash.com/photo-1628944681206-2ee8d63b0a6b?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
           "https://images.unsplash.com/photo-1628944681206-2ee8d63b0a6b?q=80&w=400&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1628944681206-2ee8d63b0a6b?q=80&w=800&auto=format&fit=crop 800w",
-        alt: "Polpo",
+        alt: "Octopus",
         description:
-          "Il polpo depone le sue uova in grotte subacquee. La madre le custodisce con grande cura, morendo spesso poco dopo che le uova si schiudono.",
+          "Octopuses lay thousands of eggs in underwater dens, carefully attaching them to cave walls. The mother guards them relentlessly, often refusing to eat, and usually dies shortly after the eggs hatch — a final act of devotion.",
       },
       {
         id: "animal-24",
@@ -337,7 +337,7 @@ export const animalsSlice = createSlice({
           "https://images.unsplash.com/photo-1601814933824-fd0b574dd592?q=80&w=400&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1601814933824-fd0b574dd592?q=80&w=800&auto=format&fit=crop 800w",
         alt: "Vogon",
         description:
-          "Depongono uova che emettono un odore acre, noto per la sua potenza nauseante.",
+          "Vogons, infamous for their bureaucracy and poetry, lay eggs that emit a pungent, almost weaponized odor. These eggs are kept in sealed environments to avoid mass nausea. Their lifecycle remains poorly understood — intentionally.",
       },
       {
         id: "animal-30",
