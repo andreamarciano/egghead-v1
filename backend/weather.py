@@ -17,6 +17,8 @@ def weather():
     weather_response = requests.get(
         f"https://api.openweathermap.org/data/2.5/weather?q={city}&units=metric&appid={api_key}")
         # units of measurement: standard, metric, imperial
+        
+    print(weather_response.json())
     
     # check the status code value: 404 = name not found
     if weather_response.json()['cod'] == '404':
