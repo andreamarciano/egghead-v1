@@ -78,9 +78,9 @@ export const animalsSlice = createSlice({
         num: 6,
         imgURL:
           "https://images.unsplash.com/photo-1597245623587-82578a8b0c90?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        alt: "Lizard",
         srcSet:
           "https://images.unsplash.com/photo-1597245623587-82578a8b0c90?q=80&w=400&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1597245623587-82578a8b0c90?q=80&w=800&auto=format&fit=crop 800w",
+        alt: "Lizard",
         description:
           "Lizards lay soft-shelled eggs in warm, hidden spots — from deserts to forests. Egg size and texture vary by species. Many lizards are known for their rapid reproduction, a trait that helps them survive and thrive in challenging environments.",
       },
@@ -89,9 +89,9 @@ export const animalsSlice = createSlice({
         num: 7,
         imgURL:
           "https://images.unsplash.com/photo-1521217155737-0d5632e9813f?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        alt: "Turtle",
         srcSet:
           "https://images.unsplash.com/photo-1521217155737-0d5632e9813f?q=80&w=400&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1521217155737-0d5632e9813f?q=80&w=800&auto=format&fit=crop 800w",
+        alt: "Turtle",
         description:
           "Turtles travel immense distances to lay eggs in secret beach nests. Whether freshwater or marine, their soft-shelled eggs incubate under warm sand until hatchlings emerge and instinctively race to the sea.",
         position: "center 65%",
@@ -279,9 +279,9 @@ export const animalsSlice = createSlice({
           "https://images.unsplash.com/photo-1579570806650-b335656b96a9?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
           "https://images.unsplash.com/photo-1579570806650-b335656b96a9?q=80&w=400&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1579570806650-b335656b96a9?q=80&w=800&auto=format&fit=crop 800w",
-        alt: "Ornitorinco",
+        alt: "Platypus",
         description:
-          "L'ornitorinco è uno degli unici mammiferi che depongono uova. Le sue uova sono incassate in un nido che la madre costruisce lungo le rive di fiumi e torrenti.",
+          "The platypus is one of the few egg-laying mammals. Native to Australia (Earth), it builds a burrow near rivers or streams where the female lays leathery eggs. These are incubated against her warm body, deep within a carefully crafted nest.",
       },
       {
         id: "animal-25",
@@ -301,9 +301,9 @@ export const animalsSlice = createSlice({
           "https://images.unsplash.com/photo-1544923408-75c5cef46f14?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cGFwcGFnYWxsb3xlbnwwfHwwfHx8Mg%3D%3D",
         srcSet:
           "https://images.unsplash.com/photo-1544923408-75c5cef46f14?w=400&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1544923408-75c5cef46f14?w=500&auto=format&fit=crop 800w",
-        alt: "Fenice",
+        alt: "Phoenix",
         description:
-          "La fenice è un uccello immortale che risorge dalle proprie ceneri. Depone uova fiammeggianti che rappresentano la rinascita e la ciclicità della vita.",
+          "The phoenix is a legendary immortal bird that rises from its own ashes. It lays flaming eggs, each one symbolizing rebirth and the eternal cycle of life. These radiant eggs are rare and burn with mystical energy until the hatchling emerges.",
         position: "center 10%",
       },
       {
@@ -313,9 +313,9 @@ export const animalsSlice = createSlice({
           "https://images.unsplash.com/photo-1643324759759-d765bed49091?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
           "https://images.unsplash.com/photo-1643324759759-d765bed49091?q=80&w=400&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1643324759759-d765bed49091?q=80&w=800&auto=format&fit=crop800w",
-        alt: "Grifone",
+        alt: "Griffin",
         description:
-          "Il grifone è una creatura mitologica con il corpo di un leone e la testa di un'aquila. Le sue uova sono considerate sacre e vengono deposte in luoghi remoti e protetti.",
+          "A majestic hybrid with the body of a lion and the head and wings of an eagle, the griffin lays its eggs in isolated, mountainous regions. Revered in ancient cultures, these eggs are said to possess protective powers and untold wisdom.",
       },
       {
         id: "animal-28",
@@ -346,9 +346,9 @@ export const animalsSlice = createSlice({
           "https://images.unsplash.com/photo-1728755291200-e259f5a60eeb?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         srcSet:
           "https://images.unsplash.com/photo-1728755291200-e259f5a60eeb?q=80&w=400&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1728755291200-e259f5a60eeb?q=80&w=800&auto=format&fit=crop 800w",
-        alt: "Basilisco",
+        alt: "Basilisk",
         description:
-          "Il basilisco è una creatura mitologica che, con il suo sguardo, può pietrificare chiunque. Le sue uova sono custodite in luoghi segreti, spesso protetti da magie oscure.",
+          "The basilisk is a fearsome mythological creature whose gaze can petrify at a glance. Its eggs are hidden in secret, enchanted places and must be cooked with great care — improperly prepared, they may still carry a paralyzing effect.",
       },
       {
         id: "animal-31",
@@ -359,7 +359,7 @@ export const animalsSlice = createSlice({
           "https://images.unsplash.com/photo-1524685794168-52985e79c1f8?q=80&w=400&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1524685794168-52985e79c1f8?q=80&w=800&auto=format&fit=crop 800w",
         alt: "Steve",
         description:
-          "Con la sua abilità nel crafting e nell'esplorazione, è in grado di produrre uova uniche e magiche, che possono dare vita a creature straordinarie nel suo mondo blocchettato.",
+          "With a remarkable talent for crafting and exploration, Steve is known for producing unique, magical eggs. These eggs may hatch extraordinary creatures, shaped by the strange, blocky world he calls home — a place of endless creativity.",
       },
     ],
   },
