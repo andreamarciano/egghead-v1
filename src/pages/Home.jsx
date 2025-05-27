@@ -50,14 +50,16 @@ function Home() {
   return (
     <div className="bg-gray-100 min-h-screen p-4">
       <h1 className="text-4xl font-bold text-gray-900 mb-4 text-center">
-        Benvenuti nel nostro Shop di Uova!
+        Welcome to Our Egg Shop!
       </h1>
-      <p className="text-xl text-gray-700 text-center mb-6">
-        Siamo un'azienda specializzata nella vendita di uova fresche, di alta
-        qualità, provenienti da una varietà di uccelli e animali, anche estinti.
-        Scopri il nostro assortimento di uova bianche, marroni, di quaglia,
-        tacchino, e altre varietà esclusive!
-      </p>
+      <div className="flex items-center justify-center">
+        <p className="text-xl text-gray-700 text-center mb-8 w-3/4">
+          We are a company specialized in the sale of fresh, high-quality eggs
+          from a wide range of birds and animals — even extinct ones. Explore
+          our selection of white and brown eggs, quail and turkey eggs, and
+          other exclusive varieties!
+        </p>
+      </div>
 
       {/* Animal Cards */}
       <div className="space-y-12">
@@ -135,8 +137,8 @@ function Home() {
 
       <div className="mt-6 text-center">
         <p className="text-lg text-gray-800">
-          Scegli le uova più fresche e di qualità direttamente dal nostro
-          negozio online.
+          Choose the freshest, highest-quality eggs directly from our online
+          store.
         </p>
       </div>
     </div>
