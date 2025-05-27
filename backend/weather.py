@@ -18,6 +18,7 @@ def weather():
         f"https://api.openweathermap.org/data/2.5/weather?q={city}&units=metric&appid={api_key}")
         # units of measurement: standard, metric, imperial
         
+    # DEBUG: print the full raw JSON response    
     print(weather_response.json(), flush=True)
     
     # check the status code value: 404 = name not found

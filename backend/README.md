@@ -23,23 +23,40 @@ This is a simple Flask server that serves as a middle layer between the frontend
    - humidity, wind speed, pressure, visibility
    - sunrise and sunset times
 
-### Sample Response:
+### Sample Response (full raw JSON):
 
 ```json
 {
-  "city": "London",
-  "temperature": 16,
-  "feels_like": 14,
-  "temp_min": 13,
-  "temp_max": 18,
-  "description": "light rain",
-  "wind_speed": 10,
-  "humidity": 87,
-  "pressure": 1012,
-  "visibility": 10,
-  "icon": "http://openweathermap.org/img/wn/10d@2x.png",
-  "sunrise": 1716789351,
-  "sunset": 1716846563
+  "coord": { "lon": -74.006, "lat": 40.7143 },
+  "weather": [
+    { "id": 800, "main": "Clear", "description": "clear sky", "icon": "01d" }
+  ],
+  "base": "stations",
+  "main": {
+    "temp": 22.43,
+    "feels_like": 21.88,
+    "temp_min": 20.97,
+    "temp_max": 24.21,
+    "pressure": 1027,
+    "humidity": 44,
+    "sea_level": 1027,
+    "grnd_level": 1026
+  },
+  "visibility": 10000,
+  "wind": { "speed": 3.09, "deg": 50 },
+  "clouds": { "all": 0 },
+  "dt": 1748360616,
+  "sys": {
+    "type": 1,
+    "id": 4610,
+    "country": "US",
+    "sunrise": 1748338182,
+    "sunset": 1748391424
+  },
+  "timezone": -14400,
+  "id": 5128581,
+  "name": "New York",
+  "cod": 200
 }
 ```
 
