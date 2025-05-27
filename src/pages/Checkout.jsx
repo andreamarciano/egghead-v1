@@ -3,7 +3,14 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { clearCart } from "../redux/cartSlice";
 
-const discountCodes = ["TRIS5", "FLOW5", "FOUR5", "GRAZIEATE5", "ORDER5", "MAZE5"];
+const discountCodes = [
+  "TRIS5",
+  "FLOW5",
+  "FOUR5",
+  "GRAZIEATE5",
+  "ORDER5",
+  "MAZE5",
+];
 
 function Checkout() {
   const cartItems = useSelector((state) => state.cart.items); // redux store
@@ -15,13 +22,13 @@ function Checkout() {
   const grandTotal = total + shippingCost;
 
   const [formData, setFormData] = useState({
-    nome: "",
-    cognome: "",
+    firstName: "",
+    lastName: "",
     email: "",
-    indirizzo: "",
-    citta: "",
-    cap: "",
-    numeroCarta: "",
+    address: "",
+    city: "",
+    postalCode: "",
+    cardNumber: "",
   });
 
   // Discount Code
@@ -54,11 +61,11 @@ function Checkout() {
   // Already applied
   const applyDiscount = () => {
     if (!discountCodes.includes(discountCode)) {
-      setErrorMessage("Codice sconto non valido!");
+      setErrorMessage("Invalid discount code!");
       return;
     }
     if (appliedDiscounts.includes(discountCode)) {
-      setErrorMessage("Codice sconto già applicato!");
+      setErrorMessage("Discount code already applied!");
       return;
     }
     setAppliedDiscounts([...appliedDiscounts, discountCode]);
@@ -80,39 +87,39 @@ function Checkout() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!window.confirm("Sei sicuro di voler completare l'ordine?")) return;
+    if (!window.confirm("Are you sure you want to complete the order?")) return;
 
     // RESET
     dispatch(clearCart());
     setFormData({
-      nome: "",
-      cognome: "",
+      firstName: "",
+      lastName: "",
       email: "",
-      indirizzo: "",
-      citta: "",
-      cap: "",
-      numeroCarta: "",
+      address: "",
+      city: "",
+      postalCode: "",
+      cardNumber: "",
     });
     setAppliedDiscounts([]);
     setPaymentMethod("");
     setErrorMessage("");
     setDiscountCode("");
 
-    alert("Ordine completato con successo!");
+    alert("Order successfully completed!");
   };
 
   return (
     <>
       <Navbar />
       <div className="max-w-4xl mx-auto p-6">
-        <h1 className="text-3xl font-bold mb-6">Finalizza il tuo ordine</h1>
+        <h1 className="text-3xl font-bold mb-6">Complete Your Order</h1>
 
         {/* Order Recap */}
         <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">Riepilogo Ordine</h2>
+          <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
           <div className="bg-gray-400 p-4 rounded shadow">
             {cartItems.length === 0 ? (
-              <p className="text-gray-700">Il tuo carrello è vuoto.</p>
+              <p className="text-gray-700">Your cart is empty.</p>
             ) : (
               <>
                 {cartItems.map((item) => (
@@ -124,19 +131,19 @@ function Checkout() {
                   </div>
                 ))}
                 <div className="flex justify-between mb-2">
-                  <span>Spese di spedizione</span>
+                  <span>Shipping Cost</span>
                   <span>€{shippingCost}</span>
                 </div>
                 {appliedDiscounts.length > 0 && (
                   <div className="flex justify-between mb-2 text-green-600">
                     <span>
-                      Codice sconto applicato ({appliedDiscounts.join(", ")})
+                      Discount code applied ({appliedDiscounts.join(", ")})
                     </span>
                     <span>-€{discountTotal}</span>
                   </div>
                 )}
                 <div className="flex justify-between font-bold border-t pt-2">
-                  <span>Totale</span>
+                  <span>Total</span>
                   <span>
                     €
                     {parseFloat(finalTotal.toFixed(4))
@@ -152,7 +159,7 @@ function Checkout() {
         {/* Form */}
         <section className="mb-8">
           <h2 className="text-xl font-semibold mb-4 text-center">
-            Dati per la spedizione
+            Shipping Information
           </h2>
 
           <form
@@ -163,20 +170,20 @@ function Checkout() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <input
                 type="text"
-                name="nome"
-                placeholder="Nome"
-                value={formData.nome}
+                name="firstName"
+                placeholder="First Name"
+                value={formData.firstName}
                 onChange={handleChange}
-                className={getInputClass(formData.nome)}
+                className={getInputClass(formData.firstName)}
                 required
               />
               <input
                 type="text"
-                name="cognome"
-                placeholder="Cognome"
-                value={formData.cognome}
+                name="lastName"
+                placeholder="Last Name"
+                value={formData.lastName}
                 onChange={handleChange}
-                className={getInputClass(formData.cognome)}
+                className={getInputClass(formData.lastName)}
                 required
               />
               <input
@@ -190,29 +197,29 @@ function Checkout() {
               />
               <input
                 type="text"
-                name="indirizzo"
-                placeholder="Indirizzo"
-                value={formData.indirizzo}
+                name="address"
+                placeholder="Address"
+                value={formData.address}
                 onChange={handleChange}
-                className={`${getInputClass(formData.indirizzo)} col-span-2`}
+                className={`${getInputClass(formData.address)} col-span-2`}
                 required
               />
               <input
                 type="text"
-                name="citta"
-                placeholder="Città"
-                value={formData.citta}
+                name="city"
+                placeholder="City"
+                value={formData.city}
                 onChange={handleChange}
-                className={getInputClass(formData.citta)}
+                className={getInputClass(formData.city)}
                 required
               />
               <input
                 type="text"
-                name="cap"
-                placeholder="CAP"
-                value={formData.cap}
+                name="postalCode"
+                placeholder="Postal Code"
+                value={formData.postalCode}
                 onChange={handleChange}
-                className={getInputClass(formData.cap)}
+                className={getInputClass(formData.postalCode)}
                 required
               />
             </div>
@@ -220,7 +227,7 @@ function Checkout() {
             {/* Payment Method */}
             <div className="flex flex-col items-center mb-8 mt-8">
               <h2 className="text-xl font-semibold mb-4 text-center">
-                Metodo di pagamento
+                Payment Method
               </h2>
 
               {/* main div left-right */}
@@ -231,12 +238,12 @@ function Checkout() {
                     <input
                       type="radio"
                       name="payment"
-                      value="Visa Galattica"
+                      value="Galactic Visa"
                       onChange={handlePaymentChange}
                       className="accent-amber-600"
                       required
                     />
-                    <span>Visa Galattica</span>
+                    <span>Galactic Visa</span>
                   </label>
                   <label className="flex items-center space-x-2">
                     <input
@@ -264,12 +271,23 @@ function Checkout() {
                     <input
                       type="radio"
                       name="payment"
-                      value="Criptovalute Marziane"
+                      value="Martian Cryptocurrencies"
                       onChange={handlePaymentChange}
                       className="accent-amber-600"
                       required
                     />
-                    <span>Criptovalute Marziane</span>
+                    <span>Martian Cryptocurrencies</span>
+                  </label>
+                  <label className="flex items-center space-x-2">
+                    <input
+                      type="radio"
+                      name="payment"
+                      value="EggPay"
+                      onChange={handlePaymentChange}
+                      className="accent-amber-600"
+                      required
+                    />
+                    <span>EggPay</span>
                   </label>
                 </div>
 
@@ -277,22 +295,22 @@ function Checkout() {
                 <div className="flex flex-col space-y-4 w-full md:w-1/2">
                   <input
                     type="text"
-                    name="numeroCarta"
-                    placeholder="Numero carta (XXXX-XXXX-XXXX-XXXX)"
-                    value={formData.numeroCarta}
+                    name="cardNumber"
+                    placeholder="Card Number (XXXX-XXXX-XXXX-XXXX)"
+                    value={formData.cardNumber}
                     onChange={handleChange}
                     className={`p-2 border rounded w-full ${getInputClass(
-                      formData.numeroCarta
+                      formData.cardNumber
                     )}`}
                     required
                     pattern="\d{4}-\d{4}-\d{4}-\d{4}"
-                    title="Formato corretto: XXXX-XXXX-XXXX-XXXX"
+                    title="Correct format: XXXX-XXXX-XXXX-XXXX"
                   />
                   {/* Discount code */}
                   <div className="flex space-x-2 relative">
                     <input
                       type="text"
-                      placeholder="Codice sconto"
+                      placeholder="Discount Code"
                       value={discountCode}
                       onChange={handleDiscountChange}
                       className="p-2 border rounded w-full"
@@ -302,7 +320,7 @@ function Checkout() {
                       onClick={applyDiscount}
                       className="bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700 transition cursor-pointer"
                     >
-                      Applica
+                      Apply
                     </button>
 
                     {/* Show Discount Codes */}
@@ -310,7 +328,7 @@ function Checkout() {
                       type="button"
                       onClick={() => setShowCodes(!showCodes)}
                       className="bg-gray-100 border border-gray-400 px-3 py-2 rounded hover:bg-gray-300 transition text-xl cursor-pointer"
-                      title="Mostra codici sbloccati"
+                      title="Show unlocked codes"
                     >
                       🗝️
                     </button>
@@ -319,9 +337,7 @@ function Checkout() {
                       <div className="absolute top-12 right-0 text-gray-800 bg-white shadow-md rounded p-4 z-10 w-48 text-sm overflow-y-auto h-40 mt-1">
                         <h3 className="font-semibold mb-2">Discount Codes</h3>
                         {unlockedCodes.length === 0 ? (
-                          <p className="text-gray-500">
-                            Nessun codice sbloccato
-                          </p>
+                          <p className="text-gray-500">No unlocked codes</p>
                         ) : (
                           <ul className="list-disc list-outside pl-5 space-y-1">
                             {unlockedCodes.map((code, index) => (
@@ -340,7 +356,7 @@ function Checkout() {
               )}
               {appliedDiscounts.length > 0 && (
                 <div className="mt-4 text-green-600">
-                  Codice(i) sconto applicato(i): {appliedDiscounts.join(", ")}
+                  Applied discount code(s): {appliedDiscounts.join(", ")}
                 </div>
               )}
             </div>
@@ -351,7 +367,7 @@ function Checkout() {
                 type="submit"
                 className="bg-amber-600 text-white px-6 py-3 rounded hover:bg-amber-700 transition cursor-pointer"
               >
-                Completa l'ordine
+                Complete Order
               </button>
             </div>
           </form>
