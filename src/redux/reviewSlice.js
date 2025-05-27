@@ -45,9 +45,9 @@ const defaultReviews = [
   },
   {
     id: 8,
-    name: "Sicuramente non un uovo",
+    name: "Definitely Not an Egg",
     rating: 0,
-    text: "Smettetela di mangiare il mio popolo!",
+    text: "Stop eating my people!",
   },
 ];
 
