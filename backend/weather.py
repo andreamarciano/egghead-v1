@@ -9,37 +9,37 @@ CORS(app)
 # Get API key from environment variables (Render)
 api_key = os.environ.get("OPENWEATHER_API_KEY")
 if not api_key:
-    raise ValueError("API key non trovata nelle variabili d'ambiente!")
+    raise ValueError("API key not found in environment variables!")
 
-@app.route("/meteo", methods=["GET"])
-def meteo():
-    citta = request.args.get("citta", "Palermo")  # Default to "Palermo" if no city is provided
-    weather_data = requests.get(
-        f"https://api.openweathermap.org/data/2.5/weather?q={citta}&units=metric&appid={api_key}")
+@app.route("/weather", methods=["GET"])
+def weather():
+    city = request.args.get("city", "Nijmegen")  # Default
+    weather_response = requests.get(
+        f"https://api.openweathermap.org/data/2.5/weather?q={city}&units=metric&appid={api_key}")
         # units of measurement: standard, metric, imperial
     
     # check the status code value: 404 = name not found
-    if weather_data.json()['cod'] == '404':
-        return jsonify({"errore": "City not founded"}), 404
+    if weather_response.json()['cod'] == '404':
+        return jsonify({"error": "City not found"}), 404
     
-    data = weather_data.json()
-    meteo = {
-        "citta": data["name"],
-        "temperatura": round(data["main"]["temp"]),
-        "temperatura_percepita": round(data["main"]["feels_like"]),
+    data = weather_response.json()
+    weather_info = {
+        "city": data["name"],
+        "temperature": round(data["main"]["temp"]),
+        "feels_like": round(data["main"]["feels_like"]),
         "temp_min": round(data["main"]["temp_min"]),
         "temp_max": round(data["main"]["temp_max"]),
-        "descrizione": data["weather"][0]["description"],
-        "vento": round(data["wind"]["speed"] * 3.6), # from m/s to km/h
-        "umidita": data["main"]["humidity"],
-        "pressione": data["main"]["pressure"],
-        "visibilita": data["visibility"] / 1000, # km
-        "icona": f"http://openweathermap.org/img/wn/{data['weather'][0]['icon']}@2x.png", # icon url
-        "alba": data["sys"]["sunrise"],
-        "tramonto": data["sys"]["sunset"]
+        "description": data["weather"][0]["description"],
+        "wind_speed": round(data["wind"]["speed"] * 3.6), # from m/s to km/h
+        "humidity": data["main"]["humidity"],
+        "pressure": data["main"]["pressure"],
+        "visibility": data["visibility"] / 1000, # km
+        "icon": f"http://openweathermap.org/img/wn/{data['weather'][0]['icon']}@2x.png", # icon url
+        "sunrise": data["sys"]["sunrise"],
+        "sunset": data["sys"]["sunset"]
     }
     
-    return jsonify(meteo)
+    return jsonify(weather_info)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

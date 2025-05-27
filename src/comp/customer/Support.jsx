@@ -1,60 +1,60 @@
 import { useState } from "react";
 import GuidedChat from "./GuidedChat";
 
-const Assistenza = () => {
+const Support = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   return (
     <div className="flex space-x-8 mt-8 p-6 bg-gray-600 rounded-lg shadow-md">
-      {/* Left side: contact info */}
+      {/* Left side: Contact Info */}
       <div className="w-1/2 space-y-4">
-        <h3 className="text-xl font-semibold">Contatta l'assistenza</h3>
+        <h3 className="text-xl font-semibold">Contact Support</h3>
         <p className="text-gray-800">
-          Per assistenza, puoi contattarci tramite:
+          For assistance, you can reach us through:
         </p>
         <ul className="text-blue-300 space-y-2 list-none pl-0">
           <li className="flex items-start gap-2">
             📧 <span>Email: hopeless@nevergonnareply.com</span>
           </li>
           <li className="flex items-start gap-2">
-            📞 <span>Telefono: +11 333 AX1 2-8-1</span>
+            📞 <span>Phone: +11 333 AX1 2-8-1</span>
           </li>
           <li className="flex items-start gap-2">
-            🧠 <span>Frequenza telepatica: 0.1235 Hz</span>
+            🧠 <span>Telepathic Frequency: 0.1235 Hz</span>
           </li>
           <li className="flex items-start gap-2">
             🚀{" "}
             <span>
-              Messaggio razzo: coordinate X:42.0 Y:-13.7 Z:7.89, Blagzorg-4
+              Rocket message: Coordinates X:42.0 Y:-13.7 Z:7.89, Blagzorg-4
             </span>
           </li>
           <li className="flex items-start gap-2">
             🐦{" "}
-            <span>Richiesta tramite piccione (3 giorni e 7 ere cosmiche)</span>
+            <span>Request via carrier pigeon (3 days and 7 cosmic eras)</span>
           </li>
           <li className="flex items-start gap-2">
-            🍞 <span>Parla al tuo tostapane (supportati modelli AI-12)</span>
+            🍞 <span>Talk to your toaster (AI-12 models supported)</span>
           </li>
           <li className="flex items-start gap-2">
-            🧘‍♂️ <span>Teletrasmetti un pensiero positivo ogni 13 minuti</span>
+            🧘‍♂️ <span>Transmit a positive thought every 13 minutes</span>
           </li>
           <li className="flex items-start gap-2">
-            🔦 <span>Invia messaggi in codice Morse nello spazio profondo</span>
+            🔦 <span>Send Morse code messages into deep space</span>
           </li>
         </ul>
       </div>
 
-      {/* Right side: chat with operator */}
+      {/* Right side: Chat with Operator */}
       <div className="w-1/2 space-y-4">
-        <h3 className="text-xl font-semibold">Chatta con un operatore</h3>
+        <h3 className="text-xl font-semibold">Chat with an Operator</h3>
         <p className="text-gray-800">
-          Se preferisci una chat in tempo reale, clicca qui per iniziare.
+          If you prefer a real-time chat, click here to start.
         </p>
         <button
           onClick={() => setIsChatOpen(!isChatOpen)}
           className="p-2 bg-blue-500 text-white rounded hover:bg-blue-400 cursor-pointer"
         >
-          {isChatOpen ? "Chiudi la chat" : "Apri la chat"}
+          {isChatOpen ? "Close Chat" : "Open Chat"}
         </button>
         {isChatOpen && (
           <div className="mt-4">
@@ -66,4 +66,4 @@ const Assistenza = () => {
   );
 };
 
-export default Assistenza;
+export default Support;

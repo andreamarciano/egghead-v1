@@ -10,18 +10,18 @@ const Weather = () => {
   const handleSubmit = () => {
     // empty
     if (!city) {
-      setError("Per favore, inserisci una città.");
+      setError("Please enter a city.");
       return;
     }
     setLoading(true);
     setError(null);
 
     // API Call
-    fetch(`https://andreafactoryproject-v1.onrender.com/meteo?citta=${city}`)
+    fetch(`https://andreafactoryproject-v1.onrender.com/weather?city=${city}`)
       .then((res) => res.json())
       .then((data) => {
-        if (data.errore) {
-          setError(data.errore);
+        if (data.error) {
+          setError(data.error);
         } else {
           setWeather(data);
         }
@@ -29,7 +29,7 @@ const Weather = () => {
       })
       .catch((err) => {
         setLoading(false);
-        setError("Errore nella chiamata API");
+        setError("API call error");
         console.error(err);
       });
 
@@ -49,46 +49,49 @@ const Weather = () => {
     return "bg-red-500"; // High humidity
   };
   // UI - message
-  const getWeatherMessage = (descrizione) => {
-    const desc = descrizione.toLowerCase();
+  const getWeatherMessage = (description) => {
+    if (!description || typeof description !== "string") {
+      return "Weather forecast not available!";
+    }
+
+    const desc = description.toLowerCase();
 
     if (
       desc.includes("rain") ||
       desc.includes("drizzle") ||
       desc.includes("shower")
     )
-      return "Prendi un ombrello, sembra che stia per piovere!";
+      return "Take an umbrella, it looks like rain!";
     if (desc.includes("clear"))
-      return "È una bella giornata! Perfetta per uscire!";
-    if (desc.includes("cloud"))
-      return "Oggi potrebbe essere nuvoloso, preparati!";
+      return "It's a beautiful day! Perfect for going out!";
+    if (desc.includes("cloud")) return "It might be cloudy today, be prepared!";
     if (desc.includes("snow"))
-      return "Nevica! È il momento perfetto per una cioccolata calda.";
+      return "Snow is falling! Perfect time for a hot chocolate.";
     if (desc.includes("mist") || desc.includes("fog") || desc.includes("haze"))
-      return "C'è foschia, guida con prudenza!";
+      return "There's haze, drive carefully!";
     if (desc.includes("thunderstorm"))
-      return "Temporale in arrivo! Resta al sicuro al chiuso.";
+      return "Thunderstorm incoming! Stay safe indoors.";
     if (
       desc.includes("smoke") ||
       desc.includes("dust") ||
       desc.includes("sand")
     )
-      return "La qualità dell’aria non è ottima, evita sforzi all’aperto.";
+      return "Air quality is poor, avoid strenuous outdoor activities.";
     if (desc.includes("tornado"))
-      return "Allerta meteo: tornado! Prendi precauzioni.";
+      return "Weather alert: tornado! Take precautions.";
 
-    return "Previsioni meteo non specifiche disponibili!";
+    return "No specific weather forecast available!";
   };
   // UI - wind direction
   const getWindDirection = (deg) => {
-    if (deg > 337.5 || deg <= 22.5) return "Nord";
-    if (deg > 22.5 && deg <= 67.5) return "Nord-Est";
-    if (deg > 67.5 && deg <= 112.5) return "Est";
-    if (deg > 112.5 && deg <= 157.5) return "Sud-Est";
-    if (deg > 157.5 && deg <= 202.5) return "Sud";
-    if (deg > 202.5 && deg <= 247.5) return "Sud-Ovest";
-    if (deg > 247.5 && deg <= 292.5) return "Ovest";
-    return "Nord-Ovest";
+    if (deg > 337.5 || deg <= 22.5) return "North";
+    if (deg > 22.5 && deg <= 67.5) return "Northeast";
+    if (deg > 67.5 && deg <= 112.5) return "East";
+    if (deg > 112.5 && deg <= 157.5) return "Southeast";
+    if (deg > 157.5 && deg <= 202.5) return "South";
+    if (deg > 202.5 && deg <= 247.5) return "Southwest";
+    if (deg > 247.5 && deg <= 292.5) return "West";
+    return "Northwest";
   };
 
   // Weather Ticker
@@ -123,23 +126,21 @@ const Weather = () => {
 
   return (
     <div className="mt-8 p-6 bg-gray-600 rounded-lg shadow-md space-y-6">
-      <p className="mb-8">
-        Nel frattempo, perché non controlli il meteo nella tua città?
-      </p>
+      <p className="mb-8">Meanwhile, why not check the weather in your city?</p>
       {/* Input City */}
       <div className="flex justify-center items-center space-x-4">
         <input
           type="text"
           value={city}
           onChange={(e) => setCity(e.target.value)}
-          placeholder="Inserisci una città"
+          placeholder="Enter a city"
           className="p-2 border border-gray-300 rounded"
         />
         <button
           onClick={handleSubmit}
           className="p-2 bg-blue-500 text-white rounded hover:bg-blue-400 cursor-pointer"
         >
-          Cerca
+          Search
         </button>
       </div>
 
@@ -147,57 +148,58 @@ const Weather = () => {
       {error && <p className="text-red-500 text-center">{error}</p>}
 
       {/* Loader */}
-      {loading && <p className="text-center text-blue-500">Caricamento...</p>}
+      {loading && <p className="text-center text-blue-500">Loading...</p>}
 
       {/* Weather UI */}
       {weather && !loading && (
         <div
           className={`p-6 ${getTemperatureColor(
-            weather.temperatura
+            weather.temperature
           )} rounded-lg shadow-md max-w-sm mx-auto`}
         >
           <h3 className="text-2xl font-bold text-center">
-            Meteo a {weather.citta}
+            Weather in {weather.city}
           </h3>
           <div className="mt-4 text-center space-y-2">
-            <img src={weather.icona} alt="Icona meteo" className="mx-auto" />
-            <p className="text-lg">{weather.descrizione}</p>
-            <p className="text-xl font-semibold">{weather.temperatura}°C</p>
-            <p>Percepita: {weather.temperatura_percepita}°C</p>
+            <img src={weather.icon} alt="Weather Icon" className="mx-auto" />
+            <p className="text-lg">{weather.description}</p>
+            <p className="text-xl font-semibold">{weather.temperature}°C</p>
+            <p>Feels like: {weather.feels_like}°C</p>
             <p className="text-sm text-gray-600">
               Min: {weather.temp_min}°C, Max: {weather.temp_max}°C
             </p>
 
             {/* Message */}
             <p className="text-md italic mt-2">
-              {getWeatherMessage(weather.descrizione)}
+              {getWeatherMessage(weather.description)}
             </p>
 
             <p className="text-sm text-gray-600">
-              Vento: {weather.vento} km/h - {getWindDirection(weather.vento)}
+              Vento: {weather.wind_speed} km/h -{" "}
+              {getWindDirection(weather.wind_speed)}
             </p>
             <div className="my-4">
-              <label>Umidità: {weather.umidita}%</label>
+              <label>Humidity: {weather.humidity}%</label>
               <div
                 className={`h-2 w-full ${getHumidityColor(
-                  weather.umidita
+                  weather.humidity
                 )} rounded`}
               ></div>
             </div>
             <p className="text-sm text-gray-600">
-              Pressione: {weather.pressione} hPa
+              Pressure: {weather.pressure} hPa
             </p>
             <p className="text-sm text-gray-600">
-              Visibilità: {weather.visibilita} km
+              Visibility: {weather.visibility} km
             </p>
             <p className="text-sm text-gray-600">
-              🌅 Alba:{" "}
-              {new Date(weather.alba * 1000).toLocaleTimeString("it-IT", {
+              🌅 Sunrise:{" "}
+              {new Date(weather.sunrise * 1000).toLocaleTimeString("it-IT", {
                 hour: "2-digit",
                 minute: "2-digit",
               })}{" "}
-              | 🌇 Tramonto:{" "}
-              {new Date(weather.tramonto * 1000).toLocaleTimeString("it-IT", {
+              | 🌇 Sunset:{" "}
+              {new Date(weather.sunset * 1000).toLocaleTimeString("it-IT", {
                 hour: "2-digit",
                 minute: "2-digit",
               })}
