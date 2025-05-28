@@ -28,7 +28,7 @@ function About() {
           </h1>
 
           {/* Sec 1: Our Story */}
-          <section className="flex flex-col items-center justify-center w-max mx-auto p-2 mb-6 bg-gradient-to-r from-blue-200 via-green-200 to-orange-200 rounded-tl-3xl rounded-br-3xl">
+          <div className="flex flex-col items-center justify-center w-max mx-auto p-2 mb-6 bg-gradient-to-r from-blue-200 via-green-200 to-orange-200 rounded-tl-3xl rounded-br-3xl">
             <h2 className="text-2xl font-semibold text-gray-700 mb-2">
               Our Story
             </h2>
@@ -40,10 +40,10 @@ function About() {
               continue to innovate, bringing the most extraordinary eggs in the
               universe to your table!
             </p>
-          </section>
+          </div>
 
           {/* Sec 2: Our Mission */}
-          <section className="flex flex-col items-center justify-center w-max mx-auto p-2 mb-6 bg-gradient-to-r from-orange-200 via-green-200 to-blue-200 rounded-tr-3xl rounded-bl-3xl">
+          <div className="flex flex-col items-center justify-center w-max mx-auto p-2 mb-6 bg-gradient-to-r from-orange-200 via-green-200 to-blue-200 rounded-tr-3xl rounded-bl-3xl">
             <h2 className="text-2xl font-semibold text-gray-700 mb-2">
               Our Mission
             </h2>
@@ -54,10 +54,10 @@ function About() {
               <strong>science, innovation, and a pinch of madness</strong> to
               create the best product possible.
             </p>
-          </section>
+          </div>
 
           {/* Sec 3: Where We Are */}
-          <section className="mb-10 mt-10">
+          <div className="mb-10 mt-10">
             <h2 className="text-2xl font-semibold text-gray-700 mb-2">
               Where We Are
             </h2>
@@ -85,10 +85,10 @@ function About() {
                 📧 <strong>Email:</strong> info@moonlayeggs.com
               </p>
             </div>
-          </section>
+          </div>
 
           {/* Sec 4: Our Team */}
-          <section className="flex flex-col items-center justify-center w-max mx-auto p-2 mb-6 bg-gradient-to-r from-blue-200 via-green-200 to-orange-200 rounded-tl-3xl rounded-br-3xl">
+          <div className="flex flex-col items-center justify-center w-max mx-auto p-2 mb-6 bg-gradient-to-r from-blue-200 via-green-200 to-orange-200 rounded-tl-3xl rounded-br-3xl">
             <h2 className="text-2xl font-semibold text-gray-700 mb-2">
               Our Team
             </h2>
@@ -110,10 +110,10 @@ function About() {
                 charge of zero-gravity eggs.
               </li>
             </ul>
-          </section>
+          </div>
 
           {/* Sec 5: Special Eggs */}
-          <section className="flex flex-col items-center justify-center w-max mx-auto p-2 mb-6 bg-gradient-to-r from-orange-200 via-green-200 to-blue-200 rounded-tr-3xl rounded-bl-3xl">
+          <div className="flex flex-col items-center justify-center w-max mx-auto p-2 mb-6 bg-gradient-to-r from-orange-200 via-green-200 to-blue-200 rounded-tr-3xl rounded-bl-3xl">
             <h2 className="text-2xl font-semibold text-gray-700 mb-2">
               Our Special Eggs
             </h2>
@@ -135,10 +135,10 @@ function About() {
                 (Handle with care.)
               </li>
             </ul>
-          </section>
+          </div>
 
           {/* Sec 6: Sustainability */}
-          <section className="flex flex-col items-center justify-center w-max mx-auto p-2 m-10 bg-gradient-to-r from-yellow-200 to-red-300 rounded-4xl">
+          <div className="flex flex-col items-center justify-center w-max mx-auto p-2 m-10 bg-gradient-to-r from-yellow-200 to-red-300 rounded-4xl">
             <h2 className="text-2xl font-semibold text-gray-700 mb-2">
               Sustainability & Innovation
             </h2>
@@ -148,10 +148,10 @@ function About() {
               <strong>bionic chickens</strong> — though they tend to rebel… for
               now.
             </p>
-          </section>
+          </div>
 
           {/* Sec 7: Why Choose Us */}
-          <section className="flex flex-col items-center justify-center w-max mx-auto p-2 mb-10 bg-gradient-to-r from-blue-200 via-green-200 to-orange-200 rounded-tl-3xl rounded-br-3xl">
+          <div className="flex flex-col items-center justify-center w-max mx-auto p-2 mb-10 bg-gradient-to-r from-blue-200 via-green-200 to-orange-200 rounded-tl-3xl rounded-br-3xl">
             <h2 className="text-2xl font-semibold text-gray-700 mb-2">
               Why Choose Us?
             </h2>
@@ -171,7 +171,7 @@ function About() {
                 during launch countdowns).
               </li>
             </ul>
-          </section>
+          </div>
 
           {/* Carousel */}
           <Carousel />
