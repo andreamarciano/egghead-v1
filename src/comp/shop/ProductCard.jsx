@@ -1,3 +1,5 @@
+import "./ProductCard.css";
+
 function ProductCard({
   imgURL,
   alt,
@@ -24,7 +26,7 @@ function ProductCard({
       ></img>
       <div className="flex flex-col justify-between h-full p-4">
         <h2 className="text-lg text-white font-bold">{alt}</h2>
-        <p className="text-gray-500 text-sm mt-2 h-30 overflow-y-auto">
+        <p className="text-gray-500 text-sm mt-2 h-30 overflow-y-auto custom-scrollbar">
           {description}
         </p>
         <div className="mt-4">
