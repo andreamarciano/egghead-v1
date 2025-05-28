@@ -1,9 +1,14 @@
+import { useEffect } from "react";
 import Navbar from "../comp/Navbar";
 import Footer from "../comp/Footer";
 import Weather from "../comp/customer/Weather";
 import Support from "../comp/customer/Support";
 
 function Customer() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <>
       <Navbar />
