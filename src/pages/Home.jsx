@@ -48,7 +48,7 @@ function Home() {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen p-4">
+    <div className="bg-gradient-to-b from-gray-200 to-gray-400 min-h-screen p-4">
       <h1 className="text-4xl font-bold text-gray-900 mb-4 text-center">
         Welcome to Our Egg Shop!
       </h1>
