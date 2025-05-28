@@ -28,11 +28,11 @@ function About() {
           </h1>
 
           {/* Sec 1: Our Story */}
-          <section className="mb-10">
-            <h2 className="text-2xl font-semibold text-gray-700 mb-3">
+          <section className="flex flex-col items-center justify-center w-max mx-auto p-2 mb-6 bg-gradient-to-r from-blue-200 via-green-200 to-orange-200 rounded-tl-3xl rounded-br-3xl">
+            <h2 className="text-2xl font-semibold text-gray-700 mb-2">
               Our Story
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto text-center">
+            <p className="text-gray-600 max-w-2xl mb-2">
               Back in <strong>1972</strong>, a group of visionary farmers
               decided that Earth simply wasn't enough to raise the best eggs.
               With a second-hand rocket and a couple of very brave chickens, we
@@ -43,11 +43,11 @@ function About() {
           </section>
 
           {/* Sec 2: Our Mission */}
-          <section className="mb-10">
-            <h2 className="text-2xl font-semibold text-gray-700 mb-3">
+          <section className="flex flex-col items-center justify-center w-max mx-auto p-2 mb-6 bg-gradient-to-r from-orange-200 via-green-200 to-blue-200 rounded-tr-3xl rounded-bl-3xl">
+            <h2 className="text-2xl font-semibold text-gray-700 mb-2">
               Our Mission
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto text-center">
+            <p className="text-gray-600 max-w-2xl mb-2">
               Our goal is to <strong>revolutionize the concept of eggs</strong>.
               We don’t just sell eggs — we sell experiences! Our mission is to
               combine{" "}
@@ -57,8 +57,8 @@ function About() {
           </section>
 
           {/* Sec 3: Where We Are */}
-          <section className="mb-10">
-            <h2 className="text-2xl font-semibold text-gray-700 mb-3">
+          <section className="mb-10 mt-10">
+            <h2 className="text-2xl font-semibold text-gray-700 mb-2">
               Where We Are
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto text-center">
@@ -88,15 +88,15 @@ function About() {
           </section>
 
           {/* Sec 4: Our Team */}
-          <section className="mb-10">
-            <h2 className="text-2xl font-semibold text-gray-700 mb-3">
+          <section className="flex flex-col items-center justify-center w-max mx-auto p-2 mb-6 bg-gradient-to-r from-blue-200 via-green-200 to-orange-200 rounded-tl-3xl rounded-br-3xl">
+            <h2 className="text-2xl font-semibold text-gray-700 mb-2">
               Our Team
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto text-center">
+            <p className="text-gray-600 max-w-2xl">
               Our team is a wild mix of{" "}
               <strong>farmers, mad scientists, and retired astronauts</strong>.
             </p>
-            <ul className="list-disc pl-5 mt-3 text-gray-600 max-w-2xl mx-auto text-center">
+            <ul className="list-disc pl-5 mt-2 text-gray-600 max-w-2xl mx-auto text-center mb-1">
               <li>
                 🥚 <strong>Dr. Eggo Nauta</strong> - Former astronaut, now Head
                 of Egg Quality.
@@ -113,11 +113,11 @@ function About() {
           </section>
 
           {/* Sec 5: Special Eggs */}
-          <section className="mb-10">
-            <h2 className="text-2xl font-semibold text-gray-700 mb-3">
+          <section className="flex flex-col items-center justify-center w-max mx-auto p-2 mb-6 bg-gradient-to-r from-orange-200 via-green-200 to-blue-200 rounded-tr-3xl rounded-bl-3xl">
+            <h2 className="text-2xl font-semibold text-gray-700 mb-2">
               Our Special Eggs
             </h2>
-            <ul className="list-disc pl-5 text-gray-600 max-w-2xl mx-auto text-center">
+            <ul className="list-disc pl-5 text-gray-600 max-w-2xl mb-1">
               <li>
                 🚀 <strong>ZeroG Eggs</strong> - Perfect for space missions.
                 They don’t roll away!
@@ -138,11 +138,11 @@ function About() {
           </section>
 
           {/* Sec 6: Sustainability */}
-          <section className="mb-10">
-            <h2 className="text-2xl font-semibold text-gray-700 mb-3">
+          <section className="flex flex-col items-center justify-center w-max mx-auto p-2 m-10 bg-gradient-to-r from-yellow-200 to-red-300 rounded-4xl">
+            <h2 className="text-2xl font-semibold text-gray-700 mb-2">
               Sustainability & Innovation
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto text-center">
+            <p className="text-gray-600 max-w-2xl mx-auto text-center mb-1">
               Our lunar farm is fully solar-powered and recycles 100% of its
               resources. We're also experimenting with{" "}
               <strong>bionic chickens</strong> — though they tend to rebel… for
@@ -151,11 +151,11 @@ function About() {
           </section>
 
           {/* Sec 7: Why Choose Us */}
-          <section className="mb-10">
-            <h2 className="text-2xl font-semibold text-gray-700 mb-3">
+          <section className="flex flex-col items-center justify-center w-max mx-auto p-2 mb-10 bg-gradient-to-r from-blue-200 via-green-200 to-orange-200 rounded-tl-3xl rounded-br-3xl">
+            <h2 className="text-2xl font-semibold text-gray-700 mb-2">
               Why Choose Us?
             </h2>
-            <ul className="list-disc pl-5 text-gray-600 max-w-2xl mx-auto text-center">
+            <ul className="list-disc pl-5 text-gray-600 max-w-2xl">
               <li>
                 ✔️ <strong>Truly one-of-a-kind eggs on Earth</strong> (literally
                 — some come from outer space!)
