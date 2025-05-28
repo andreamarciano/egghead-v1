@@ -28,7 +28,7 @@ function About() {
           </h1>
 
           {/* Sec 1: Our Story */}
-          <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto p-2 mb-6 bg-gradient-to-r from-blue-200 via-green-200 to-orange-200 rounded-tl-3xl rounded-br-3xl text-center">
+          <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto p-2 mb-6 bg-gradient-to-r from-blue-200 via-green-200 to-orange-200 rounded-tl-3xl rounded-br-3xl text-center shadow-2xl shadow-blue-600/80">
             <h2 className="text-2xl font-semibold text-gray-700 mb-2">
               Our Story
             </h2>
@@ -43,7 +43,7 @@ function About() {
           </div>
 
           {/* Sec 2: Our Mission */}
-          <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto p-2 mb-6 bg-gradient-to-r from-orange-200 via-green-200 to-blue-200 rounded-tr-3xl rounded-bl-3xl text-center">
+          <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto p-2 mb-6 bg-gradient-to-r from-orange-200 via-green-200 to-blue-200 rounded-tr-3xl rounded-bl-3xl text-center shadow-2xl shadow-blue-600/80">
             <h2 className="text-2xl font-semibold text-gray-700 mb-2">
               Our Mission
             </h2>
@@ -88,7 +88,7 @@ function About() {
           </div>
 
           {/* Sec 4: Our Team */}
-          <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto p-2 mb-6 bg-gradient-to-r from-blue-200 via-green-200 to-orange-200 rounded-tl-3xl rounded-br-3xl text-center">
+          <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto p-2 mb-6 bg-gradient-to-r from-blue-200 via-green-200 to-orange-200 rounded-tl-3xl rounded-br-3xl text-center shadow-2xl shadow-blue-600/80">
             <h2 className="text-2xl font-semibold text-gray-700 mb-2">
               Our Team
             </h2>
@@ -113,7 +113,7 @@ function About() {
           </div>
 
           {/* Sec 5: Special Eggs */}
-          <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto p-2 mb-6 bg-gradient-to-r from-orange-200 via-green-200 to-blue-200 rounded-tr-3xl rounded-bl-3xl text-center">
+          <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto p-2 mb-6 bg-gradient-to-r from-orange-200 via-green-200 to-blue-200 rounded-tr-3xl rounded-bl-3xl text-center shadow-2xl shadow-blue-600/80">
             <h2 className="text-2xl font-semibold text-gray-700 mb-2">
               Our Special Eggs
             </h2>
@@ -138,7 +138,7 @@ function About() {
           </div>
 
           {/* Sec 6: Sustainability */}
-          <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto p-2 m-10 bg-gradient-to-r from-yellow-200 to-red-300 rounded-4xl text-center">
+          <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto p-2 m-10 bg-gradient-to-r from-yellow-200 to-red-300 rounded-4xl text-center shadow-2xl shadow-red-500">
             <h2 className="text-2xl font-semibold text-gray-700 mb-2">
               Sustainability & Innovation
             </h2>
@@ -151,7 +151,7 @@ function About() {
           </div>
 
           {/* Sec 7: Why Choose Us */}
-          <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto p-2 mb-10 bg-gradient-to-r from-blue-200 via-green-200 to-orange-200 rounded-tl-3xl rounded-br-3xl text-center">
+          <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto p-2 mb-10 bg-gradient-to-r from-blue-200 via-green-200 to-orange-200 rounded-tl-3xl rounded-br-3xl text-center shadow-2xl shadow-blue-600/80">
             <h2 className="text-2xl font-semibold text-gray-700 mb-2">
               Why Choose Us?
             </h2>
