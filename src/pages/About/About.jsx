@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
-import Navbar from "../comp/Navbar";
-import Footer from "../comp/Footer";
-import Carousel from "../comp/review/Carousel";
-import Reviews from "../comp/review/Reviews";
-import Scrollbar from "../comp/Scrollbar";
-import Maze from "../comp/game/Maze/Maze";
+import "./About.css";
+import Navbar from "../../comp/Navbar";
+import Footer from "../../comp/Footer";
+import Carousel from "../../comp/review/Carousel";
+import Reviews from "../../comp/review/Reviews";
+import Scrollbar from "../../comp/Scrollbar";
+
+import FancyDiv from "./FancyDiv";
 
 function About() {
-  const [isMazeOpen, setIsMazeOpen] = useState(false);
+  const [hovered, setHovered] = useState(false);
 
   // Scroll to top
   useEffect(() => {
@@ -28,7 +30,7 @@ function About() {
           </h1>
 
           {/* Sec 1: Our Story */}
-          <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto p-2 mb-6 bg-gradient-to-r from-blue-200 via-green-200 to-orange-200 rounded-tl-3xl rounded-br-3xl text-center shadow-2xl shadow-blue-600/80 hover:scale-150 hover:rotate-[45deg] transition-all duration-[5000ms] delay-100 ease-out origin-top-left animate-bounce">
+          <FancyDiv>
             <h2 className="text-2xl font-semibold text-gray-700 mb-2">
               Our Story
             </h2>
@@ -40,7 +42,7 @@ function About() {
               continue to innovate, bringing the most extraordinary eggs in the
               universe to your table!
             </p>
-          </div>
+          </FancyDiv>
 
           {/* Sec 2: Our Mission */}
           <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto p-2 mb-6 bg-gradient-to-r from-orange-200 via-green-200 to-blue-200 rounded-tr-3xl rounded-bl-3xl text-center shadow-2xl shadow-blue-600/80">
@@ -69,11 +71,7 @@ function About() {
               by accident.
             </p>
 
-            {/* Maze */}
-            <div
-              className="bg-white shadow-md p-5 rounded-lg mt-4 max-w-2xl mx-auto text-center hover:scale-105 transition-all ease-linear cursor-pointer"
-              onClick={() => setIsMazeOpen(true)}
-            >
+            <div className="bg-white shadow-md p-5 rounded-lg mt-4 max-w-2xl mx-auto text-center hover:scale-105 transition-all ease-linear cursor-pointer">
               <p className="text-gray-700">
                 📍 <strong>Address:</strong> Rebel Hens Lane, 42, 00042, Lunar
                 Farm, Burkina Faso
@@ -182,9 +180,6 @@ function About() {
 
       {/* Footer */}
       <Footer />
-
-      {/* Maze */}
-      {isMazeOpen && <Maze onClose={() => setIsMazeOpen(false)} />}
     </>
   );
 }

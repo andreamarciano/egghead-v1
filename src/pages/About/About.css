@@ -1,0 +1,108 @@
+/* SPIN */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-spin-custom {
+    animation: spin 1s linear infinite;
+}
+
+
+/* PING */
+@keyframes ping {
+
+    75%,
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+.animate-ping-custom {
+    animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+
+/* PULSE */
+@keyframes pulse {
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.animate-pulse-custom {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+
+/* BOUNCE */
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(-25%);
+        animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+
+    50% {
+        transform: none;
+        animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+}
+
+.animate-bounce-custom {
+    animation: bounce 2s infinite;
+}
+
+/* PENDOLO */
+@keyframes swing {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    15% {
+        transform: rotate(10deg);
+    }
+
+    30% {
+        transform: rotate(-8deg);
+    }
+
+    45% {
+        transform: rotate(6deg);
+    }
+
+    60% {
+        transform: rotate(-4deg);
+    }
+
+    75% {
+        transform: rotate(2deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+@keyframes fall {
+    0% {
+        transform: rotate(15deg) translateY(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: rotate(60deg) translateY(300px);
+        opacity: 0;
+    }
+}
+
+.animate-swing {
+    animation: swing 2s ease-in-out infinite;
+}
+
+.animate-fall {
+    animation: fall 1s ease-in forwards;
+}

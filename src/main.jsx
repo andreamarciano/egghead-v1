@@ -12,7 +12,7 @@ import App from "./App";
 import Shop from "./pages/Shop";
 import ProductInfoCard from "./comp/shop/ProductInfoCard";
 import Checkout from "./pages/Checkout";
-import About from "./pages/About";
+import About from "./pages/About/About";
 import Customer from "./pages/Customer";
 import ArcadeCabinet from "./pages/Cabinet/ArcadeCabinet";
 import NotFound from "./pages/NotFound";
