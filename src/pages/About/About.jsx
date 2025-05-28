@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import "./About.css";
 import Navbar from "../../comp/Navbar";
 import Footer from "../../comp/Footer";
@@ -6,11 +6,9 @@ import Carousel from "../../comp/review/Carousel";
 import Reviews from "../../comp/review/Reviews";
 import Scrollbar from "../../comp/Scrollbar";
 
-import FancyDiv from "./FancyDiv";
+import FallingDiv from "./FallingDiv";
 
 function About() {
-  const [hovered, setHovered] = useState(false);
-
   // Scroll to top
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -30,11 +28,11 @@ function About() {
           </h1>
 
           {/* Sec 1: Our Story */}
-          <FancyDiv>
-            <h2 className="text-2xl font-semibold text-gray-700 mb-2">
+          <FallingDiv>
+            <h2 className="text-2xl font-semibold text-gray-700 py-1">
               Our Story
             </h2>
-            <p className="text-gray-600 max-w-2xl mb-2">
+            <p className="text-gray-600 max-w-2xl mb-2 py-2">
               Back in <strong>1972</strong>, a group of visionary farmers
               decided that Earth simply wasn't enough to raise the best eggs.
               With a second-hand rocket and a couple of very brave chickens, we
@@ -42,7 +40,7 @@ function About() {
               continue to innovate, bringing the most extraordinary eggs in the
               universe to your table!
             </p>
-          </FancyDiv>
+          </FallingDiv>
 
           {/* Sec 2: Our Mission */}
           <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto p-2 mb-6 bg-gradient-to-r from-orange-200 via-green-200 to-blue-200 rounded-tr-3xl rounded-bl-3xl text-center shadow-2xl shadow-blue-600/80">
