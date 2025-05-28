@@ -1,6 +1,6 @@
 {
-  "name": "Andrea Factory Project",
-  "short_name": "Andrea Project",
+  "name": "ArziFact Project",
+  "short_name": "ArziFact",
   "description": "Una web app interattiva creata con React, Vite e Tailwind.",
   "start_url": "/",
   "display": "standalone",

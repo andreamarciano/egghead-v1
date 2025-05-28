@@ -28,7 +28,7 @@ function About() {
           </h1>
 
           {/* Sec 1: Our Story */}
-          <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto p-2 mb-6 bg-gradient-to-r from-blue-200 via-green-200 to-orange-200 rounded-tl-3xl rounded-br-3xl text-center shadow-2xl shadow-blue-600/80">
+          <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto p-2 mb-6 bg-gradient-to-r from-blue-200 via-green-200 to-orange-200 rounded-tl-3xl rounded-br-3xl text-center shadow-2xl shadow-blue-600/80 hover:scale-150 hover:rotate-[45deg] transition-all duration-[5000ms] delay-100 ease-out origin-top-left animate-bounce">
             <h2 className="text-2xl font-semibold text-gray-700 mb-2">
               Our Story
             </h2>
