@@ -18,7 +18,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-gray-400 shadow-lg p-4 overflow-y-auto transition-transform duration-700 ease-in-out transform ${
+        className={`fixed top-0 left-0 z-300 h-full w-64 bg-gray-400 shadow-lg p-4 overflow-y-auto transition-transform duration-700 ease-in-out transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
