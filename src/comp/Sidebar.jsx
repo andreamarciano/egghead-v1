@@ -1,14 +1,7 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
-const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
-
+const Sidebar = ({ isOpen, toggleSidebar }) => {
   return (
     <div>
       <div className="w-4 relative">
@@ -25,7 +18,7 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-gray-400 shadow-lg p-4 overflow-y-auto transition-transform transform ${
+        className={`fixed top-0 left-0 h-full w-64 bg-gray-400 shadow-lg p-4 overflow-y-auto transition-transform duration-700 ease-in-out transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
