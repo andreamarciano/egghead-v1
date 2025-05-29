@@ -18,7 +18,7 @@ const playSound = (key) => {
 };
 
 const FallingDiv = ({ children }) => {
-  const { addToTrash } = useTrash();
+  const { addToTrash } = useTrash(); // context
 
   const [rightPinRemoved, setRightPinRemoved] = useState(false);
   const [leftPinRemoved, setLeftPinRemoved] = useState(false);
@@ -54,10 +54,9 @@ const FallingDiv = ({ children }) => {
   // Current State
   const divState = divFalling ? "fall" : rightPinRemoved ? "swing" : "still";
 
-  /* Trash */
+  /* EXTRACT TEXT → TRASH */
   useEffect(() => {
     if (divFalling) {
-      // Funzione per estrarre il testo dai children
       const extractText = (node) => {
         if (typeof node === "string") return node;
         if (Array.isArray(node)) return node.map(extractText).join(" ");

@@ -5,14 +5,36 @@ const TrashContext = createContext();
 export const useTrash = () => useContext(TrashContext);
 
 export const TrashProvider = ({ children }) => {
-  const [texts, setTexts] = useState([]);
+  const [pendingLetters, setPendingLetters] = useState([]);
+  const [fallingLetters, setFallingLetters] = useState([]);
+  const [dumpedLetters, setDumpedLetters] = useState([]);
 
+  // Add to Trash Collector
   const addToTrash = (text) => {
-    setTexts((prev) => [...prev, text]);
+    const letters = text.split("").filter((char) => char.trim().length > 0);
+    setPendingLetters((prev) => [...prev, ...letters]);
+  };
+
+  // Dump Trash Collector
+  const dumpTrash = () => {
+    setFallingLetters([...pendingLetters]);
+    setTimeout(() => {
+      setDumpedLetters((prev) => [...prev, ...pendingLetters]);
+      setFallingLetters([]);
+      setPendingLetters([]);
+    }, 800);
   };
 
   return (
-    <TrashContext.Provider value={{ texts, addToTrash }}>
+    <TrashContext.Provider
+      value={{
+        pendingLetters,
+        fallingLetters,
+        dumpedLetters,
+        addToTrash,
+        dumpTrash,
+      }}
+    >
       {children}
     </TrashContext.Provider>
   );

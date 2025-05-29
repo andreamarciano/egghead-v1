@@ -7,23 +7,19 @@ const randomStyle = () => ({
 });
 
 const TrashBin = () => {
-  const { texts } = useTrash();
+  const { dumpedLetters } = useTrash();
 
   return (
-    <div className="relative h-48 mt-16 border-t-4 border-dashed border-gray-400 bg-gray-100 overflow-hidden">
-      {texts.flatMap((text, i) =>
-        text
-          .split("") // scompone in lettere singole
-          .map((char, j) => (
-            <span
-              key={`${i}-${j}`}
-              className="absolute text-sm text-gray-700 opacity-80 select-none pointer-events-none transition-transform"
-              style={randomStyle()}
-            >
-              {char}
-            </span>
-          ))
-      )}
+    <div className="relative h-48 mt-4 border-t-4 border-dashed border-gray-400 bg-gray-100 overflow-hidden">
+      {dumpedLetters.map((char, i) => (
+        <span
+          key={i}
+          className="absolute text-sm text-gray-700 opacity-80 select-none pointer-events-none transition-transform"
+          style={randomStyle()}
+        >
+          {char}
+        </span>
+      ))}
     </div>
   );
 };

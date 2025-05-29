@@ -4,10 +4,10 @@ import Navbar from "../../comp/Navbar";
 import Footer from "../../comp/Footer";
 import Carousel from "../../comp/review/Carousel";
 import Reviews from "../../comp/review/Reviews";
-import Scrollbar from "../../comp/Scrollbar";
 
 import { TrashProvider } from "./TrashContext";
 import TrashBin from "./TrashBin";
+import TrashCollector from "./TrashCollector";
 import FallingDiv from "./FallingDiv";
 
 function About() {
@@ -20,7 +20,6 @@ function About() {
     <TrashProvider>
       <Navbar />
       {/* Vertical Scroll Bar */}
-      <Scrollbar />
 
       <div className="py-10 bg-gradient-to-r from-blue-300 via-green-300 to-orange-300">
         <div className="max-w-5xl mx-auto px-6">
@@ -46,22 +45,23 @@ function About() {
 
           <FallingDiv>
             <h2 className="text-2xl font-semibold text-gray-700 py-1">
-              22222222222222
+              Lorem, ipsum dolor.
             </h2>
             <p className="text-gray-600 max-w-2xl mb-2 py-2">
-              33333333333333333333333333333333333333333333333333333333
-              aaaaaaaaaaaaaa
-              a
-              a
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas
+              autem ea iusto magni adipisci nam eligendi repudiandae quaerat est
+              tempore?
             </p>
           </FallingDiv>
 
           <FallingDiv>
             <h2 className="text-2xl font-semibold text-gray-700 py-1">
-              4444444444444444444444444444
+              Lorem, ipsum dolor.
             </h2>
             <p className="text-gray-600 max-w-2xl mb-2 py-2">
-              ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZz
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas
+              autem ea iusto magni adipisci nam eligendi repudiandae quaerat est
+              tempore?
             </p>
           </FallingDiv>
 
@@ -198,6 +198,7 @@ function About() {
           <Reviews />
         </div>
 
+        <TrashCollector />
         <TrashBin />
       </div>
 
