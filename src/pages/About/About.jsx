@@ -6,6 +6,8 @@ import Carousel from "../../comp/review/Carousel";
 import Reviews from "../../comp/review/Reviews";
 import Scrollbar from "../../comp/Scrollbar";
 
+import { TrashProvider } from "./TrashContext";
+import TrashBin from "./TrashBin";
 import FallingDiv from "./FallingDiv";
 
 function About() {
@@ -15,7 +17,7 @@ function About() {
   }, []);
 
   return (
-    <>
+    <TrashProvider>
       <Navbar />
       {/* Vertical Scroll Bar */}
       <Scrollbar />
@@ -39,6 +41,27 @@ function About() {
               launched our first farm on the <strong>Moon</strong>. Today, we
               continue to innovate, bringing the most extraordinary eggs in the
               universe to your table!
+            </p>
+          </FallingDiv>
+
+          <FallingDiv>
+            <h2 className="text-2xl font-semibold text-gray-700 py-1">
+              22222222222222
+            </h2>
+            <p className="text-gray-600 max-w-2xl mb-2 py-2">
+              33333333333333333333333333333333333333333333333333333333
+              aaaaaaaaaaaaaa
+              a
+              a
+            </p>
+          </FallingDiv>
+
+          <FallingDiv>
+            <h2 className="text-2xl font-semibold text-gray-700 py-1">
+              4444444444444444444444444444
+            </h2>
+            <p className="text-gray-600 max-w-2xl mb-2 py-2">
+              ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZz
             </p>
           </FallingDiv>
 
@@ -174,11 +197,13 @@ function About() {
           {/* Reviews */}
           <Reviews />
         </div>
+
+        <TrashBin />
       </div>
 
       {/* Footer */}
       <Footer />
-    </>
+    </TrashProvider>
   );
 }
 

@@ -1,5 +1,6 @@
 import "./FallingDiv.css";
 import { useState, useEffect } from "react";
+import { useTrash } from "./TrashContext";
 
 const soundURL = {
   pop: { src: "/sounds/about/pop.mp3", volume: 0.4 },
@@ -17,6 +18,8 @@ const playSound = (key) => {
 };
 
 const FallingDiv = ({ children }) => {
+  const { addToTrash } = useTrash();
+
   const [rightPinRemoved, setRightPinRemoved] = useState(false);
   const [leftPinRemoved, setLeftPinRemoved] = useState(false);
   const [rightPinFalling, setRightPinFalling] = useState(false);
@@ -50,6 +53,22 @@ const FallingDiv = ({ children }) => {
 
   // Current State
   const divState = divFalling ? "fall" : rightPinRemoved ? "swing" : "still";
+
+  /* Trash */
+  useEffect(() => {
+    if (divFalling) {
+      // Funzione per estrarre il testo dai children
+      const extractText = (node) => {
+        if (typeof node === "string") return node;
+        if (Array.isArray(node)) return node.map(extractText).join(" ");
+        if (node?.props?.children) return extractText(node.props.children);
+        return "";
+      };
+
+      const text = extractText(children);
+      addToTrash(text);
+    }
+  }, [divFalling]);
 
   return (
     <div className="relative inline-block pt-4 mb-8">
