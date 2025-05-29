@@ -1,8 +1,11 @@
-# 🔠 Hidden Word Trash Collector
+# 🔠 Hidden Word Trash Collector - React + Context API
 
 This project implements a playful animation system where discarded letters "fall" into a trash bin and gradually reveal a **hidden word** through **negative space**. As users interact with different components, letters are collected and visually scattered — **avoiding specific masked areas** that form the contours of a secret word.
 
 Currently, the word **"HIDE5"** is being revealed.
+
+> **Technologies used**:
+> **React**, **Context API**, **Tailwind CSS**, **Custom CSS Animations** (fall, tilt)
 
 ---
 
@@ -10,7 +13,11 @@ Currently, the word **"HIDE5"** is being revealed.
 
 The system consists of:
 
-- `FallingDiv`: A component that simulates a paper held by two pins. When one pin is removed, it swings and then falls. Its text content is extracted and sent to the trash.
+- **Interactive Components**: These components are designed to **extract text** and send it to the trash system. Each one offers a different animation or interaction, but they all contribute letters to the central collector.
+  Currently implemented components include:
+
+  - **`FallingDiv`**: A component that simulates a paper held by two pins. When one pin is removed, it swings and then falls. Its text content is extracted and sent to the trash.
+
 - `TrashBin`: A bouncing trash can icon. Clicking it dumps the collected letters into the **TrashCollector**.
 - `TrashCollector`: The visual "floor" where letters scatter — but intentionally **avoid** certain areas, leaving a negative-space outline of a word.
 - `TrashContext`: Centralized state using **React Context API** to manage all letters in motion or dumped.
@@ -105,9 +112,31 @@ As more letters fall, the masked areas remain empty, and the secret word **emerg
 
 ---
 
+## ➕ Extending the System
+
+You can easily add new divs that inject letters into the system using the addToTrash() function from context:
+
+```js
+const { addToTrash } = useTrash();
+addToTrash("new content");
+```
+
+---
+
 ## Dev Notes
 
 - All coordinates for masks use percentages (`0–100%`) for responsive scaling.
 - Falling animations are handled via CSS (`FallingDiv.css`, `TrashBin.css`).
 - Letter positioning is randomized but avoids masked zones using `do...while`.
 - A `DebugMask` component is available to visually preview the letter masks.
+
+## Getting Started
+
+To run the project locally:
+
+```bash
+git clone https://github.com/andreamarciano/hidden-v1
+cd hidden-v1
+npm install
+npm run dev
+```
