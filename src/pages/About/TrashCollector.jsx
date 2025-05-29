@@ -5,6 +5,15 @@ const TrashCollector = () => {
 
   return (
     <div className="relative top-8 h-48 mt-4 bg-gray-100 overflow-hidden">
+      {/* Left border */}
+      <div className="absolute top-0 left-0 bottom-0 w-1 z-1 bg-gray-500" />
+
+      {/* Right border */}
+      <div className="absolute top-0 right-0 bottom-0 w-1 z-1 bg-gray-500" />
+
+      {/* Bottom border */}
+      <div className="absolute left-0 right-0 bottom-0 h-1 z-1 bg-gray-500" />
+
       {/* Left Line */}
       <div
         className="absolute top-0 left-0 h-1 bg-gray-500"
