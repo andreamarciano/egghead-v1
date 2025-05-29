@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import "./About.css";
 import Navbar from "../../comp/Navbar";
 import Footer from "../../comp/Footer";
 import Carousel from "../../comp/review/Carousel";
