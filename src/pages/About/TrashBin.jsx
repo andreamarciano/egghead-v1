@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useTrash } from "./TrashContext";
 import "./TrashBin.css";
-import { FaTrashAlt } from "react-icons/fa";
 
 const TrashBin = () => {
   const { pendingLetters, fallingLetters, dumpTrash } = useTrash(); // context
@@ -30,7 +29,13 @@ const TrashBin = () => {
           pendingLetters.length > 0 && !isDumping ? "animate-bounce" : ""
         } ${isDumping ? "trash-tilt" : ""}`}
       >
-        <FaTrashAlt />
+        <img
+          src={
+            isDumping ? "/images/about/binOpen.svg" : "/images/about/bin.svg"
+          }
+          alt="Trash Bin"
+          className="w-8 h-8"
+        />
         {pendingLetters.length > 0 && (
           <span className="absolute -top-2 -right-2 text-xs bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center">
             {pendingLetters.length}
