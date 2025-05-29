@@ -22,7 +22,7 @@ const TrashBin = () => {
   };
 
   return (
-    <div className="flex justify-center mt-8 relative h-10 w-max">
+    <div className="flex justify-center mt-8 relative h-2 w-max">
       <div
         onClick={handleClick}
         className={`text-4xl cursor-pointer relative left-10 z-10 duration-300 ${
