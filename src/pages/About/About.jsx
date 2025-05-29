@@ -21,7 +21,7 @@ function About() {
       <Navbar />
       {/* Vertical Scroll Bar */}
 
-      <div className="py-10 bg-gradient-to-r from-blue-300 via-green-300 to-orange-300">
+      <div className="py-8 bg-gradient-to-r from-blue-300 via-green-300 to-orange-300">
         <div className="max-w-5xl mx-auto px-6">
           {/* Title */}
           <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">
