@@ -23,6 +23,7 @@ const FallingDiv = ({ children }) => {
   const [leftPinFalling, setLeftPinFalling] = useState(false);
   const [divFalling, setDivFalling] = useState(false);
 
+  /* Animation Sequence: Pin Removed → Swing → Fall */
   useEffect(() => {
     if (rightPinRemoved && !leftPinRemoved) {
       playSound("creaks");
@@ -39,6 +40,7 @@ const FallingDiv = ({ children }) => {
     }
   }, [rightPinRemoved]);
 
+  // Remove Pin
   const handleRightPinClick = () => {
     setRightPinFalling(true);
     playSound("pop");
@@ -46,11 +48,12 @@ const FallingDiv = ({ children }) => {
     setTimeout(() => setRightPinRemoved(true), 1000);
   };
 
+  // Current State
   const divState = divFalling ? "fall" : rightPinRemoved ? "swing" : "still";
 
   return (
     <div className="relative inline-block pt-4 mb-8">
-      {/* Puntina sinistra */}
+      {/* Left Pin */}
       {!leftPinRemoved && (
         <div
           className={`absolute top-0 left-0 z-10 text-xl select-none ${
@@ -61,7 +64,7 @@ const FallingDiv = ({ children }) => {
         </div>
       )}
 
-      {/* Puntina destra cliccabile */}
+      {/* Right Pin (clickable) */}
       {!rightPinRemoved && (
         <div
           className={`absolute top-0 right-0 z-10 text-xl cursor-pointer select-none ${
@@ -73,7 +76,7 @@ const FallingDiv = ({ children }) => {
         </div>
       )}
 
-      {/* Contenuto */}
+      {/* Content div */}
       <div
         className={`bg-gradient-to-r from-orange-200 via-green-200 to-blue-200 rounded-br-3xl rounded-bl-3xl shadow-2xl shadow-blue-600/80 transition-transform origin-top-left ${
           divState === "swing"
