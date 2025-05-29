@@ -1,11 +1,5 @@
 import { useTrash } from "./TrashContext";
 
-const randomStyle = () => ({
-  top: `${Math.random() * 97}%`,
-  left: `${Math.random() * 97}%`,
-  transform: `rotate(${Math.random() * 60 - 30}deg)`,
-});
-
 const TrashCollector = () => {
   const { dumpedLetters } = useTrash();
 
@@ -28,11 +22,15 @@ const TrashCollector = () => {
       <div className="absolute top-0 left-[95px] w-1 h-2 bg-gray-500" />
 
       {/* Letters */}
-      {dumpedLetters.map((char, i) => (
+      {dumpedLetters.map(({ char, top, left, rotate, id }) => (
         <span
-          key={i}
+          key={id}
           className="absolute text-sm text-gray-700 opacity-80 select-none pointer-events-none transition-transform"
-          style={randomStyle()}
+          style={{
+            top,
+            left,
+            transform: `rotate(${rotate})`,
+          }}
         >
           {char}
         </span>

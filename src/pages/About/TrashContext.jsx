@@ -17,9 +17,20 @@ export const TrashProvider = ({ children }) => {
 
   // Dump Trash Collector
   const dumpTrash = () => {
+    const generateLetterData = (char) => ({
+      char,
+      top: `${Math.random() * 97}%`,
+      left: `${Math.random() * 97}%`,
+      rotate: `${Math.random() * 60 - 30}deg`,
+      id: crypto.randomUUID(),
+    });
+
+    const letterData = pendingLetters.map(generateLetterData);
+
     setFallingLetters([...pendingLetters]);
+
     setTimeout(() => {
-      setDumpedLetters((prev) => [...prev, ...pendingLetters]);
+      setDumpedLetters((prev) => [...prev, ...letterData]);
       setFallingLetters([]);
       setPendingLetters([]);
     }, 800);
