@@ -1,4 +1,5 @@
 import { useTrash } from "./TrashContext";
+import DebugMask from "./DebugMask";
 
 const TrashCollector = () => {
   const { dumpedLetters } = useTrash();
@@ -34,7 +35,7 @@ const TrashCollector = () => {
       {dumpedLetters.map(({ char, top, left, rotate, id }) => (
         <span
           key={id}
-          className="absolute text-sm text-gray-700 opacity-80 select-none pointer-events-none transition-transform"
+          className="absolute text-base sm:text-lg text-gray-700 opacity-80 select-none pointer-events-none transition-transform"
           style={{
             top,
             left,
@@ -44,6 +45,9 @@ const TrashCollector = () => {
           {char}
         </span>
       ))}
+
+      {/* Debug Mask */}
+      {/* <DebugMask /> */}
     </div>
   );
 };
