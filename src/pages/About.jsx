@@ -1,13 +1,13 @@
 import { useEffect } from "react";
-import Navbar from "../../comp/Navbar";
-import Footer from "../../comp/Footer";
-import Carousel from "../../comp/review/Carousel";
-import Reviews from "../../comp/review/Reviews";
+import Navbar from "../comp/Navbar";
+import Footer from "../comp/Footer";
+import Carousel from "../comp/review/Carousel";
+import Reviews from "../comp/review/Reviews";
 
-import { TrashProvider } from "./TrashContext";
-import TrashBin from "./TrashBin";
-import TrashCollector from "./TrashCollector";
-import FallingDiv from "./FallingDiv";
+import { TrashProvider } from "../comp/aboutComp/TrashContext";
+import TrashBin from "../comp/aboutComp/TrashBin";
+import TrashCollector from "../comp/aboutComp/TrashCollector";
+import FallingDiv from "../comp/aboutComp/FallingDiv";
 
 function About() {
   // Scroll to top
