@@ -197,8 +197,9 @@ function About() {
           <Reviews />
         </div>
 
-        <TrashCollector />
+        {/* Trash */}
         <TrashBin />
+        <TrashCollector />
       </div>
 
       {/* Footer */}
