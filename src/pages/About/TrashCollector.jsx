@@ -10,7 +10,24 @@ const TrashCollector = () => {
   const { dumpedLetters } = useTrash();
 
   return (
-    <div className="relative top-8 h-48 mt-4 border-t-4 border-dashed border-gray-400 bg-gray-100 overflow-hidden">
+    <div className="relative top-8 h-48 mt-4 bg-gray-100 overflow-hidden">
+      {/* Left Line */}
+      <div
+        className="absolute top-0 left-0 h-1 bg-gray-500"
+        style={{ width: "45px" }}
+      />
+
+      {/* Right Line */}
+      <div
+        className="absolute top-0 left-[95px] h-1 bg-gray-500"
+        style={{ right: 0 }}
+      />
+
+      {/* Hole */}
+      <div className="absolute top-0 left-[45px] w-1 h-2 bg-gray-500" />
+      <div className="absolute top-0 left-[95px] w-1 h-2 bg-gray-500" />
+
+      {/* Letters */}
       {dumpedLetters.map((char, i) => (
         <span
           key={i}
