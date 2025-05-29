@@ -4,9 +4,9 @@ import Footer from "../comp/Footer";
 import Carousel from "../comp/review/Carousel";
 import Reviews from "../comp/review/Reviews";
 
-import { TrashProvider } from "../comp/aboutComp/TrashContext";
-import TrashBin from "../comp/aboutComp/TrashBin";
-import TrashCollector from "../comp/aboutComp/TrashCollector";
+import { TrashProvider } from "../comp/aboutComp/trash/TrashContext";
+import TrashBin from "../comp/aboutComp/trash/TrashBin";
+import TrashCollector from "../comp/aboutComp/trash/TrashCollector";
 import FallingDiv from "../comp/aboutComp/FallingDiv";
 
 function About() {

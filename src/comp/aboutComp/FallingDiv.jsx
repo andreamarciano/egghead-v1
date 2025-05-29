@@ -1,6 +1,6 @@
 import "./FallingDiv.css";
 import { useState, useEffect } from "react";
-import { useTrash } from "./TrashContext";
+import { useTrash } from "./trash/TrashContext";
 
 const soundURL = {
   pop: { src: "/sounds/about/pop.mp3", volume: 0.4 },
