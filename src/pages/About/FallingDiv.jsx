@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 
 const soundURL = {
   pop: { src: "/sounds/about/pop.mp3", volume: 0.4 },
-  creaks: { src: "/sounds/about/creaks.mp3", volume: 0.2 },
+  creaks: { src: "/sounds/about/creaks.mp3", volume: 0.5 },
   woosh: { src: "/sounds/about/woosh.mp3", volume: 0.5 },
 };
 
