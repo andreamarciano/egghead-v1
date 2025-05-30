@@ -3,7 +3,7 @@ import "./MeltingDiv.css";
 import { useTrash } from "../trash/TrashContext";
 
 const MeltingDiv = ({ children }) => {
-  // === SOUND ===
+  /* === SOUND SETUP === */
   const soundURL = {
     lava: { src: "/sounds/about/lava5.mp3", volume: 0.5 },
     melting: { src: "/sounds/about/lava2.mp3", volume: 0.9 },
@@ -16,6 +16,7 @@ const MeltingDiv = ({ children }) => {
     melting: null,
   });
 
+  // Play looped sound (e.g. lava bubbling)
   const playLoopedSound = (key) => {
     const sound = soundURL[key];
     if (!sound) return;
@@ -30,7 +31,7 @@ const MeltingDiv = ({ children }) => {
     const audio = audioRefs.current[key];
     if (audio.paused) audio.play();
   };
-
+  // Stop looped sound
   const stopSound = (key) => {
     const audio = audioRefs.current[key];
     if (audio && !audio.paused) {
@@ -39,6 +40,7 @@ const MeltingDiv = ({ children }) => {
     }
   };
 
+  // Play one-shot sound (e.g. steam burst or melting effect)
   const playOneShot = (key) => {
     const sound = soundURL[key];
     if (!sound) return;
@@ -47,22 +49,23 @@ const MeltingDiv = ({ children }) => {
     audio.play();
   };
 
+  // === STATE & CONTEXT ===
   const { addToTrash } = useTrash(); // context
-
   const [hovering, setHovering] = useState(false);
-  const [heatLevel, setHeatLevel] = useState(0); // 0 to 1
+  const [heatLevel, setHeatLevel] = useState(0);
   const [melting, setMelting] = useState(false);
+  const [isDead, setIsDead] = useState(false);
   const timerRef = useRef(null);
   const hoverStartTimeRef = useRef(null);
-  const [isDead, setIsDead] = useState(false);
 
-  // Utility per interpolare un colore da giallo (h=50) a rosso (h=0)
+  // === DIV Color logic ===
+  // Gradually interpolate from yellow (heatLevel 0) to red (heatLevel 1)
   const getInterpolatedColor = (level) => {
-    const hue = 50 - level * 50; // da 50 (giallo) a 0 (rosso)
+    const hue = 50 - level * 50;
     return `hsl(${hue}, 100%, 70%)`;
   };
 
-  // Handle hover timer
+  // === HEAT BUILD-UP & MELTING TRIGGER ===
   useEffect(() => {
     if (isDead) return;
 
@@ -74,6 +77,7 @@ const MeltingDiv = ({ children }) => {
         elapsed += 100;
         setHeatLevel(Math.min(1, elapsed / 5000));
         if (elapsed >= 5000) {
+          // Trigger melting sequence
           clearInterval(timerRef.current);
           stopSound("lava");
           setMelting(true);
@@ -81,10 +85,10 @@ const MeltingDiv = ({ children }) => {
         }
       }, 100);
     } else {
+      // Cooling down when not hovering
       clearInterval(timerRef.current);
       stopSound("lava");
 
-      // raffreddamento visuale
       const cooldown = setInterval(() => {
         setHeatLevel((prev) => {
           const next = Math.max(0, prev - 0.05);
@@ -100,7 +104,7 @@ const MeltingDiv = ({ children }) => {
     };
   }, [hovering, isDead]);
 
-  // Extract and send text when melting ends
+  /* === TEXT EXTRACTION ON MELT → TRASH === */
   useEffect(() => {
     if (melting) {
       playOneShot("melting");
@@ -115,22 +119,16 @@ const MeltingDiv = ({ children }) => {
         addToTrash(text);
 
         setIsDead(true);
-      }, 2000); // match with animation duration
+      }, 2000);
       return () => clearTimeout(timeout);
     }
   }, [melting]);
 
-  // Determine Bg Color based on heat
-  const bgColor = getInterpolatedColor(heatLevel);
-  // Determine Shake Intensity based on heat
-  const shake = heatLevel > 0.7 && !melting ? "animate-shake" : "";
-  // Lava Lapilli colors
-  const lapilliColors = ["#ff4500", "#ff8c00", "#ffd700"];
-
+  // === MOUSE EVENTS ===
   const handleMouseEnter = () => {
     if (isDead) return;
     setHovering(true);
-    hoverStartTimeRef.current = Date.now(); // salva inizio hover
+    hoverStartTimeRef.current = Date.now();
   };
 
   const handleMouseLeave = () => {
@@ -144,6 +142,11 @@ const MeltingDiv = ({ children }) => {
       playOneShot("steam");
     }
   };
+
+  // === VISUAL PROPERTIES ===
+  const bgColor = getInterpolatedColor(heatLevel);
+  const shake = heatLevel > 0.7 && !melting ? "animate-shake" : "";
+  const lapilliColors = ["#ff4500", "#ff8c00", "#ffd700"];
 
   return (
     <div
