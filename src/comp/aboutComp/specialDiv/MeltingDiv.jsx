@@ -7,7 +7,7 @@ const MeltingDiv = ({ children }) => {
   const soundURL = {
     lava: { src: "/sounds/about/lava5.mp3", volume: 0.5 },
     melting: { src: "/sounds/about/lava2.mp3", volume: 0.9 },
-    steam: { src: "/sounds/about/steam2.mp3", volume: 0.3 },
+    steam: { src: "/sounds/about/steam.mp3", volume: 0.3 },
   };
 
   const audioRefs = useRef({
@@ -84,10 +84,6 @@ const MeltingDiv = ({ children }) => {
       clearInterval(timerRef.current);
       stopSound("lava");
 
-    //   if (heatLevel > 0) {
-    //     playOneShot("steam"); // raffreddamento
-    //   }
-
       // raffreddamento visuale
       const cooldown = setInterval(() => {
         setHeatLevel((prev) => {
@@ -131,24 +127,28 @@ const MeltingDiv = ({ children }) => {
   // Lava Lapilli colors
   const lapilliColors = ["#ff4500", "#ff8c00", "#ffd700"];
 
+  const handleMouseEnter = () => {
+    if (isDead) return;
+    setHovering(true);
+    hoverStartTimeRef.current = Date.now(); // salva inizio hover
+  };
+
+  const handleMouseLeave = () => {
+    if (isDead) return;
+    setHovering(false);
+
+    const hoverDuration = Date.now() - hoverStartTimeRef.current;
+
+    // suona steam solo se è stato sopra almeno 2s
+    if (hoverDuration >= 2000 && heatLevel > 0) {
+      playOneShot("steam");
+    }
+  };
+
   return (
     <div
-      onMouseEnter={() => {
-        if (isDead) return;
-        setHovering(true);
-        hoverStartTimeRef.current = Date.now(); // 🕒 salva inizio hover
-      }}
-      onMouseLeave={() => {
-        if (isDead) return;
-        setHovering(false);
-
-        const hoverDuration = Date.now() - hoverStartTimeRef.current;
-
-        // 🎵 suona steam solo se è stato sopra almeno 2s
-        if (hoverDuration >= 2000 && heatLevel > 0) {
-          playOneShot("steam");
-        }
-      }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       style={{
         background: `linear-gradient(to right, ${bgColor}, ${bgColor})`,
         transition: "background 0.2s linear",
