@@ -59,8 +59,10 @@ const MeltingDiv = ({ children }) => {
     }
   }, [melting]);
 
-  // Determine background color based on heat
+  // Determine Bg Color based on heat
   const bgColor = getInterpolatedColor(heatLevel);
+  // Determine Shake Intensity based on heat
+  const shake = heatLevel > 0.7 && !melting ? "animate-shake" : "";
 
   return (
     <div
@@ -72,7 +74,7 @@ const MeltingDiv = ({ children }) => {
       }}
       className={`relative flex flex-col items-center justify-center w-full max-w-2xl mx-auto text-center p-2 m-10 rounded-4xl shadow-2xl shadow-red-500 transition-all duration-300 ${
         melting ? "animate-melt" : ""
-      }`}
+      } ${shake}`}
     >
       {children}
     </div>

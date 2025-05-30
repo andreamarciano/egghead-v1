@@ -1,3 +1,4 @@
+/* Melt */
 @keyframes melt {
     0% {
         transform: scaleY(1) translateY(0);
@@ -14,4 +15,33 @@
 
 .animate-melt {
     animation: melt 2s ease-in-out forwards;
+}
+
+/* Shake */
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translate(0, 0);
+    }
+
+    20% {
+        transform: translate(-1px, 1px);
+    }
+
+    40% {
+        transform: translate(1px, -1px);
+    }
+
+    60% {
+        transform: translate(-1px, 1px);
+    }
+
+    80% {
+        transform: translate(1px, -1px);
+    }
+}
+
+.animate-shake {
+    animation: shake 0.3s infinite;
 }
