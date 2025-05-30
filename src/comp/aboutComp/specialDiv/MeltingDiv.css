@@ -1,0 +1,17 @@
+@keyframes melt {
+    0% {
+        transform: scaleY(1) translateY(0);
+        opacity: 1;
+        filter: blur(0px);
+    }
+
+    100% {
+        transform: scaleY(2) translateY(50px);
+        opacity: 0;
+        filter: blur(4px);
+    }
+}
+
+.animate-melt {
+    animation: melt 2s ease-in-out forwards;
+}

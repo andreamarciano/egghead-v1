@@ -7,7 +7,9 @@ import Reviews from "../comp/review/Reviews";
 import { TrashProvider } from "../comp/aboutComp/trash/TrashContext";
 import TrashBin from "../comp/aboutComp/trash/TrashBin";
 import TrashCollector from "../comp/aboutComp/trash/TrashCollector";
+
 import FallingDiv from "../comp/aboutComp/specialDiv/FallingDiv";
+import MeltingDiv from "../comp/aboutComp/specialDiv/MeltingDiv";
 
 function About() {
   // Scroll to top
@@ -27,7 +29,7 @@ function About() {
             About Us
           </h1>
 
-          {/* Sec 1: Our Story */}
+          {/* FALLING - Sec 1: Our Story */}
           <FallingDiv>
             <h2 className="text-2xl font-semibold text-gray-700 py-1">
               Our Story
@@ -39,17 +41,6 @@ function About() {
               launched our first farm on the <strong>Moon</strong>. Today, we
               continue to innovate, bringing the most extraordinary eggs in the
               universe to your table!
-            </p>
-          </FallingDiv>
-
-          <FallingDiv>
-            <h2 className="text-2xl font-semibold text-gray-700 py-1">
-              Lorem, ipsum dolor.
-            </h2>
-            <p className="text-gray-600 max-w-2xl mb-2 py-2">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas
-              autem ea iusto magni adipisci nam eligendi repudiandae quaerat est
-              tempore?
             </p>
           </FallingDiv>
 
@@ -144,8 +135,8 @@ function About() {
             </ul>
           </div>
 
-          {/* Sec 6: Sustainability */}
-          <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto p-2 m-10 bg-gradient-to-r from-yellow-200 to-red-300 rounded-4xl text-center shadow-2xl shadow-red-500">
+          {/* MELTING - Sec 6: Sustainability */}
+          <MeltingDiv>
             <h2 className="text-2xl font-semibold text-gray-700 mb-2">
               Sustainability & Innovation
             </h2>
@@ -155,7 +146,20 @@ function About() {
               <strong>bionic chickens</strong> — though they tend to rebel… for
               now.
             </p>
-          </div>
+          </MeltingDiv>
+
+          {/* MELTING - Sec 6: Sustainability */}
+          <MeltingDiv>
+            <h2 className="text-2xl font-semibold text-gray-700 mb-2">
+              Sustainability & Innovation
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto text-center mb-1">
+              Our lunar farm is fully solar-powered and recycles 100% of its
+              resources. We're also experimenting with{" "}
+              <strong>bionic chickens</strong> — though they tend to rebel… for
+              now.
+            </p>
+          </MeltingDiv>
 
           {/* Sec 7: Why Choose Us */}
           <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto p-2 mb-10 bg-gradient-to-r from-blue-200 via-green-200 to-orange-200 rounded-tl-3xl rounded-br-3xl text-center shadow-2xl shadow-blue-600/80">
