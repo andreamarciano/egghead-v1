@@ -6,20 +6,21 @@ const TiltDiv = ({ children }) => {
   const containerRef = useRef(null);
   const [angle, setAngle] = useState(0);
   const [dragging, setDragging] = useState(false);
-  const [textFall, setTextFall] = useState(false);
   const startY = useRef(0);
   const initialAngle = useRef(0);
   const maxAngle = 70;
 
+  // --- Mouse down: start dragging ---
   const handleMouseDown = (e) => {
     setDragging(true);
     startY.current = e.clientY;
     initialAngle.current = angle;
 
-    // Disattiva selezione globale
+    // Disable global text selection
     document.body.style.userSelect = "none";
   };
 
+  // --- Mouse move: update rotation based on movement ---
   const handleMouseMove = (e) => {
     if (!dragging) return;
     const dy = startY.current - e.clientY;
@@ -30,17 +31,19 @@ const TiltDiv = ({ children }) => {
     setAngle(newAngle);
   };
 
+  // --- Mouse up: stop dragging and reset angle if needed ---
   const handleMouseUp = () => {
     setDragging(false);
-    document.body.style.userSelect = ""; // Ripristina selezione
+    document.body.style.userSelect = ""; // Restore text selection
 
     if (angle >= 50) {
-      setTextFall(true); // trigger fase 2
+      // trigger phase 2
     } else {
       setAngle(0);
     }
   };
 
+  /* === Mouse events based on dragging state === */
   useEffect(() => {
     if (dragging) {
       window.addEventListener("mousemove", handleMouseMove);
@@ -52,23 +55,25 @@ const TiltDiv = ({ children }) => {
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
-      document.body.style.userSelect = ""; // Failsafe
+      document.body.style.userSelect = ""; // Failsafe reset
     };
   }, [dragging]);
 
   return (
     <div
       className={`relative w-full max-w-2xl mx-auto my-6 ${
-        dragging ? "select-none" : ""
+        dragging ? "cursor-grabbing select-none" : ""
       }`}
     >
-      {/* Area di trascinamento */}
+      {/* --- Drag handle area --- */}
       <div
-        className="absolute top-0 right-0 w-6 h-full cursor-ns-resize z-20"
+        className={`absolute top-0 right-0 w-6 h-full z-20 bg-red-500 ${
+          dragging ? "cursor-grabbing" : "cursor-grab"
+        }`}
         onMouseDown={handleMouseDown}
       />
 
-      {/* Contenuto inclinabile */}
+      {/* --- Tiltable content --- */}
       <div
         ref={containerRef}
         style={{
