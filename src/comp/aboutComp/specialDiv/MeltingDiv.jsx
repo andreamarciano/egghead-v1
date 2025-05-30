@@ -3,12 +3,58 @@ import "./MeltingDiv.css";
 import { useTrash } from "../trash/TrashContext";
 
 const MeltingDiv = ({ children }) => {
-  const { addToTrash } = useTrash();
+  // === SOUND ===
+  const soundURL = {
+    lava: { src: "/sounds/about/lava5.mp3", volume: 0.5 },
+    melting: { src: "/sounds/about/lava2.mp3", volume: 0.9 },
+    steam: { src: "/sounds/about/steam2.mp3", volume: 0.3 },
+  };
+
+  const audioRefs = useRef({
+    lava: null,
+    steam: null,
+    melting: null,
+  });
+
+  const playLoopedSound = (key) => {
+    const sound = soundURL[key];
+    if (!sound) return;
+
+    if (!audioRefs.current[key]) {
+      const audio = new Audio(sound.src);
+      audio.loop = true;
+      audio.volume = sound.volume ?? 1.0;
+      audioRefs.current[key] = audio;
+    }
+
+    const audio = audioRefs.current[key];
+    if (audio.paused) audio.play();
+  };
+
+  const stopSound = (key) => {
+    const audio = audioRefs.current[key];
+    if (audio && !audio.paused) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+  };
+
+  const playOneShot = (key) => {
+    const sound = soundURL[key];
+    if (!sound) return;
+    const audio = new Audio(sound.src);
+    audio.volume = sound.volume ?? 1.0;
+    audio.play();
+  };
+
+  const { addToTrash } = useTrash(); // context
 
   const [hovering, setHovering] = useState(false);
   const [heatLevel, setHeatLevel] = useState(0); // 0 to 1
   const [melting, setMelting] = useState(false);
   const timerRef = useRef(null);
+  const hoverStartTimeRef = useRef(null);
+  const [isDead, setIsDead] = useState(false);
 
   // Utility per interpolare un colore da giallo (h=50) a rosso (h=0)
   const getInterpolatedColor = (level) => {
@@ -18,19 +64,31 @@ const MeltingDiv = ({ children }) => {
 
   // Handle hover timer
   useEffect(() => {
+    if (isDead) return;
+
     if (hovering) {
+      playLoopedSound("lava");
+
       let elapsed = 0;
       timerRef.current = setInterval(() => {
         elapsed += 100;
         setHeatLevel(Math.min(1, elapsed / 5000));
         if (elapsed >= 5000) {
           clearInterval(timerRef.current);
+          stopSound("lava");
           setMelting(true);
+          hoverStartTimeRef.current = null;
         }
       }, 100);
     } else {
       clearInterval(timerRef.current);
-      // Cool down gradually
+      stopSound("lava");
+
+    //   if (heatLevel > 0) {
+    //     playOneShot("steam"); // raffreddamento
+    //   }
+
+      // raffreddamento visuale
       const cooldown = setInterval(() => {
         setHeatLevel((prev) => {
           const next = Math.max(0, prev - 0.05);
@@ -39,12 +97,17 @@ const MeltingDiv = ({ children }) => {
         });
       }, 100);
     }
-    return () => clearInterval(timerRef.current);
-  }, [hovering]);
+
+    return () => {
+      clearInterval(timerRef.current);
+      stopSound("lava");
+    };
+  }, [hovering, isDead]);
 
   // Extract and send text when melting ends
   useEffect(() => {
     if (melting) {
+      playOneShot("melting");
       const timeout = setTimeout(() => {
         const extractText = (node) => {
           if (typeof node === "string") return node;
@@ -54,6 +117,8 @@ const MeltingDiv = ({ children }) => {
         };
         const text = extractText(children);
         addToTrash(text);
+
+        setIsDead(true);
       }, 2000); // match with animation duration
       return () => clearTimeout(timeout);
     }
@@ -68,8 +133,22 @@ const MeltingDiv = ({ children }) => {
 
   return (
     <div
-      onMouseEnter={() => setHovering(true)}
-      onMouseLeave={() => setHovering(false)}
+      onMouseEnter={() => {
+        if (isDead) return;
+        setHovering(true);
+        hoverStartTimeRef.current = Date.now(); // 🕒 salva inizio hover
+      }}
+      onMouseLeave={() => {
+        if (isDead) return;
+        setHovering(false);
+
+        const hoverDuration = Date.now() - hoverStartTimeRef.current;
+
+        // 🎵 suona steam solo se è stato sopra almeno 2s
+        if (hoverDuration >= 2000 && heatLevel > 0) {
+          playOneShot("steam");
+        }
+      }}
       style={{
         background: `linear-gradient(to right, ${bgColor}, ${bgColor})`,
         transition: "background 0.2s linear",
