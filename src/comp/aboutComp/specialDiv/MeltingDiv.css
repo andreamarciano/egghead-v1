@@ -72,3 +72,40 @@
 .animate-lapilli {
     animation: lapilli 1.5s ease-out infinite;
 }
+
+/* Drip */
+@keyframes dripChunk {
+    0% {
+        transform: translateY(0) scaleX(1) scaleY(1);
+        border-radius: 30% 30% 50% 50%;
+        opacity: 1;
+    }
+
+    30% {
+        transform: translateY(10px) scaleX(1.1) scaleY(1.1);
+        border-radius: 40% 40% 60% 60%;
+    }
+
+    100% {
+        transform: translateY(60px) scaleX(0.9) scaleY(1.4);
+        border-radius: 60% 40% 80% 70%;
+        opacity: 0;
+    }
+}
+
+.drip-chunk {
+    position: absolute;
+    bottom: -2px;
+    border-radius: 40% 40% 60% 60%;
+    opacity: 1;
+    animation: dripChunk 2.5s ease-in forwards;
+    z-index: 5;
+}
+
+.rotate-drip-left {
+    transform: rotate(-30deg);
+}
+
+.rotate-drip-right {
+    transform: rotate(40deg);
+}

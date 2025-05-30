@@ -96,6 +96,82 @@ const MeltingDiv = ({ children }) => {
           ></span>
         );
       })}
+
+      {/* Drip */}
+      {!melting && heatLevel > 0.5 && (
+        <>
+          <div
+            className="drip-chunk rotate-drip-left"
+            style={{
+              left: "12%",
+              width: "14px",
+              height: "28px",
+              backgroundColor: getInterpolatedColor(heatLevel),
+              animationDelay: "0.4s",
+            }}
+          />
+          <div
+            className="drip-chunk"
+            style={{
+              left: "28%",
+              width: "20px",
+              height: "40px",
+              backgroundColor: getInterpolatedColor(heatLevel),
+              animationDelay: "1.2s",
+            }}
+          />
+          <div
+            className="drip-chunk rotate-drip-right"
+            style={{
+              left: "38%",
+              width: "10px",
+              height: "22px",
+              backgroundColor: getInterpolatedColor(heatLevel),
+              animationDelay: "1.5s",
+            }}
+          />
+          <div
+            className="drip-chunk"
+            style={{
+              left: "52%",
+              width: "18px",
+              height: "35px",
+              backgroundColor: getInterpolatedColor(heatLevel),
+              animationDelay: "1.9s",
+            }}
+          />
+          <div
+            className="drip-chunk"
+            style={{
+              left: "63%",
+              width: "12px",
+              height: "30px",
+              backgroundColor: getInterpolatedColor(heatLevel),
+              animationDelay: "2.2s",
+            }}
+          />
+          <div
+            className="drip-chunk rotate-drip-left"
+            style={{
+              left: "78%",
+              width: "16px",
+              height: "38px",
+              backgroundColor: getInterpolatedColor(heatLevel),
+              animationDelay: "2.6s",
+            }}
+          />
+          <div
+            className="drip-chunk rotate-drip-right"
+            style={{
+              left: "88%",
+              width: "14px",
+              height: "25px",
+              backgroundColor: getInterpolatedColor(heatLevel),
+              animationDelay: "3.1s",
+            }}
+          />
+        </>
+      )}
     </div>
   );
 };
