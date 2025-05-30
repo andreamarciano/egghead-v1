@@ -54,6 +54,7 @@ const MeltingDiv = ({ children }) => {
   const [hovering, setHovering] = useState(false);
   const [heatLevel, setHeatLevel] = useState(0);
   const [melting, setMelting] = useState(false);
+  const [showSteam, setShowSteam] = useState(false);
   const [isDead, setIsDead] = useState(false);
   const timerRef = useRef(null);
   const hoverStartTimeRef = useRef(null);
@@ -137,9 +138,10 @@ const MeltingDiv = ({ children }) => {
 
     const hoverDuration = Date.now() - hoverStartTimeRef.current;
 
-    // suona steam solo se è stato sopra almeno 2s
     if (hoverDuration >= 2000 && heatLevel > 0) {
       playOneShot("steam");
+      setShowSteam(true);
+      setTimeout(() => setShowSteam(false), 1500);
     }
   };
 
@@ -254,6 +256,22 @@ const MeltingDiv = ({ children }) => {
           />
         </>
       )}
+
+      {/* Steam particles */}
+      {showSteam &&
+        Array.from({ length: 8 }).map((_, i) => (
+          <div
+            key={`steam-${i}`}
+            className="absolute w-12 h-12 bg-white opacity-20 animate-steam"
+            style={{
+              left: `${10 + i * 10}%`,
+              bottom: `${60 + Math.random() * 10}px`,
+              borderRadius: "50% / 60%",
+              filter: "blur(8px)",
+              animationDelay: `${Math.random() * 0.5}s`,
+            }}
+          />
+        ))}
     </div>
   );
 };
