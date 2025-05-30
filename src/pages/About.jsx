@@ -7,7 +7,7 @@ import Reviews from "../comp/review/Reviews";
 import { TrashProvider } from "../comp/aboutComp/trash/TrashContext";
 import TrashBin from "../comp/aboutComp/trash/TrashBin";
 import TrashCollector from "../comp/aboutComp/trash/TrashCollector";
-import FallingDiv from "../comp/aboutComp/FallingDiv";
+import FallingDiv from "../comp/aboutComp/specialDiv/FallingDiv";
 
 function About() {
   // Scroll to top
