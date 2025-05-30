@@ -63,6 +63,8 @@ const MeltingDiv = ({ children }) => {
   const bgColor = getInterpolatedColor(heatLevel);
   // Determine Shake Intensity based on heat
   const shake = heatLevel > 0.7 && !melting ? "animate-shake" : "";
+  // Lava Lapilli colors
+  const lapilliColors = ["#ff4500", "#ff8c00", "#ffd700"];
 
   return (
     <div
@@ -77,6 +79,23 @@ const MeltingDiv = ({ children }) => {
       } ${shake}`}
     >
       {children}
+
+      {/* Lapilli */}
+      {Array.from({ length: Math.floor(heatLevel * 10) }).map((_, i) => {
+        const color =
+          lapilliColors[Math.floor(Math.random() * lapilliColors.length)];
+        return (
+          <span
+            key={i}
+            className="absolute top-0 w-2 h-2 rounded-full opacity-70 animate-lapilli"
+            style={{
+              left: `${Math.random() * 100}%`,
+              backgroundColor: color,
+              animationDelay: `${Math.random()}s`,
+            }}
+          ></span>
+        );
+      })}
     </div>
   );
 };
