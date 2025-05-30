@@ -10,6 +10,12 @@ const MeltingDiv = ({ children }) => {
   const [melting, setMelting] = useState(false);
   const timerRef = useRef(null);
 
+  // Utility per interpolare un colore da giallo (h=50) a rosso (h=0)
+  const getInterpolatedColor = (level) => {
+    const hue = 50 - level * 50; // da 50 (giallo) a 0 (rosso)
+    return `hsl(${hue}, 100%, 70%)`;
+  };
+
   // Handle hover timer
   useEffect(() => {
     if (hovering) {
@@ -54,19 +60,19 @@ const MeltingDiv = ({ children }) => {
   }, [melting]);
 
   // Determine background color based on heat
-  const bgColor =
-    heatLevel < 0.3
-      ? "from-yellow-200 to-red-300"
-      : heatLevel < 0.7
-      ? "from-orange-300 to-red-400"
-      : "from-red-500 to-yellow-500";
+  const bgColor = getInterpolatedColor(heatLevel);
 
   return (
     <div
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
-      className={`relative flex flex-col items-center justify-center w-full max-w-2xl mx-auto text-center p-2 m-10 rounded-4xl shadow-2xl shadow-red-500 transition-all duration-300 
-        bg-gradient-to-r ${bgColor} ${melting ? "animate-melt" : ""}`}
+      style={{
+        background: `linear-gradient(to right, ${bgColor}, ${bgColor})`,
+        transition: "background 0.2s linear",
+      }}
+      className={`relative flex flex-col items-center justify-center w-full max-w-2xl mx-auto text-center p-2 m-10 rounded-4xl shadow-2xl shadow-red-500 transition-all duration-300 ${
+        melting ? "animate-melt" : ""
+      }`}
     >
       {children}
     </div>
