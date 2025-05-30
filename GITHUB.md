@@ -59,6 +59,40 @@ git config --global user.email "your-email@example.com"
    git log
    ```
 
+   ### How to navigate:
+
+   | Key       | Action                       |
+   | --------- | ---------------------------- |
+   | `q`       | Quit (exit log view)         |
+   | `↑` / `↓` | Scroll up/down               |
+   | `Space`   | Move one page forward        |
+   | `b`       | Move one page back           |
+   | `/word`   | Search for "word"            |
+   | `n`       | Go to the next search result |
+   | `h`       | Show help for more commands  |
+
+   ### 📄 Exporting commit history to a file
+
+   You can save the commit log to a text file.
+
+   - Full detailed log:
+
+     ```bash
+     git log > git-log.txt
+     ```
+
+   - One-line summary per commit:
+
+     ```bash
+     git log --oneline > git-log-oneline.txt
+     ```
+
+   - Custom format (hash, author, time, message):
+
+     ```bash
+     git log --pretty=format:"%h - %an, %ar : %s" > git-log-custom.txt
+     ```
+
 ---
 
 ## 🌐 Connecting to GitHub
