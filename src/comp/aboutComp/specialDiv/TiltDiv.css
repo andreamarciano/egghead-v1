@@ -1,0 +1,4 @@
+.falling-letter {
+    transform: translate(-30px, 200px) rotate(-20deg);
+    opacity: 0;
+}

@@ -10,6 +10,7 @@ import TrashCollector from "../comp/aboutComp/trash/TrashCollector";
 
 import FallingDiv from "../comp/aboutComp/specialDiv/FallingDiv";
 import MeltingDiv from "../comp/aboutComp/specialDiv/MeltingDiv";
+import TiltDiv from "../comp/aboutComp/specialDiv/TiltDiv";
 
 function About() {
   // Scroll to top
@@ -45,6 +46,19 @@ function About() {
           </FallingDiv>
 
           {/* Sec 2: Our Mission */}
+          <TiltDiv>
+            <h2 className="text-2xl font-semibold text-gray-700 mb-2">
+              Our Mission
+            </h2>
+            <p className="text-gray-600 max-w-2xl mb-2">
+              Our goal is to <strong>revolutionize the concept of eggs</strong>.
+              We don’t just sell eggs — we sell experiences! Our mission is to
+              combine{" "}
+              <strong>science, innovation, and a pinch of madness</strong> to
+              create the best product possible.
+            </p>
+          </TiltDiv>
+
           <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto p-2 mb-6 bg-gradient-to-r from-orange-200 via-green-200 to-blue-200 rounded-tr-3xl rounded-bl-3xl text-center shadow-2xl shadow-blue-600/80">
             <h2 className="text-2xl font-semibold text-gray-700 mb-2">
               Our Mission
