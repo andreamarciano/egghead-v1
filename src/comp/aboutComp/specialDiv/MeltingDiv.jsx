@@ -133,7 +133,7 @@ const MeltingDiv = ({ children }) => {
   };
 
   const handleMouseLeave = () => {
-    if (isDead) return;
+    if (isDead || melting) return;
     setHovering(false);
 
     const hoverDuration = Date.now() - hoverStartTimeRef.current;
