@@ -1,4 +1,4 @@
-# 🔠 Hidden Word Trash Collector - React + Context API
+# Hidden Word Trash Collector - React + Context API
 
 This project implements a playful animation system where discarded letters "fall" into a trash bin and gradually reveal a **hidden word** through **negative space**. As users interact with different components, letters are collected and visually scattered — **avoiding specific masked areas** that form the contours of a secret word.
 
