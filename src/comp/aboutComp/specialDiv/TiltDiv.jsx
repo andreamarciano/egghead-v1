@@ -18,34 +18,36 @@ const TiltDiv = () => {
     <>
       <h2 className="text-2xl font-semibold text-gray-700 mb-2">Our Mission</h2>
       <p className="text-gray-600 max-w-2xl mb-2">
-        Our goal is to <strong>revolutionize the concept of eggs</strong>. We
-        don’t just sell eggs — we sell experiences! Our mission is to combine{" "}
-        <strong>science, innovation, and a pinch of madness</strong> to create
-        the best product possible.
+        Our goal is to revolutionize the concept of eggs. We don’t just sell
+        eggs — we sell experiences! Our mission is to combine science,
+        innovation, and a pinch of madness to create the best product possible.
       </p>
     </>
   );
 
-  /* === LETTERS === */
-  // letters: array of { char: string, fallen: boolean }
-  const [letters, setLetters] = useState([]);
-  // Extract plain text from React nodes (recursive)
-  const extractStyledLetters = (node, parentStyle = {}) => {
+  /* === TEXT PREP === */
+  const [blocks, setBlocks] = useState([]);
+  // Recursively extract plain text and styles from React nodes
+  const extractStyledBlocks = (node, parentStyle = {}) => {
     if (typeof node === "string") {
-      return node.split("").map((char, i) => ({
-        char,
-        fallen: false,
-        style: parentStyle,
-        id: Math.random().toString(36).substr(2, 9), // unique ID
-      }));
+      return [
+        {
+          id: Math.random().toString(36).substr(2, 9),
+          style: parentStyle,
+          letters: node.split("").map((char) => ({
+            char,
+            fallen: false,
+            id: Math.random().toString(36).substr(2, 9),
+          })),
+        },
+      ];
     }
 
     if (Array.isArray(node)) {
-      return node.flatMap((child) => extractStyledLetters(child, parentStyle));
+      return node.flatMap((child) => extractStyledBlocks(child, parentStyle));
     }
 
     if (node?.props?.children) {
-      // Compose inherited styles
       const newStyle = { ...parentStyle };
       const className = node.props.className || "";
 
@@ -53,24 +55,27 @@ const TiltDiv = () => {
       if (node.type === "h2") {
         newStyle.fontSize = "1.5rem";
         newStyle.fontWeight = "600";
-        newStyle.marginBottom = "0.5rem";
+        newStyle.marginBottom = "0.2rem";
+      }
+      if (node.type === "p") {
+        newStyle.marginBottom = "0.2rem";
       }
 
-      // Additional parsing from className if needed
       if (className.includes("text-2xl")) newStyle.fontSize = "1.5rem";
       if (className.includes("font-semibold")) newStyle.fontWeight = "600";
       if (className.includes("text-gray-700")) newStyle.color = "#374151";
       if (className.includes("text-gray-600")) newStyle.color = "#4B5563";
 
-      return extractStyledLetters(node.props.children, newStyle);
+      return extractStyledBlocks(node.props.children, newStyle);
     }
 
     return [];
   };
+
   // Extract text from the fixed content
   useEffect(() => {
-    const arr = extractStyledLetters(content);
-    setLetters(arr);
+    const styledBlocks = extractStyledBlocks(content);
+    setBlocks(styledBlocks);
   }, []);
 
   // --- Mouse down: start dragging ---
@@ -132,32 +137,41 @@ const TiltDiv = () => {
   useEffect(() => {
     if (!phase2Active) return;
 
-    if (letters.every((l) => l.fallen)) {
-      // All letters have fallen
+    const allFallen = blocks.every((block) =>
+      block.letters.every((l) => l.fallen)
+    );
+    if (allFallen) {
       setPhase2Active(false);
       return;
     }
 
     const interval = setInterval(() => {
-      setLetters((oldLetters) => {
-        // Find the first letter that hasn't fallen yet
-        const idx = oldLetters.findIndex((l) => !l.fallen);
-        if (idx === -1) {
-          clearInterval(interval);
-          setPhase2Active(false);
-          return oldLetters;
+      setBlocks((oldBlocks) => {
+        for (let b = 0; b < oldBlocks.length; b++) {
+          const block = oldBlocks[b];
+          const idx = block.letters.findIndex((l) => !l.fallen);
+          if (idx !== -1) {
+            const updatedBlocks = [...oldBlocks];
+            const updatedBlock = { ...block };
+            updatedBlock.letters = [...block.letters];
+            updatedBlock.letters[idx] = {
+              ...updatedBlock.letters[idx],
+              fallen: true,
+            };
+            updatedBlocks[b] = updatedBlock;
+
+            setTimeout(() => addToTrash(updatedBlock.letters[idx].char), 500);
+            return updatedBlocks;
+          }
         }
-        // Mark the letter as fallen
-        const newLetters = [...oldLetters];
-        newLetters[idx] = { ...newLetters[idx], fallen: true };
-        // Send letter to trash
-        setTimeout(() => addToTrash(newLetters[idx].char), 500);
-        return newLetters;
+        clearInterval(interval);
+        setPhase2Active(false);
+        return oldBlocks;
       });
-    }, 100);
+    }, 50);
 
     return () => clearInterval(interval);
-  }, [phase2Active, letters, addToTrash]);
+  }, [phase2Active, blocks, addToTrash]);
 
   /* === Mouse events based on dragging state === */
   useEffect(() => {
@@ -185,7 +199,7 @@ const TiltDiv = () => {
     >
       {/* --- Drag handle area --- */}
       <div
-        className={`absolute top-0 right-0 w-6 h-full z-20 bg-red-500 ${
+        className={`absolute top-0 right-0 w-6 h-full z-20 ${
           dragging ? "cursor-grabbing" : "cursor-grab"
         }`}
         onMouseDown={handleMouseDown}
@@ -208,25 +222,27 @@ const TiltDiv = () => {
           rounded-tr-3xl rounded-bl-3xl shadow-2xl shadow-blue-600/80 
           p-4 text-center ${dragging ? "select-none" : ""}`}
       >
-        {/* Render Single Letter */}
-        {letters.map(({ char, fallen, id, style }) => (
-          <span
-            key={id}
-            className={`inline-block relative transition-transform duration-500 ease-in-out ${
-              fallen ? "letter-fallen" : ""
-            }`}
-            style={{
-              transform: fallen
-                ? "translate(-30px, 60px) rotate(-45deg)"
-                : "none",
-              opacity: fallen ? 0 : 1,
-              transitionProperty: "transform, opacity",
-              whiteSpace: "pre", // preserve spacing
-              ...style,
-            }}
-          >
-            {char === " " ? "\u00A0" : char}
-          </span>
+        {/* Render each letter with its associated style */}
+        {blocks.map((block) => (
+          <div key={block.id} style={{ ...block.style, display: "block" }}>
+            {block.letters.map(({ char, fallen, id }) => (
+              <span
+                key={id}
+                className="inline-block relative transition-transform duration-500 ease-in-out"
+                style={{
+                  transform: fallen
+                    ? "translate(-30px, 60px) rotate(-45deg)"
+                    : "none",
+                  opacity: fallen ? 0 : 1,
+                  transitionProperty: "transform, opacity",
+                  whiteSpace: "pre",
+                  ...block.style,
+                }}
+              >
+                {char === " " ? "\u00A0" : char}
+              </span>
+            ))}
+          </div>
         ))}
       </div>
     </div>

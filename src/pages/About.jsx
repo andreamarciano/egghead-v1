@@ -32,10 +32,10 @@ function About() {
 
           {/* FALLING - Sec 1: Our Story */}
           <FallingDiv>
-            <h2 className="text-2xl font-semibold text-gray-700 py-1">
+            <h2 className="text-2xl font-semibold text-gray-700 py-2">
               Our Story
             </h2>
-            <p className="text-gray-600 max-w-2xl mb-2 py-2">
+            <p className="text-gray-600 max-w-2xl py-2">
               Back in <strong>1972</strong>, a group of visionary farmers
               decided that Earth simply wasn't enough to raise the best eggs.
               With a second-hand rocket and a couple of very brave chickens, we
@@ -47,19 +47,6 @@ function About() {
 
           {/* TILT - Sec 2: Our Mission */}
           <TiltDiv />
-
-          <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto p-2 mb-6 bg-gradient-to-r from-orange-200 via-green-200 to-blue-200 rounded-tr-3xl rounded-bl-3xl text-center shadow-2xl shadow-blue-600/80">
-            <h2 className="text-2xl font-semibold text-gray-700 mb-2">
-              Our Mission
-            </h2>
-            <p className="text-gray-600 max-w-2xl mb-2">
-              Our goal is to <strong>revolutionize the concept of eggs</strong>.
-              We don’t just sell eggs — we sell experiences! Our mission is to
-              combine{" "}
-              <strong>science, innovation, and a pinch of madness</strong> to
-              create the best product possible.
-            </p>
-          </div>
 
           {/* Sec 3: Where We Are */}
           <div className="mb-10 mt-10">
