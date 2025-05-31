@@ -13,6 +13,19 @@ const TiltDiv = () => {
   const threshold = 50;
   const { addToTrash } = useTrash(); // context
 
+  const soundURL = {
+    drop: { src: "/sounds/about/drop.mp3", volume: 0.8 },
+  };
+
+  const playSound = (key) => {
+    const sound = soundURL[key];
+    if (!sound) return;
+
+    const audio = new Audio(sound.src);
+    audio.volume = sound.volume ?? 1.0;
+    audio.play();
+  };
+
   const content = (
     <>
       <h2 className="text-2xl font-semibold text-gray-700 mb-2">Our Mission</h2>
@@ -121,6 +134,9 @@ const TiltDiv = () => {
 
     angleRef.current = 0;
     setAngle(0);
+    setTimeout(() => {
+      playSound("drop");
+    }, 200);
     console.log("🔁 Resetting angle to 0");
   };
 
