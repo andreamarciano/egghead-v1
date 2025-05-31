@@ -32,12 +32,12 @@ const TiltDiv = () => {
     if (typeof node === "string") {
       return [
         {
-          id: Math.random().toString(36).substr(2, 9),
+          id: Math.random().toString(36).slice(2, 11),
           style: parentStyle,
           letters: node.split("").map((char) => ({
             char,
             fallen: false,
-            id: Math.random().toString(36).substr(2, 9),
+            id: Math.random().toString(36).slice(2, 11),
           })),
         },
       ];
@@ -168,7 +168,7 @@ const TiltDiv = () => {
         setPhase2Active(false);
         return oldBlocks;
       });
-    }, 50);
+    }, 30);
 
     return () => clearInterval(interval);
   }, [phase2Active, blocks, addToTrash]);
