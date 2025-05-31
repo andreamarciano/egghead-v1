@@ -1,6 +1,5 @@
 import { useRef, useState, useEffect } from "react";
 import { useTrash } from "../trash/TrashContext";
-import "./TiltDiv.css";
 
 const TiltDiv = () => {
   const containerRef = useRef(null);
@@ -38,6 +37,11 @@ const TiltDiv = () => {
             char,
             fallen: false,
             id: Math.random().toString(36).slice(2, 11),
+            fallStyle: {
+              rotate: Math.random() * 180 - 30,
+              x: Math.random() * 300 - 150,
+              y: 300 + Math.random() * 300,
+            },
           })),
         },
       ];
@@ -225,17 +229,22 @@ const TiltDiv = () => {
         {/* Render each letter with its associated style */}
         {blocks.map((block) => (
           <div key={block.id} style={{ ...block.style, display: "block" }}>
-            {block.letters.map(({ char, fallen, id }) => (
+            {block.letters.map(({ char, fallen, id, fallStyle }) => (
               <span
                 key={id}
-                className="inline-block relative transition-transform duration-500 ease-in-out"
+                className="inline-block relative transition-transform duration-500 ease-in-out falling-letter"
                 style={{
                   transform: fallen
-                    ? "translate(-30px, 60px) rotate(-45deg)"
+                    ? `translate(${fallStyle.x}px, ${fallStyle.y}px) rotate(${fallStyle.rotate}deg)`
                     : "none",
                   opacity: fallen ? 0 : 1,
-                  transitionProperty: "transform, opacity",
+                  transition: `transform 1.2s ease-in, opacity 0.6s ease-out`,
+                  transitionDelay: fallen ? `${Math.random() * 0.2}s` : "0s",
                   whiteSpace: "pre",
+                  willChange: "transform, opacity",
+                  backfaceVisibility: "hidden",
+                  pointerEvents: "none",
+                  userSelect: "none",
                   ...block.style,
                 }}
               >

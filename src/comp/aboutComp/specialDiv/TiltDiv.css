@@ -1,5 +1,0 @@
-/* Disable interaction and text selection */
-.letter-fallen {
-    pointer-events: none;
-    user-select: none;
-}
