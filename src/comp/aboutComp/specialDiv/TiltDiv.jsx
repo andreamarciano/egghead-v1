@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import { useTrash } from "../trash/TrashContext";
 import "./TiltDiv.css";
 
-const TiltDiv = ({ children }) => {
+const TiltDiv = () => {
   const containerRef = useRef(null);
   const [angle, setAngle] = useState(0);
   const angleRef = useRef(0);
@@ -12,6 +12,38 @@ const TiltDiv = ({ children }) => {
   const initialAngle = useRef(0);
   const maxAngle = 70;
   const threshold = 50;
+  const { addToTrash } = useTrash(); // context
+
+  const content = (
+    <>
+      <h2 className="text-2xl font-semibold text-gray-700 mb-2">Our Mission</h2>
+      <p className="text-gray-600 max-w-2xl mb-2">
+        Our goal is to <strong>revolutionize the concept of eggs</strong>. We
+        don’t just sell eggs — we sell experiences! Our mission is to combine{" "}
+        <strong>science, innovation, and a pinch of madness</strong> to create
+        the best product possible.
+      </p>
+    </>
+  );
+
+  /* === LETTERS === */
+  // letters: array of { char: string, fallen: boolean }
+  const [letters, setLetters] = useState([]);
+  // Extract plain text from React nodes (recursive)
+  const extractText = (node) => {
+    if (typeof node === "string") return node;
+    if (Array.isArray(node)) return node.map(extractText).join("");
+    if (node?.props?.children) return extractText(node.props.children);
+    return "";
+  };
+  // Extract text from the fixed content
+  useEffect(() => {
+    const text = extractText(content);
+    const arr = text
+      .split("")
+      .map((char, i) => ({ char, fallen: false, id: i }));
+    setLetters(arr);
+  }, []);
 
   // --- Mouse down: start dragging ---
   const handleMouseDown = (e) => {
@@ -68,6 +100,37 @@ const TiltDiv = ({ children }) => {
     }
   }, [angle, phase2Active]);
 
+  /* === Progressive letter drop animation === */
+  useEffect(() => {
+    if (!phase2Active) return;
+
+    if (letters.every((l) => l.fallen)) {
+      // All letters have fallen
+      setPhase2Active(false);
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setLetters((oldLetters) => {
+        // Find the first letter that hasn't fallen yet
+        const idx = oldLetters.findIndex((l) => !l.fallen);
+        if (idx === -1) {
+          clearInterval(interval);
+          setPhase2Active(false);
+          return oldLetters;
+        }
+        // Mark the letter as fallen
+        const newLetters = [...oldLetters];
+        newLetters[idx] = { ...newLetters[idx], fallen: true };
+        // Send letter to trash
+        setTimeout(() => addToTrash(newLetters[idx].char), 500);
+        return newLetters;
+      });
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [phase2Active, letters, addToTrash]);
+
   /* === Mouse events based on dragging state === */
   useEffect(() => {
     if (dragging) {
@@ -100,19 +163,46 @@ const TiltDiv = ({ children }) => {
         onMouseDown={handleMouseDown}
       />
 
-      {/* --- Tiltable content --- */}
+      {/* --- Tiltable container --- */}
       <div
         ref={containerRef}
         style={{
           transform: `rotateZ(-${angle}deg)`,
           transformOrigin: "left center",
           transition: dragging ? "none" : "transform 0.4s ease",
+          // fixed dimensions
+          minHeight: "4rem",
+          minWidth: "100%",
+          position: "relative",
+          overflow: "hidden",
         }}
         className={`bg-gradient-to-r from-orange-200 via-green-200 to-blue-200 
           rounded-tr-3xl rounded-bl-3xl shadow-2xl shadow-blue-600/80 
           p-4 text-center ${dragging ? "select-none" : ""}`}
       >
-        {children}
+        {/* Render Single Letter */}
+        {letters.map(({ char, fallen, id }) => (
+          <span
+            key={id}
+            className={`inline-block relative transition-transform duration-500 ease-in-out ${
+              fallen ? "letter-fallen" : ""
+            }`}
+            style={{
+              display: "inline-block",
+              transform: fallen
+                ? "translate(-30px, 60px) rotate(-45deg)"
+                : "none",
+              opacity: fallen ? 0 : 1,
+              transitionProperty: "transform, opacity",
+              // preserve original font and style
+              fontWeight: char.match(/[A-Z]/) ? "600" : "400",
+              fontSize: char.match(/[A-Z]/) ? "1.5rem" : "1rem",
+              color: char === " " ? "transparent" : undefined,
+            }}
+          >
+            {char === " " ? "\u00A0" : char}
+          </span>
+        ))}
       </div>
     </div>
   );
