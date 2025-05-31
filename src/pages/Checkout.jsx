@@ -10,6 +10,7 @@ const discountCodes = [
   "NOTREALLYSORRY5",
   "ORDER5",
   "INVADER5",
+  "HIDE5",
 ];
 
 function Checkout() {
