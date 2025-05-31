@@ -16,8 +16,10 @@ const TiltDiv = () => {
   const threshold = 50;
   const { addToTrash } = useTrash(); // context
 
+  /* === SOUND SETUP === */
   const soundURL = {
     drop: { src: "/sounds/about/drop.mp3", volume: 0.8 },
+    fallingLetters: { src: "/sounds/about/fallingLetters.mp3", volume: 0.8 },
   };
 
   const playSound = (key) => {
@@ -29,6 +31,25 @@ const TiltDiv = () => {
     audio.play();
   };
 
+  const fallingAudio = useRef(null);
+  const startFallingLoop = () => {
+    const sound = soundURL.fallingLetters;
+    if (!sound) return;
+
+    fallingAudio.current = new Audio(sound.src);
+    fallingAudio.current.volume = sound.volume ?? 1.0;
+    fallingAudio.current.loop = true;
+    fallingAudio.current.play();
+  };
+  const stopFallingLoop = () => {
+    if (fallingAudio.current) {
+      fallingAudio.current.pause();
+      fallingAudio.current.currentTime = 0;
+      fallingAudio.current = null;
+    }
+  };
+
+  /* === DIV CONTENT === */
   const content = (
     <>
       <h2 className="text-2xl font-semibold text-gray-700 mb-2">Our Mission</h2>
@@ -152,9 +173,11 @@ const TiltDiv = () => {
     if (angle >= threshold && !phase2Active) {
       if (debug) console.log("✅ Entering Phase 2 (angle >= threshold)");
       setPhase2Active(true);
+      startFallingLoop();
     } else if (angle < threshold && phase2Active) {
       setTimeout(() => {
         setPhase2Active(false);
+        stopFallingLoop();
         if (debug) console.log("⏪ Exiting Phase 2 (angle < threshold)");
       }, 400);
     }
@@ -164,16 +187,19 @@ const TiltDiv = () => {
   useEffect(() => {
     if (!phase2Active) return;
 
-    const allFallen = blocks.every((block) =>
-      block.letters.every((l) => l.fallen)
-    );
-    if (allFallen) {
-      setPhase2Active(false);
-      return;
-    }
-
     const interval = setInterval(() => {
       setBlocks((oldBlocks) => {
+        // All letters have fallen
+        const allFallen = oldBlocks.every((block) =>
+          block.letters.every((l) => l.fallen)
+        );
+        if (allFallen) {
+          setPhase2Active(false);
+          clearInterval(interval);
+          stopFallingLoop();
+          return oldBlocks;
+        }
+
         for (let b = 0; b < oldBlocks.length; b++) {
           const block = oldBlocks[b];
           const idx = block.letters.findIndex((l) => !l.fallen);
@@ -191,8 +217,9 @@ const TiltDiv = () => {
             return updatedBlocks;
           }
         }
-        clearInterval(interval);
         setPhase2Active(false);
+        clearInterval(interval);
+        stopFallingLoop();
         return oldBlocks;
       });
     }, 30);
