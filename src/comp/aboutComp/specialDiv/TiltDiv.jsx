@@ -30,18 +30,46 @@ const TiltDiv = () => {
   // letters: array of { char: string, fallen: boolean }
   const [letters, setLetters] = useState([]);
   // Extract plain text from React nodes (recursive)
-  const extractText = (node) => {
-    if (typeof node === "string") return node;
-    if (Array.isArray(node)) return node.map(extractText).join("");
-    if (node?.props?.children) return extractText(node.props.children);
-    return "";
+  const extractStyledLetters = (node, parentStyle = {}) => {
+    if (typeof node === "string") {
+      return node.split("").map((char, i) => ({
+        char,
+        fallen: false,
+        style: parentStyle,
+        id: Math.random().toString(36).substr(2, 9), // unique ID
+      }));
+    }
+
+    if (Array.isArray(node)) {
+      return node.flatMap((child) => extractStyledLetters(child, parentStyle));
+    }
+
+    if (node?.props?.children) {
+      // Compose inherited styles
+      const newStyle = { ...parentStyle };
+      const className = node.props.className || "";
+
+      if (node.type === "strong") newStyle.fontWeight = "bold";
+      if (node.type === "h2") {
+        newStyle.fontSize = "1.5rem";
+        newStyle.fontWeight = "600";
+        newStyle.marginBottom = "0.5rem";
+      }
+
+      // Additional parsing from className if needed
+      if (className.includes("text-2xl")) newStyle.fontSize = "1.5rem";
+      if (className.includes("font-semibold")) newStyle.fontWeight = "600";
+      if (className.includes("text-gray-700")) newStyle.color = "#374151";
+      if (className.includes("text-gray-600")) newStyle.color = "#4B5563";
+
+      return extractStyledLetters(node.props.children, newStyle);
+    }
+
+    return [];
   };
   // Extract text from the fixed content
   useEffect(() => {
-    const text = extractText(content);
-    const arr = text
-      .split("")
-      .map((char, i) => ({ char, fallen: false, id: i }));
+    const arr = extractStyledLetters(content);
     setLetters(arr);
   }, []);
 
@@ -181,23 +209,20 @@ const TiltDiv = () => {
           p-4 text-center ${dragging ? "select-none" : ""}`}
       >
         {/* Render Single Letter */}
-        {letters.map(({ char, fallen, id }) => (
+        {letters.map(({ char, fallen, id, style }) => (
           <span
             key={id}
             className={`inline-block relative transition-transform duration-500 ease-in-out ${
               fallen ? "letter-fallen" : ""
             }`}
             style={{
-              display: "inline-block",
               transform: fallen
                 ? "translate(-30px, 60px) rotate(-45deg)"
                 : "none",
               opacity: fallen ? 0 : 1,
               transitionProperty: "transform, opacity",
-              // preserve original font and style
-              fontWeight: char.match(/[A-Z]/) ? "600" : "400",
-              fontSize: char.match(/[A-Z]/) ? "1.5rem" : "1rem",
-              color: char === " " ? "transparent" : undefined,
+              whiteSpace: "pre", // preserve spacing
+              ...style,
             }}
           >
             {char === " " ? "\u00A0" : char}
