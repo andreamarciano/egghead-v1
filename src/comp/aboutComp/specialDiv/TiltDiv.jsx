@@ -19,7 +19,7 @@ const TiltDiv = () => {
   /* === SOUND SETUP === */
   const soundURL = {
     drop: { src: "/sounds/about/drop.mp3", volume: 0.8 },
-    fallingLetters: { src: "/sounds/about/fallingLetters.mp3", volume: 0.8 },
+    fallingLetters: { src: "/sounds/about/fallingLetters.mp3", volume: 1 },
   };
 
   const playSound = (key) => {
