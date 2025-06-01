@@ -113,6 +113,19 @@ function Navbar() {
             Customer Service
           </NavLink>
         </li>
+        {/* Playground */}
+        <li>
+          <NavLink
+            to="/playground"
+            className={({ isActive }) =>
+              `hover:text-yellow-300 transition-colors duration-200 ${
+                isActive ? "text-yellow-400 font-bold" : ""
+              }`
+            }
+          >
+            Playground
+          </NavLink>
+        </li>
         {/* Cabinet */}
         {showGamesLink && (
           <li>

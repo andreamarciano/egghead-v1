@@ -17,6 +17,8 @@ import Customer from "./pages/Customer";
 import ArcadeCabinet from "./pages/Cabinet/ArcadeCabinet";
 import NotFound from "./pages/NotFound";
 
+import Playground from "./pages/Playground";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -51,6 +53,10 @@ const router = createBrowserRouter([
   {
     path: "*",
     element: <NotFound />,
+  },
+  {
+    path: "/playground",
+    element: <Playground />,
   },
 ]);
 
