@@ -1,6 +1,6 @@
 # JavaScript - String
 
-## Methods:
+## Methods
 
 ### 🔤 **Access & Basic Info**
 
