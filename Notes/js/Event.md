@@ -1,67 +1,8 @@
-# JavaScript - Events & DOM Interaction
+# JavaScript - Events Handling
 
-## 🔍 DOM Selection
+## 🧩 Adding Events
 
-### `document.querySelector(selector)`
-
-Returns the **first** element that matches the selector.
-
-```js
-const button = document.querySelector(".btn");
-```
-
-- Accepts any CSS selector (`.class`, `#id`, `tag`, etc.)
-
-### `document.querySelectorAll(selector)`
-
-Returns **all matching elements** as a `NodeList`.
-
-```js
-const items = document.querySelectorAll("li");
-items.forEach((item) => item.classList.add("active"));
-```
-
-### `document.getElementById(id)`
-
-Returns the element with the specified ID.
-
-```js
-const title = document.getElementById("main-title");
-```
-
-### `document.getElementsByClassName(className)`
-
-Returns a live HTMLCollection of elements with the specified class.
-
-```js
-const cards = document.getElementsByClassName("card");
-```
-
-### `document.getElementsByTagName(tagName)`
-
-Returns a live HTMLCollection of elements by tag name.
-
-```js
-const paragraphs = document.getElementsByTagName("p");
-```
-
-### 🆚 `querySelector` vs `getElementBy`
-
-| Feature         | `querySelector`                              | `getElementBy`                                    |
-| --------------- | -------------------------------------------- | ------------------------------------------------- |
-| 🔣 Syntax       | Uses **CSS selectors**                       | Uses **specific arguments** (`id`, `class`, etc.) |
-| 📦 Return type  | `Element` or `NodeList`                      | `Element` or **live HTMLCollection**              |
-| 🧠 Flexibility  | Can select anything (e.g., `div > p.active`) | More limited (only by ID, class, tag)             |
-| 📌 Modern usage | ✅ Recommended                               | 🟡 Legacy but still useful in some cases          |
-| 📊 Performance  | Slightly slower but negligible               | Slightly faster, especially in large DOMs         |
-
----
-
-## ⚙️ Event Handling
-
-### 🧩 Adding Events
-
-#### `element.addEventListener(event, callback)`
+### `element.addEventListener(event, callback)`
 
 Attaches an event handler to the element.
 
@@ -76,9 +17,9 @@ button.addEventListener("click", () => {
 
 ---
 
-### ❌ Removing Events
+## ❌ Removing Events
 
-#### `element.removeEventListener(event, callback)`
+### `element.removeEventListener(event, callback)`
 
 Removes a previously added event listener.
 
@@ -93,7 +34,7 @@ button.removeEventListener("click", handleClick);
 
 ---
 
-### ⚡️ Event Object
+## ⚡️ Event Object
 
 Every event callback receives an `event` object with useful information.
 
@@ -105,7 +46,7 @@ document.addEventListener("click", (e) => {
 
 ---
 
-### 🔄 Common Events
+## 🔄 Common Events
 
 | Type        | Example use                         |
 | ----------- | ----------------------------------- |
@@ -120,13 +61,13 @@ document.addEventListener("click", (e) => {
 
 ---
 
-### 🎯 Event Targeting
+## 🎯 Event Targeting
 
-#### `event.target`
+### `event.target`
 
 The actual element that triggered the event.
 
-#### `event.currentTarget`
+### `event.currentTarget`
 
 The element the listener is attached to.
 
@@ -139,9 +80,9 @@ parent.addEventListener("click", (e) => {
 
 ---
 
-### 🪄 Preventing Default Behavior
+## 🪄 Preventing Default Behavior
 
-#### `event.preventDefault()`
+### `event.preventDefault()`
 
 Stops the browser from doing its default action.
 
@@ -153,7 +94,7 @@ form.addEventListener("submit", (e) => {
 
 ---
 
-### 🪤 Event Delegation
+## 🪤 Event Delegation
 
 Use one listener on a parent to handle events on many children.
 
@@ -170,9 +111,9 @@ ul.addEventListener("click", (e) => {
 
 ---
 
-### ➕ 3 Ways to Attach Events
+## ➕ 3 Ways to Attach Events
 
-#### 1. **Inline Event Handler (HTML)**
+### 1. **Inline Event Handler (HTML)**
 
 Defined directly in the HTML element using `on[event]`.
 
@@ -187,7 +128,7 @@ Defined directly in the HTML element using `on[event]`.
 
 ---
 
-#### 2. **Property-Based Event Handler**
+### 2. **Property-Based Event Handler**
 
 Assign a function to the DOM element's event property.
 
@@ -203,7 +144,7 @@ button.onclick = function () {
 
 ---
 
-#### 3. **`addEventListener` (Recommended)**
+### 3. **`addEventListener` (Recommended)**
 
 Attach one or more listeners using the standard method.
 
