@@ -86,10 +86,10 @@ request.send(); // 5. Send the HTTP request
 // 6. Wait for the response to be fully received
 request.onload = function () {
   // 7. Get the parsed JSON from the response
-  const classe = request.response;
+  const classData = request.response;
 
   // 8. Access a nested property from the JSON object
-  console.log(classe.teachers[1].lastName);
+  console.log(classData.teachers[1].lastName);
 };
 ```
 
@@ -103,9 +103,8 @@ fetch("./class.json")
   // 2. Wait for the response, then parse it as JSON
   .then((response) => response.json())
   // 3. Once parsed, access the data
-  .then((classe) => {
-    console.log(classe.students[0].grades.math);
-    F;
+  .then((classData) => {
+    console.log(classData.students[0].grades.math);
   })
   .catch((error) => console.error("Error loading JSON:", error));
 ```
@@ -118,8 +117,8 @@ async function loadClass() {
   // 1. Wait for the fetch response
   const response = await fetch("./class.json");
   // 2. Wait for the response body to be parsed as JSON
-  const classe = await response.json();
+  const classData = await response.json();
   // 3. Use the data
-  console.log(classe.name);
+  console.log(classData.name);
 }
 ```
