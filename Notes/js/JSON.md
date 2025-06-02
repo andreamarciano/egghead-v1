@@ -122,3 +122,68 @@ async function loadClass() {
   console.log(classData.name);
 }
 ```
+
+---
+
+## 🔄 Converting JSON ↔️ JavaScript
+
+Sometimes you’ll need to **manually convert** between JSON strings and JavaScript objects.
+
+---
+
+### 🧱 `JSON.parse()` – From JSON String to JavaScript Object
+
+Converts a **JSON string** into a JavaScript object.
+
+```js
+const jsonString = '{"name": "1A", "age": 14}';
+
+const obj = JSON.parse(jsonString);
+console.log(obj.name); // "1A"
+console.log(typeof obj); // "object"
+```
+
+- ⚠️ The input **must be a valid JSON string** (double quotes, no trailing commas, etc.)
+- Common use case: receiving JSON from an API or `localStorage`
+
+---
+
+### 📤 `JSON.stringify()` – From JavaScript Object to JSON String
+
+Converts a **JavaScript object** into a JSON-formatted string.
+
+```js
+const student = {
+  name: "Luke",
+  age: 14,
+  passed: true,
+};
+
+const jsonString = JSON.stringify(student);
+console.log(jsonString);
+// '{"name":"Luke","age":14,"passed":true}'
+console.log(typeof jsonString); // "string"
+```
+
+- Useful when sending data to a server or saving to `localStorage`
+- Functions, `undefined`, and symbols are **ignored**
+
+---
+
+### ✅ Bonus: Optional Parameters
+
+`JSON.stringify(value, replacer, space)`
+
+- `replacer`: filter which keys to include (array or function)
+- `space`: add indentation for readability
+
+```js
+console.log(JSON.stringify(student, null, 2));
+/*
+{
+  "name": "Luca",
+  "age": 14,
+  "passed": true
+}
+*/
+```
