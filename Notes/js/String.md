@@ -100,3 +100,54 @@
 |   10 | `repeat()`                      | ⭐⭐☆☆☆           | Niche use: visual effects, placeholders, text animations.  |
 |   11 | `charAt()`                      | ⭐⭐☆☆☆           | Often replaced by `str[i]` for simplicity.                 |
 |   12 | `concat()`                      | ⭐☆☆☆☆            | Rarely used: the `+` operator is simpler and more common.  |
+
+---
+
+## ➕ **Regular Expressions (RegEx)**
+
+A **RegEx** is a pattern used to match character combinations in strings.
+
+### ✅ Basic Usage
+
+- To create a regular expression, use `/pattern/` or `new RegExp("pattern")`.
+
+### 🛠️ Common RegEx Methods:
+
+- `.test(string)`: Returns `true` if the pattern matches part of the string.
+
+  ```js
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test("user@example.com");
+  ```
+
+- `.exec(string)`: Returns match info or `null`.
+
+---
+
+### 📧 Example: Email Validation
+
+```js
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+if (!emailRegex.test(email.value)) {
+  errEmail.textContent = "Invalid email format.";
+}
+```
+
+---
+
+#### 🔍 What this regex means:
+
+```js
+/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+```
+
+- `/.../` → defines the pattern
+- `^` → start of string
+- `[^\s@]+` → one or more characters that are **not** space (`\s`) or `@`
+- `@` → the "@" symbol, required in every valid email
+- `[^\s@]+` → again, one or more non-space, non-@ characters
+- `\.` → a literal dot (`.`), escaped with `\`
+- `[^\s@]+` → one or more non-space, non-@ characters (e.g., domain suffix like `com`)
+- `$` → end of string
+
+✅ This pattern ensures the email looks like: `something@something.something`
