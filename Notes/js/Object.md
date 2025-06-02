@@ -32,7 +32,7 @@ Use when the property name is known and valid as an identifier.
 
 ```js
 console.log(person.fname); // "John"
-console.log(person.address.zipcode); // "09812"
+console.log(person.address.zipCode); // "09812"
 console.log(person.interests[2]); // "books"
 ```
 
@@ -42,7 +42,7 @@ Use when the property name is stored in a **variable** or includes **invalid cha
 
 ```js
 console.log(person["fname"]); // "John"
-console.log(person["address"]["zipcode"]); // "09812"
+console.log(person["address"]["zipCode"]); // "09812"
 console.log(person["interests"][2]); // "books"
 ```
 
