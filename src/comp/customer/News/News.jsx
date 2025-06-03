@@ -31,11 +31,14 @@ function News() {
   return (
     <>
       <div className="relative bg-gray-600 mt-8 rounded-xl p-2">
+        {/* Ticker */}
         <h1 className="text-3xl p-4">🪐 News</h1>
         <Ticker />
 
-        <h1 className="text-3xl p-4">🌎 Planet Earth News</h1>
+        <hr className="border-t-2 border-gray-700 my-4" />
 
+        {/* News */}
+        <h1 className="text-3xl p-4">🌎 Planet Earth News</h1>
         <div className="flex flex-col items-center justify-center p-4 gap-4 text-white bg-gray-800 rounded-2xl shadow-md w-full max-w-sm mx-auto">
           {/* Topic */}
           <SelectGroup
@@ -64,7 +67,7 @@ function News() {
           </button>
         </div>
 
-        {/* News */}
+        {/* Render News */}
         <div className="flex flex-col gap-6 bg-gray-800 rounded-2xl mt-6 p-6">
           <h2 className="text-2xl font-semibold text-white">
             📰 {topic.charAt(0).toUpperCase().concat(topic.slice(1))} -{" "}
@@ -77,7 +80,7 @@ function News() {
             <p className="text-white/60">No news found for this selection.</p>
           )}
 
-          {/* Render News */}
+          {/* News Card */}
           {!loading &&
             articles.map((art, i) => <NewsCard key={i} article={art} />)}
         </div>
