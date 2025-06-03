@@ -74,7 +74,7 @@ function News() {
           {/* Loading */}
           {loading && <p className="text-gray-700">Loading News...</p>}
           {!loading && articles.length === 0 && (
-            <p className="text-gray-700">No news found for this selection.</p>
+            <p className="text-white/60">No news found for this selection.</p>
           )}
 
           {/* Render News */}
