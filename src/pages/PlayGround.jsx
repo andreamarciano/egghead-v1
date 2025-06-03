@@ -2,12 +2,11 @@ import { useState } from "react";
 import Navbar from "../comp/Navbar";
 
 function Playground() {
-  const [topic, setTopic] = useState("general");
-  const [country, setCountry] = useState("us");
+  const [topic, setTopic] = useState("world");
+  const [country, setCountry] = useState("it");
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const newsAPI = "7eeb8f0bda3c497aa804a7806ec32f6a";
   const gnewsAPI = "956fe4da3a2c640faa1108da58c6af27";
 
   const fetchNews = () => {
@@ -25,22 +24,6 @@ function Playground() {
         setLoading(false);
       });
   };
-
-  // const fetchNews = () => {
-  //   setLoading(true);
-  //   fetch(
-  //     `https://newsapi.org/v2/top-headlines?country=${country}&category=${topic}&apiKey=${newsAPI}`
-  //   )
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setArticles(data.articles);
-  //       setLoading(false);
-  //     })
-  //     .catch((err) => {
-  //       console.error("API error:", err);
-  //       setLoading(false);
-  //     });
-  // };
 
   return (
     <>
@@ -64,13 +47,23 @@ function Playground() {
               onChange={(e) => setTopic(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
-              <option value="business">Business</option>
-              <option value="entertainment">Entertainment</option>
-              <option value="general">General</option>
-              <option value="health">Health</option>
-              <option value="science">Science</option>
-              <option value="sports">Sports</option>
-              <option value="technology">Technology</option>
+              <optgroup label="🌍 Global">
+                <option value="general">📰 General</option>
+                <option value="world">🌐 World</option>
+                <option value="nation">🏛️ Nation</option>
+              </optgroup>
+
+              <optgroup label="📚 Knowledge">
+                <option value="science">🔬 Science</option>
+                <option value="technology">💻 Technology</option>
+                <option value="health">🩺 Health</option>
+              </optgroup>
+
+              <optgroup label="🎭 Lifestyle">
+                <option value="entertainment">🎬 Entertainment</option>
+                <option value="sports">🏅 Sports</option>
+                <option value="business">💼 Business</option>
+              </optgroup>
             </select>
           </div>
 
