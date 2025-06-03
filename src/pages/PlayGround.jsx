@@ -133,49 +133,68 @@ function Playground() {
             onClick={fetchNews}
             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition"
           >
-            Cerca Notizie
+            Search
           </button>
         </div>
 
         {/* News */}
-        <div className="flex flex-col gap-2 bg-stone-500 rounded-2xl mt-4 p-4">
-          <h2 className="text-xl font-semibold">
+        <div className="flex flex-col gap-6 bg-stone-100 rounded-2xl mt-6 p-6">
+          <h2 className="text-2xl font-semibold text-stone-800">
             📰 {topic.charAt(0).toUpperCase().concat(topic.slice(1))} news for{" "}
             {country.toUpperCase()}
           </h2>
 
           {/* Loading */}
-          {loading && <p className="text-white">Loading News...</p>}
+          {loading && <p className="text-gray-700">Loading News...</p>}
           {!loading && articles.length === 0 && (
-            <p className="text-white">No news.</p>
+            <p className="text-gray-700">No news found for this selection.</p>
           )}
 
           {/* Render News */}
           {!loading &&
             articles.map((art, i) => (
-              <div key={i} className="p-4 rounded shadow-2xl border-2">
-                <h3 className="font-bold text-lg">{art.title}</h3>
-                <p>{art.description}</p>
-                {/*art.urlToImage */}
+              <div
+                key={i}
+                className="bg-white rounded-xl shadow-md overflow-hidden flex flex-col sm:flex-row gap-4 border border-gray-200 hover:shadow-lg transition-shadow duration-300"
+              >
+                {/* Image */}
                 {art.image && (
                   <img
-                    // src={art.urlToImage}
                     src={art.image}
                     alt={art.title}
-                    className="my-2 w-full max-w-xs"
+                    className="w-full sm:w-48 object-cover h-48 sm:h-auto"
                   />
                 )}
-                <p>{art.content}</p>
-                <a
-                  href={art.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="underline"
-                >
-                  Read More
-                </a>
-                <p>Date: {art.publishedAt}</p>
-                <p>Source: {art.source.name}</p>
+
+                {/* Content */}
+                <div className="flex flex-col justify-between p-4 w-full">
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-800 mb-2">
+                      {art.title}
+                    </h3>
+                    <p className="text-gray-600 text-sm mb-2">
+                      {art.description || "No description available."}
+                    </p>
+                    <p className="text-gray-500 text-sm">
+                      {art.content ? `${art.content.substring(0, 100)}...` : ""}
+                    </p>
+                  </div>
+                  {/* Footer */}
+                  <div className="flex items-center justify-between mt-4">
+                    <div className="text-xs text-gray-500">
+                      <p>📅 {new Date(art.publishedAt).toLocaleDateString()}</p>
+                      <p>📰 {art.source?.name || "Unknown source"}</p>
+                    </div>
+                    <a
+                      href={art.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm transition"
+                    >
+                      Read More
+                    </a>
+                  </div>
+                </div>
               </div>
             ))}
         </div>
