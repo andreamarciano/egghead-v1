@@ -2,6 +2,7 @@ import { useState } from "react";
 import SelectGroup from "./SelectGroup";
 import { topicOptions, countryOptions } from "./options";
 import NewsCard from "./NewsCard";
+import Ticker from "./Ticker";
 
 function News() {
   const [topic, setTopic] = useState("world");
@@ -30,6 +31,9 @@ function News() {
   return (
     <>
       <div className="relative bg-gray-600 mt-8 rounded-xl p-2">
+        <h1 className="text-3xl p-4">News</h1>
+        <Ticker />
+
         <h1 className="text-3xl p-4">Planet Earth News</h1>
 
         <div className="flex flex-col items-center justify-center p-4 gap-4 text-black bg-white rounded-2xl shadow-md w-full max-w-sm mx-auto">
