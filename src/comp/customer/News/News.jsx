@@ -10,12 +10,10 @@ function News() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const gnewsAPI = "956fe4da3a2c640faa1108da58c6af27";
-
   const fetchNews = () => {
     setLoading(true);
     fetch(
-      `https://gnews.io/api/v4/top-headlines?country=${country}&category=${topic}&apikey=${gnewsAPI}`
+      `https://egghead-v1-news.onrender.com/news?country=${country}&category=${topic}`
     )
       .then((res) => res.json())
       .then((data) => {
