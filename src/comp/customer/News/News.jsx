@@ -26,7 +26,7 @@ function News() {
 
   return (
     <>
-      <div className="relative">
+      <div className="relative bg-gray-600 mt-8 rounded-xl p-2">
         <h1 className="text-3xl p-4">Planet Earth News</h1>
 
         <div className="flex flex-col items-center justify-center p-4 gap-4 text-black bg-white rounded-2xl shadow-md w-full max-w-sm mx-auto">
@@ -173,7 +173,7 @@ function News() {
                       {art.description || "No description available."}
                     </p>
                     <p className="text-gray-500 text-sm">
-                      {art.content ? `${art.content.substring(0, 100)}...` : ""}
+                      {art.content ? `${art.content.substring(0, 200)}...` : ""}
                     </p>
                   </div>
                   {/* Footer */}
