@@ -4,7 +4,7 @@ export default function NewsCard({ article }) {
     article;
 
   return (
-    <div className="bg-white rounded-xl shadow-md overflow-hidden flex flex-col sm:flex-row gap-4 border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+    <div className="bg-white/70 rounded-xl shadow-md overflow-hidden flex flex-col sm:flex-row gap-4 border border-gray-200 hover:shadow-lg transition-shadow duration-300">
       {/* Image */}
       {image && (
         <img
@@ -17,7 +17,7 @@ export default function NewsCard({ article }) {
       {/* Content */}
       <div className="flex flex-col justify-between p-4 w-full">
         <div>
-          <h3 className="text-lg font-bold text-gray-800 mb-2">{title}</h3>
+          <h3 className="text-lg font-bold text-gray-900 mb-2">{title}</h3>
           <p className="text-gray-600 text-sm mb-2">
             {description || "No description available."}
           </p>

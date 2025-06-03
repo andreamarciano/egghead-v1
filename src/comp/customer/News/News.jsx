@@ -31,12 +31,12 @@ function News() {
   return (
     <>
       <div className="relative bg-gray-600 mt-8 rounded-xl p-2">
-        <h1 className="text-3xl p-4">News</h1>
+        <h1 className="text-3xl p-4">🪐 News</h1>
         <Ticker />
 
-        <h1 className="text-3xl p-4">Planet Earth News</h1>
+        <h1 className="text-3xl p-4">🌎 Planet Earth News</h1>
 
-        <div className="flex flex-col items-center justify-center p-4 gap-4 text-black bg-white rounded-2xl shadow-md w-full max-w-sm mx-auto">
+        <div className="flex flex-col items-center justify-center p-4 gap-4 text-white bg-gray-800 rounded-2xl shadow-md w-full max-w-sm mx-auto">
           {/* Topic */}
           <SelectGroup
             id="topic"
@@ -58,16 +58,16 @@ function News() {
           {/* Search Button */}
           <button
             onClick={fetchNews}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition"
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition cursor-pointer"
           >
             Search
           </button>
         </div>
 
         {/* News */}
-        <div className="flex flex-col gap-6 bg-stone-100 rounded-2xl mt-6 p-6">
-          <h2 className="text-2xl font-semibold text-stone-800">
-            📰 {topic.charAt(0).toUpperCase().concat(topic.slice(1))} news{" "}
+        <div className="flex flex-col gap-6 bg-gray-800 rounded-2xl mt-6 p-6">
+          <h2 className="text-2xl font-semibold text-white">
+            📰 {topic.charAt(0).toUpperCase().concat(topic.slice(1))} -{" "}
             {country.toUpperCase()}
           </h2>
 

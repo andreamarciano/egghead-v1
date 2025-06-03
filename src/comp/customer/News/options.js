@@ -1,9 +1,9 @@
 export const topicOptions = [
   {
-    label: "🌍 Global",
+    label: "🌐 Global",
     options: [
       { value: "general", label: "📰 General" },
-      { value: "world", label: "🌐 World" },
+      { value: "world", label: "🌍 World" },
       { value: "nation", label: "🏛️ Nation" },
     ],
   },
