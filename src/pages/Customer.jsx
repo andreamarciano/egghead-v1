@@ -3,6 +3,7 @@ import Navbar from "../comp/Navbar";
 import Footer from "../comp/Footer";
 import Weather from "../comp/customer/Weather";
 import Support from "../comp/customer/Support";
+import News from "../comp/customer/News";
 
 function Customer() {
   useEffect(() => {
@@ -19,6 +20,9 @@ function Customer() {
 
       {/* Weather */}
       <Weather />
+
+      {/* News */}
+      <News />
 
       <Footer />
     </>
