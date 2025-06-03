@@ -17,7 +17,7 @@ import Customer from "./pages/Customer";
 import ArcadeCabinet from "./pages/Cabinet/ArcadeCabinet";
 import NotFound from "./pages/NotFound";
 
-import Playground from "./pages/Playground";
+import Playground from "./pages/PlayGround";
 
 const router = createBrowserRouter([
   {
