@@ -3,7 +3,7 @@ import Navbar from "../comp/Navbar";
 import Footer from "../comp/Footer";
 import Weather from "../comp/customer/Weather";
 import Support from "../comp/customer/Support";
-import News from "../comp/customer/News";
+import News from "../comp/customer/News/News";
 
 function Customer() {
   useEffect(() => {

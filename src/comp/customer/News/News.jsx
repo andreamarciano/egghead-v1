@@ -137,7 +137,7 @@ function News() {
         {/* News */}
         <div className="flex flex-col gap-6 bg-stone-100 rounded-2xl mt-6 p-6">
           <h2 className="text-2xl font-semibold text-stone-800">
-            📰 {topic.charAt(0).toUpperCase().concat(topic.slice(1))} news for{" "}
+            📰 {topic.charAt(0).toUpperCase().concat(topic.slice(1))} news{" "}
             {country.toUpperCase()}
           </h2>
 
