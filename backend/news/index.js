@@ -3,7 +3,6 @@ import cors from "cors";
 import fetch from "node-fetch";
 import dotenv from "dotenv";
 
-// Carica le variabili dall'.env
 dotenv.config();
 
 const app = express();
@@ -11,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 const GNEWS_API_KEY = process.env.GNEWS_API_KEY;
 
 if (!GNEWS_API_KEY) {
-  console.error("❌ GNEWS_API_KEY non trovato nel file .env!");
+  console.error("❌ GNEWS_API_KEY not found on .env!");
   process.exit(1);
 }
 
@@ -34,5 +33,5 @@ app.get("/news", async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`✅ Server avviato su http://localhost:${PORT}`);
+  console.log(`✅ Server live on http://localhost:${PORT}`);
 });
