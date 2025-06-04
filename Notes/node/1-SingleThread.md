@@ -1,4 +1,4 @@
-# Introduction to Node.js
+# Node.js - Intro
 
 Node.js is a **JavaScript runtime environment** that allows you to execute JavaScript code **outside of the browser**, typically on a server or your local machine. It is built on Chrome's V8 JavaScript engine.
 
@@ -22,9 +22,3 @@ This design allows Node.js to be **non-blocking** and efficient, especially for 
 2. It delegates the task to the system (non-blocking).
 3. Meanwhile, it continues processing other events.
 4. When the task is done, a **callback** is triggered to handle the result.
-
----
-
-## Keywords
-
-- **Event Loop**, **Non-blocking Code**, **Async**, **Promise**, **Callback**
