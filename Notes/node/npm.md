@@ -1,4 +1,4 @@
-# 5. NPM - Node Package Manager
+# NPM - Node Package Manager
 
 Install, manage, and share third-party libraries and tools.
 
@@ -15,7 +15,7 @@ npm uninstall pkg_name  # Removes a package
 
 ---
 
-## 📄 `package.json` File
+### 📄 `package.json` File
 
 This file tracks:
 
@@ -32,7 +32,7 @@ npm init -y    # Auto-generate with defaults
 
 ---
 
-## 🔧 Installing Dev Dependencies
+### 🔧 Installing Dev Dependencies
 
 Some tools (like linters or test runners) are needed only during development:
 
@@ -44,11 +44,62 @@ npm i some-dev-tool -D
 
 ---
 
-## Bonus Tip 💡
+### Bonus Tip 💡
 
 To remove `node_modules` and reinstall everything from scratch:
 
 ```bash
 rm -rf node_modules
 npm install
+```
+
+---
+
+## 🔁 Nodemon - Auto Restart Your Server
+
+`nodemon` is a **development tool** that automatically restarts your Node.js app **every time you make changes** to the source code.
+
+---
+
+### 📦 Install Nodemon
+
+#### 🔹 Locally
+
+```bash
+npm install nodemon --save-dev
+```
+
+---
+
+### ▶️ Use Nodemon
+
+Replace:
+
+```bash
+node index.js
+```
+
+With:
+
+```bash
+nodemon index.js
+```
+
+Now the app will restart automatically on file save.
+
+---
+
+### Typical Use in `package.json`
+
+```json
+"scripts": {
+  "start": "node index.js",
+  "dev": "nodemon index.js"
+}
+```
+
+Then run:
+
+```bash
+npm run dev
 ```
