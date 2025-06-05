@@ -167,10 +167,66 @@ end async
 
 ---
 
-## Summary
+## 4. `http` Module
 
-| Module | Description                   | Example Use Case                     |
-| ------ | ----------------------------- | ------------------------------------ |
-| `fs`   | File read/write (sync/async)  | Log files, configs, generate content |
-| `os`   | OS/user/system info           | Get uptime, memory usage             |
-| `path` | File/directory path utilities | Join paths, resolve absolute paths   |
+The `http` module allows you to **create web servers** in Node.js. This is the foundation of most Node-based backends.
+
+### Import the module:
+
+```js
+const http = require("http");
+```
+
+### Create a basic server:
+
+```js
+const server = http.createServer((req, res) => {
+  // Base routing example
+  if (req.url === "/") {
+    res.end("Welcome to our site");
+  }
+  if (req.url === "/profile") {
+    res.end("This is your profile");
+  }
+
+  // Fallback (404)
+  res.end(`<h1>Error</h1>
+    <p>Go back to <a href="/">Home</a></p>`);
+});
+
+server.listen(3000); // Server listens on port 3000
+```
+
+🧠 **How it works:**
+
+- `req` = incoming HTTP request (e.g., URL, method)
+- `res` = HTTP response (you write and end it)
+- The server stays alive and handles multiple requests over time.
+
+---
+
+### Conceptual Link to React Routers
+
+In a React SPA, you use tools like `createBrowserRouter()` to map URL paths to components.
+
+```js
+const router = createBrowserRouter([
+  { path: "/", element: <Home /> },
+  { path: "/profile", element: <Profile /> },
+]);
+```
+
+With Node's `http` module, you're doing this manually by inspecting `req.url` and choosing what to return.
+
+> ✅ So now you're seeing **how the client-side router depends on a backend server** to serve the app initially and potentially handle API routes.
+
+---
+
+## Summary (Updated)
+
+| Module | Description                   | Example Use Case                         |
+| ------ | ----------------------------- | ---------------------------------------- |
+| `fs`   | File read/write (sync/async)  | Log files, configs, generate content     |
+| `http` | Create HTTP servers           | Handle requests, build basic web servers |
+| `os`   | OS/user/system info           | Get uptime, memory usage                 |
+| `path` | File/directory path utilities | Join paths, resolve absolute paths       |
