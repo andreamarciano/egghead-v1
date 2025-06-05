@@ -1,4 +1,4 @@
-# Node.js - Intro
+# Node.js - Event Loop
 
 Node.js is a **JavaScript runtime environment** that allows you to execute JavaScript code **outside of the browser**, typically on a server or your local machine. It is built on Chrome's V8 JavaScript engine.
 

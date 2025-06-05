@@ -1,4 +1,4 @@
-# NPM - Node Package Manager
+# Node.js - Node Package Manager
 
 Install, manage, and share third-party libraries and tools.
 
