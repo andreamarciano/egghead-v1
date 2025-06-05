@@ -1,5 +1,12 @@
 # Node.js - Built-in Modules
 
+| Module | Description                   | Example Use Case                         |
+| ------ | ----------------------------- | ---------------------------------------- |
+| `fs`   | File read/write (sync/async)  | Log files, configs, generate content     |
+| `http` | Create HTTP servers           | Handle requests, build basic web servers |
+| `os`   | OS/user/system info           | Get uptime, memory usage                 |
+| `path` | File/directory path utilities | Join paths, resolve absolute paths       |
+
 ## 1. `os` Module
 
 The `os` module provides methods and properties to get information about the operating system and user.
@@ -222,11 +229,36 @@ With Node's `http` module, you're doing this manually by inspecting `req.url` an
 
 ---
 
-## Summary (Updated)
+### HTTP Requests Overview
 
-| Module | Description                   | Example Use Case                         |
-| ------ | ----------------------------- | ---------------------------------------- |
-| `fs`   | File read/write (sync/async)  | Log files, configs, generate content     |
-| `http` | Create HTTP servers           | Handle requests, build basic web servers |
-| `os`   | OS/user/system info           | Get uptime, memory usage                 |
-| `path` | File/directory path utilities | Join paths, resolve absolute paths       |
+#### Common HTTP Methods
+
+| Method | Purpose              | Example URL                        |
+| ------ | -------------------- | ---------------------------------- |
+| GET    | Read data            | `GET /api/orders` — get all orders |
+|        |                      | `GET /api/orders/:id` — get one    |
+| POST   | Send new data        | `POST /api/orders` — create order  |
+| PUT    | Update existing data | `PUT /api/orders/:id` — update     |
+| DELETE | Delete data          | `DELETE /api/orders/:id` — remove  |
+
+#### Status Codes
+
+| Code | Meaning                                 |
+| ---- | --------------------------------------- |
+| 200  | OK — Request successful                 |
+| 201  | Created — Resource successfully created |
+| 400  | Bad Request — Invalid input             |
+| 401  | Unauthorized — Auth required            |
+| 403  | Forbidden — Not allowed                 |
+| 404  | Not Found — Resource does not exist     |
+| 500  | Internal Server Error — Server crashed  |
+
+#### Example
+
+```bash
+GET    - website.com/api/orders         # Get all orders
+GET    - website.com/api/orders/:id     # Get a specific order
+POST   - website.com/api/orders         # Create a new order
+PUT    - website.com/api/orders/:id     # Update an existing order
+DELETE - website.com/api/orders/:id     # Delete an order
+```
