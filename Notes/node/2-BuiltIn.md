@@ -75,9 +75,102 @@ console.log(absolutePath);
 
 ---
 
+## 3. `fs` Module
+
+The `fs` (File System) module allows you to read from and write to files on your system. It supports both **synchronous** and **asynchronous** methods.
+
+### Import the module:
+
+```js
+// Sync methods
+const { readFileSync, writeFileSync } = require("fs");
+
+// Async methods
+const { readFile, writeFile } = require("fs");
+```
+
+---
+
+### 🔹 Synchronous File Operations
+
+Synchronous methods **block the execution** until the operation completes.
+
+```js
+console.log("start sync");
+
+const test = readFileSync("./dir/test.txt", "utf8");
+const hello = readFileSync("./dir/hello.txt", "utf8");
+
+console.log(hello);
+console.log(test);
+
+writeFileSync("./dir/test.txt", "write text in text"); // Overwrites
+writeFileSync("./dir/test.txt", " append some text", { flag: "a" }); // Appends
+writeFileSync("./dir/newFile.txt", "I'm a new file"); // Creates if not exists
+
+console.log("end sync");
+console.log("starting next task");
+```
+
+**Output order:**
+
+```
+start sync
+<file contents>
+end sync
+starting next task
+```
+
+---
+
+### 🔹 Asynchronous File Operations
+
+Asynchronous methods use **callbacks** and do not block the event loop.
+
+```js
+console.log("start async");
+
+readFile("./dir/test.txt", "utf8", (error, result) => {
+  if (error) {
+    console.log(error);
+    return;
+  }
+  const test = result;
+
+  readFile("./dir/hello.txt", "utf8", (error, result) => {
+    if (error) {
+      console.log(error);
+      return;
+    }
+    const hello = result;
+
+    writeFile("./dir/newFile.txt", "I'm a new file", (error, result) => {
+      if (error) {
+        console.log(error);
+        return;
+      }
+      console.log("end async");
+    });
+  });
+});
+
+console.log("starting next task");
+```
+
+**Output order:**
+
+```
+start async
+starting next task
+end async
+```
+
+---
+
 ## Summary
 
-| Module | Description                   | Example Use Case                   |
-| ------ | ----------------------------- | ---------------------------------- |
-| `os`   | OS/user/system info           | Get uptime, memory usage           |
-| `path` | File/directory path utilities | Join paths, resolve absolute paths |
+| Module | Description                   | Example Use Case                     |
+| ------ | ----------------------------- | ------------------------------------ |
+| `fs`   | File read/write (sync/async)  | Log files, configs, generate content |
+| `os`   | OS/user/system info           | Get uptime, memory usage             |
+| `path` | File/directory path utilities | Join paths, resolve absolute paths   |
