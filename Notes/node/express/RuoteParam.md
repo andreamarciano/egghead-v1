@@ -102,7 +102,7 @@ app.get("/person/:id", (req, res) => {
 
 ---
 
-## 🧩 More Complex Routes
+### 🧩 More Complex Routes Example
 
 Route parameters can be **nested** or **combined** for more detailed access:
 
@@ -112,3 +112,56 @@ app.get("/product/:productID/review/:reviewID", (req, res) => {
   res.send(`Review ${reviewID} for product ${productID}`);
 });
 ```
+
+## 🔍 Query String Parameters
+
+While **route parameters** are used for identifying specific resources (`/person/:id`), **query parameters** are used for **filtering**, **searching**, or **limiting** results.
+
+### Example
+
+```js
+app.get("/person/search", (req, res) => {
+  console.log(req.query); // e.g. { query: 'L', limit: '2' }
+
+  const { query, limit } = req.query;
+  let filteredPerson = [...person]; // Copy to avoid modifying the original array
+
+  if (query) {
+    filteredPerson = filteredPerson.filter((person) =>
+      person.name.startsWith(query)
+    );
+  }
+
+  if (limit) {
+    filteredPerson = filteredPerson.slice(0, Number(limit));
+  }
+
+  if (filteredPerson.length < 1) {
+    return res.status(200).json({ success: true, code: 200, data: [] });
+  }
+
+  res.status(200).json(filteredPerson);
+});
+```
+
+#### URL Examples:
+
+```
+/person/search?query=L&limit=2
+```
+
+- `/person/search?query=L` → filters people whose names start with “L”
+- `/person/search?limit=2` → returns only the first 2 people
+- `/person/search?query=A&limit=1` → filters and limits
+
+---
+
+### 🧠 Summary: Route vs Query Params
+
+| Feature         | Route Params (`/person/:id`) | Query Params (`/person/search?name=X`) |
+| --------------- | ---------------------------- | -------------------------------------- |
+| Used for        | Identifying resource         | Filtering or customizing response      |
+| Accessed via    | `req.params`                 | `req.query`                            |
+| Data type       | Always string                | Always string                          |
+| Syntax in URL   | `/user/1`                    | `/user?sort=asc&limit=10`              |
+| Common use case | Get specific user, product   | Pagination, filtering, search          |
