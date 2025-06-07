@@ -1,4 +1,3 @@
-// components/OrderSummary.jsx
 function OrderSummary({
   cartItems,
   shippingCost,
