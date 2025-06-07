@@ -163,13 +163,29 @@ app.post("/", (req, res) => {
 
 ## PUT Request
 
-_(To be completed)_
+### Update a specific person
 
 ```js
-// Example structure:
 app.put("/api/people/:id", (req, res) => {
-  // logic to update a person by id
+  const { id } = req.params;
+  const person = req.body;
+
+  people[Number(id) - 1] = person;
+
+  res.status(200).json({ success: true, data: people });
 });
+```
+
+### Example Request
+
+```http
+PUT /api/people/2
+
+{
+  "id": "2",
+  "name": "Jack",
+  "lname": "Orange"
+}
 ```
 
 ---
