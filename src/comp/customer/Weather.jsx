@@ -17,7 +17,7 @@ const Weather = () => {
     setError(null);
 
     // API Call
-    fetch(`https://andreafactoryproject-v1.onrender.com/weather?city=${city}`)
+    fetch(`https://factoryproject-weather.onrender.com/weather?city=${city}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.error) {
