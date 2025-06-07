@@ -1,3 +1,5 @@
+import currencies from "./currencies.json";
+
 function OrderSummary({
   cartItems,
   shippingCost,
@@ -50,13 +52,13 @@ function OrderSummary({
               <select
                 value={currency}
                 onChange={(e) => setCurrency(e.target.value)}
-                className="p-1 rounded border bg-gray-400"
+                className="p-1 rounded border bg-gray-400 max-h-48 overflow-y-auto"
               >
-                <option value="USD">USD</option>
-                <option value="GBP">GBP</option>
-                <option value="JPY">JPY</option>
-                <option value="CHF">CHF</option>
-                <option value="AUD">AUD</option>
+                {currencies.map(({ code, name }) => (
+                  <option key={code} value={code}>
+                    {code} - {name}
+                  </option>
+                ))}
               </select>
               <button
                 onClick={handleCurrencyConversion}
