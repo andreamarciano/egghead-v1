@@ -3,6 +3,8 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { clearCart } from "../redux/cartSlice";
 
+import OrderSummary from "../comp/checkout/OrderSummary";
+
 const discountCodes = [
   "TRIS5",
   "FLOW5",
@@ -116,46 +118,13 @@ function Checkout() {
         <h1 className="text-3xl font-bold mb-6">Complete Your Order</h1>
 
         {/* Order Recap */}
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
-          <div className="bg-gray-400 p-4 rounded shadow">
-            {cartItems.length === 0 ? (
-              <p className="text-gray-700">Your cart is empty.</p>
-            ) : (
-              <>
-                {cartItems.map((item) => (
-                  <div key={item.id} className="flex justify-between mb-2">
-                    <span>
-                      {item.name} (x{item.quantity})
-                    </span>
-                    <span>€{item.price * item.quantity}</span>
-                  </div>
-                ))}
-                <div className="flex justify-between mb-2">
-                  <span>Shipping Cost</span>
-                  <span>€{shippingCost}</span>
-                </div>
-                {appliedDiscounts.length > 0 && (
-                  <div className="flex justify-between mb-2 text-green-600">
-                    <span>
-                      Discount code applied ({appliedDiscounts.join(", ")})
-                    </span>
-                    <span>-€{discountTotal}</span>
-                  </div>
-                )}
-                <div className="flex justify-between font-bold border-t pt-2">
-                  <span>Total</span>
-                  <span>
-                    €
-                    {parseFloat(finalTotal.toFixed(4))
-                      .toString()
-                      .replace(".", ",")}
-                  </span>
-                </div>
-              </>
-            )}
-          </div>
-        </section>
+        <OrderSummary
+          cartItems={cartItems}
+          shippingCost={shippingCost}
+          appliedDiscounts={appliedDiscounts}
+          discountTotal={discountTotal}
+          finalTotal={finalTotal}
+        />
 
         {/* Form */}
         <section className="mb-8">
