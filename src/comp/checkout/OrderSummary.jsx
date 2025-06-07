@@ -44,12 +44,13 @@ function OrderSummary({
                 {parseFloat(finalTotal.toFixed(4)).toString().replace(".", ",")}
               </span>
             </div>
+            {/* CONVERT TO */}
             <div className="mt-4">
               <label className="mr-2 font-semibold">Convert to:</label>
               <select
                 value={currency}
                 onChange={(e) => setCurrency(e.target.value)}
-                className="p-1 rounded border"
+                className="p-1 rounded border bg-gray-400"
               >
                 <option value="USD">USD</option>
                 <option value="GBP">GBP</option>
@@ -59,7 +60,7 @@ function OrderSummary({
               </select>
               <button
                 onClick={handleCurrencyConversion}
-                className="ml-2 px-3 py-1 bg-blue-600 text-white rounded"
+                className="ml-2 px-3 py-1 bg-blue-600 text-white rounded cursor-pointer hover:bg-blue-800"
               >
                 Convert
               </button>
