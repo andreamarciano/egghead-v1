@@ -52,7 +52,8 @@ function OrderSummary({
               <select
                 value={currency}
                 onChange={(e) => setCurrency(e.target.value)}
-                className="p-1 rounded border bg-gray-400 max-h-48 overflow-y-auto"
+                className="p-1 rounded border bg-gray-400 max-w-17"
+                title={currencies.find((c) => c.code === currency)?.name || ""}
               >
                 {currencies.map(({ code, name }) => (
                   <option key={code} value={code}>
