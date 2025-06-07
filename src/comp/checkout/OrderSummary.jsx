@@ -1,4 +1,4 @@
-import currencies from "./currencies.json";
+import CurrencySelector from "./CurrencySelector";
 
 function OrderSummary({
   cartItems,
@@ -15,10 +15,12 @@ function OrderSummary({
     <section className="mb-8">
       <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
       <div className="bg-gray-400 p-4 rounded shadow">
+        {/* Check if cart is empty */}
         {cartItems.length === 0 ? (
           <p className="text-gray-700">Your cart is empty.</p>
         ) : (
           <>
+            {/* List of items in the cart */}
             {cartItems.map((item) => (
               <div key={item.id} className="flex justify-between mb-2">
                 <span>
@@ -27,10 +29,14 @@ function OrderSummary({
                 <span>€{item.price * item.quantity}</span>
               </div>
             ))}
+
+            {/* Shipping cost */}
             <div className="flex justify-between mb-2">
               <span>Shipping Cost</span>
               <span>€{shippingCost}</span>
             </div>
+
+            {/* Applied discount codes summary */}
             {appliedDiscounts.length > 0 && (
               <div className="flex justify-between mb-2 text-green-600">
                 <span>
@@ -39,6 +45,8 @@ function OrderSummary({
                 <span>-€{discountTotal}</span>
               </div>
             )}
+
+            {/* Final total after discounts */}
             <div className="flex justify-between font-bold border-t pt-2">
               <span>Total</span>
               <span>
@@ -46,28 +54,20 @@ function OrderSummary({
                 {parseFloat(finalTotal.toFixed(4)).toString().replace(".", ",")}
               </span>
             </div>
-            {/* CONVERT TO */}
-            <div className="mt-4">
+
+            {/* Currency Conversion Section */}
+            <div className="mt-4 flex justify-end items-center space-x-2">
               <label className="mr-2 font-semibold">Convert to:</label>
-              <select
-                value={currency}
-                onChange={(e) => setCurrency(e.target.value)}
-                className="p-1 rounded border bg-gray-400 max-w-17"
-                title={currencies.find((c) => c.code === currency)?.name || ""}
-              >
-                {currencies.map(({ code, name }) => (
-                  <option key={code} value={code}>
-                    {code} - {name}
-                  </option>
-                ))}
-              </select>
+              <CurrencySelector currency={currency} setCurrency={setCurrency} />
               <button
                 onClick={handleCurrencyConversion}
-                className="ml-2 px-3 py-1 bg-blue-600 text-white rounded cursor-pointer hover:bg-blue-800"
+                className="ml-3 px-3 py-1 bg-blue-600 text-white rounded cursor-pointer hover:bg-blue-800"
               >
                 Convert
               </button>
             </div>
+
+            {/* Display converted total if available */}
             {convertedTotal && (
               <div className="mt-2 text-right text-sm text-blue-800">
                 ≈ {currency} {convertedTotal.toFixed(2)} (from EUR)
