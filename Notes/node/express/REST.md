@@ -90,7 +90,7 @@ app.post("/api/people", (req, res) => {
 });
 ```
 
-### Example Request
+#### Example Request
 
 ```http
 POST /api/people
@@ -102,11 +102,62 @@ POST /api/people
 }
 ```
 
-### Notes
+#### Notes
 
 - `req.body` contains the full JSON sent by the client.
 - We assume the client sends a valid person object with both `id` and `name`. In real-world apps, you'd validate this.
 - We return the updated people list for confirmation.
+
+### Handling Form Submission
+
+Handle data submitted from a classic HTML `<form>` using a middleware:
+
+```js
+app.use(express.urlencoded({ extended: false }));
+```
+
+- This is required to parse form data from `req.body`.
+- `extended: false` means it will parse data using the querystring library (sufficient for simple forms).
+
+#### Form Example
+
+```html
+<form method="POST" action="/">
+  <label for="id">ID:</label>
+  <input type="text" name="id" required />
+  <label for="name">Name:</label>
+  <input type="text" name="name" required />
+  <label for="lname">Last Name:</label>
+  <input type="text" name="lname" required />
+  <button type="submit">Submit</button>
+</form>
+```
+
+Make it accessible:
+
+```js
+app.use(express.static("public"));
+app.get("/", (req, res) => {
+  res.sendFile("form.html", { root: __dirname + "/public" });
+});
+```
+
+#### Route to Handle Form Submission
+
+```js
+app.post("/", (req, res) => {
+  const { id, name, lname } = req.body;
+
+  if (!id || !name || !lname) {
+    return res.status(400).send("Fill all fields");
+  }
+
+  const newPerson = { id, name, lname };
+  people.push(newPerson);
+
+  res.status(200).send(`<h1>Thank you, ${name}!</h1>`);
+});
+```
 
 ---
 
