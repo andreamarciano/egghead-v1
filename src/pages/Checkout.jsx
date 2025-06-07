@@ -25,6 +25,8 @@ function Checkout() {
   );
   const shippingCost = 999.99;
   const grandTotal = total + shippingCost;
+  const [currency, setCurrency] = useState("EUR");
+  const [convertedTotal, setConvertedTotal] = useState(null);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -88,6 +90,19 @@ function Checkout() {
 
   const finalTotal = grandTotal - discountTotal;
 
+  /* EXCHANGE RATE API */
+  const handleCurrencyConversion = async () => {
+    try {
+      const res = await fetch(
+        `https://factoryproject-exchangerate.onrender.com/exchange?amount=${finalTotal}&to=${currency}`
+      );
+      const data = await res.json();
+      setConvertedTotal(data.convertedAmount);
+    } catch (err) {
+      console.error("Error converting currency:", err);
+    }
+  };
+
   // SUBMIT
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -126,6 +141,10 @@ function Checkout() {
           appliedDiscounts={appliedDiscounts}
           discountTotal={discountTotal}
           finalTotal={finalTotal}
+          currency={currency}
+          setCurrency={setCurrency}
+          convertedTotal={convertedTotal}
+          handleCurrencyConversion={handleCurrencyConversion}
         />
 
         {/* Form */}

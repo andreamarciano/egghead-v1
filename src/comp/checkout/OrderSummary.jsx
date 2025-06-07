@@ -4,6 +4,10 @@ function OrderSummary({
   appliedDiscounts,
   discountTotal,
   finalTotal,
+  currency,
+  setCurrency,
+  convertedTotal,
+  handleCurrencyConversion,
 }) {
   return (
     <section className="mb-8">
@@ -40,6 +44,31 @@ function OrderSummary({
                 {parseFloat(finalTotal.toFixed(4)).toString().replace(".", ",")}
               </span>
             </div>
+            <div className="mt-4">
+              <label className="mr-2 font-semibold">Convert to:</label>
+              <select
+                value={currency}
+                onChange={(e) => setCurrency(e.target.value)}
+                className="p-1 rounded border"
+              >
+                <option value="USD">USD</option>
+                <option value="GBP">GBP</option>
+                <option value="JPY">JPY</option>
+                <option value="CHF">CHF</option>
+                <option value="AUD">AUD</option>
+              </select>
+              <button
+                onClick={handleCurrencyConversion}
+                className="ml-2 px-3 py-1 bg-blue-600 text-white rounded"
+              >
+                Convert
+              </button>
+            </div>
+            {convertedTotal && (
+              <div className="mt-2 text-right text-sm text-blue-800">
+                ≈ {currency} {convertedTotal.toFixed(2)} (from EUR)
+              </div>
+            )}
           </>
         )}
       </div>
