@@ -192,26 +192,21 @@ PUT /api/people/2
 
 ## DELETE Request
 
-_(To be completed)_
+### Remove a person
 
 ```js
-// Example structure:
 app.delete("/api/people/:id", (req, res) => {
-  // logic to delete a person by id
+  const { id } = req.params;
+
+  const index = people.findIndex((person) => person.id === id);
+  people.splice(index, 1);
+
+  res.status(200).json({ success: true, data: people });
 });
 ```
 
----
+### Example Request
 
-## Notes
-
-- This is a classic **RESTful API** structure, useful for any CRUD-based resource.
-- You can use tools like **Postman** or the **Fetch API** in frontend code to test these routes.
-- Always validate and sanitize user input in real-world apps.
-
-```
-
----
-
-Fammi sapere quando hai finito i video così completiamo il file con il codice per `POST`, `PUT` e `DELETE`. Se vuoi, possiamo anche aggiungere una sezione su come simulare un database con un array, oppure come passare a qualcosa di più serio come MongoDB.
+```http
+DELETE /api/people/2
 ```
