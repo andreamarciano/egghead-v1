@@ -1,4 +1,4 @@
-# 📘 SQL & Relational Databases
+# SQL & Relational Databases
 
 ## What is SQL?
 

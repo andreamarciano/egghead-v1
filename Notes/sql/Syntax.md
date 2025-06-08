@@ -93,8 +93,8 @@ You can also use `IF NOT EXISTS` to **avoid errors** if the table already exists
 ```sql
 CREATE TABLE IF NOT EXISTS employee (
   id INT,
-  fname VARCHAR(20),
-  lname VARCHAR(50),
+  first_name VARCHAR(20),
+  last_name VARCHAR(50),
   hiring_date DATE,
   salary DECIMAL
 );
