@@ -17,63 +17,35 @@ const discountCodes = [
   "HIDE5",
 ];
 
+const alienExchangeRates = {
+  ZGR: 2,
+  MLK: 42.42,
+  PLT: 0.0042,
+};
+
 function Checkout() {
-  const cartItems = useSelector((state) => state.cart.items); // redux store
-  const total = cartItems.reduce(
-    (acc, item) => acc + Number(item.price) * Number(item.quantity),
-    0
-  );
-  const shippingCost = 999.99;
-  const grandTotal = total + shippingCost;
+  // --- Redux ---
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.items);
 
-  const [loading, setLoading] = useState(false);
-  const [currency, setCurrency] = useState("EUR");
-  const [convertedTotal, setConvertedTotal] = useState(null);
-  const [convertedCurrency, setConvertedCurrency] = useState(null);
-  const alienExchangeRates = {
-    ZGR: 2,
-    MLK: 42.42,
-    PLT: 0.0042,
-  };
-
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    address: "",
-    city: "",
-    postalCode: "",
-    cardNumber: "",
-  });
-
-  // Discount Code
+  // --- Discount Code ---
   const [showCodes, setShowCodes] = useState(false);
   const unlockedCodes = JSON.parse(
     localStorage.getItem("unlockedCodes") || "[]"
   );
   const [discountCode, setDiscountCode] = useState("");
-  const [appliedDiscounts, setAppliedDiscounts] = useState([]); // already applied
+  const [appliedDiscounts, setAppliedDiscounts] = useState([]);
 
   const [errorMessage, setErrorMessage] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
 
-  const dispatch = useDispatch();
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handlePaymentChange = (e) => {
-    setPaymentMethod(e.target.value);
-  };
-
   // Update discount code
   const handleDiscountChange = (e) => {
     setDiscountCode(e.target.value);
-    setErrorMessage(""); // reset error message
+    setErrorMessage("");
   };
 
-  // Already applied
+  // Already applied code
   const applyDiscount = () => {
     if (!discountCodes.includes(discountCode)) {
       setErrorMessage("Invalid discount code!");
@@ -87,16 +59,45 @@ function Checkout() {
     setDiscountCode(""); // reset discount code field
   };
 
-  // Form
+  // --- Cart & Totals ---
+  const total = cartItems.reduce(
+    (acc, item) => acc + Number(item.price) * Number(item.quantity),
+    0
+  );
+  const shippingCost = 999.99;
+  const grandTotal = total + shippingCost;
+  const discountTotal =
+    appliedDiscounts.length > 0 ? appliedDiscounts.length * 0.05 * total : 0;
+  const finalTotal = grandTotal - discountTotal;
+
+  // --- Currency Conversion ---
+  const [loading, setLoading] = useState(false);
+  const [currency, setCurrency] = useState("EUR");
+  const [convertedTotal, setConvertedTotal] = useState(null);
+  const [convertedCurrency, setConvertedCurrency] = useState(null);
+
+  // --- Form ---
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    address: "",
+    city: "",
+    postalCode: "",
+    cardNumber: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handlePaymentChange = (e) => {
+    setPaymentMethod(e.target.value);
+  };
+
   const getInputClass = (value) => {
     return `p-2 border rounded transition-colors ${value ? "bg-blue-950" : ""}`;
   };
-
-  // Total
-  const discountTotal =
-    appliedDiscounts.length > 0 ? appliedDiscounts.length * 0.05 * total : 0;
-
-  const finalTotal = grandTotal - discountTotal;
 
   /* EXCHANGE RATE API */
   const handleCurrencyConversion = async () => {
@@ -125,13 +126,13 @@ function Checkout() {
     }
   };
 
-  // SUBMIT
+  // FORM SUBMIT
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!window.confirm("Are you sure you want to complete the order?")) return;
 
-    // RESET
+    // reset
     dispatch(clearCart());
     setFormData({
       firstName: "",
