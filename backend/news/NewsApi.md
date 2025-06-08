@@ -6,7 +6,7 @@ The backend securely proxies requests to the GNews API, ensuring API keys remain
 
 ---
 
-## 🧠 Project Overview
+## Project Overview
 
 This application serves as a news aggregator, allowing users to:
 
@@ -202,8 +202,6 @@ function News() {
     </div>
   );
 }
-
-export default News;
 ```
 
 ---
@@ -216,7 +214,7 @@ export default News;
 
 2. Create a new Node.js service (Web Service) on Render.com:
 
-   - **Name**: `egghead-v1-news`
+   - **Name**: `factoryproject-news`
    - **Branch**: `main`
    - **Root Directory**: `backend/news`
    - **Build Command**: `npm install`
