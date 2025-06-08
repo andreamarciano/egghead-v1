@@ -9,6 +9,7 @@ function OrderSummary({
   currency,
   setCurrency,
   convertedTotal,
+  convertedCurrency,
   handleCurrencyConversion,
 }) {
   return (
@@ -70,7 +71,7 @@ function OrderSummary({
             {/* Display converted total if available */}
             {convertedTotal && (
               <div className="mt-2 text-right text-sm text-blue-800">
-                ≈ {currency} {convertedTotal.toFixed(2)} (from EUR)
+                ≈ {convertedCurrency} {convertedTotal.toFixed(2)} (from EUR)
               </div>
             )}
           </>

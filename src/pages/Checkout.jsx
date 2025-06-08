@@ -27,6 +27,7 @@ function Checkout() {
   const grandTotal = total + shippingCost;
   const [currency, setCurrency] = useState("EUR");
   const [convertedTotal, setConvertedTotal] = useState(null);
+  const [convertedCurrency, setConvertedCurrency] = useState(null);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -98,6 +99,7 @@ function Checkout() {
       );
       const data = await res.json();
       setConvertedTotal(data.convertedAmount);
+      setConvertedCurrency(currency);
     } catch (err) {
       console.error("Error converting currency:", err);
     }
@@ -144,6 +146,7 @@ function Checkout() {
           currency={currency}
           setCurrency={setCurrency}
           convertedTotal={convertedTotal}
+          convertedCurrency={convertedCurrency}
           handleCurrencyConversion={handleCurrencyConversion}
         />
 
