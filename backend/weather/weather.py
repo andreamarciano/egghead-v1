@@ -19,7 +19,7 @@ def weather():
         # units of measurement: standard, metric, imperial
         
     # DEBUG: print the full raw JSON response    
-    print(weather_response.json(), flush=True)
+    # print(weather_response.json(), flush=True)
     
     # check the status code value: 404 = name not found
     if weather_response.json()['cod'] == '404':
