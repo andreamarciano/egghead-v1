@@ -11,6 +11,7 @@ function OrderSummary({
   convertedTotal,
   convertedCurrency,
   handleCurrencyConversion,
+  loading,
 }) {
   return (
     <section className="mb-8">
@@ -69,10 +70,16 @@ function OrderSummary({
             </div>
 
             {/* Display converted total if available */}
-            {convertedTotal && (
-              <div className="mt-2 text-right text-sm text-blue-800">
-                ≈ {convertedCurrency} {convertedTotal.toFixed(2)} (from EUR)
+            {loading ? (
+              <div className="mt-2 text-sm text-right text-gray-600">
+                Converting currency...
               </div>
+            ) : (
+              convertedTotal && (
+                <div className="mt-2 text-right text-sm text-blue-800">
+                  ≈ {convertedCurrency} {convertedTotal.toFixed(2)} (from EUR)
+                </div>
+              )
             )}
           </>
         )}

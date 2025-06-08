@@ -16,19 +16,27 @@ if (!GNEWS_API_KEY) {
 
 app.use(cors());
 
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  next();
+});
+
 app.get("/news", async (req, res) => {
   const topic = req.query.topic || "world";
   const country = req.query.country || "it";
+
+  console.log(`Request received: country=${country}, topic=${topic}`);
 
   try {
     const url = `https://gnews.io/api/v4/top-headlines?country=${country}&category=${topic}&apikey=${GNEWS_API_KEY}`;
     const response = await fetch(url);
     const data = await response.json();
 
+    console.log(`Articles fetched: ${data.articles?.length || 0}`);
     res.json(data);
   } catch (error) {
-    console.error("Errore nella chiamata API:", error);
-    res.status(500).json({ error: "Errore nel server." });
+    console.error("Error fetching news:", error);
+    res.status(500).json({ error: "Server Error" });
   }
 });
 

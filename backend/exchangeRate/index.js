@@ -16,11 +16,19 @@ if (!EXCHANGE_API_KEY) {
 
 app.use(cors());
 
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  next();
+});
+
 app.get("/exchange", async (req, res) => {
   const currency = req.query.to || "USD";
   const amount = req.query.amount;
 
+  console.log(`Currency Conversion Request: EUR → ${currency} (${amount})`);
+
   if (!amount || isNaN(amount)) {
+    console.warn("Invalid quantity:", amount);
     return res.status(400).json({ error: "Invalid amount" });
   }
 
@@ -31,8 +39,8 @@ app.get("/exchange", async (req, res) => {
 
     res.json({ convertedAmount: data.result });
   } catch (error) {
-    console.error("Errore nella chiamata API:", error);
-    res.status(500).json({ error: "Errore nel server." });
+    console.error("API call Error:", error);
+    res.status(500).json({ error: "Server Error" });
   }
 });
 

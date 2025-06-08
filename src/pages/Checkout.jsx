@@ -25,6 +25,8 @@ function Checkout() {
   );
   const shippingCost = 999.99;
   const grandTotal = total + shippingCost;
+
+  const [loading, setLoading] = useState(false);
   const [currency, setCurrency] = useState("EUR");
   const [convertedTotal, setConvertedTotal] = useState(null);
   const [convertedCurrency, setConvertedCurrency] = useState(null);
@@ -98,11 +100,14 @@ function Checkout() {
 
   /* EXCHANGE RATE API */
   const handleCurrencyConversion = async () => {
+    setLoading(true);
+
     if (alienExchangeRates[currency]) {
       const rate = alienExchangeRates[currency];
       const converted = finalTotal * rate;
       setConvertedTotal(converted);
       setConvertedCurrency(currency);
+      setLoading(false);
       return;
     }
 
@@ -115,6 +120,8 @@ function Checkout() {
       setConvertedCurrency(currency);
     } catch (err) {
       console.error("Error converting currency:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -161,6 +168,7 @@ function Checkout() {
           convertedTotal={convertedTotal}
           convertedCurrency={convertedCurrency}
           handleCurrencyConversion={handleCurrencyConversion}
+          loading={loading}
         />
 
         {/* Form */}
