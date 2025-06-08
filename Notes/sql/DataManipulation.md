@@ -70,3 +70,79 @@ FROM table_name;
 SELECT company_name, vat_number
 FROM customers;
 ```
+
+## ⚙️ `WHERE` – Filter Query Results
+
+```sql
+SELECT column1, column2, ...
+FROM table_name
+WHERE condition;
+```
+
+---
+
+### 🔸 Comparison Operators
+
+- `=` → Equal
+- `!=` or `<>` → Not equal
+- `<`, `>`, `<=`, `>=` → Less/greater than
+- `AND`, `OR`, `NOT` → Combine conditions
+
+```sql
+SELECT *
+FROM employee
+WHERE (role = "warehouseman" AND salary > 1300)
+   OR (role = "employee" AND salary > 1500);
+```
+
+---
+
+### 🔹 `IN` – Match Any Value in a List
+
+```sql
+SELECT *
+FROM employee
+WHERE role IN ("employee", "warehouseman");
+```
+
+---
+
+### 🔹 `BETWEEN` – Range Filtering (Inclusive)
+
+```sql
+SELECT *
+FROM employee
+WHERE hiring_date BETWEEN "2018-01-31" AND "2018-12-31";
+```
+
+> Equivalent to: `hiring_date >= "2018-01-31" AND hiring_date <= "2018-12-31"`
+
+---
+
+### 🔹 `LIKE` – Pattern Matching
+
+The `LIKE` operator is used for pattern-based filtering (mostly with strings):
+
+| Symbol | Meaning                              |
+| ------ | ------------------------------------ |
+| `%`    | Matches **any** number of characters |
+| `_`    | Matches **a single** character       |
+
+```sql
+-- Find employees whose first name starts with "Mar"
+SELECT *
+FROM employee
+WHERE first_name LIKE "Mar%";
+
+-- Find customers whose company name ends with "Candies"
+SELECT *
+FROM customers
+WHERE company_name LIKE "%Candies";
+
+-- Find employees whose name has 5 letters
+SELECT *
+FROM employee
+WHERE first_name LIKE "_____";
+```
+
+> 🔍 Use `LIKE` when filtering strings that follow **partial or unknown patterns**.
