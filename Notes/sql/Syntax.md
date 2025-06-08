@@ -47,3 +47,25 @@ SELECT name, hiring_date, salary
 FROM employee
 WHERE salary > 1800;
 ```
+
+## Create & Drop a Database
+
+### ➕ Create a Database
+
+```sql
+CREATE DATABASE db_test;
+```
+
+- This command creates a new database named `db_test`.
+- After running it, **refresh your database client** (e.g., Beekeeper Studio) to see the new database appear.
+
+### ➖ Drop a Database
+
+```sql
+DROP DATABASE db_test;
+```
+
+- This command **deletes** the `db_test` database **permanently**.
+- As with creation, **refresh your client** to confirm the database is gone.
+
+> ⚠️ Be careful with `DROP DATABASE` — it cannot be undone.
