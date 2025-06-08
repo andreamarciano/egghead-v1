@@ -380,6 +380,10 @@
     "name": "Macedonian Denar"
   },
   {
+    "code": "MLK",
+    "name": "Milky Way Kredits"
+  },
+  {
     "code": "MMK",
     "name": "Myanma Kyat"
   },
@@ -470,6 +474,10 @@
   {
     "code": "PLN",
     "name": "Polish Zloty"
+  },
+  {
+    "code": "PLT",
+    "name": "Plutonian Tesseract"
   },
   {
     "code": "PYG",
@@ -569,7 +577,7 @@
   },
   {
     "code": "TOP",
-    "name": "Tongan Paʻanga"
+    "name": "Tongan Pa'anga"
   },
   {
     "code": "TRY",
@@ -658,6 +666,10 @@
   {
     "code": "ZAR",
     "name": "South African Rand"
+  },
+  {
+    "code": "ZGR",
+    "name": "Zorgon Galactic Ruble"
   },
   {
     "code": "ZMK",

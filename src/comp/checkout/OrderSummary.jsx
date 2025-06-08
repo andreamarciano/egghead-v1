@@ -27,14 +27,14 @@ function OrderSummary({
                 <span>
                   {item.name} (x{item.quantity})
                 </span>
-                <span>€{item.price * item.quantity}</span>
+                <span>{item.price * item.quantity}€</span>
               </div>
             ))}
 
             {/* Shipping cost */}
             <div className="flex justify-between mb-2">
               <span>Shipping Cost</span>
-              <span>€{shippingCost}</span>
+              <span>{shippingCost}€</span>
             </div>
 
             {/* Applied discount codes summary */}
@@ -43,7 +43,7 @@ function OrderSummary({
                 <span>
                   Discount code applied ({appliedDiscounts.join(", ")})
                 </span>
-                <span>-€{discountTotal}</span>
+                <span>-{discountTotal}€</span>
               </div>
             )}
 
@@ -51,8 +51,8 @@ function OrderSummary({
             <div className="flex justify-between font-bold border-t pt-2">
               <span>Total</span>
               <span>
+                {parseFloat(finalTotal.toFixed(4)).toString().replace(".", ",")}{" "}
                 €
-                {parseFloat(finalTotal.toFixed(4)).toString().replace(".", ",")}
               </span>
             </div>
 

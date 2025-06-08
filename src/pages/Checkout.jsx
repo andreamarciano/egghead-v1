@@ -28,6 +28,11 @@ function Checkout() {
   const [currency, setCurrency] = useState("EUR");
   const [convertedTotal, setConvertedTotal] = useState(null);
   const [convertedCurrency, setConvertedCurrency] = useState(null);
+  const alienExchangeRates = {
+    ZGR: 2,
+    MLK: 42.42,
+    PLT: 0.0042,
+  };
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -93,6 +98,14 @@ function Checkout() {
 
   /* EXCHANGE RATE API */
   const handleCurrencyConversion = async () => {
+    if (alienExchangeRates[currency]) {
+      const rate = alienExchangeRates[currency];
+      const converted = finalTotal * rate;
+      setConvertedTotal(converted);
+      setConvertedCurrency(currency);
+      return;
+    }
+
     try {
       const res = await fetch(
         `https://factoryproject-exchangerate.onrender.com/exchange?amount=${finalTotal}&to=${currency}`
