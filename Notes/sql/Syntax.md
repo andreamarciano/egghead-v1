@@ -1,6 +1,12 @@
 # SQL - Syntax Basics
 
-## Basic concepts:
+## 📚 Table of Contents
+
+- [Basic Concepts](#basic-concepts)
+- [Create & Drop a Database](#create--drop-a-database)
+- [Create & Drop a Table](#create--drop-a-table)
+
+## Basic concepts
 
 ### 🧩 Keywords
 
@@ -68,4 +74,51 @@ DROP DATABASE db_test;
 - This command **deletes** the `db_test` database **permanently**.
 - As with creation, **refresh your client** to confirm the database is gone.
 
-> ⚠️ Be careful with `DROP DATABASE` — it cannot be undone.
+## Create & Drop a Table
+
+### 🛠️ Create Table Syntax
+
+To create a table, use the `CREATE TABLE` statement:
+
+```sql
+CREATE TABLE table_name (
+  column_name data_type constraint,
+  column_name data_type constraint,
+  ...
+);
+```
+
+You can also use `IF NOT EXISTS` to **avoid errors** if the table already exists.
+
+```sql
+CREATE TABLE IF NOT EXISTS employee (
+  id INT,
+  fname VARCHAR(20),
+  lname VARCHAR(50),
+  hiring_date DATE,
+  salary DECIMAL
+);
+```
+
+### 🗑️ Drop Table
+
+To remove a table from the database:
+
+```sql
+DROP TABLE table_name;
+```
+
+---
+
+### 📦 Common SQL Data Types
+
+| Type         | Description                                                                                            |
+| ------------ | ------------------------------------------------------------------------------------------------------ |
+| `INT`        | Stores numeric values in the range of **-2,147,483,648 to 2,147,483,647**.                             |
+| `DECIMAL`    | Stores decimal values with **exact precision**.                                                        |
+| `CHAR(n)`    | Stores **fixed-length strings** with a maximum size of **255 characters**.                             |
+| `VARCHAR(n)` | Stores **variable-length strings** with a maximum size of **65,535 characters**.                       |
+| `TEXT`       | Stores strings with a maximum size of **65,535 characters**.                                           |
+| `DATE`       | Stores **date values** in the `YYYY-MM-DD` format.                                                     |
+| `DATETIME`   | Stores combined **date and time** in the `YYYY-MM-DD HH:MM:SS` format.                                 |
+| `TIMESTAMP`  | Stores **timestamp values** as the number of seconds since the Unix epoch (`1970-01-01 00:00:01` UTC). |
