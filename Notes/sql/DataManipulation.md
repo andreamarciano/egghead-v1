@@ -165,7 +165,7 @@ ORDER BY column_name [ASC|DESC];
 
 ---
 
-### 🔸 Examples
+### 🔸  Example
 
 ```sql
 SELECT *
@@ -173,7 +173,7 @@ FROM employee
 ORDER BY salary ASC;
 ```
 
-#### 🔸 Ordering by Multiple Columns
+### 🔸 Ordering by Multiple Columns
 
 When sorting by multiple columns, the order is **hierarchical**:
 First column is sorted, then within that, the second column, and so on.
@@ -193,3 +193,57 @@ Mark Red
 ```
 
 > Sorted first by `first_name`, and for rows with the same name, sorted by `last_name`.
+
+---
+
+## `LIMIT` – Restrict Number of Returned Rows {#limit}
+
+```sql
+SELECT column1, column2, ...
+FROM table_name
+LIMIT number_of_rows;
+```
+
+---
+
+### 🔸  Examples
+
+Top 3 highest salaries:
+
+```sql
+SELECT *
+FROM employee
+ORDER BY salary DESC
+LIMIT 3;
+```
+
+Last added employee (assuming `employee_id` is AUTO\_INCREMENT):
+
+```sql
+SELECT *
+FROM employee
+ORDER BY employee_id DESC
+LIMIT 1;
+```
+
+---
+
+### 🔹 With Offset: `LIMIT offset, count`
+
+Use `LIMIT` with **offset** to skip a number of rows before starting to return the results.
+
+```sql
+SELECT *
+FROM employee
+ORDER BY employee_id DESC
+LIMIT 1, 2;
+```
+
+> 🔍 This means:
+
+- **Skip** the first row
+- **Return** the next 2 rows
+
+---
+
+📘 `LIMIT` is often combined with `ORDER BY` and used in **pagination** (e.g., show 10 items per page).
