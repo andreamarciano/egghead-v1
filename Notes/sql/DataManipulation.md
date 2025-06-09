@@ -1,6 +1,10 @@
 # SQL – 📝 Data Manipulation (DML)
 
-## ➕ `INSERT` – Add Records to a Table
+- [INSERT](#insert)
+- [SELECT](#select)
+- [WHERE](#where)
+
+## ➕ `INSERT` – Add Records to a Table {#insert}
 
 ```sql
 INSERT INTO table_name (column1, column2, ...)
@@ -15,7 +19,6 @@ VALUES (0, "Sweet Candies", "9045778", "First Road, New York", "3216767890");
 ```
 
 > ⚠️ Make sure all rows match the same column order and data types.
-
 > If you know the **column order**, you can omit the column list:
 
 ```sql
@@ -50,7 +53,7 @@ VALUES
 
 ---
 
-## 🔍 `SELECT` – Query Data from a Table
+## 🔍 `SELECT` – Query Data from a Table {#select}
 
 ```sql
 SELECT column1, column2, ...
@@ -62,7 +65,7 @@ FROM table_name;
 
 ---
 
-### 🔸 Example
+### 🔹 Example
 
 **Select specific columns:**
 
@@ -71,7 +74,7 @@ SELECT company_name, vat_number
 FROM customers;
 ```
 
-## ⚙️ `WHERE` – Filter Query Results
+## ⚙️ `WHERE` – Filter Query Results {#where}
 
 ```sql
 SELECT column1, column2, ...
