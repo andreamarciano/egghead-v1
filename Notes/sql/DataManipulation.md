@@ -1,8 +1,11 @@
 # SQL – 📝 Data Manipulation (DML)
 
+## Table of Contents
+
 - [INSERT](#insert)
 - [SELECT](#select)
 - [WHERE](#where)
+- [ORDER](#order)
 
 ## ➕ `INSERT` – Add Records to a Table {#insert}
 
@@ -149,3 +152,44 @@ WHERE first_name LIKE "_____";
 ```
 
 > 🔍 Use `LIKE` when filtering strings that follow **partial or unknown patterns**.
+
+---
+
+## `ORDER BY` - Sort Query Results {#order}
+
+```sql
+SELECT column1, column2, ...
+FROM table_name
+ORDER BY column_name [ASC|DESC];
+```
+
+---
+
+### 🔸 Examples
+
+```sql
+SELECT *
+FROM employee
+ORDER BY salary ASC;
+```
+
+#### 🔸 Ordering by Multiple Columns
+
+When sorting by multiple columns, the order is **hierarchical**:
+First column is sorted, then within that, the second column, and so on.
+
+```sql
+SELECT *
+FROM employee
+ORDER BY first_name, last_name ASC;
+```
+
+e.g. result:
+
+```bash
+Mark Brown
+Mark Purple
+Mark Red
+```
+
+> Sorted first by `first_name`, and for rows with the same name, sorted by `last_name`.
