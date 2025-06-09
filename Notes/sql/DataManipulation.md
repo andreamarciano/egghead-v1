@@ -6,6 +6,7 @@
 - [SELECT](#select)
 - [WHERE](#where)
 - [ORDER](#order)
+- [LIMIT](#limit)
 
 ## ➕ `INSERT` – Add Records to a Table {#insert}
 
@@ -186,7 +187,7 @@ ORDER BY first_name, last_name ASC;
 
 e.g. result:
 
-```bash
+```text
 Mark Brown
 Mark Purple
 Mark Red

@@ -59,6 +59,13 @@ console.log(res)
 
 This is the `sum` function.
 
+> js (or javascript), ts (or typescript), html, css, json
+> bash, sh, shell
+> sql
+> md (or markdown), yml (or yaml), dockerfile
+> git
+> text
+
 ## Images
 
 <!-- ![alt] (path "title") -->
