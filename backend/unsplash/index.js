@@ -33,7 +33,6 @@ app.get("/images", async (req, res) => {
     const response = await fetch(url);
     const data = await response.json();
 
-    // Mappo solo i campi utili
     const results = data.results.map((photo) => ({
       id: photo.id,
       alt_description: photo.alt_description,
@@ -59,30 +58,29 @@ app.get("/images", async (req, res) => {
 });
 
 // WIKIPEDIA Endpoint
-// app.get("/citydesc", async (req, res) => {
-//   const city = req.query.city || "Rome";
+app.get("/citydesc", async (req, res) => {
+  const city = req.query.city || "Rome";
 
-//   try {
-//     const url = `https://it.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(
-//       city
-//     )}`;
-//     const response = await fetch(url);
-//     const data = await response.json();
+  try {
+    const url = `https://it.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(
+      city
+    )}`;
+    const response = await fetch(url);
+    const data = await response.json();
 
-//     // Prendo i campi più utili
-//     const cityInfo = {
-//       title: data.title,
-//       description: data.extract,
-//       thumbnail: data.thumbnail?.source,
-//       content_urls: data.content_urls,
-//     };
+    const cityInfo = {
+      title: data.title,
+      description: data.extract,
+      thumbnail: data.thumbnail?.source,
+      content_urls: data.content_urls,
+    };
 
-//     res.json(cityInfo);
-//   } catch (error) {
-//     console.error("Error fetching Wikipedia city description:", error);
-//     res.status(500).json({ error: "Server Error" });
-//   }
-// });
+    res.json(cityInfo);
+  } catch (error) {
+    console.error("Error fetching Wikipedia city description:", error);
+    res.status(500).json({ error: "Server Error" });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`✅ Server live on http://localhost:${PORT}`);
