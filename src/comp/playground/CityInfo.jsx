@@ -33,64 +33,89 @@ function CityInfo() {
   };
 
   return (
-    <div className="bg-red-500 p-2 mt-2 mb-20">
-      <input
-        type="text"
-        value={city}
-        onChange={(e) => setCity(e.target.value)}
-        placeholder="City"
-        className="border-2 p-2 mr-2"
-      />
-      <button
-        onClick={fetchCityData}
-        disabled={loading}
-        className="bg-blue-500 p-2 rounded-2xl hover:bg-blue-700 cursor-pointer"
-      >
-        {loading ? "Loading..." : "Search"}
-      </button>
+    <div className="p-4 mt-4 mb-20 flex flex-col items-center">
+      <div className="mb-4">
+        <input
+          type="text"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          placeholder="City"
+          className="border-2 p-2 mr-2"
+        />
+        <button
+          onClick={fetchCityData}
+          disabled={loading}
+          className="bg-blue-500 p-2 rounded-2xl hover:bg-blue-700 cursor-pointer"
+        >
+          {loading ? "Loading..." : "Search"}
+        </button>
+      </div>
 
-      {/* Wikipedia */}
       {cityDesc && (
-        <div className="mt-5">
-          <h2 className="text-xl font-semibold">{cityDesc.title}</h2>
-          <p className="mt-2">{cityDesc.description}</p>
-          <a
-            href={cityDesc.content_urls?.desktop.page}
-            target="_blank"
-            rel="noreferrer"
-            className="text-blue-900 underline mt-2 inline-block"
-          >
-            Read on Wikipedia
-          </a>
+        <div className="relative w-[400px] h-[400px] flex items-center justify-center">
+          {/* Wikipedia */}
+          <div className="text-center z-10 bg-gray-800/50 p-4 rounded-xl shadow-md max-w-[250px]">
+            <h2 className="text-xl font-semibold">{cityDesc.title}</h2>
+            <p className="mt-2 text-sm">{cityDesc.description}</p>
+            <a
+              href={cityDesc.content_urls?.desktop.page}
+              target="_blank"
+              rel="noreferrer"
+              className="text-blue-900 mt-2 inline-block text-sm"
+            >
+              Source: <span className="underline">Wikipedia</span>
+            </a>
+          </div>
+
+          {/* Unsplash */}
+          {images.slice(0, 8).map((img, i) => {
+            const angle = (i / 8) * 2 * Math.PI;
+            const radius = 200;
+            const x = Math.cos(angle) * radius;
+            const y = Math.sin(angle) * radius;
+
+            return (
+              <div
+                key={img.id}
+                className="absolute z-20 group"
+                style={{
+                  top: `calc(50% + ${y}px - 40px)`,
+                  left: `calc(50% + ${x}px - 40px)`,
+                }}
+              >
+                <a
+                  href={img.links.html}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="block"
+                >
+                  <img
+                    src={img.urls.small}
+                    alt={img.alt_description || "city"}
+                    className="w-20 h-20 object-cover rounded-full border-4 border-white shadow-md transition-transform duration-300 group-hover:scale-110"
+                  />
+                </a>
+
+                {/* Author */}
+                <div className="absolute left-1/2 -translate-x-1/2 top-[90px] w-max bg-white bg-opacity-90 text-sm text-black px-2 py-1 rounded shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                  <span>
+                    Photo by{" "}
+                    <a
+                      href={img.user.profile_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-blue-800 underline"
+                    >
+                      {img.user.name}
+                    </a>{" "}
+                    on Unsplash
+                  </span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
-
-      {/* Unsplash */}
-      <div className="flex flex-wrap gap-3 mt-5">
-        {images.map((img) => (
-          <div key={img.id} className="max-w-[200px]">
-            <a href={img.links.html} target="_blank" rel="noreferrer">
-              <img
-                src={img.urls.small}
-                alt={img.alt_description || "city image"}
-                className="w-full rounded-md"
-              />
-            </a>
-            <p className="text-xs mt-1">
-              Photo by{" "}
-              <a
-                href={img.user.profile_url}
-                target="_blank"
-                rel="noreferrer"
-                className="text-blue-900 underline"
-              >
-                {img.user.name}
-              </a>{" "}
-              on Unsplash
-            </p>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }

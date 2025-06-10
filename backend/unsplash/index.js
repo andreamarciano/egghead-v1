@@ -28,7 +28,7 @@ app.get("/images", async (req, res) => {
   try {
     const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(
       query
-    )}&client_id=${UNSPLASH_ACCESS_KEY}&per_page=6`;
+    )}&client_id=${UNSPLASH_ACCESS_KEY}&per_page=8`;
 
     const response = await fetch(url);
     const data = await response.json();
