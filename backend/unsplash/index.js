@@ -62,7 +62,7 @@ app.get("/citydesc", async (req, res) => {
   const city = req.query.city || "Rome";
 
   try {
-    const url = `https://it.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(
+    const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(
       city
     )}`;
     const response = await fetch(url);

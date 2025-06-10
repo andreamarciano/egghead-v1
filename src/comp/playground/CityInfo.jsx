@@ -3,6 +3,7 @@ import { useState } from "react";
 function CityInfo() {
   const [city, setCity] = useState("Roma");
   const [images, setImages] = useState([]);
+  const [cityDesc, setCityDesc] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const fetchCityData = async () => {
@@ -50,41 +51,39 @@ function CityInfo() {
 
       {/* Wikipedia */}
       {cityDesc && (
-        <div style={{ marginTop: 20 }}>
-          <h2>{cityDesc.title}</h2>
-          {cityDesc.thumbnail && (
-            <img
-              src={cityDesc.thumbnail}
-              alt={cityDesc.title}
-              style={{ maxWidth: 300 }}
-            />
-          )}
-          <p>{cityDesc.description}</p>
+        <div className="mt-5">
+          <h2 className="text-xl font-semibold">{cityDesc.title}</h2>
+          <p className="mt-2">{cityDesc.description}</p>
           <a
             href={cityDesc.content_urls?.desktop.page}
             target="_blank"
             rel="noreferrer"
+            className="text-blue-900 underline mt-2 inline-block"
           >
             Read on Wikipedia
           </a>
         </div>
       )}
 
-      <div
-        style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 20 }}
-      >
+      {/* Unsplash */}
+      <div className="flex flex-wrap gap-3 mt-5">
         {images.map((img) => (
-          <div key={img.id} style={{ maxWidth: 200 }}>
+          <div key={img.id} className="max-w-[200px]">
             <a href={img.links.html} target="_blank" rel="noreferrer">
               <img
                 src={img.urls.small}
                 alt={img.alt_description || "city image"}
-                style={{ width: "100%", borderRadius: 6 }}
+                className="w-full rounded-md"
               />
             </a>
-            <p style={{ fontSize: 12, margin: "4px 0" }}>
+            <p className="text-xs mt-1">
               Photo by{" "}
-              <a href={img.user.profile_url} target="_blank" rel="noreferrer">
+              <a
+                href={img.user.profile_url}
+                target="_blank"
+                rel="noreferrer"
+                className="text-blue-900 underline"
+              >
                 {img.user.name}
               </a>{" "}
               on Unsplash
