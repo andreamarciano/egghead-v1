@@ -1,5 +1,5 @@
 import "./PlayGround.css";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { restoreAll } from "../redux/playgroundSlice";
 
@@ -9,6 +9,22 @@ import Footer from "../comp/Footer";
 import CityCard from "../comp/playground/CityCard";
 
 function Playground() {
+  // COUNTER
+  const [count, setCount] = useState(0); // State to keep track of the current count value
+  const prevCountRef = useRef(); // Ref to store the previous count value without triggering re-renders
+
+  // Update the ref with the latest count after every render where `count` changes
+  useEffect(() => {
+    prevCountRef.current = count;
+  }, [count]);
+
+  const prevCount = prevCountRef.current; // Read the previous count from the ref
+
+  // Log to console whenever the count changes, showing the transition from previous to current
+  useEffect(() => {
+    console.log(`Count changed: ${prevCount} → ${count}`);
+  }, [count, prevCount]);
+
   // CARD
   const dispatch = useDispatch();
   const cities = useSelector((state) => state.playground.value);
@@ -32,7 +48,7 @@ function Playground() {
         setLoading(false);
       })
       .catch((err) => {
-        setError("Impossibile ottenere la posizione");
+        setError("Unable to get location");
         setLoading(false);
       });
   };
@@ -48,6 +64,16 @@ function Playground() {
           <p className="text-xs sm:text-large md:text-xl ">
             This is the playground page, where you can test new components and
             animations
+          </p>
+        </div>
+
+        {/* COUNTER */}
+        <div style={{ textAlign: "center" }}>
+          <h2>Counter: {count}</h2>
+          <button onClick={() => setCount(count + 1)}>Increment</button>
+          <button onClick={() => setCount(count - 1)}>Decrement</button>
+          <p>
+            Previous Value: {prevCount !== undefined ? prevCount : "Nessuno"}
           </p>
         </div>
 

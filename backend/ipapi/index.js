@@ -9,7 +9,7 @@ app.use(cors());
 
 app.get("/whereami", async (req, res) => {
   try {
-    const response = await fetch("https://ipapi.co/json/");
+    const response = await fetch("https://ipwhois.app/json/");
     const data = await response.json();
 
     res.json(data);
