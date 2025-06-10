@@ -5,6 +5,7 @@ import { carouselReducer } from "./carouselSlice";
 import { reviewsReducer } from "./reviewSlice";
 import { cartReducer } from "./cartSlice";
 import { cabinetReducer } from "./cabinetSlice";
+import { playgroundReducer } from "./playgroundSlice";
 
 export default configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export default configureStore({
     reviews: reviewsReducer,
     cart: cartReducer,
     cabinet: cabinetReducer,
+    playground: playgroundReducer,
   },
 });
