@@ -7,6 +7,7 @@ import Navbar from "../comp/Navbar";
 import Footer from "../comp/Footer";
 
 import CityCard from "../comp/playground/CityCard";
+import CityInfo from "../comp/playground/CityInfo";
 
 function Playground() {
   // COUNTER
@@ -32,6 +33,8 @@ function Playground() {
   return (
     <>
       <Navbar />
+
+      <CityInfo />
 
       <div className="bg-gradient-to-b from-red-300 to-red-500 p-2 mt-2 mb-2 rounded-2xl ">
         {/* TITLE */}
