@@ -4,9 +4,16 @@
 
 - [INSERT](#insert)
 - [SELECT](#select)
-- [WHERE](#where)
-- [ORDER](#order)
-- [LIMIT](#limit)
+  - [WHERE](#where)
+    - [IN](#in)
+    - [BETWEEN](#between)
+    - [LIKE](#like)
+  - [ORDER](#order)
+  - [LIMIT](#limit)
+  - [DISTINCT-count](#distinct)
+- [UPDATE-set](#update)
+- [DELETE](#delete)
+- [TRUNCATE](#truncate)
 
 ## ➕ `INSERT` – Add Records to a Table {#insert}
 
@@ -104,7 +111,7 @@ WHERE (role = "warehouseman" AND salary > 1300)
 
 ---
 
-### 🔹 `IN` – Match Any Value in a List
+### 🔹 `IN` – Match Any Value in a List {#in}
 
 ```sql
 SELECT *
@@ -114,7 +121,7 @@ WHERE role IN ("employee", "warehouseman");
 
 ---
 
-### 🔹 `BETWEEN` – Range Filtering (Inclusive)
+### 🔹 `BETWEEN` – Range Filtering (Inclusive) {#between}
 
 ```sql
 SELECT *
@@ -126,7 +133,7 @@ WHERE hiring_date BETWEEN "2018-01-31" AND "2018-12-31";
 
 ---
 
-### 🔹 `LIKE` – Pattern Matching
+### 🔹 `LIKE` – Pattern Matching {#like}
 
 The `LIKE` operator is used for pattern-based filtering (mostly with strings):
 
@@ -248,3 +255,145 @@ LIMIT 1, 2;
 ---
 
 📘 `LIMIT` is often combined with `ORDER BY` and used in **pagination** (e.g., show 10 items per page).
+
+---
+
+## `DISTINCT` - Eliminate Duplicate Values {#distinct}
+
+```sql
+SELECT DISTINCT column1, column2, ...
+FROM table_name;
+```
+
+---
+
+### 🔸 Examples
+
+**Which cities do our customers work in?**
+
+> Some cities may be repeated. Use `DISTINCT` to get only unique values.
+
+```sql
+SELECT DISTINCT city
+FROM customer;
+```
+
+---
+
+**How many different countries do our users come from?**
+
+> Instead of listing all users (even from the same country), we want the **count of unique nations**.
+
+```sql
+SELECT COUNT(DISTINCT nation)
+FROM user;
+```
+
+---
+
+## `UPDATE` - Modify Existing Records {#update}
+
+```sql
+UPDATE table_name
+SET column1 = value1, column2 = value2, ...
+WHERE condition;
+```
+
+> ⚠️ **Always use a `WHERE` clause** to avoid updating **all rows** in the table.
+
+---
+
+### 🔸Examples
+
+Update the phone number of a specific customer:
+
+```sql
+UPDATE customer
+SET phone = "3494448923"
+WHERE customer_id = 1;
+```
+
+---
+
+Update multiple rows (same column):
+
+```sql
+UPDATE customer
+SET city = "Rome"
+WHERE customer_id = 1 OR customer_id = 3;
+```
+
+---
+
+Update multiple columns in one row:
+
+```sql
+UPDATE customer
+SET address = "3rd Road", city = "Milan"
+WHERE customer_id = 3;
+```
+
+---
+
+## `DELETE` - Delete Existing Records {#delete}
+
+```sql
+DELETE FROM table_name
+WHERE condition;
+```
+
+> ⚠️ **Always include a `WHERE` clause** to avoid deleting **all records**.
+
+---
+
+### 🔸   Examples
+
+**Delete a specific customer:**
+
+```sql
+DELETE FROM customer
+WHERE customer_id = 7;
+```
+
+---
+
+### Note on `AUTO_INCREMENT`
+
+If your table uses `AUTO_INCREMENT`:
+
+- Suppose you insert 7 records (IDs 1–7).
+- Then delete records 6 and 7.
+- The next inserted record will have ID **8**, not 6.
+
+> This is because the auto-increment counter **remembers the last highest value**.
+
+---
+
+## `TRUNCATE` - Delete All Rows & Reset IDs {#truncate}
+
+```sql
+TRUNCATE TABLE table_name;
+```
+
+📌 Use `TRUNCATE` when:
+
+- You want a **clean slate**
+- You don’t need to filter which rows to delete
+- You want to reset the primary key counter
+
+> ❗ Make sure you don't need the data anymore – `TRUNCATE` is **irreversible** and much faster than `DELETE`.
+
+---
+
+### Key Differences: `TRUNCATE` vs `DELETE`
+
+| Feature                | `TRUNCATE`                           | `DELETE`                         |
+| ---------------------- | ------------------------------------ | -------------------------------- |
+| Type                   | DDL (Data Definition Language)       | DML (Data Manipulation Language) |
+| Auto Increment Reset   | ✅ Yes                                | ❌ No                             |
+| Can Use `WHERE` Filter | ❌ No (removes all rows)              | ✅ Yes                            |
+| Speed                  | ⚡ Very Fast (no row-by-row scan)     | 🐢 Slower (even without `WHERE`) |
+| Table Structure        | Preserved (but recreated internally) | Preserved                        |
+
+> - **DML (Data Manipulation Language)** command: operate on the **data** stored in database tables.
+> - **DDL (Data Definition Language)** command: operate on the **structure of the database** (e.g., `CREATE TABLE`, `CREATE DATABASE`, `DROP TABLE`, `ALTER TABLE`).

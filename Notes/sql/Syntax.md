@@ -2,11 +2,14 @@
 
 ## 📚 Table of Contents
 
-- [Basic Concepts](#basic-concepts)
-- [Create & Drop a Database](#create--drop-a-database)
-- [Create & Drop a Table](#create--drop-a-table)
+- [Basic Concepts](#basic)
+- [Create & Drop a Database](#createdb)
+- [Create & Drop a Table](#createtable)
+- [Alias](#alias)
 
-## Basic concepts
+---
+
+## Basic concepts {#basic}
 
 ### 🧩 Keywords
 
@@ -54,7 +57,9 @@ FROM employee
 WHERE salary > 1800;
 ```
 
-## Create & Drop a Database
+---
+
+## Create & Drop a Database {#createdb}
 
 ### ➕ Create a Database
 
@@ -74,7 +79,9 @@ DROP DATABASE db_test;
 - This command **deletes** the `db_test` database **permanently**.
 - As with creation, **refresh your client** to confirm the database is gone.
 
-## Create & Drop a Table
+---
+
+## Create & Drop a Table {#createtable}
 
 ### 🛠️ Create Table Syntax
 
@@ -122,3 +129,53 @@ DROP TABLE table_name;
 | `DATE`       | Stores **date values** in the `YYYY-MM-DD` format.                                                     |
 | `DATETIME`   | Stores combined **date and time** in the `YYYY-MM-DD HH:MM:SS` format.                                 |
 | `TIMESTAMP`  | Stores **timestamp values** as the number of seconds since the Unix epoch (`1970-01-01 00:00:01` UTC). |
+
+---
+
+## Alias
+
+**Aliases** allow you to assign temporary names to **tables** or **columns** to make your SQL queries more readable and concise.
+
+---
+
+### 📁 Table Alias
+
+Used to shorten table names, especially useful in JOINs:
+
+```sql
+SELECT e.employee_id, e.first_name, e.hiring_date, e.phone, off.office_name
+FROM employee AS e
+INNER JOIN office AS off
+ON e.office_id = off.office_id;
+```
+
+🔎 Equivalent to:
+
+```sql
+SELECT employee.employee_id, employee.first_name, employee.hiring_date, employee.phone, office.office_name
+FROM employee
+INNER JOIN office ON employee.office_id = office.office_id;
+```
+
+> You can also omit `AS` (optional):
+> `FROM employee e INNER JOIN office off ON ...`
+
+---
+
+### 📄 Column Alias
+
+Used to rename the output column of an expression or function:
+
+```sql
+SELECT first_name, DATE_FORMAT(hiring_date, "%e %M, %Y") AS hiring_date
+FROM employee;
+```
+
+🔎 Equivalent to:
+
+```sql
+SELECT first_name, DATE_FORMAT(hiring_date, "%e %M, %Y")
+FROM employee;
+```
+
+In the second version, the formatted date will appear with the function name as column label unless renamed.

@@ -2,8 +2,6 @@
 
 **Constraints** are rules applied to columns to enforce data integrity in the database.
 
-## 🔒 Main Types of Constraints
-
 | Constraint    | Description                                            |
 | ------------- | ------------------------------------------------------ |
 | `NOT NULL`    | Ensures the column **cannot be null**                  |

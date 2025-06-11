@@ -35,7 +35,7 @@ Tables can be connected using **relationships** (foreign keys), enabling structu
 
 <img src="../../public/images/notes/xampp.jpg" alt="XAMPP" width="500" />
 
-#### Steps:
+#### Steps
 
 1. Download and install XAMPP.
 2. Open the XAMPP Control Panel & Start **Apache** and **MySQL**.
@@ -49,7 +49,7 @@ Tables can be connected using **relationships** (foreign keys), enabling structu
 
 **Beekeeper Studio** is a modern and user-friendly SQL editor and database management tool.
 
-#### Features:
+#### Features
 
 - Connect to various database types (MySQL, PostgreSQL, SQLite, etc.)
 - Visual table browsing
