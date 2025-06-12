@@ -37,6 +37,62 @@ npx tsc            # Compiles .ts files
 
 ---
 
+## 🧪 Static Typing in Action
+
+In JavaScript, type errors don't show up until **runtime**.
+For example:
+
+```ts
+function sum(a, b) {
+  return a + b;
+}
+
+const res = sum(1, "2");
+```
+
+```tsx
+<p>Sum: {res}</p> // Output: "12"
+```
+
+Even though `1 + "2"` returns `"12"` (a string), this is **logically a bug** if you expect numeric addition.
+This often happens when values come from `<input>` fields in a form, since they are always received as **strings**.
+
+- To prevent issues like that, you might write:
+
+```ts
+function sum(a, b) {
+  if (typeof a === "number" && typeof b === "number") {
+    return a + b;
+  } else {
+    return 0;
+  }
+}
+
+const res = sum(1, "2");
+```
+
+But this still **compiles and runs**, and could silently return `0` instead of warning you.
+
+---
+
+### ✅ TypeScript catches this for you
+
+With TypeScript, you can define types:
+
+```ts
+function sum(a: number, b: number): number {
+  return a + b;
+}
+
+const res = sum(1, "2"); // ❌ Error!
+```
+
+> Argument of type `'string'` is not assignable to parameter of type `'number'`.
+
+TypeScript stops the error **before it runs**, making your code more robust.
+
+---
+<!-- 
 ## 🧩 Basic Types
 
 ```ts
@@ -184,4 +240,4 @@ Built-in helpers:
 - `Partial<T>` – Makes all properties optional
 - `Pick<T, K>` – Pick selected keys from a type
 - `Record<K, T>` – Object with keys of K and values of T
-- `Readonly<T>` – Makes properties readonly
+- `Readonly<T>` – Makes properties readonly -->
