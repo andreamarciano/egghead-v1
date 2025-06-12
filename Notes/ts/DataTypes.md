@@ -73,6 +73,10 @@ function sum(num1: number, num2: number) {}
 - [`custom types`](#custom)
 - [`enum`](#enum)
 
+- [`unknown`](#unknown)
+- [`never`](#never)
+- [`undefined`](#undefined)
+
 ---
 
 ## `object` {#object}
@@ -98,8 +102,6 @@ const person = {
 
 console.log(person.age); // ❌ Error: Property 'age' does not exist on type ...
 ```
-
----
 
 ### ✅ Declaring object types
 
@@ -146,8 +148,6 @@ person = {
 
 > 🛑 If you forget a property or make a typo, TypeScript will immediately highlight the error.
 
----
-
 ### 📦 Object types in function parameters
 
 You can also define object types inline inside function arguments:
@@ -159,6 +159,8 @@ function getData(data: { id: number; username: string; password: string }) {
 
 getData({ id: 1, username: "", password: "" });
 ```
+
+---
 
 ## `array` {#array}
 
@@ -179,6 +181,8 @@ You can also use the `any` type to allow all values (not recommended for strict 
 ```ts
 const anything: any[] = ["hello", 2, true, [], {}];
 ```
+
+---
 
 ## `tuple` {#tuple}
 
@@ -208,6 +212,8 @@ const players: [string, string] = ["Bob", "Tom"];
 ```
 
 > 🛡️ Tuples are strict: `["Bob"]` or `["Bob", "Tom", "Alice"]` would both cause compile-time errors.
+
+---
 
 ## `any` {#any}
 
@@ -271,4 +277,156 @@ function findPerson(person: Person) {
 
 > 🧠 Custom types improve readability and make your code easier to maintain.
 
+---
+
 ## `enum` {#enum}
+
+Enums let you define a **set of named constants**.
+Useful when you have a limited number of allowed values, like roles or states.
+
+Example:
+
+```ts
+const person = {
+  firstName: "Luke",
+  secondName: "Red",
+  role: "adminn" // ❌ Typo-prone!
+};
+```
+
+You might end up hardcoding checks everywhere:
+
+```ts
+if (person.role === "admin") { ... }
+```
+
+A common workaround is using constants:
+
+```ts
+const ADMIN = "admin";
+const USER = "user";
+
+if (person.role === ADMIN) { ... }
+```
+
+But this still lacks structure and autocomplete support.
+
+### ✅ Using `enum`
+
+TypeScript provides `enum` for this purpose:
+
+```ts
+enum Role {
+  ADMIN,
+  USER,
+  GUEST
+}
+
+const person = {
+  firstName: "Luke",
+  secondName: "Red",
+  role: Role.ADMIN
+};
+```
+
+Now `person.role` is type-safe and gets autocomplete.
+
+> By default, enum values are numbers (`ADMIN = 0`, `USER = 1`, ...)
+
+### 🔁 Custom values
+
+You can assign custom values to enum members:
+
+```ts
+enum Role {
+  ADMIN = 1,
+  USER = 100,
+  GUEST // = 101
+}
+```
+
+Or use string-based enums:
+
+```ts
+enum Role {
+  ADMIN = "admin",
+  USER = "user",
+  GUEST = "guest"
+}
+
+const person = {
+  firstName: "Luke",
+  secondName: "Red",
+  role: Role.ADMIN
+};
+
+if (person.role === Role.ADMIN) {
+  // ✅ Safe and clear
+}
+```
+
+> 🎯 Enums help avoid typos, centralize value definitions, and improve IntelliSense.
+
+---
+
+## `unknown` {#unknown}
+
+The `unknown` type represents any value, similar to `any`, but is **safer** because you must perform type checks before using it.
+
+```ts
+let value: unknown;
+
+value = 5;
+value = "hello";
+
+let num: number = value; // ❌ Error: Object is of type 'unknown'.
+
+// ✅ Type checking needed before assignment:
+if (typeof value === "number") {
+  num = value;
+}
+```
+
+Use `unknown` when you want to accept any value but still enforce type safety.
+
+---
+
+## `never` {#never}
+
+The `never` type represents values that **never occur**.
+Typically used for functions that never return (e.g. throw errors or infinite loops).
+
+```ts
+function error(message: string): never {
+  throw new Error(message);
+}
+
+function infiniteLoop(): never {
+  while (true) {}
+}
+```
+
+Use `never` to signal unreachable code or impossible states.
+
+---
+
+## `undefined` and `null` {#undefined}
+
+- `undefined` means a variable has been declared but not assigned a value.
+- `null` represents an intentional absence of any object value.
+
+```ts
+let a: undefined = undefined;
+let b: null = null;
+
+// Variables can be union types with undefined or null
+let c: number | undefined;
+c = 5;
+c = undefined;
+
+let d: string | null;
+d = "hello";
+d = null;
+```
+
+By default, `undefined` and `null` are **subtypes** of all types unless you enable `--strictNullChecks` in `tsconfig.json`, which forces you to explicitly handle them.
