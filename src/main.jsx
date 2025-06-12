@@ -18,6 +18,7 @@ import ArcadeCabinet from "./pages/Cabinet/ArcadeCabinet";
 import NotFound from "./pages/NotFound";
 
 import Playground from "./pages/PlayGround";
+import PlaygroundTSX from "./pages/PlayGroundTSX";
 
 const router = createBrowserRouter([
   {
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
   {
     path: "/playground",
     element: <Playground />,
+  },
+  {
+    path: "/playgroundtsx",
+    element: <PlaygroundTSX />,
   },
 ]);
 

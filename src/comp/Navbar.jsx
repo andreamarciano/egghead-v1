@@ -126,6 +126,19 @@ function Navbar() {
             Playground
           </NavLink>
         </li>
+        {/* Playground TSX */}
+        <li>
+          <NavLink
+            to="/playgroundtsx"
+            className={({ isActive }) =>
+              `hover:text-yellow-300 transition-colors duration-200 ${
+                isActive ? "text-yellow-400 font-bold" : ""
+              }`
+            }
+          >
+            PlaygroundTSX
+          </NavLink>
+        </li>
         {/* Cabinet */}
         {showGamesLink && (
           <li>
