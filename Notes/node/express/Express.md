@@ -1,6 +1,6 @@
 # Node.js - Express
 
-### Project Initialization
+## Project Initialization
 
 To set up a new Node.js project with Express:
 

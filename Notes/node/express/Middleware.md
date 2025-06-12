@@ -57,7 +57,7 @@ module.exports = authTest;
 
 ---
 
-#### 📌 Apply to a specific route:
+#### 📌 Apply to a specific route
 
 ```js
 app.get("/", middlewareTest, (req, res) => {
@@ -65,19 +65,19 @@ app.get("/", middlewareTest, (req, res) => {
 });
 ```
 
-#### 📌 Apply to all routes with `app.use()`:
+#### 📌 Apply to all routes with `app.use()`
 
 ```js
 app.use(middlewareTest);
 ```
 
-#### 📌 Apply to specific path only:
+#### 📌 Apply to specific path only
 
 ```js
 app.use("/person", middlewareTest); // Only applies to /person and its subroutes
 ```
 
-#### 📌 Apply multiple middleware functions:
+#### 📌 Apply multiple middleware functions
 
 ```js
 app.use("/person", [middlewareTest, authTest]);
@@ -113,7 +113,6 @@ app.get("/person/private", authTest, (req, res) => {
 Try visiting:
 
 > `http://localhost:3000/person/private?user=Luke` → ✅ Authorized
-
 > `http://localhost:3000/person/private?user=John` → ❌ Unauthorized
 
 ---
