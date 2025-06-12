@@ -111,7 +111,7 @@ A **RegEx** is a pattern used to match character combinations in strings.
 
 - To create a regular expression, use `/pattern/` or `new RegExp("pattern")`.
 
-### 🛠️ Common RegEx Methods:
+### 🛠️ Common RegEx Methods
 
 - `.test(string)`: Returns `true` if the pattern matches part of the string.
 
@@ -135,7 +135,7 @@ if (!emailRegex.test(email.value)) {
 
 ---
 
-#### 🔍 What this regex means:
+#### 🔍 What this regex means
 
 ```js
 /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

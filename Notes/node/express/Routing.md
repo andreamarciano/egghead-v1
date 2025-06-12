@@ -4,9 +4,9 @@ By using Express Routers, you can split routes into separate modules and keep yo
 
 ---
 
-#### Folder Structure Example
+Folder Structure Example
 
-```
+```text
 project/
 ├── index.js
 ├── people.js         # (data source)

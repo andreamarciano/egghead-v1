@@ -212,7 +212,7 @@
 |    5 | `includes()`             | ⭐⭐⭐⭐☆         |                                                           |
 |    6 | `slice()`                | ⭐⭐⭐⭐☆         |                                                           |
 |    7 | `reduce()`               | ⭐⭐⭐☆☆          |                                                           |
-|    8 | `find()` / `findIndex()` | ⭐⭐⭐☆☆          |
+|    8 | `find()` / `findIndex()` | ⭐⭐⭐☆☆          |                                                           |
 |    9 | `shift()` / `unshift()`  | ⭐⭐☆☆☆           | Less used compared to `push/pop`.                         |
 |   10 | `join()`                 | ⭐⭐☆☆☆           | Mostly used for display (e.g., CSV or simple output).     |
 |   11 | `splice()`               | ⭐⭐☆☆☆           | Powerful but can be error-prone if not handled carefully. |

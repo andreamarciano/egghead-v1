@@ -12,7 +12,7 @@
 
 ---
 
-## Example
+## Example: routing persons
 
 Assume we have a file `person.js` like this:
 
@@ -39,7 +39,7 @@ const person = [
 module.exports = { person };
 ```
 
-### Main Express file:
+### Main Express file
 
 ```js
 const express = require("express");
@@ -91,7 +91,7 @@ app.get("/person/:id", (req, res) => {
 });
 ```
 
-#### Notes:
+#### Notes
 
 - `:id` is a **route parameter**
 - It's available as `req.params.id`: `const personID = req.params.id`
@@ -144,9 +144,9 @@ app.get("/person/search", (req, res) => {
 });
 ```
 
-#### URL Examples:
+#### URL Examples
 
-```
+```text
 /person/search?query=L&limit=2
 ```
 

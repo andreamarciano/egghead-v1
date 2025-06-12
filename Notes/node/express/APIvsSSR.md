@@ -7,19 +7,17 @@
 
 Allows the frontend (React, Angular, mobile app, etc.) to communicate with the backend to **fetch or send data**.
 
-### Common flow:
+### Common flow
 
-```
-
+```text
 Client (frontend) → sends request → API (Express) → queries the DB
 DB → returns data → API → sends JSON → Client displays it
-
 ```
 
 - Data is returned using `res.json(data)`
 - Client is responsible for rendering it (using JavaScript)
 
-### Example:
+### Example
 
 ```js
 app.get("/api/users", (req, res) => {
@@ -34,9 +32,9 @@ app.get("/api/users", (req, res) => {
 
 With **Server-Side Rendering**, the Express server creates the full HTML page — including the data — and sends it directly to the client.
 
-### Common flow:
+### Common  flow
 
-```
+```text
 Client → requests a page → Server renders HTML (with data) → sends complete HTML
 Client → displays HTML
 ```
@@ -45,7 +43,7 @@ Client → displays HTML
 - Express typically uses a **template engine** like EJS, Pug, or Handlebars.
 - HTML is returned using `res.render()` (not `res.json()`)
 
-### Example (using EJS):
+### Example (using EJS)
 
 ```js
 app.set("view engine", "ejs");
@@ -60,7 +58,7 @@ app.get("/profile", (req, res) => {
 
 ## 🔗 Typical Architecture
 
-```
+```text
 Frontend / Client-side <--> Backend / Server-side <--> Database
 
 React / Angular         <-->     Express (API)      <--> MongoDB / SQL
@@ -68,6 +66,6 @@ React / Angular         <-->     Express (API)      <--> MongoDB / SQL
 
 In SSR apps:
 
-```
+```text
 Browser → Express server → Generates HTML using data from DB → Sends to browser
 ```

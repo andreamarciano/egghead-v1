@@ -6,7 +6,7 @@ It’s especially useful when testing routes like `POST`, `PUT`, or `DELETE`, wh
 
 ---
 
-### Why Use Postman?
+## Why Use Postman
 
 - Test all types of HTTP methods (`GET`, `POST`, `PUT`, `DELETE`, etc.)
 - Send request **bodies** (e.g. JSON)
@@ -16,7 +16,7 @@ It’s especially useful when testing routes like `POST`, `PUT`, or `DELETE`, wh
 
 ---
 
-### 🔧 Setup Example
+## 🔧 Setup Example
 
 Example server routes:
 

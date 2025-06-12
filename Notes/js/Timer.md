@@ -4,13 +4,11 @@
 
 Runs code **ONCE** after a specified delay (in milliseconds).
 
-### Syntax:
-
 ```js
 setTimeout(callback, delay);
 ```
 
-### Example:
+- Example
 
 ```js
 setTimeout(() => {
@@ -18,7 +16,7 @@ setTimeout(() => {
 }, 2000);
 ```
 
-### ❌ Cancel a timeout:
+### ❌ Cancel a timeout
 
 ```js
 const timerId = setTimeout(() => {
@@ -34,13 +32,11 @@ clearTimeout(timerId); // Cancels the timeout
 
 Runs code **REPEATEDLY** every `X` milliseconds.
 
-### Syntax:
-
 ```js
 setInterval(callback, interval);
 ```
 
-### Example:
+- Example
 
 ```js
 const intervalId = setInterval(() => {
@@ -48,7 +44,7 @@ const intervalId = setInterval(() => {
 }, 1000);
 ```
 
-### ❌ Cancel an interval:
+### ❌ Cancel an interval
 
 ```js
 clearInterval(intervalId); // Stops the repetition

@@ -61,7 +61,7 @@ console.log(process.cwd()); // Current working directory
 
 Here's an example of a simple project with three files.
 
-#### File: `index.js`
+- `index.js`
 
 ```js
 const sayHi = require("./utils");
@@ -72,7 +72,7 @@ sayHi("Luke");
 sayHi(names.name2); // Hi Luigi
 ```
 
-#### File: `utils.js`
+- `utils.js`
 
 ```js
 function sayHi(name) {
@@ -82,7 +82,7 @@ function sayHi(name) {
 module.exports = sayHi;
 ```
 
-#### File: `names.js`
+- `names.js`
 
 ```js
 const name1 = "Mario";

@@ -173,7 +173,7 @@ timeoutPromise("Hello there", 1000)
   });
 ```
 
-### 🔍 What this demonstrates:
+### 🔍 What this demonstrates
 
 | Concept           | What’s happening                                      |
 | ----------------- | ----------------------------------------------------- |

@@ -1,6 +1,6 @@
 # Node.js - Event Emitter
 
-### Event Loop (Recap)
+## Event Loop (Recap)
 
 - Node.js runs on a **single thread** using an **event loop** to handle async operations.
 - It uses a **non-blocking** architecture:

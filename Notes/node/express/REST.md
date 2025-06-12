@@ -21,7 +21,7 @@ DELETE  /api/people/:id    - Delete a person
 
 ---
 
-#### Sample Data
+Sample Data
 
 ```js
 const people = [
@@ -176,7 +176,7 @@ app.put("/api/people/:id", (req, res) => {
 });
 ```
 
-### Example Request
+### Example   Request
 
 ```http
 PUT /api/people/2
@@ -205,7 +205,7 @@ app.delete("/api/people/:id", (req, res) => {
 });
 ```
 
-### Example Request
+### Example  Request
 
 ```http
 DELETE /api/people/2

@@ -160,7 +160,7 @@ function Counter() {
 }
 ```
 
-#### ✅ Functional React wins because:
+#### ✅ Functional React wins because
 
 | Functional Components              | Class Components (OOP)         |
 | ---------------------------------- | ------------------------------ |

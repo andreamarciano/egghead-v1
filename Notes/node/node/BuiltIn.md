@@ -11,13 +11,13 @@
 
 The `os` module provides methods and properties to get information about the operating system and user.
 
-### Import the module:
+### Import the module
 
 ```js
 const os = require("os");
 ```
 
-### Common Methods:
+### Common Methods
 
 ```js
 os.userInfo(); // Info about the current user
@@ -43,13 +43,11 @@ const systemInfo = {
 
 The `path` module provides utilities to work with file paths in a way that is safe across different operating systems.
 
-### Import the module:
-
 ```js
 const path = require("path");
 ```
 
-### Key Features and Methods:
+### Key Features and Methods
 
 ```js
 console.log(path.sep); // OS-specific path separator, e.g., "/" or "\\"
@@ -86,8 +84,6 @@ console.log(absolutePath);
 
 The `fs` (File System) module allows you to read from and write to files on your system. It supports both **synchronous** and **asynchronous** methods.
 
-### Import the module:
-
 ```js
 // Sync methods
 const { readFileSync, writeFileSync } = require("fs");
@@ -121,7 +117,7 @@ console.log("starting next task");
 
 **Output order:**
 
-```
+```text
 start sync
 <file contents>
 end sync
@@ -166,7 +162,7 @@ console.log("starting next task");
 
 **Output order:**
 
-```
+```text
 start async
 starting next task
 end async
@@ -178,13 +174,11 @@ end async
 
 The `http` module allows you to **create web servers** in Node.js. This is the foundation of most Node-based backends.
 
-### Import the module:
-
 ```js
 const http = require("http");
 ```
 
-### Create a basic server:
+### Create a basic server
 
 ```js
 const server = http.createServer((req, res) => {
