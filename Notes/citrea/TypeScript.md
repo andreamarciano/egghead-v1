@@ -9,6 +9,9 @@ It helps catch errors **before runtime** and makes your code more **predictable,
 - You **optionally** add types.
 - It compiles to plain JavaScript (`.ts → .js`).
 
+> TypeScript code **cannot run directly in browsers or Node.js**.  
+> It must first be **compiled to JavaScript** using the TypeScript compiler (`tsc`).
+
 ---
 
 ## ✅ Why use it?
@@ -22,13 +25,15 @@ It helps catch errors **before runtime** and makes your code more **predictable,
 
 ## ⚙️ Setup
 
-Install globally or per project:
-
 ```bash
 npm install typescript --save-dev
 npx tsc --init     # Creates tsconfig.json
 npx tsc            # Compiles .ts files
 ```
+
+- VS Code Extensions:
+  - **ESLint** – Linting and enforcing code quality
+  - **Path Intellisense** – Auto-completion for file paths
 
 ---
 
@@ -39,6 +44,13 @@ let name: string = "Alice";
 let age: number = 30;
 let isAdmin: boolean = true;
 let tags: string[] = ["typescript", "js"];
+```
+
+> Showing errors at write time, not just at compile time
+
+```ts
+let test: number;
+test = "hello"; // ❌ Error: Type 'string' is not assignable to type 'number'
 ```
 
 ---
