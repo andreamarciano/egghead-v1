@@ -14,6 +14,8 @@
 - [`abstract` Classes](#abstract)
 - [Singleton Pattern](#singleton)
 
+> [Full Example](#example)
+
 ## Defining a Class and Adding Properties {#define}
 
 ```ts
@@ -301,3 +303,112 @@ const principal = new Principal("John", 50); // ❌ Error: constructor is privat
 ```
 
 you’ll get an error.
+
+---
+
+## Full Example {#example}
+
+```ts
+// Person
+abstract class Person {
+  constructor(
+    protected readonly name: string,
+    protected age: number
+  ) {}
+
+  abstract introduce(): void;
+
+  celebrateBirthday(): void {
+    this.age++;
+    console.log(`${this.name} is now ${this.age} years old.`);
+  }
+}
+
+// Student
+class Student extends Person {
+  constructor(
+    name: string,
+    age: number,
+    private favouriteSubject: string
+  ) {
+    super(name, age);
+  }
+
+  introduce(): void {
+    console.log(
+      `Hi, I'm ${this.name}, I'm ${this.age} years old and I love ${this.favouriteSubject}.`
+    );
+  }
+
+  study(): void {
+    console.log(`${this.name} is studying ${this.favouriteSubject}.`);
+  }
+}
+
+// Teacher
+class Teacher extends Person {
+  constructor(
+    name: string,
+    age: number,
+    private subject: string
+  ) {
+    super(name, age);
+  }
+
+  introduce(): void {
+    console.log(
+      `Hello, I'm Professor ${this.name}, I teach ${this.subject}.`
+    );
+  }
+
+  explain(): void {
+    console.log(`${this.name} is explaining ${this.subject}.`);
+  }
+
+  static schoolMotto(): void {
+    console.log("Knowledge is power!");
+  }
+}
+
+// Principal
+class Principal {
+  private static instance: Principal;
+
+  private constructor(
+    private readonly name: string,
+    private readonly age: number
+  ) {}
+
+  static getInstance(): Principal {
+    if (!Principal.instance) {
+      Principal.instance = new Principal("Albus Dumbledore", 115);
+    }
+    return Principal.instance;
+  }
+
+  introduce(): void {
+    console.log(`I'm Principal ${this.name}, welcome to our school.`);
+  }
+}
+
+
+const student1 = new Student("Harry", 15, "Defense Against the Dark Arts");
+const teacher1 = new Teacher("Snape", 45, "Potions");
+
+student1.introduce(); // Hi, I'm Harry, I'm 15 years old and I love Defense Against the Dark Arts.
+teacher1.introduce(); // Hello, I'm Professor Snape, I teach Potions.
+
+student1.study(); // Harry is studying Defense Against the Dark Arts.
+teacher1.explain(); // Snape is explaining Potions.
+
+student1.celebrateBirthday(); // Harry is now 16 years old.
+teacher1.celebrateBirthday(); // Snape is now 46 years old.
+
+Teacher.schoolMotto(); // Knowledge is power!
+
+const principal = Principal.getInstance();
+principal.introduce(); // I'm Principal Albus Dumbledore, welcome to our school.
+
+const anotherPrincipal = Principal.getInstance();
+console.log(principal === anotherPrincipal); // true (singleton)
+```
