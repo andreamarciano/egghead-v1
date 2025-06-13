@@ -100,10 +100,18 @@ git config --global user.email "your-email@example.com"
 1. Add the remote origin:
 
    ```bash
-   git remote add origin https://github.com/your-username/repo-name.git
+   git remote add origin https://github.com/your-username/repo-name
    ```
 
-2. Push the main branch to GitHub:
+2. Check current remotes:
+
+   ```bash
+   git remote -v
+   ```
+
+   This shows the remotes configured for your project (typically `origin`).
+
+3. Push the main branch to GitHub:
 
    ```bash
    git push -u origin main
