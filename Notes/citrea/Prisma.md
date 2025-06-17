@@ -75,13 +75,40 @@ const user = await prisma.user.findUnique({ where: { id: 1 } });
 
 ---
 
-## 🧰 Common Methods
+## 🧰 Common Prisma Client Methods
 
-- `findMany()` – Get multiple records
-- `findUnique()` – Get one record (by unique field like `id` or `email`)
-- `create()` – Insert a new record
-- `update()` – Update a record
-- `delete()` – Delete a record
+### 📄 **Read Methods**
+
+| Method                | Description                                                     |
+| --------------------- | --------------------------------------------------------------- |
+| `findMany()`          | Get multiple records with optional filters                      |
+| `findUnique()`        | Get a single record by a unique field like `id` or `email`      |
+| `findFirst()`         | Get the first record matching a filter (not necessarily unique) |
+| `findUniqueOrThrow()` | Like `findUnique`, but throws an error if not found             |
+| `findFirstOrThrow()`  | Like `findFirst`, but throws an error if not found              |
+| `count()`             | Count how many records match a given filter                     |
+
+### ✍️ **Write Methods (Create / Update / Delete)**
+
+| Method         | Description                               |
+| -------------- | ----------------------------------------- |
+| `create()`     | Create a new record                       |
+| `createMany()` | Create multiple records at once           |
+| `update()`     | Update a single record by a unique field  |
+| `updateMany()` | Update multiple records matching a filter |
+| `delete()`     | Delete a single record by a unique field  |
+| `deleteMany()` | Delete multiple records matching a filter |
+| `upsert()`     | Update if exists, create if it doesn't    |
+
+### 🔗 **Query Options**
+
+| Option          | Description                               |
+| --------------- | ----------------------------------------- |
+| `where`         | Define filtering conditions               |
+| `include`       | Include related data (e.g., `user.todos`) |
+| `select`        | Select specific fields                    |
+| `orderBy`       | Sort results                              |
+| `skip` / `take` | Paginate results (skip and limit)         |
 
 ---
 
